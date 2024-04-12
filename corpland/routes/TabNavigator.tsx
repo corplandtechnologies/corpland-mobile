@@ -10,8 +10,8 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   const [fontsLoaded] = useFonts({
-    RalewayBold: require("../fonts/Raleway-ExtraBold.ttf"),
-    RalewayRegular: require("../fonts/Raleway-Bold.ttf"),
+    RalewayBold: require("../fonts/Raleway/static/Raleway-ExtraBold.ttf"),
+    RalewayRegular: require("../fonts/Raleway/static/Raleway-Bold.ttf"),
   });
   return (
     <Tab.Navigator screenOptions={{ tabBarActiveTintColor: COLORS.PRIMARY }}>

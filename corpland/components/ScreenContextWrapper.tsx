@@ -5,7 +5,7 @@ import { useFonts } from "expo-font";
 
 const ScreenContextWrapper = ({ children }: { children: React.ReactNode }) => {
   const [fontsLoaded] = useFonts({
-    Raleway: require("../fonts/Raleway-Regular.ttf"),
+    Raleway: require("../fonts/Raleway/static/Raleway-Regular.ttf"),
   });
   return (
     <SafeAreaProvider>
