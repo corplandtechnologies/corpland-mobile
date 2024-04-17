@@ -1,40 +1,30 @@
-// Request.tsx
-import { View, Text, Animated } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFonts } from "expo-font";
-import { useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const Request = () => {
+interface RequestProps {
+  post: {
+    title: string;
+    description: string;
+    image: string;
+    postedTime: string;
+  };
+}
+
+const Request: React.FC<RequestProps> = ({ post }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [animation] = useState(new Animated.Value(0));
 
   const [fontsLoaded] = useFonts({
-    RalewayExtraBold: require("../fonts/Raleway/static/Raleway-ExtraBold.ttf"),
-    RalewayBold: require("../fonts/Raleway/static/Raleway-Bold.ttf"),
-    RalewayRegular: require("../fonts/Raleway/static/Raleway-Regular.ttf"),
-    RalewaySemiBold: require("../fonts/Raleway/static/Raleway-SemiBold.ttf"),
-    RalewayLight: require("../fonts/Raleway/static/Raleway-Light.ttf"),
+    PoppinsExtraBold: require("../fonts/Poppins/Poppins-ExtraBold.ttf"),
+    PoppinsRegular: require("../fonts/Poppins/Poppins-Regular.ttf"),
+    PoppinsLight: require("../fonts/Poppins/Poppins-Light.ttf"),
   });
 
   const toggleLike = () => {
     setIsLiked(!isLiked);
-  };
-
-  const animateHeart = () => {
-    Animated.timing(animation, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: true,
-    }).start(() => {
-      setIsLiked(!isLiked);
-      Animated.timing(animation, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start();
-    });
   };
 
   const toggleDescription = () => {
@@ -42,24 +32,30 @@ const Request = () => {
   };
 
   return (
-    <View className="bg-white rounded-lg p-2.5 shadow-xl my-2.5">
-      <Text style={{ fontFamily: "RalewayLight" }}>Posted 3 minutes ago</Text>
-      <View className="flex flex-col gap-2.5">
-        <View className="flex flex-row items-center justify-between">
-          <View
-            className="flex flex-col items-start justify-start"
-            style={{ width: "60%" }}>
-            <Text
-              className="text-lg"
-              style={{ fontFamily: "RalewayExtraBold" }}>
-              We are looking for 45 Freelancers
-            </Text>
+    <View style={styles.container}>
+      <Text style={styles.postedTime}>{post.postedTime}</Text>
+      <View style={styles.content}>
+        <View>
+          <Image
+            source={post.image}
+            style={styles.image}
+          />
+        </View>
+        <View style={styles.titleContainer}>
+          <View style={styles.title}>
+            <Text style={styles.titleText}>{post.title}</Text>
           </View>
-
-          <View className="flex flex-row items-center gap-2.5">
+          <View style={styles.iconsContainer}>
             <TouchableOpacity onPress={toggleLike}>
               <Icon
                 name={isLiked ? "heart" : "heart-outline"}
+                size={20}
+                color="black"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Icon
+                name="call-outline"
                 size={20}
                 color="black"
               />
@@ -77,13 +73,11 @@ const Request = () => {
           <Text
             numberOfLines={showFullDescription ? undefined : 3}
             ellipsizeMode="tail"
-            className="my-1">
-            I will provide a detailed description of the project and what is
-            needed from freelancers in this section More of the details can be
-            found on our website www.website.com at the "Projects" tab.
+            style={styles.description}>
+            {post.description}
           </Text>
           <TouchableOpacity onPress={toggleDescription}>
-            <Text className="underline">
+            <Text style={styles.toggleDescription}>
               {showFullDescription ? "show less" : "more"}
             </Text>
           </TouchableOpacity>
@@ -92,5 +86,62 @@ const Request = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginVertical: 10,
+  },
+  postedTime: {
+    fontFamily: "PoppinsLight",
+    marginBottom: 10,
+  },
+  content: {
+    flexDirection: "column",
+    gap: 5,
+  },
+  image: {
+    width: "100%",
+    height: 250,
+    // resizeMode: "cover",
+    objectFit: "cover",
+    borderRadius: 10,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  title: {
+    flex: 0.9,
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
+  titleText: {
+    fontFamily: "PoppinsBold",
+    fontSize: 20,
+  },
+  iconsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 15,
+  },
+  description: {
+    fontFamily: "PoppinsRegular",
+  },
+  toggleDescription: {
+    textDecorationLine: "underline",
+  },
+});
 
 export default Request;

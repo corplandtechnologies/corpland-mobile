@@ -5,6 +5,7 @@ import { COLORS } from "../utils/color";
 import Home from "../screens/Home";
 import { useFonts } from "expo-font";
 import CreateRequest from "../screens/buyer/CreateRequest";
+import Profile from "../screens/Profile";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,6 +51,21 @@ export default function TabNavigator() {
           },
         }}
       />
+
+      {/* <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon
+              name="person"
+              color={color}
+              size={size}
+            />
+          ),
+          headerShown: false,
+        }}
+      /> */}
     </Tab.Navigator>
   );
 }

@@ -9,7 +9,7 @@ const ScreenContextWrapper = ({ children }: { children: React.ReactNode }) => {
   });
   return (
     <SafeAreaProvider>
-      <SafeAreaView className="">
+      <SafeAreaView>
         <View>
           {children}
         </View>
