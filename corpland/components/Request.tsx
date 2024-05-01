@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Linking } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFonts } from "expo-font";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import moment from "moment";
+import { COLORS } from "../utils/color";
 
 interface RequestProps {
   post: {
     title: string;
     description: string;
     image: string;
-    postedTime: string;
+    createdAt: string;
+    phoneNumber: string; // Assuming the post object now includes a phoneNumber
   };
 }
 
@@ -19,6 +22,7 @@ const Request: React.FC<RequestProps> = ({ post }) => {
 
   const [fontsLoaded] = useFonts({
     PoppinsExtraBold: require("../fonts/Poppins/Poppins-ExtraBold.ttf"),
+    PoppinsBold: require("../fonts/Poppins/Poppins-Bold.ttf"),
     PoppinsRegular: require("../fonts/Poppins/Poppins-Regular.ttf"),
     PoppinsLight: require("../fonts/Poppins/Poppins-Light.ttf"),
   });
@@ -31,42 +35,50 @@ const Request: React.FC<RequestProps> = ({ post }) => {
     setShowFullDescription(!showFullDescription);
   };
 
+  const dialNumber = () => {
+    const phoneNumber = post.phoneNumber; // Assuming the phoneNumber is part of the post object
+    const dialUrl = `tel:${phoneNumber}`;
+    Linking.openURL(dialUrl);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.postedTime}>{post.postedTime}</Text>
+      <Text style={styles.postedTime}>{moment(post.createdAt).fromNow()}</Text>
       <View style={styles.content}>
-        <View>
-          <Image
-            source={post.image}
-            style={styles.image}
-          />
-        </View>
+        {post.image && (
+          <View>
+            <Image
+              src={post.image}
+              style={styles.image}
+            />
+          </View>
+        )}
         <View style={styles.titleContainer}>
           <View style={styles.title}>
             <Text style={styles.titleText}>{post.title}</Text>
           </View>
           <View style={styles.iconsContainer}>
-            <TouchableOpacity onPress={toggleLike}>
+            {/* <TouchableOpacity onPress={toggleLike}>
               <Icon
                 name={isLiked ? "heart" : "heart-outline"}
                 size={20}
                 color="black"
               />
-            </TouchableOpacity>
-            <TouchableOpacity>
+            </TouchableOpacity> */}
+            <TouchableOpacity onPress={dialNumber}>
               <Icon
                 name="call-outline"
                 size={20}
                 color="black"
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Icon
                 name="share-outline"
                 size={20}
                 color="black"
-              />
-            </TouchableOpacity>
+              /> 
+            </TouchableOpacity>*/}
           </View>
         </View>
         <View>
@@ -89,10 +101,11 @@ const Request: React.FC<RequestProps> = ({ post }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: COLORS.SECONDARY,
+    width: "100%",
     borderRadius: 10,
     padding: 10,
-    shadowColor: "#000",
+    shadowColor: COLORS.PRIMARY,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -130,6 +143,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: "PoppinsBold",
     fontSize: 20,
+    fontWeight: "extrabold",
   },
   iconsContainer: {
     flexDirection: "row",
@@ -138,6 +152,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontFamily: "PoppinsRegular",
+    fontWeight: "500",
   },
   toggleDescription: {
     textDecorationLine: "underline",
