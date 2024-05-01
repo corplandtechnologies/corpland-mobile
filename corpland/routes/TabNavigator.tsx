@@ -52,7 +52,7 @@ export default function TabNavigator() {
         }}
       />
 
-      {/* <Tab.Screen
+       {/* <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
@@ -65,7 +65,7 @@ export default function TabNavigator() {
           ),
           headerShown: false,
         }}
-      /> */}
+      />  */}
     </Tab.Navigator>
   );
 }

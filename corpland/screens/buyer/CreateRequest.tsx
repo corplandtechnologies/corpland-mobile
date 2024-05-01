@@ -1,4 +1,10 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import ScreenContextWrapper from "../../components/ScreenContextWrapper";
 import Card from "../../components/ui/Card";
@@ -11,6 +17,9 @@ import Select from "../../components/ui/Select";
 import * as ImagePicker from "expo-image-picker";
 import { categories, regionsByCountry } from "../../data/dummyData";
 import { getUserCountry, getUserLocation } from "../../utils/modules";
+import { Snackbar } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { createRequest } from "../../api/api";
 
 const CreateRequest = () => {
   const [fontsLoaded] = useFonts({
@@ -18,10 +27,21 @@ const CreateRequest = () => {
     RalewayRegular: require("../../fonts/Poppins/Poppins-Regular.ttf"),
     PoppinsLight: require("../../fonts/Poppins/Poppins-Light.ttf"),
   });
+
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [image, setImage] = useState("");
+  const [imageObject, setImageObject] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [locationOptions, setLocationOptions] = useState<string[]>([]);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const navigation = useNavigation();
+
   useEffect(() => {
     const fetchLocationOptions = async () => {
       const location = await getUserLocation();
@@ -55,11 +75,48 @@ const CreateRequest = () => {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+      setImageObject(result.assets[0]);
     }
   };
 
+  if (!fontsLoaded) {
+    return null;
+  }
+
   const removeImage = () => {
     setImage("");
+  };
+
+  // CreateRequest.tsx
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      if (!title || !desc || !locationOptions || !categories || !phoneNumber) {
+        setSnackbarMessage("All fields are required");
+        setSnackbarVisible(true);
+        return;
+      }
+      const newRequest = {
+        title: title,
+        description: desc,
+        image: image,
+        location: locationOptions,
+        category: selectedCategory,
+        phoneNumber: phoneNumber,
+      };
+      const response = await createRequest(newRequest);
+      console.log(response.data);
+      navigation.navigate("Home");
+      setSnackbarMessage("Request created successfully");
+      setSnackbarVisible(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage("An error occurred");
+      setSnackbarVisible(true);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <ScreenContextWrapper>
@@ -94,6 +151,8 @@ const CreateRequest = () => {
           outlineColor={COLORS.COMPLIMENTARY}
           activeOutlineColor={COLORS.PRIMARY}
           style={styles.textInput}
+          value={title} // Bind the state value
+          onChangeText={setTitle} // Update the state value
         />
         <TextInput
           mode="outlined"
@@ -102,6 +161,8 @@ const CreateRequest = () => {
           activeOutlineColor={COLORS.PRIMARY}
           multiline={true}
           style={styles.textInput}
+          value={desc}
+          onChangeText={setDesc}
         />
         <TextInput
           mode="outlined"
@@ -111,6 +172,8 @@ const CreateRequest = () => {
           activeOutlineColor={COLORS.PRIMARY}
           multiline={true}
           style={styles.textInput}
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
         />
         <Select
           touchableText={selectedCategory || "Category*"} // Display the selected category or the placeholder text
@@ -130,9 +193,16 @@ const CreateRequest = () => {
           <Button
             icon="post"
             mode="contained"
-            onPress={() => console.log("Pressed")}
+            onPress={handleSubmit}
             style={styles.createRequest}>
-            Request
+            {loading ? (
+              <ActivityIndicator
+                size="small"
+                color="white"
+              />
+            ) : (
+              "Request"
+            )}
           </Button>
         </TouchableOpacity>
 
@@ -142,6 +212,12 @@ const CreateRequest = () => {
           include any Prohibited Requests.
         </Text>
       </Card>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={Snackbar.DURATION_SHORT}>
+        {snackbarMessage}
+      </Snackbar>
     </ScreenContextWrapper>
   );
 };
