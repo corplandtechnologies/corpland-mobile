@@ -2,7 +2,7 @@ import axios from "axios";
 import { v4 as uuid } from "uuid";
 
 export const API = axios.create({
-  baseURL: "http://192.168.125.158:3000/api/v1", //I would seperate the repos so that I can give you the production api
+  baseURL: "http://192.168.121.158:3000/api/v1", //I would seperate the repos so that I can give you the production api
   withCredentials: true,
 });
 

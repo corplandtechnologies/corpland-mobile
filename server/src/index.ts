@@ -18,8 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("common"));
 
-
-
 useRoutes(app);
 
 app.listen(PORT, () => {
