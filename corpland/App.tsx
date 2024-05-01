@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Onboarding">
+      <Stack.Navigator initialRouteName="OnBoarding">
         <Stack.Screen
           name="TabNavigator"
           options={{ headerShown: false }}
