@@ -72,9 +72,6 @@ const CreateRequest = () => {
     }
   };
 
-  if (!fontsLoaded) {
-    return null;
-  }
 
   const removeImage = () => {
     setImage("");
