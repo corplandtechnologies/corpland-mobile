@@ -1,0 +1,8 @@
+export const COLORS = {
+  PRIMARY: "#000000",
+  SECONDARY: "#FFFFFF",
+  TERTIARY: "#DDDDDD",
+  COMPLIMENTARY: "#AAAAAA",
+  TRANSPARENT: "rgba(0,0,0,0.5)",
+  DESTRUCTIVE: "#FF4136",
+};

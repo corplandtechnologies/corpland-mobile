@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Corpland",
+    "slug": "Corpland",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/CORPLAND7-NO-BG.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/CORPLAND-2-no-bg.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/CORPLAND7-NO-BG.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.soluservant.corpland"
+    },
+    "web": {
+      "favicon": "./assets/CORPLAND7-NO-BG.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9ae54f66-419e-40d0-a4f3-b06671eb3cf4"
+      }
+    },
+    "owner": "soluservant",
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}
