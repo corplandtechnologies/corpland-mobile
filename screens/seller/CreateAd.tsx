@@ -4,6 +4,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import ScreenContextWrapper from "../../components/ScreenContextWrapper";
@@ -18,9 +19,9 @@ import { categories, regionsByCountry } from "../../data/dummyData";
 import { getUserCountry, getUserLocation } from "../../utils/modules";
 import { Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { createRequest } from "../../api/api";
+import { createAd } from "../../api/api";
 
-const CreateRequest = () => {
+const CreateAd = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -37,8 +38,6 @@ const CreateRequest = () => {
   const [countryOptions, setCountryOptions] = useState<string[]>([]);
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-
-  console.log(countryOptions);
 
   const navigation = useNavigation();
 
@@ -60,7 +59,6 @@ const CreateRequest = () => {
         } else {
           // Default to global locations if user is not in a specific region
           console.log(regionsByCountry);
-          setCountryOptions(Object.keys(regionsByCountry));
         }
       } else {
         // Location refused, set locationRefused to true
@@ -103,7 +101,7 @@ const CreateRequest = () => {
     setImage("");
   };
 
-  // CreateRequest.tsx
+  // CreateAd.tsx
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -113,7 +111,7 @@ const CreateRequest = () => {
         setSnackbarVisible(true);
         return;
       }
-      const newRequest = {
+      const newAd = {
         title: title,
         description: desc,
         image: image,
@@ -121,10 +119,10 @@ const CreateRequest = () => {
         category: selectedCategory,
         phoneNumber: phoneNumber,
       };
-      const response = await createRequest(newRequest);
+      const response = await createAd(newAd);
       console.log(response.data);
       navigation.navigate("Home");
-      setSnackbarMessage("Request created successfully");
+      setSnackbarMessage("Ad created successfully");
       setSnackbarVisible(true);
     } catch (error) {
       console.error(error);
@@ -136,113 +134,117 @@ const CreateRequest = () => {
   };
   return (
     <ScreenContextWrapper>
-      <Card>
-        <Text style={{ fontFamily: "RalewayRegular" }}>Requestd a photo</Text>
-        <View style={styles.imageContainer}>
-          {image && (
-            <View style={styles.imageWrapper}>
-              <Image
-                source={{ uri: image }}
-                style={styles.image}
-              />
-              <TouchableOpacity
-                style={styles.removeImageButton}
-                onPress={removeImage}>
-                <Text style={styles.removeImageText}>x</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          <TouchableOpacity
-            style={styles.addImageBox}
-            onPress={pickImage}>
-            <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>+</Text>
-          </TouchableOpacity>
-        </View>
-      </Card>
-      <Card>
-        <TextInput
-          mode="outlined"
-          placeholder="What do you need?"
-          label={"Title"}
-          outlineColor={COLORS.COMPLIMENTARY}
-          activeOutlineColor={COLORS.PRIMARY}
-          style={styles.textInput}
-          value={title} // Bind the state value
-          onChangeText={setTitle} // Update the state value
-        />
-        <TextInput
-          mode="outlined"
-          placeholder="Some more details to take note of?"
-          label={"Description"}
-          activeOutlineColor={COLORS.PRIMARY}
-          multiline={true}
-          style={styles.textInput}
-          value={desc}
-          onChangeText={setDesc}
-        />
-        <TextInput
-          mode="outlined"
-          placeholder="Contact this number if available"
-          label={"Phone Number"}
-          keyboardType="numeric"
-          activeOutlineColor={COLORS.PRIMARY}
-          multiline={true}
-          style={styles.textInput}
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-        />
-        <Select
-          touchableText={selectedCategory || "Category*"} // Display the selected category or the placeholder text
-          title="Categories"
-          options={categories}
-          onSelect={(selectedOption) => setSelectedCategory(selectedOption)} // Update the selected category state
-        />
-        <Select
-          touchableText={selectedCountry || "Country*"} // Display the selected category or the placeholder text
-          title="Country"
-          options={Object.keys(regionsByCountry)}
-          onSelect={handleCountrySelect}
-          locationRefused={locationRefused}
-        />
-        {selectedCountry && (
-          <Select
-            touchableText={selectedRegion || "Region*"} // Display the selected category or the placeholder text
-            title="Region"
-            options={regionOptions}
-            onSelect={handleRegionSelect}
-          />
-        )}
-      </Card>
-      <Card>
-        <TouchableOpacity>
-          <Button
-            icon="post"
-            mode="contained"
-            onPress={handleSubmit}
-            style={styles.createRequest}>
-            {loading ? (
-              <ActivityIndicator
-                size="small"
-                color="white"
-              />
-            ) : (
-              "Request"
+      <ScrollView>
+        <Card>
+          <Text style={{ fontFamily: "RalewayRegular" }}>Add a photo</Text>
+          <View style={styles.imageContainer}>
+            {image && (
+              <View style={styles.imageWrapper}>
+                <Image
+                  source={{ uri: image }}
+                  style={styles.image}
+                />
+                <TouchableOpacity
+                  style={styles.removeImageButton}
+                  onPress={removeImage}>
+                  <Text style={styles.removeImageText}>x</Text>
+                </TouchableOpacity>
+              </View>
             )}
-          </Button>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.addImageBox}
+              onPress={pickImage}>
+              <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
+                +
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Card>
+        <Card>
+          <TextInput
+            mode="outlined"
+            placeholder="What's available?"
+            label={"Title"}
+            outlineColor={COLORS.COMPLIMENTARY}
+            activeOutlineColor={COLORS.PRIMARY}
+            style={styles.textInput}
+            value={title} // Bind the state value
+            onChangeText={setTitle} // Update the state value
+          />
+          <TextInput
+            mode="outlined"
+            placeholder="Any detail?"
+            label={"Description"}
+            activeOutlineColor={COLORS.PRIMARY}
+            multiline={true}
+            style={styles.textInput}
+            value={desc}
+            onChangeText={setDesc}
+          />
+          <TextInput
+            mode="outlined"
+            placeholder="Contact this number if available"
+            label={"Phone Number"}
+            keyboardType="numeric"
+            activeOutlineColor={COLORS.PRIMARY}
+            multiline={true}
+            style={styles.textInput}
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+          />
+          <Select
+            touchableText={selectedCategory || "Category*"} // Display the selected category or the placeholder text
+            title="Categories"
+            options={categories}
+            onSelect={(selectedOption) => setSelectedCategory(selectedOption)} // Update the selected category state
+          />
+          <Select
+            touchableText={selectedCountry || "Country*"} // Display the selected category or the placeholder text
+            title="Country"
+            options={Object.keys(regionsByCountry)}
+            onSelect={handleCountrySelect}
+            locationRefused={locationRefused}
+          />
+          {selectedCountry && (
+            <Select
+              touchableText={selectedRegion || "Region*"} // Display the selected category or the placeholder text
+              title="Region"
+              options={regionOptions}
+              onSelect={handleRegionSelect}
+            />
+          )}
+        </Card>
+        <Card>
+          <TouchableOpacity>
+            <Button
+              icon="post"
+              mode="contained"
+              onPress={handleSubmit}
+              style={styles.createAd}>
+              {loading ? (
+                <ActivityIndicator
+                  size="small"
+                  color="white"
+                />
+              ) : (
+                "Ad"
+              )}
+            </Button>
+          </TouchableOpacity>
 
-        <Text style={{ textAlign: "center" }}>
-          By clicking on Request, you accept the Terms of Use , confirm that you
-          will abide by the Safety Tips, and declare that this posting does not
-          include any Prohibited Requests.
-        </Text>
-      </Card>
-      <Snackbar
-        visible={snackbarVisible}
-        onDismiss={() => setSnackbarVisible(false)}
-        duration={Snackbar.DURATION_SHORT}>
-        {snackbarMessage}
-      </Snackbar>
+          <Text style={{ textAlign: "center" }}>
+            By clicking on Ad, you accept the Terms of Use , confirm that you
+            will abide by the Safety Tips, and declare that this posting does
+            not include any Prohibited Ads.
+          </Text>
+        </Card>
+        <Snackbar
+          visible={snackbarVisible}
+          onDismiss={() => setSnackbarVisible(false)}
+          duration={Snackbar.DURATION_SHORT}>
+          {snackbarMessage}
+        </Snackbar>
+      </ScrollView>
     </ScreenContextWrapper>
   );
 };
@@ -265,7 +267,7 @@ const styles = StyleSheet.create({
     fontFamily: "RalewayRegular",
     height: "100%",
   },
-  createRequest: {
+  createAd: {
     backgroundColor: COLORS.PRIMARY,
   },
   image: {
@@ -301,4 +303,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateRequest;
+export default CreateAd;

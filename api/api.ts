@@ -1,8 +1,7 @@
 import axios from "axios";
-import { v4 as uuid } from "uuid";
 
 export const API = axios.create({
-  baseURL: "https://corpland-backend.onrender.com/api/v1", //I would seperate the repos so that I can give you the production api
+  baseURL: "https://corpland-backend.onrender.com/api/v1", //I would seperate the repors so that I can give you the production api
   withCredentials: true,
 });
 
@@ -27,4 +26,25 @@ export const createRequest = async (newRequest: any) => {
   };
 
   return API.post("/requests", formData, config);
+};
+
+export const getAds = () => API.get("/ads");
+export const createAd = async (newAd: any) => {
+  const formData: any = new FormData();
+  formData.append("title", newAd.title);
+  formData.append("description", newAd.description);
+  formData.append("phoneNumber", newAd.phoneNumber);
+  formData.append("location", newAd.location);
+  formData.append("category", newAd.category);
+  formData.append("image", {
+    uri: newAd.image,
+    type: "image/jpeg", // or 'image/png' if the image is a PNG
+    name: `adImage.jpg`, // or '.png'
+  });
+
+  const config = {
+    headers: { "Content-Type": "multipart/form-data" },
+  };
+
+  return API.post("/ads", formData, config);
 };

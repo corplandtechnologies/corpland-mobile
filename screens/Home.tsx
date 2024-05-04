@@ -3,7 +3,7 @@ import Request from "../components/Request";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
-import { getRequests } from "../api/api";
+import { getAds, getRequests } from "../api/api";
 import { useFocusEffect } from "@react-navigation/native";
 import React from "react";
 import { COLORS } from "../utils/color";
@@ -18,7 +18,7 @@ const Home = () => {
       postedTime: "3 minutes ago",
     },
   ];
-  const [requests, setRequests] = useState([]);
+  const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   console.log(requests);
 
@@ -27,8 +27,9 @@ const Home = () => {
       const getPosts = async () => {
         setLoading(true);
         try {
-          const response = await getRequests();
-          setRequests(response?.data);
+          const requestsResponse = await getRequests();
+          const adsResponse = await getAds();
+          setRequests([...requestsResponse?.data, ...adsResponse?.data]);
           setLoading(false);
         } catch (error) {
           setLoading(false);

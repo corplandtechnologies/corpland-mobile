@@ -4,37 +4,32 @@
     "slug": "Corpland",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/CORPLAND7-NO-BG.png",
+    "icon": "./assets/CORPLAND5.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/CORPLAND-2-no-bg.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "contain"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/CORPLAND7-NO-BG.png",
+        "foregroundImage": "./assets/CORPLAND5.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.soluservant.corpland"
     },
     "web": {
-      "favicon": "./assets/CORPLAND7-NO-BG.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "9ae54f66-419e-40d0-a4f3-b06671eb3cf4"
-      }
+      "favicon": "./assets/CORPLAND5.png"
     },
     "owner": "soluservant",
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font"],
+    "extra": {
+      "eas": {
+        "projectId": "a84f5db7-a1e3-4149-b0ef-db4daee77a20"
+      }
+    }
   }
 }

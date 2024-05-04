@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, Linking } from "react-native";
+import { View, Text, StyleSheet, Linking, Image } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import moment from "moment";
@@ -40,7 +40,7 @@ const Request: React.FC<RequestProps> = ({ post }) => {
         {post.image && (
           <View>
             <Image
-              src={post.image}
+              source={{ uri: post?.image }}
               style={styles.image}
             />
           </View>

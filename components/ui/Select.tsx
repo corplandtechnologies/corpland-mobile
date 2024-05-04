@@ -60,12 +60,14 @@ const Select = ({
   title,
   options = [],
   onSelect,
+  locationRefused = false, // New prop to indicate location refusal
 }: {
   touchableComponent?: typeof Touchable;
   touchableText?: string;
   title: string;
   options?: string[];
   onSelect: (selectedOption: string) => void;
+  locationRefused?: boolean; // New prop
 }) => {
   const [visible, setVisible] = useState(false);
   const { TouchableComponent } = touchableComponent(touchableText, () =>
@@ -97,7 +99,7 @@ const Select = ({
               </TouchableOpacity>
             </View>
             <FlatList
-              data={options}
+              data={options} // Use the options prop directly
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <Option

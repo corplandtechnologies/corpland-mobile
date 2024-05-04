@@ -15,7 +15,8 @@ export default function App() {
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
-        RalewayBold: require("./fonts/Raleway/static/Raleway-ExtraBold.ttf"),
+        RalewayExtraBold: require("./fonts/Raleway/static/Raleway-ExtraBold.ttf"),
+        RalewayBold: require("./fonts/Raleway/static/Raleway-Bold.ttf"),
         RalewayRegular: require("./fonts/Raleway/static/Raleway-Bold.ttf"),
         PoppinsExtraBold: require("./fonts/Poppins/Poppins-ExtraBold.ttf"),
         PoppinsBold: require("./fonts/Poppins/Poppins-Bold.ttf"),

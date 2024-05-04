@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS } from "../utils/color";
 import Home from "../screens/Home";
 import CreateRequest from "../screens/buyer/CreateRequest";
+import CreateAd from "../screens/seller/CreateAd";
 import Profile from "../screens/Profile";
+import { Switch } from "react-native-paper";
+import { View } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
+  const [isRequest, setIsRequest] = useState(false);
+
+  const onToggleSwitch = () => setIsRequest(!isRequest);
 
   return (
     <Tab.Navigator screenOptions={{ tabBarActiveTintColor: COLORS.PRIMARY }}>
@@ -23,17 +29,17 @@ export default function TabNavigator() {
               size={size}
             />
           ),
-          headerTitle: "Corpland",
+          headerTitle: "CORPLAND",
           headerTitleStyle: {
-            fontFamily: "RalewayBold",
+            fontFamily: "RalewayExtraBold",
             // borderWidth:8
           },
         }}
       />
       <Tab.Screen
-        name="Request"
-        component={CreateRequest}
-        options={{
+        name="Add"
+        component={isRequest ? CreateRequest : CreateAd}
+        options={({ route }) => ({
           tabBarIcon: ({ color, size }) => (
             <Icon
               name="add-circle"
@@ -41,14 +47,22 @@ export default function TabNavigator() {
               size={size}
             />
           ),
-          headerTitle: "Make a Request",
+          headerTitle: isRequest ? "Make a Request" : "Post an Ad",
           headerTitleStyle: {
             fontFamily: "RalewayRegular",
           },
-        }}
+          headerRight: () => (
+            <View style={{ marginRight: 10 }}>
+              <Switch
+                value={isRequest}
+                onValueChange={onToggleSwitch}
+              />
+            </View>
+          ),
+        })}
       />
 
-       {/* <Tab.Screen
+      {/* <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
