@@ -137,7 +137,7 @@ const CreateRequest = () => {
   return (
     <ScreenContextWrapper>
       <Card>
-        <Text style={{ fontFamily: "RalewayRegular" }}>Requestd a photo</Text>
+        <Text style={{ fontFamily: "RalewayRegular" }}>Add a photo</Text>
         <View style={styles.imageContainer}>
           {image && (
             <View style={styles.imageWrapper}>

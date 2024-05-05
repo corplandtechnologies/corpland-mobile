@@ -8,7 +8,8 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/CORPLAND-2-no-bg.png",
-      "resizeMode": "contain"
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {

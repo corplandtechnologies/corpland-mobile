@@ -56,6 +56,7 @@ export default function TabNavigator() {
               <Switch
                 value={isRequest}
                 onValueChange={onToggleSwitch}
+                color={COLORS.PRIMARY}
               />
             </View>
           ),
