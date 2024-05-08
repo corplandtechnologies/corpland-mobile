@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/CORPLAND-2-no-bg.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {

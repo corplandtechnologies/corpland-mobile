@@ -15,13 +15,11 @@ export default function App() {
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
-        RalewayExtraBold: require("./fonts/Raleway/static/Raleway-ExtraBold.ttf"),
-        RalewayBold: require("./fonts/Raleway/static/Raleway-Bold.ttf"),
-        RalewayRegular: require("./fonts/Raleway/static/Raleway-Bold.ttf"),
-        PoppinsExtraBold: require("./fonts/Poppins/Poppins-ExtraBold.ttf"),
-        PoppinsBold: require("./fonts/Poppins/Poppins-Bold.ttf"),
-        PoppinsRegular: require("./fonts/Poppins/Poppins-Regular.ttf"),
-        PoppinsLight: require("./fonts/Poppins/Poppins-Light.ttf"),
+        InterExtraBold: require("./fonts/Inter/static/Inter-ExtraBold.ttf"),
+        InterBold: require("./fonts/Inter/static/Inter-Bold.ttf"),
+        InterRegular: require("./fonts/Inter/static/Inter-Regular.ttf"),
+        InterLight: require("./fonts/Inter/static/Inter-light.ttf"),
+        InterThin: require("./fonts/Inter/static/Inter-Thin.ttf"),
       });
       setFontLoaded(true);
     }
@@ -34,7 +32,7 @@ export default function App() {
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="TabNavigator">
+      <Stack.Navigator initialRouteName="OnBoarding">
         <Stack.Screen
           name="TabNavigator"
           options={{ headerShown: false }}
@@ -47,7 +45,14 @@ export default function App() {
         />
         <Stack.Screen
           name="Login"
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false ,
+            headerTitle: "Sign In",
+            headerTitleStyle: {
+              fontFamily: "InterBold",
+              // borderWidth:8
+            },
+          }}
           component={Login}
         />
         <Stack.Screen
