@@ -1,16 +1,21 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import TabNavigator from "./routes/TabNavigator";
 import Register from "./screens/auth/Register";
 import Login from "./screens/auth/Login";
 import Onboarding from "./screens/Onboarding";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
+import Verify from "./screens/auth/Verify";
+import BackButton from "./components/ui/BackButton";
+import CompleteProfile from "./screens/auth/CompleteProfile";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [isFontLoaded, setFontLoaded] = useState(false);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     async function loadFonts() {
@@ -27,12 +32,28 @@ export default function App() {
     loadFonts();
   }, []);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userInfo = await AsyncStorage.getItem("user");
+        if (userInfo) {
+          const parsedUserInfo = JSON.parse(userInfo);
+          setUser(parsedUserInfo._id);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   if (!isFontLoaded) {
     return null; // or a loading indicator
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="OnBoarding">
+      <Stack.Navigator initialRouteName={"OnBoarding"}>
         <Stack.Screen
           name="TabNavigator"
           options={{ headerShown: false }}
@@ -46,7 +67,7 @@ export default function App() {
         <Stack.Screen
           name="Login"
           options={{
-            headerShown: false ,
+            headerShown: false,
             headerTitle: "Sign In",
             headerTitleStyle: {
               fontFamily: "InterBold",
@@ -59,6 +80,22 @@ export default function App() {
           name="OnBoarding"
           options={{ headerShown: false }}
           component={Onboarding}
+        />
+        <Stack.Screen
+          name="Verify"
+          options={{
+            headerTitle: "",
+            headerLeft: () => <BackButton />,
+          }}
+          component={Verify}
+        />
+        <Stack.Screen
+          name="CompleteProfile"
+          options={{
+            headerTitle: "",
+            headerLeft: () => <BackButton />,
+          }}
+          component={CompleteProfile}
         />
       </Stack.Navigator>
     </NavigationContainer>

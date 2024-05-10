@@ -9,6 +9,8 @@ import {
 import { Input, Button, Icon, CheckBox } from "react-native-elements"; // Import CheckBox
 import { COLORS } from "../../utils/color";
 import { useNavigation } from "@react-navigation/native";
+import UserHeader from "../../components/UserHeader";
+import PrimaryButton from "../../components/ui/PrimaryButton";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -30,11 +32,10 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.pageTitle}>Create Account</Text>
-      <Text style={styles.descriptiveText}>
-        Fill your information below or register with your social account
-      </Text>
-
+      <UserHeader
+        title="Create Account"
+        description="Fill your information below or register with your social account"
+      />
       <View style={styles.inputContainer}>
         <Icon
           name="envelope"
@@ -74,10 +75,9 @@ const Login = () => {
       <TouchableOpacity onPress={() => console.log("Forgot Password")}>
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
-      <Button
-        title="Sign In"
-        buttonStyle={styles.signUpButton}
-      />
+
+      <PrimaryButton value="Sign In" />
+
       <View style={styles.separatorContainer}>
         <View style={styles.separatorLine} />
         <Text style={styles.separatorText}>or</Text>
@@ -122,18 +122,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
     backgroundColor: COLORS.SECONDARY,
-  },
-  pageTitle: {
-    fontSize: 24,
-    textAlign: "center",
-    marginBottom: 20,
-    fontFamily: "InterBold",
-  },
-  descriptiveText: {
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 20,
-    color: COLORS.GRAY,
   },
   termsButton: {
     fontSize: 14,

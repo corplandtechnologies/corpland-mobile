@@ -6,9 +6,14 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { Input, Button, Icon, CheckBox } from "react-native-elements"; // Import CheckBox
+import { Input, Button, Icon, CheckBox } from "react-native-elements";
 import { COLORS } from "../../utils/color";
 import { useNavigation } from "@react-navigation/native";
+import { signUp } from "../../api/auth.api";
+import { Snackbar } from "react-native-paper"; // Ensure this is imported
+import PrimaryButton from "../../components/ui/PrimaryButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import UserHeader from "../../components/UserHeader";
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -19,21 +24,45 @@ const Register = () => {
   const [visible, setVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [fullName, setFullName] = useState("");
+  const [name, setName] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
-  // New state for terms agreement
+  const [snackbarVisible, setSnackbarVisible] = useState(false); // New state for Snackbar visibility
   const navigation = useNavigation();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
+  const handleSignUp = async () => {
+    setLoading(true);
+    try {
+      const res = await signUp({
+        name,
+        email,
+        password,
+        termsAccepted,
+      });
+      // Assuming user object contains userInfo and token
+      await AsyncStorage.setItem("user", JSON.stringify(res.user));
+      await AsyncStorage.setItem("token", res.token);
+      setSnackbarVisible(true);
+      setSnackbarMessage(res.message);
+      navigation.navigate("Verify");
+    } catch (error) {
+      console.log(error);
+      const err = error as Error;
+      setSnackbarMessage("Something went wrong");
+      setSnackbarVisible(true);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.pageTitle}>Create Account</Text>
-      <Text style={styles.descriptiveText}>
-        Fill your information below or register with your social account
-      </Text>
+      <UserHeader
+        title="Create Account"
+        description="Fill your information below or register with your social account"
+      />
 
       <View style={styles.inputContainer}>
         <Icon
@@ -42,10 +71,10 @@ const Register = () => {
           color={COLORS.GRAY}
         />
         <TextInput
-          placeholder="Full Name"
+          placeholder="Name"
           style={styles.input}
           placeholderTextColor={COLORS.TERTIARY}
-          onChangeText={setFullName}
+          onChangeText={setName}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -92,9 +121,11 @@ const Register = () => {
         textStyle={styles.termsText}
       />
 
-      <Button
-        title="Sign Up"
-        buttonStyle={styles.signUpButton}
+      <PrimaryButton
+        value="Sign Up"
+        onPress={handleSignUp}
+        disabled={!termsAccepted}
+        loading={loading}
       />
 
       <View style={styles.separatorContainer}>
@@ -131,6 +162,17 @@ const Register = () => {
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
         <Text style={styles.signInText}>Don't have an account? Sign In</Text>
       </TouchableOpacity>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        action={{
+          label: "Close",
+          onPress: () => {
+            setSnackbarVisible(false);
+          },
+        }}>
+        {snackbarMessage}
+      </Snackbar>
     </View>
   );
 };

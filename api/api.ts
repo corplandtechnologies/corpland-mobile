@@ -48,3 +48,21 @@ export const createAd = async (newAd: any) => {
 
   return API.post("/ads", formData, config);
 };
+
+export const completeProfile = async (userData: any) => {
+  const formData: any = new FormData();
+  formData.append("name", userData.description);
+  formData.append("phoneNumber", userData.phoneNumber);
+  formData.append("profilePicture", {
+    uri: userData.profilePicture,
+    type: "image/jpeg", // or 'image/png' if the image is a PNG
+    name: `profilePicture.jpg`, // or '.png'
+  });
+  formData.append("userId", userData.userId);
+
+  const config = {
+    headers: { "Content-Type": "multipart/form-data" },
+  };
+
+  return API.put("/users", formData, config);
+};
