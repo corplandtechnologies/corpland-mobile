@@ -8,11 +8,18 @@ import CreateAd from "../screens/seller/CreateAd";
 import Profile from "../screens/Profile";
 import { Switch } from "react-native-paper";
 import { View } from "react-native";
+import BackButton from "../components/ui/BackButton";
+import {
+  SellerModeProvider,
+  useSellerMode,
+} from "../context/SellerModeContext";
+import CreateProduct from "../screens/seller/CreateProduct";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   const [isRequest, setIsRequest] = useState(false);
+  const { isSellerMode, toggleSellerMode } = useSellerMode();
 
   const onToggleSwitch = () => setIsRequest(!isRequest);
 
@@ -31,14 +38,14 @@ export default function TabNavigator() {
           ),
           headerTitle: "CORPLAND",
           headerTitleStyle: {
-            fontFamily: "RalewayExtraBold",
+            fontFamily: "InterExtraBold",
             // borderWidth:8
           },
         }}
       />
       <Tab.Screen
         name="Add"
-        component={isRequest ? CreateRequest : CreateAd}
+        component={isSellerMode ? CreateProduct : CreateRequest}
         options={({ route }) => ({
           tabBarIcon: ({ color, size }) => (
             <Icon
@@ -47,23 +54,25 @@ export default function TabNavigator() {
               size={size}
             />
           ),
-          headerTitle: isRequest ? "Make a Request" : "Post an Ad",
+          headerTitle: isSellerMode ? "Post a Product" : "Make a Request",
           headerTitleStyle: {
-            fontFamily: "RalewayRegular",
+            fontFamily: "InterMedium",
           },
           headerRight: () => (
             <View style={{ marginRight: 10 }}>
-              <Switch
-                value={isRequest}
-                onValueChange={onToggleSwitch}
+              {/* <Switch
+                value={is}
+                onValueChange={toggleSellerMode}
                 color={COLORS.PRIMARY}
-              />
+              /> */}
             </View>
           ),
+          headerLeft: () => <BackButton />,
+          headerTitleAlign: "center",
         })}
       />
 
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
@@ -74,9 +83,11 @@ export default function TabNavigator() {
               size={size}
             />
           ),
-          headerShown: false,
+          headerTitle: "Profile",
+          headerLeft: () => <BackButton />,
+          headerTitleAlign: "center",
         }}
-      />  */}
+      />
     </Tab.Navigator>
   );
 }

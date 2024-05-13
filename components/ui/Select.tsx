@@ -13,8 +13,6 @@ import ScreenContextWrapper from "../ScreenContextWrapper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Touchable = (text = "Select an Option", onPress: () => void) => {
-
-
   const TouchableComponent = () => {
     return (
       <TouchableOpacity
@@ -24,7 +22,7 @@ const Touchable = (text = "Select an Option", onPress: () => void) => {
         <Icon
           name="chevron-forward"
           size={24}
-          color={COLORS.COMPLIMENTARY}
+          color={COLORS.PRIMARY}
         />
       </TouchableOpacity>
     );
@@ -48,7 +46,7 @@ const Option = ({
       <Icon
         name="chevron-forward"
         size={24}
-        color={COLORS.COMPLIMENTARY}
+        color={COLORS.PRIMARY}
       />
     </TouchableOpacity>
   );
@@ -125,21 +123,22 @@ const styles = StyleSheet.create({
   touchableContainer: {
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: COLORS.SECONDARY,
+    padding: 15,
+    borderRadius: 10,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: COLORS.TERTIARY,
     justifyContent: "space-between",
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    borderRadius: 8,
-    borderBottomColor: COLORS.PRIMARY,
-    borderBottomWidth: 1,
   },
   touchableText: {
     color: COLORS.PRIMARY,
     fontSize: 14,
     fontWeight: "600",
-    fontFamily: "RalewayRegular",
+    fontFamily: "InterRegular",
   },
   header: {
-    borderBottomColor: COLORS.COMPLIMENTARY,
+    borderBottomColor: COLORS.PRIMARY,
     borderBottomWidth: 1,
     flexDirection: "row-reverse",
     alignItems: "center",
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    fontFamily: "RalewayBold",
+    fontFamily: "InterBold",
   },
   title: {
     fontSize: 18,
@@ -156,19 +155,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLORS.PRIMARY,
     textAlign: "center",
-    fontFamily: "RalewayBold",
+    fontFamily: "InterBold",
   },
   optionContainer: {
     paddingVertical: 15,
     paddingHorizontal: 7.5,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.COMPLIMENTARY,
+    borderBottomColor: COLORS.PRIMARY,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   optionText: {
     fontSize: 16,
-    fontFamily: "RalewayRegular",
+    fontFamily: "InterRegular",
   },
 });

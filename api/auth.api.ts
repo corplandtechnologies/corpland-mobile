@@ -15,6 +15,20 @@ export const signUp = async (userData: {
   }
 };
 
+export const login = async (userData: {
+  email: string;
+  password: string;
+}) => {
+  try {
+    const response = await API.post("/users/login", userData);
+    return response.data; // Assuming the API returns the user data upon successful sign up
+  } catch (error) {
+    console.error("Error during sign up:", error);
+    throw error; // Rethrow the error to be handled by the caller
+  }
+};
+
+
 
 export const verifyEmail = async (userData: {
   email: string;

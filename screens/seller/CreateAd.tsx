@@ -136,7 +136,7 @@ const CreateAd = () => {
     <ScreenContextWrapper>
       <ScrollView>
         <Card>
-          <Text style={{ fontFamily: "RalewayRegular" }}>Add a photo</Text>
+          <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
           <View style={styles.imageContainer}>
             {image && (
               <View style={styles.imageWrapper}>
@@ -175,7 +175,6 @@ const CreateAd = () => {
             mode="outlined"
             placeholder="Any detail?"
             label={"Description"}
-            activeOutlineColor={COLORS.PRIMARY}
             multiline={true}
             style={styles.textInput}
             value={desc}
@@ -251,7 +250,7 @@ const CreateAd = () => {
 
 const styles = StyleSheet.create({
   textInput: {
-    fontFamily: "RalewayRegular",
+    fontFamily: "InterRegular",
     backgroundColor: COLORS.SECONDARY,
   },
   addImageBox: {
@@ -264,7 +263,7 @@ const styles = StyleSheet.create({
   },
   textInputDesc: {
     paddingLeft: 10,
-    fontFamily: "RalewayRegular",
+    fontFamily: "InterRegular",
     height: "100%",
   },
   createAd: {
@@ -299,7 +298,7 @@ const styles = StyleSheet.create({
   removeImageText: {
     fontSize: 16,
     color: COLORS.SECONDARY,
-    fontFamily: "RalewayRegular",
+    fontFamily: "InterRegular",
   },
 });
 

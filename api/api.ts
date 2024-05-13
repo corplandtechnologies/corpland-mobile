@@ -1,9 +1,27 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 export const API = axios.create({
-  baseURL: "https://corpland-backend.onrender.com/api/v1", //I would seperate the repors so that I can give you the production api
+  baseURL: "https://corpland-backend.onrender.com/api/v1",
   withCredentials: true,
 });
+
+const getToken = async () => {
+  return await AsyncStorage.getItem("token");
+};
+
+API.interceptors.request.use(
+  async (config) => {
+    const token = await getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export const getRequests = () => API.get("/requests");
 export const createRequest = async (newRequest: any) => {
@@ -15,8 +33,8 @@ export const createRequest = async (newRequest: any) => {
   formData.append("category", newRequest.category);
   formData.append("image", {
     uri: newRequest.image,
-    type: "image/jpeg", // or 'image/png' if the image is a PNG
-    name: `requestImage.jpg`, // or '.png'
+    type: "image/jpeg",
+    name: `requestImage.jpg`,
   });
 
   const config = {
@@ -38,8 +56,8 @@ export const createAd = async (newAd: any) => {
   formData.append("category", newAd.category);
   formData.append("image", {
     uri: newAd.image,
-    type: "image/jpeg", // or 'image/png' if the image is a PNG
-    name: `adImage.jpg`, // or '.png'
+    type: "image/jpeg",
+    name: `adImage.jpg`,
   });
 
   const config = {
@@ -51,12 +69,12 @@ export const createAd = async (newAd: any) => {
 
 export const completeProfile = async (userData: any) => {
   const formData: any = new FormData();
-  formData.append("name", userData.description);
+  formData.append("name", userData.name);
   formData.append("phoneNumber", userData.phoneNumber);
   formData.append("profilePicture", {
     uri: userData.profilePicture,
-    type: "image/jpeg", // or 'image/png' if the image is a PNG
-    name: `profilePicture.jpg`, // or '.png'
+    type: "image/jpeg",
+    name: `profilePicture.jpg`,
   });
   formData.append("userId", userData.userId);
 
@@ -65,4 +83,31 @@ export const completeProfile = async (userData: any) => {
   };
 
   return API.put("/users", formData, config);
+};
+
+export const getUserById = (userId: string) => API.get(`/users/${userId}`);
+
+export const createProduct = async (newProduct: any) => {
+  const formData: any = new FormData();
+  formData.append("title", newProduct.title);
+  formData.append("description", newProduct.description);
+  formData.append("category", newProduct.category);
+  formData.append("image", {
+    uri: newProduct.image,
+    type: "image/jpeg",
+    name: `adImage.jpg`,
+  });
+  formData.append("country", newProduct.country);
+  formData.append("region", newProduct.region);
+  formData.append("price", newProduct.price);
+  formData.append("userId", newProduct.userId);
+
+  const token = await AsyncStorage.getItem("token");
+
+  const config = {
+    headers: { "Content-Type": "multipart/form-data" },
+    Authorization: `Bearer ${token}`,
+  };
+
+  return API.post("/products", formData, config);
 };

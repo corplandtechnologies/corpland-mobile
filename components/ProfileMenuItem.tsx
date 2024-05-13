@@ -1,64 +1,46 @@
 // components/ProfileMenuItem.tsx
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS } from "../utils/color";
 
 interface ProfileMenuItemProps {
   title: string;
   iconName: string;
-  destructive?: boolean;
+  onPress: () => void;
 }
 
 const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
   title,
   iconName,
-  destructive,
+  onPress,
 }) => {
   return (
     <TouchableOpacity
+      onPress={onPress}
       style={{
-        ...styles.profileMenuView,
-        backgroundColor: destructive ? COLORS.DESTRUCTIVE : COLORS.SECONDARY,
+        flexDirection: "row",
+        alignItems: "center",
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.TERTIARY,
+        padding: 20,
+        paddingTop: 20,
+        paddingBottom: 20,
       }}>
-      <View style={styles.preferenceSelect}>
-        <Icon
-          name={iconName}
-          color={destructive ? COLORS.SECONDARY : COLORS.COMPLIMENTARY}
-          size={24}
-        />
-        <Text
-          style={{
-            ...styles.preferenceSelectText,
-            color: destructive ? COLORS.SECONDARY : COLORS.PRIMARY,
-          }}>
-          {title}
-        </Text>
-      </View>
       <Icon
-        name="chevron-forward-outline"
-        color={destructive ? COLORS.SECONDARY : COLORS.COMPLIMENTARY}
+        name={iconName}
         size={24}
+        color={COLORS.PRIMARY}
+      />
+      <Text style={{ marginLeft: 10, flex: 1, fontFamily:"InterRegular" }}>{title}</Text>
+      <Icon
+        name="chevron-forward"
+        size={24}
+        color={COLORS.PRIMARY}
       />
     </TouchableOpacity>
   );
 };
-
-export const styles = StyleSheet.create({
-  profileMenuView: {
-    padding: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  preferenceSelect: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  preferenceSelectText: {
-    fontFamily: "RalewayBold",
-  },
-});
 
 export default ProfileMenuItem;

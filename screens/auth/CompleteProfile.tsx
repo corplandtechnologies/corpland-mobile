@@ -28,10 +28,10 @@ const CompleteProfile = () => {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [userId, setUserId] = useState({});
+  const [userId, setUserId] = useState("");
   const [user, setUser] = useState(null);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -65,12 +65,15 @@ const CompleteProfile = () => {
   const handleProfileUpdate = async () => {
     setLoading(true);
     try {
-      const res = await completeProfile({
+      const data = {
         name: name,
         phoneNumber: phoneNumber,
-        userId: userId,
         profilePicture: selectedImage,
-      });
+        userId: userId,
+      };
+      console.log(data);
+
+      const res = await completeProfile(data);
       setSnackbarVisible(true);
       setSnackbarMessage(res.message);
       navigation.navigate("TabNavigator");

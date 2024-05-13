@@ -19,12 +19,12 @@ import { categories, regionsByCountry } from "../../data/dummyData";
 import { getUserCountry, getUserLocation } from "../../utils/modules";
 import { Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { createRequest } from "../../api/api";
+import { createProduct } from "../../api/api";
 import FormInput from "../../components/ui/FormInput";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useUser } from "../../context/UserContext";
 
-const CreateRequest = () => {
+const CreateProduct = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -112,7 +112,7 @@ const CreateRequest = () => {
     setImage("");
   };
 
-  // CreateRequest.tsx
+  // CreateProduct.tsx
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -122,7 +122,7 @@ const CreateRequest = () => {
         setSnackbarVisible(true);
         return;
       }
-      const newRequest = {
+      const newProduct = {
         title: title,
         description: desc,
         image: image,
@@ -132,10 +132,10 @@ const CreateRequest = () => {
         price: price,
         userId: user._id,
       };
-      const response = await createRequest(newRequest);
+      const response = await createProduct(newProduct);
       console.log(response.data);
       navigation.navigate("Home");
-      setSnackbarMessage("Request created successfully");
+      setSnackbarMessage("Product created successfully");
       setSnackbarVisible(true);
       setTitle("");
       setDesc("");
@@ -221,15 +221,15 @@ const CreateRequest = () => {
           />
           <TouchableOpacity>
             <PrimaryButton
-              value="Request"
+              value="Post"
               loading={loading}
               onPress={handleSubmit}
             />
           </TouchableOpacity>
           <Text style={{ textAlign: "center" }}>
-            By clicking on Request, you accept the Terms of Use , confirm that
+            By clicking on Product, you accept the Terms of Use , confirm that
             you will abide by the Safety Tips, and declare that this posting
-            does not include any Prohibited Requests.
+            does not include any Prohibited Products.
           </Text>
           <Snackbar
             visible={snackbarVisible}
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontFamily: "InterRegular",
   },
-  createRequest: {
+  createProduct: {
     backgroundColor: COLORS.PRIMARY,
   },
   image: {
@@ -304,4 +304,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateRequest;
+export default CreateProduct;

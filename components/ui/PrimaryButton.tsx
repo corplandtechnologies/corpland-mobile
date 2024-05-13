@@ -8,6 +8,7 @@ interface primaryButtonProps {
   onPress?: () => void;
   disabled?: boolean;
   loading?: boolean;
+  icon?: string;
 }
 
 const PrimaryButton: FC<primaryButtonProps> = ({
@@ -15,6 +16,7 @@ const PrimaryButton: FC<primaryButtonProps> = ({
   onPress,
   disabled,
   loading,
+  icon,
 }) => {
   return (
     <Button
@@ -23,6 +25,7 @@ const PrimaryButton: FC<primaryButtonProps> = ({
       onPress={onPress}
       disabled={disabled}
       loading={loading}
+      icon={icon}
     />
   );
 };

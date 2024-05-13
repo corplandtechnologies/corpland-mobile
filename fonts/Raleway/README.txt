@@ -1,36 +1,36 @@
-Raleway Variable Font
+Inter Variable Font
 =====================
 
-This download contains Raleway as both variable fonts and static fonts.
+This download contains Inter as both variable fonts and static fonts.
 
-Raleway is a variable font with this axis:
+Inter is a variable font with this axis:
   wght
 
 This means all the styles are contained in these files:
-  Raleway/Raleway-VariableFont_wght.ttf
-  Raleway/Raleway-Italic-VariableFont_wght.ttf
+  Inter/Inter-VariableFont_wght.ttf
+  Inter/Inter-Italic-VariableFont_wght.ttf
 
 If your app fully supports variable fonts, you can now pick intermediate styles
 that aren’t available as static fonts. Not all apps support variable fonts, and
-in those cases you can use the static font files for Raleway:
-  Raleway/static/Raleway-Thin.ttf
-  Raleway/static/Raleway-ExtraLight.ttf
-  Raleway/static/Raleway-Light.ttf
-  Raleway/static/Raleway-Regular.ttf
-  Raleway/static/Raleway-Medium.ttf
-  Raleway/static/Raleway-SemiBold.ttf
-  Raleway/static/Raleway-Bold.ttf
-  Raleway/static/Raleway-ExtraBold.ttf
-  Raleway/static/Raleway-Black.ttf
-  Raleway/static/Raleway-ThinItalic.ttf
-  Raleway/static/Raleway-ExtraLightItalic.ttf
-  Raleway/static/Raleway-LightItalic.ttf
-  Raleway/static/Raleway-Italic.ttf
-  Raleway/static/Raleway-MediumItalic.ttf
-  Raleway/static/Raleway-SemiBoldItalic.ttf
-  Raleway/static/Raleway-BoldItalic.ttf
-  Raleway/static/Raleway-ExtraBoldItalic.ttf
-  Raleway/static/Raleway-BlackItalic.ttf
+in those cases you can use the static font files for Inter:
+  Inter/static/Inter-Thin.ttf
+  Inter/static/Inter-ExtraLight.ttf
+  Inter/static/Inter-Light.ttf
+  Inter/static/Inter-Regular.ttf
+  Inter/static/Inter-Medium.ttf
+  Inter/static/Inter-SemiBold.ttf
+  Inter/static/Inter-Bold.ttf
+  Inter/static/Inter-ExtraBold.ttf
+  Inter/static/Inter-Black.ttf
+  Inter/static/Inter-ThinItalic.ttf
+  Inter/static/Inter-ExtraLightItalic.ttf
+  Inter/static/Inter-LightItalic.ttf
+  Inter/static/Inter-Italic.ttf
+  Inter/static/Inter-MediumItalic.ttf
+  Inter/static/Inter-SemiBoldItalic.ttf
+  Inter/static/Inter-BoldItalic.ttf
+  Inter/static/Inter-ExtraBoldItalic.ttf
+  Inter/static/Inter-BlackItalic.ttf
 
 Get started
 -----------

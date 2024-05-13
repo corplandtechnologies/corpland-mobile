@@ -11,29 +11,49 @@ import { COLORS } from "../../utils/color";
 import { useNavigation } from "@react-navigation/native";
 import UserHeader from "../../components/UserHeader";
 import PrimaryButton from "../../components/ui/PrimaryButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Snackbar } from "react-native-paper";
+import { login } from "../../api/auth.api";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [snackbarVisible, setSnackbarVisible] = useState(false); // New state for Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  // New state for terms agreement
   const navigation = useNavigation();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const res = await login({
+        email: email,
+        password: password,
+      });
+      // Assuming user object contains userInfo and token
+      await AsyncStorage.setItem("user", JSON.stringify(res.user));
+      await AsyncStorage.setItem("token", res.token);
+      setSnackbarVisible(true);
+      setSnackbarMessage(res.message);
+      navigation.navigate("TabNavigator");
+    } catch (error) {
+      console.log(error);
+      setSnackbarMessage(error.message);
+      setSnackbarVisible(true);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <View style={styles.container}>
       <UserHeader
-        title="Create Account"
+        title="Sign In"
         description="Fill your information below or register with your social account"
       />
       <View style={styles.inputContainer}>
@@ -72,11 +92,16 @@ const Login = () => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => console.log("Forgot Password")}>
+      {/* <TouchableOpacity onPress={() => console.log("Forgot Password")}>
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
-      <PrimaryButton value="Sign In" />
+      <PrimaryButton
+        value="Sign In"
+        onPress={handleLogin}
+        loading={loading}
+        disabled={!password}
+      />
 
       <View style={styles.separatorContainer}>
         <View style={styles.separatorLine} />
@@ -106,11 +131,22 @@ const Login = () => {
             color={COLORS.GRAY}
           />
         </TouchableOpacity>
+        <Snackbar
+          visible={snackbarVisible}
+          onDismiss={() => setSnackbarVisible(false)}
+          action={{
+            label: "Close",
+            onPress: () => {
+              setSnackbarVisible(false);
+            },
+          }}>
+          {snackbarMessage}
+        </Snackbar>
       </View>
 
       {/* "Don't have an account? Sign In" Text */}
-      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-        <Text style={styles.signInText}>Don't have an account? Sign In</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        <Text style={styles.signInText}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>
   );

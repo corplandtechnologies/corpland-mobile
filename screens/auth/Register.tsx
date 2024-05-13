@@ -50,8 +50,7 @@ const Register = () => {
       navigation.navigate("Verify");
     } catch (error) {
       console.log(error);
-      const err = error as Error;
-      setSnackbarMessage("Something went wrong");
+      setSnackbarMessage(error.message);
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -160,7 +159,7 @@ const Register = () => {
 
       {/* "Don't have an account? Sign In" Text */}
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-        <Text style={styles.signInText}>Don't have an account? Sign In</Text>
+        <Text style={styles.signInText}>Already have an Account? Sign In</Text>
       </TouchableOpacity>
       <Snackbar
         visible={snackbarVisible}

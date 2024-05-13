@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   postedTime: {
-    fontFamily: "PoppinsLight",
+    fontFamily: "InterLight",
     marginBottom: 10,
   },
   content: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   titleText: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "InterBold",
     fontSize: 20,
   },
   iconsContainer: {
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   description: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "InterRegular",
   },
   toggleDescription: {
     textDecorationLine: "underline",

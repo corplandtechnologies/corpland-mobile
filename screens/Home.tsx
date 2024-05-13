@@ -20,7 +20,6 @@ const Home = () => {
   ];
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  console.log(requests);
 
   useFocusEffect(
     React.useCallback(() => {
