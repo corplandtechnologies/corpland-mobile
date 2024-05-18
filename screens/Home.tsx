@@ -1,82 +1,98 @@
-import ScreenContextWrapper from "../components/ScreenContextWrapper";
-import Request from "../components/Request";
-import { ScrollView } from "react-native-gesture-handler";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { useEffect, useState } from "react";
-import { getAds, getRequests } from "../api/api";
-import { useFocusEffect } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../utils/color";
+import Banner from "../components/Banner";
+import FormInput from "../components/ui/FormInput";
+import Section from "../components/Section";
+import Category from "../components/Category";
+import { storeCatergories } from "../data/dummyData";
+import ProductCard from "../components/ProductCard";
 
 const Home = () => {
-  const posts = [
-    {
-      title: "We are looking for 45 Freelancers",
-      description:
-        "I will provide a detailed description of the project and what is needed from freelancers in this section. More of the details can be found on our website www.website.com at the 'Projects' tab.",
-      image: require("../assets/Designer.jpeg"),
-      postedTime: "3 minutes ago",
-    },
-  ];
-  const [requests, setRequests] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      const getPosts = async () => {
-        setLoading(true);
-        try {
-          const requestsResponse = await getRequests();
-          const adsResponse = await getAds();
-          setRequests([...requestsResponse?.data, ...adsResponse?.data]);
-          setLoading(false);
-        } catch (error) {
-          setLoading(false);
-          console.log(error);
-        }
-      };
-      getPosts();
-    }, [])
-  );
+  const [search, setSearch] = useState("");
 
   return (
-    <ScreenContextWrapper>
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        {loading ? (
-          <>
-            <View
-              style={{
-                height: "100vh",
-                justifyContent: "center",
-                alignItems: "center",
-              }}>
-              <ActivityIndicator
-                size={50}
-                color={COLORS.PRIMARY}
-              />
+    <View style={styles.container}>
+      <ScrollView>
+        {/* <UserInfo navigation={navigation} /> */}
+        <FormInput
+          icon="search"
+          placeholder="What are you looking for?..."
+          isButtoned={true}
+          isButtonedIcon="options"
+          onChangeText={setSearch}
+        />
+        <Banner />
+        <View style={styles.sectionView}>
+          <Section headerText="Categories">
+            <View style={styles.catView}>
+              {storeCatergories.map((category, index) => (
+                <TouchableOpacity key={index}>
+                  <Category
+                    iconImagePath={category.iconImagePath}
+                    category={category.categoryName}
+                  />
+                </TouchableOpacity>
+              ))}
             </View>
-          </>
-        ) : (
-          <>
-            {requests?.map((post, index) => (
-              <Request
-                key={index}
-                post={post}
-              />
-            ))}
-          </>
-        )}
+          </Section>
+          <Section headerText="Trending">
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+          </Section>
+        </View>
       </ScrollView>
-    </ScreenContextWrapper>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    gap: 10,
+  container: {
+    padding: 10,
+    backgroundColor: COLORS.SECONDARY,
+    height: "100%",
   },
+  infoView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  locationText: {
+    color: COLORS.PRIMARY,
+    fontWeight: "900",
+    fontSize: 20,
+  },
+  greetView: {},
+  greetText: {
+    fontWeight: "900",
+    fontSize: 36,
+  },
+
+  SectionHeader: {
+    fontWeight: "700",
+    fontSize: 24,
+  },
+  sectionView: {
+    marginTop: 20,
+    gap: 20,
+  },
+  catView: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  productView: {},
 });
 
 export default Home;

@@ -9,6 +9,7 @@ export const categories = [
   "Health & Beauty",
   "Home, Furniture & Appliances",
   "Jobs",
+  "Services",
   "Mobile Phones & Tablets",
   "Pets",
   "Property",
@@ -69,3 +70,31 @@ export const regionsByCountry: RegionsByCountry = {
   ],
   // USA: ["California", "New York", "Texas"],
 };
+
+export const storeCatergories = [
+  {
+    iconImagePath: require("../assets/foodCatIcon.png"),
+    categoryName: "Food",
+  },
+  {
+    iconImagePath: require("../assets/electronicsIcon.png"),
+    categoryName: "Electronics",
+  },
+  {
+    iconImagePath: require("../assets/fashionCatIcon.png"),
+    categoryName: "Fashion",
+  },
+  {
+    iconImagePath: require("../assets/servicesCatIcon.png"),
+    categoryName: "Services",
+  },
+
+  // Add more categories as needed
+];
+
+export const productCards = [
+  { title: "High Quality T shirts" },
+  { title: "Designer Jeans" },
+  { title: "Luxury Watches" },
+  // Add more products as needed
+];

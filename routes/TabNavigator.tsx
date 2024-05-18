@@ -7,21 +7,62 @@ import CreateRequest from "../screens/buyer/CreateRequest";
 import CreateAd from "../screens/seller/CreateAd";
 import Profile from "../screens/Profile";
 import { Switch } from "react-native-paper";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import BackButton from "../components/ui/BackButton";
 import {
   SellerModeProvider,
   useSellerMode,
 } from "../context/SellerModeContext";
 import CreateProduct from "../screens/seller/CreateProduct";
+import { Icon as BadgeIcon, withBadge } from "react-native-elements";
 
 const Tab = createBottomTabNavigator();
+
+const BadgedIcon = withBadge(0)(Icon);
 
 export default function TabNavigator() {
   const [isRequest, setIsRequest] = useState(false);
   const { isSellerMode, toggleSellerMode } = useSellerMode();
 
   const onToggleSwitch = () => setIsRequest(!isRequest);
+
+  // Custom header left component for Home screen
+  const CustomHeaderLeft = () => (
+    <View style={{ paddingLeft: 10 }}>
+      <Text style={{ color: COLORS.TERTIARY }}>Location</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}>
+        <Icon
+          name="location"
+          size={20}
+          color={COLORS.PRIMARY}
+        />
+        <Text style={{ color: COLORS.PRIMARY, fontFamily: "InterBold" }}>
+          Accra, Ghana
+        </Text>
+        <Icon
+          name="chevron-down"
+          size={20}
+          color={COLORS.PRIMARY}
+        />
+      </View>
+    </View>
+  );
+
+  const CustomHeaderRight = () => (
+    <View style={{ paddingRight: 10 }}>
+      <BadgedIcon
+        name="notifications"
+        type="ionicon"
+        size={25}
+      />
+    </View>
+  );
 
   return (
     <Tab.Navigator screenOptions={{ tabBarActiveTintColor: COLORS.PRIMARY }}>
@@ -36,11 +77,9 @@ export default function TabNavigator() {
               size={size}
             />
           ),
-          headerTitle: "CORPLAND",
-          headerTitleStyle: {
-            fontFamily: "InterExtraBold",
-            // borderWidth:8
-          },
+          headerTitle: "",
+          headerLeft: () => <CustomHeaderLeft />,
+          headerRight: () => <CustomHeaderRight />,
         }}
       />
       <Tab.Screen

@@ -19,6 +19,7 @@ import { getUserById } from "../api/api";
 import noProfilePicture from "../assets/user.png";
 import { useSellerMode } from "../context/SellerModeContext";
 import { useUser } from "../context/UserContext";
+import ProductCard from "../components/ProductCard";
 
 const Profile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);

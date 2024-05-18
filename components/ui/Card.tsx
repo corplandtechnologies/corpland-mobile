@@ -12,7 +12,7 @@ const Card: React.FC<CardProps> = ({ children }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.TERTIARY,
+    backgroundColor: COLORS.SECONDARY,
     borderRadius: 10,
     padding: 10,
     shadowColor: "#000",
