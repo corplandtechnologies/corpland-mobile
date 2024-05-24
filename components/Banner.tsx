@@ -1,27 +1,78 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Dimensions, ScrollView, Image, StyleSheet, View } from "react-native";
 import { COLORS } from "../utils/color";
 
 const Banner = () => {
-  return (
-    <View style={styles.discover}>
-      <View style={styles.discoverTextView}>
-        <Text style={styles.discoverText}>Are you hungry?</Text>
-        <Text style={styles.discoverSubText}>
-          Order what you want at the the Food category!
-        </Text>
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() => console.log("Button pressed")}>
-          <Text style={styles.buttonText}>Discover More</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
+  const images = [
+    require("../assets/shopping.jpg"),
+    require("../assets/clothingImage.jpg"),
+    require("../assets/CORPLAND (3).png"),
+    require("../assets/CORPLAND5.png"),
+    require("../assets/Designer.jpeg"),
+    require("../assets/E-commerce.jpeg"),
+    // Add more images as needed
+  ];
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const nextIndex = (currentImageIndex + 1) % images.length;
+      setCurrentImageIndex(nextIndex);
+      // Scroll to the next image
+      scrollViewRef.current?.scrollTo({
+        x: nextIndex * Dimensions.get("window").width,
+        y: 0,
+        animated: true,
+      });
+    }, 5000); // Change image every 10 seconds
+
+    return () => clearInterval(timer);
+  }, [currentImageIndex]);
+
+  const renderImages = () => {
+    return images.map((image, index) => (
+      <View
+        key={index}
+        style={{ width: Dimensions.get("window").width }}>
         <Image
-          source={require("../assets/discoverImage.png")}
+          source={image}
           style={styles.imageStyle}
         />
       </View>
+    ));
+  };
+
+  const renderDots = () => {
+    return images.map((_, index) => (
+      <View
+        key={index}
+        style={[
+          styles.dot,
+          currentImageIndex === index ? styles.activeDot : {},
+        ]}
+      />
+    ));
+  };
+
+  return (
+    <View style={styles.container}>
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={(event) => {
+          const newIndex = Math.round(
+            event.nativeEvent.contentOffset.x / Dimensions.get("window").width
+          );
+          setCurrentImageIndex(newIndex);
+        }}
+        scrollEventThrottle={16}>
+        {renderImages()}
+      </ScrollView>
+      <View style={styles.dotsContainer}>{renderDots()}</View>
     </View>
   );
 };
@@ -29,51 +80,35 @@ const Banner = () => {
 export default Banner;
 
 const styles = StyleSheet.create({
-  discover: {
-    backgroundColor: COLORS.PRIMARY,
-    padding: 20,
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
     borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 20,
-    marginBottom: 20,
-    paddingVertical: 30,
+    overflow: "hidden",
+    marginVertical: 10,
   },
   imageStyle: {
-    width: 100,
-    height: 100,
+    width: "100%",
+    height: 200, // Adjust the height as needed
+    resizeMode: "cover",
+    borderRadius: 10,
   },
-  discoverText: {
-    color: COLORS.SECONDARY,
-    fontSize: 24,
-    fontFamily: "InterBold",
-  },
-  discoverSubText: {
-    color: COLORS.SECONDARY,
-    paddingTop: 10,
-    paddingBottom: 10,
-    fontFamily: "InterRegular",
-  },
-  buttonStyle: {
-    backgroundColor: COLORS.SECONDARY,
-    padding: 10,
-    borderRadius: 5,
+  dotsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    fontFamily: "InterRegular",
+    position: "absolute",
+    bottom: 10,
+    width: "100%",
   },
-  buttonText: {
-    color: COLORS.PRIMARY,
+  dot: {
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.TERTIARY,
+    marginHorizontal: 5,
   },
-  discoverTextView: {
-    width: "60%",
+  activeDot: {
+    backgroundColor: COLORS.SECONDARY,
   },
 });

@@ -112,5 +112,43 @@ export const createProduct = async (newProduct: any) => {
   return API.post("/products", formData, config);
 };
 
+export const updateProduct = async (newProduct: any, id: any) => {
+  const formData: any = new FormData();
+  formData.append("title", newProduct.title);
+  formData.append("description", newProduct.description);
+  formData.append("category", newProduct.category);
+  formData.append("image", {
+    uri: newProduct.image,
+    type: "image/jpeg",
+    name: `adImage.jpg`,
+  });
+  formData.append("country", newProduct.country);
+  formData.append("region", newProduct.region);
+  formData.append("price", newProduct.price);
+  formData.append("userId", newProduct.userId);
 
-export const searchProducts = (query: string) => API.post(`/products/search?q=${query}`);
+  const token = await AsyncStorage.getItem("token");
+
+  const config = {
+    headers: { "Content-Type": "multipart/form-data" },
+    Authorization: `Bearer ${token}`,
+  };
+
+  return API.put(`/products/${id}`, formData, config);
+};
+
+export const searchProducts = (query: string) =>
+  API.post(`/products/search?q=${query}`);
+export const getProductById = (id: string) => API.get(`/products/${id}`);
+
+export const deleteProduct = (id: string) => API.delete(`/products/${id}`);
+
+export const toggleFavorites = async (userId: string, productId: string) => {
+  const status = await API.post(`/users/toggle-favorite/${productId}`, {
+    userId: userId,
+  });
+  return status;
+};
+
+export const getUserProductsById = (userId: string) =>
+  API.get(`/products/user/${userId}`);

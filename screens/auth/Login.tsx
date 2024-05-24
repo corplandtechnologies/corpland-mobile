@@ -44,7 +44,7 @@ const Login = () => {
       navigation.navigate("TabNavigator");
     } catch (error) {
       console.log(error);
-      setSnackbarMessage(error.message);
+      setSnackbarMessage(error.response.data.message);
       setSnackbarVisible(true);
     } finally {
       setLoading(false);

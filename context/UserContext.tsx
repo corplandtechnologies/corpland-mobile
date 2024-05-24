@@ -1,5 +1,11 @@
 // UserContext.tsx
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUserById } from "../api/api";
 
@@ -8,6 +14,7 @@ interface UserContextType {
   loading: boolean;
   error: any;
   fetchUserById: (userId: string) => Promise<void>;
+  userData: any;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -16,17 +23,18 @@ export const UserProvider: React.FC = ({ children }: { children: any }) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
+  const [userData, setUserData] = useState();
+  console.log("userData", user);
 
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);
       try {
         const userInfo = await AsyncStorage.getItem("user");
-        console.log("user context", userInfo);
+        console.log("usernfo", userInfo);
         const parsedUserInfo = JSON.parse(userInfo);
-        const response = await fetchUserById(parsedUserInfo._id);
-        console.log("res", response);
-        setUser(response.data?.user);
+        const response = await getUserById(parsedUserInfo._id);
+        setUser(response?.data?.user);
       } catch (error) {
         setError(error);
       } finally {
@@ -36,20 +44,9 @@ export const UserProvider: React.FC = ({ children }: { children: any }) => {
 
     fetchUser();
   }, []);
-  const fetchUserById = async (userId: string) => {
-    setLoading(true);
-    try {
-      const response = await getUserById(userId);
-      setUser(response.data?.user);
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
-    <UserContext.Provider value={{ user, loading, error, fetchUserById }}>
+    <UserContext.Provider value={{ user, loading, error, userData }}>
       {children}
     </UserContext.Provider>
   );

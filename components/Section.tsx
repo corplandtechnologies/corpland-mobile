@@ -1,17 +1,20 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { FC, ReactNode } from "react";
 import { COLORS } from "../utils/color";
 
 interface SectionProps {
   headerText: string;
   children: ReactNode;
+  onPress?: () => void;
 }
-const Section: FC<SectionProps> = ({ headerText, children }) => {
+const Section: FC<SectionProps> = ({ headerText, children, onPress }) => {
   return (
     <View>
       <View style={styles.header}>
         <Text style={styles.headerText}>{headerText}</Text>
-        <Text style={styles.headerOptions}>See All</Text>
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles.headerOptions}>See All</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.childrenView}>{children}</View>
     </View>

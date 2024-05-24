@@ -38,10 +38,10 @@ const Home = () => {
         return;
       }
       const res = await searchProducts(search);
-      setSearchResults(res.data)
+      setSearchResults(res.data);
       setSnackbarVisible(true);
       setSnackbarMessage("Search Completed!");
-      setSearch("")
+      setSearch("");
       navigation.navigate("Search");
     } catch (error) {
       console.log(error);
@@ -67,9 +67,13 @@ const Home = () => {
         />
         <Banner />
         <View style={styles.sectionView}>
-          <Section headerText="Categories">
+          <Section
+            headerText="Categories"
+            onPress={() => {
+              navigation.navigate("Categories");
+            }}>
             <View style={styles.catView}>
-              {storeCatergories.map((category, index) => (
+              {storeCatergories.slice(0, 4).map((category, index) => (
                 <TouchableOpacity key={index}>
                   <Category
                     iconImagePath={category.iconImagePath}
@@ -82,7 +86,8 @@ const Home = () => {
           <Section headerText="Featured">
             <ScrollView
               horizontal={true}
-              showsHorizontalScrollIndicator={false}>
+              showsHorizontalScrollIndicator={false}
+              style={styles.productView}>
               <ProductCard />
               <ProductCard />
               <ProductCard />
@@ -134,7 +139,6 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     fontSize: 36,
   },
-
   SectionHeader: {
     fontWeight: "700",
     fontSize: 24,
@@ -148,7 +152,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  productView: {},
+  productView: {
+    gap: 20,
+  },
 });
 
 export default Home;

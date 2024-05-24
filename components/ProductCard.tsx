@@ -18,14 +18,19 @@ const ProductCard = () => {
   return (
     <View style={styles.productMain}>
       <Image
-        source={require("../assets/E-commerce.jpeg")}
+        source={require("../assets/clothingImage.jpg")}
         style={styles.productImage}
       />
+
       <View style={{ padding: 10 }}>
+        <Text style={styles.productTitle}>
+          Quality RoundRoundRoundRoundRound Neck Tops
+        </Text>
+
         <View style={styles.userView}>
           <View style={styles.avatarContainer}>
             <Avatar.Image
-              size={50}
+              size={20}
               source={require("../assets/shopping.jpg")}
             />
             <View>
@@ -35,17 +40,7 @@ const ProductCard = () => {
               </View> */}
             </View>
           </View>
-          <View>
-            <TouchableOpacity onPress={toggleIsLiked}>
-              <Icon
-                name={isLiked ? "heart" : "heart-outline"}
-                size={30}
-                color={"red"}
-              />
-            </TouchableOpacity>
-          </View>
         </View>
-        <Text style={styles.productTitle}>Quality Round Neck Tops</Text>
         {/* <Text style={styles.productDesc}>{truncatedTitle}</Text> */}
         <View
           style={{
@@ -88,9 +83,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginVertical: 10,
-    marginHorizontal: 10,
     width: 250,
+    marginRight: 20,
+    marginBottom: 20,
   },
   productImage: {
     width: "100%",
@@ -101,6 +96,7 @@ const styles = StyleSheet.create({
   productTitle: {
     fontFamily: "InterBold",
     fontSize: 20,
+  
   },
   productPrice: {
     fontFamily: "InterExtraBold",

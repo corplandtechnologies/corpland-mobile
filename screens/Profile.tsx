@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  Linking,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import ScreenContextWrapper from "../components/ScreenContextWrapper";
@@ -20,17 +21,27 @@ import noProfilePicture from "../assets/user.png";
 import { useSellerMode } from "../context/SellerModeContext";
 import { useUser } from "../context/UserContext";
 import ProductCard from "../components/ProductCard";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 const Profile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { isSellerMode, toggleSellerMode } = useSellerMode();
   const [userInfo, setUserInfo] = useState({});
   const { user } = useUser();
-  console.log(isSellerMode);
+  console.log(user);
 
   useFocusEffect(
     React.useCallback(() => {
-      setUserInfo(user);
+      const fetchData = async () => {
+        try {
+          const res = await getUserById(user?._id);
+          setUserInfo(res.data?.user);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
+      };
+
+      fetchData();
     }, [])
   );
 
@@ -47,83 +58,98 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("user");
+      await AsyncStorage.removeItem("token");
       navigation.navigate("Login");
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleEmail = (subject: string, body: string) => {
+    const emailUrl = `mailto:corpland.gh@gmail.com?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+    Linking.canOpenURL(emailUrl)
+      .then((supported) => {
+        if (supported) {
+          return Linking.openURL(emailUrl);
+        } else {
+          console.log(`Can't handle url: ${emailUrl}`);
+        }
+      })
+      .catch((err) => console.error("An error occurred", err));
+  };
+
   return (
     <View style={styles.headerView}>
       <View style={styles.avatarContainer}>
-        <Avatar.Image
-          size={100}
-          source={{ uri: userInfo?.profilePicture }}
-        />
-        <Text style={styles.AvatarText}>{userInfo?.name}</Text>
+        {userInfo?.profilePicture ? (
+          <Avatar.Image
+            size={100}
+            source={{ uri: userInfo?.profilePicture }}
+          />
+        ) : (
+          <Avatar.Image
+            size={100}
+            source={require("../assets/user.png")}
+          />
+        )}
+        <Text style={styles.AvatarText}>{user?.name}</Text>
       </View>
-      <View style={styles.modeView}>
+      {/* <View style={styles.modeView}>
         <Text style={styles.modeText}>Seller Mode</Text>
         <Switch
           value={isSellerMode}
           onValueChange={toggleSellerMode}
           color={COLORS.COMPLIMENTARY}
         />
-      </View>
+      </View> */}
       <View style={{ marginTop: 20 }}>
         <ProfileMenuItem
           title="Edit Profile"
           iconName="person-outline"
-          onPress={() => console.log("Edit Profile pressed")}
+          onPress={() => navigation.navigate("EditProfile")}
         />
         <ProfileMenuItem
-          title="My Wallet"
-          iconName="wallet-outline"
-          onPress={() => console.log("My Wallet pressed")}
+          title="My Products"
+          iconName="pricetags-outline"
+          onPress={() => navigation.navigate("MyProducts")}
         />
-        <ProfileMenuItem
+        {/* <ProfileMenuItem
           title="Settings"
           iconName="settings-outline"
           onPress={() => console.log("Settings pressed")}
+        /> */}
+        <ProfileMenuItem
+          title="Send Feedback"
+          iconName="mail-outline"
+          onPress={() => handleEmail("Feedback", "")}
         />
+
         <ProfileMenuItem
           title="Help Center"
           iconName="help-circle-outline"
-          onPress={() => console.log("Help Center pressed")}
+          onPress={() => handleEmail("Help Center", "")}
         />
-        <ProfileMenuItem
+
+        {/*  <ProfileMenuItem
           title="Privacy Policy"
           iconName="information-circle-outline"
           onPress={() => console.log("Privacy Policy pressed")}
-        />
+        /> */}
         <ProfileMenuItem
           title="Log Out"
           iconName="log-out-outline"
           onPress={showModal}
         />
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={hideModal}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>
-            Are you sure you want to log out?
-          </Text>
-          <View style={styles.modalButtons}>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={hideModal}>
-              <Text style={styles.modalButtonText}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalButtonLogout}
-              onPress={handleLogout}>
-              <Text style={styles.modalButtonTextLogout}>Log Out</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <ConfirmationModal
+        isVisible={isModalVisible}
+        onClose={hideModal}
+        onConfirm={handleLogout}
+        modalTitle="Are you sure you want to log out?"
+        ConfirmButtonText="Log Out"
+      />
     </View>
   );
 };

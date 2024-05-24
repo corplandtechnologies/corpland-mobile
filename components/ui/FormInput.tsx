@@ -16,6 +16,8 @@ interface FormInputProps {
   isButtonedIcon?: string;
   loading?: boolean;
   onPress: () => void;
+  defaultValue?: string;
+  value?: string;
 }
 
 const FormInput: React.FC<FormInputProps> = ({
@@ -29,6 +31,7 @@ const FormInput: React.FC<FormInputProps> = ({
   isButtonedIcon,
   loading,
   onPress,
+  defaultValue,
 }) => {
   return (
     <View style={styles.main}>
@@ -46,6 +49,7 @@ const FormInput: React.FC<FormInputProps> = ({
           multiline={multiline}
           keyboardType={keyboardType}
           cursorColor={COLORS.PRIMARY}
+          defaultValue={defaultValue}
         />
         {/* Wrap the Button in a View to align it beside the TextInput */}
       </View>
@@ -87,7 +91,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.TERTIARY,
     flex: 4,
   },
-  input: {},
+  input: {
+    width: "90%",
+  },
   buttonContainer: {
     flex: 1,
   },

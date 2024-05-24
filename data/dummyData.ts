@@ -14,7 +14,6 @@ export const categories = [
   "Pets",
   "Property",
   "Repair & Construction",
-  "Seeking Work CVs",
   "Services",
   "Sports, Arts & Outdoors",
   "Vehicles",
@@ -74,21 +73,60 @@ export const regionsByCountry: RegionsByCountry = {
 export const storeCatergories = [
   {
     iconImagePath: require("../assets/foodCatIcon.png"),
-    categoryName: "Food",
+    category: "Food",
   },
   {
     iconImagePath: require("../assets/electronicsIcon.png"),
-    categoryName: "Electronics",
+    category: "Electronics",
   },
   {
     iconImagePath: require("../assets/fashionCatIcon.png"),
-    categoryName: "Fashion",
+    category: "Fashion",
   },
   {
     iconImagePath: require("../assets/servicesCatIcon.png"),
-    categoryName: "Services",
+    category: "Services",
   },
-
+  {
+    iconImagePath: require("../assets/toycar.png"),
+    category: "Babies & Kids",
+  },
+  {
+    iconImagePath: require("../assets/tools.png"),
+    category: "Commercial Equipment & Tools",
+  },
+  {
+    iconImagePath: require("../assets/health.png"),
+    category: "Health & Beauty",
+  },
+  {
+    iconImagePath: require("../assets/phone.png"),
+    category: "Mobile Phones & Tablets",
+  },
+  {
+    iconImagePath: require("../assets/pet.png"),
+    category: "Pets",
+  },
+  {
+    iconImagePath: require("../assets/lease.png"),
+    category: "Property",
+  },
+  {
+    iconImagePath: require("../assets/construction.png"),
+    category: "Repair & Construction",
+  },
+  {
+    iconImagePath: require("../assets/job.png"),
+    category: "Jobs",
+  },
+  {
+    iconImagePath: require("../assets/sports.png"),
+    category: "Sports, Arts & Outdoors",
+  },
+  {
+    iconImagePath: require("../assets/vehicle.png"),
+    category: "Vehicles",
+  },
   // Add more categories as needed
 ];
 

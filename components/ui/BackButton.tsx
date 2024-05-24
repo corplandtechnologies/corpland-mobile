@@ -4,13 +4,22 @@ import { COLORS } from "../../utils/color";
 import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
-const BackButton = () => {
+interface BackButtonProps {
+  details?: any;
+}
+const BackButton: FC<BackButtonProps> = ({ details }) => {
   const navigation = useNavigation();
 
+  const detailStyles = details
+    ? {
+        backgroundColor: COLORS.SECONDARY,
+        borderWidth: 0,
+      }
+    : {};
   return (
     <TouchableOpacity
       onPress={() => navigation.goBack()}
-      style={styles.backButton}>
+      style={[styles.backButton, detailStyles]}>
       <Icon
         name="arrow-back"
         size={24}

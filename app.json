@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/CORPLAND5.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.soluservant.corpland"
+    "package": "com.soluservant.corpland"
     },
     "web": {
       "favicon": "./assets/CORPLAND5.png"

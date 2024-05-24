@@ -8,7 +8,8 @@ interface primaryButtonProps {
   onPress?: () => void;
   disabled?: boolean;
   loading?: boolean;
-  icon?: string;
+  icon?: string | JSX.Element;
+  isIcon?: boolean;
 }
 
 const PrimaryButton: FC<primaryButtonProps> = ({
@@ -17,6 +18,7 @@ const PrimaryButton: FC<primaryButtonProps> = ({
   disabled,
   loading,
   icon,
+  isIcon,
 }) => {
   return (
     <Button
@@ -26,6 +28,7 @@ const PrimaryButton: FC<primaryButtonProps> = ({
       disabled={disabled}
       loading={loading}
       icon={icon}
+      titleStyle={isIcon ? { marginLeft: 10 } : {}}
     />
   );
 };
@@ -34,7 +37,6 @@ export default PrimaryButton;
 
 const styles = StyleSheet.create({
   primaryButton: {
-    marginTop: 20,
     backgroundColor: COLORS.PRIMARY,
     padding: 20,
     borderRadius: 10,

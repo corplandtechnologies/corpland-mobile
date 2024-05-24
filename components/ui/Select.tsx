@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS } from "../../utils/color";
 import ScreenContextWrapper from "../ScreenContextWrapper";
@@ -58,19 +58,27 @@ const Select = ({
   title,
   options = [],
   onSelect,
-  locationRefused = false, // New prop to indicate location refusal
+  locationRefused = false,
+  initialValue,
 }: {
   touchableComponent?: typeof Touchable;
   touchableText?: string;
   title: string;
   options?: string[];
   onSelect: (selectedOption: string) => void;
-  locationRefused?: boolean; // New prop
+  locationRefused?: boolean;
+  initialValue?: string;
 }) => {
   const [visible, setVisible] = useState(false);
   const { TouchableComponent } = touchableComponent(touchableText, () =>
     setVisible(true)
   );
+
+  useEffect(() => {
+    if (initialValue) {
+      onSelect(initialValue); // Assuming onSelect updates the state accordingly
+    }
+  }, [initialValue]);
 
   return (
     <View>
@@ -130,6 +138,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.TERTIARY,
     justifyContent: "space-between",
+    marginBottom: 10,
   },
   touchableText: {
     color: COLORS.PRIMARY,
