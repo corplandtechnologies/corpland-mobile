@@ -111,3 +111,6 @@ export const createProduct = async (newProduct: any) => {
 
   return API.post("/products", formData, config);
 };
+
+
+export const searchProducts = (query: string) => API.post(`/products/search?q=${query}`);

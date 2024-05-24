@@ -14,6 +14,8 @@ interface FormInputProps {
   keyboardType?: string;
   isButtoned?: boolean;
   isButtonedIcon?: string;
+  loading?: boolean;
+  onPress: () => void;
 }
 
 const FormInput: React.FC<FormInputProps> = ({
@@ -25,6 +27,8 @@ const FormInput: React.FC<FormInputProps> = ({
   keyboardType,
   isButtoned,
   isButtonedIcon,
+  loading,
+  onPress,
 }) => {
   return (
     <View style={styles.main}>
@@ -55,8 +59,10 @@ const FormInput: React.FC<FormInputProps> = ({
                 color="white"
               />
             }
-            onPress={() => console.log("Search button pressed")}
+            onPress={onPress}
             buttonStyle={styles.searchButton}
+            loading={loading}
+            disabled={loading}
           />
         </View>
       )}

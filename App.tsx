@@ -12,6 +12,8 @@ import CompleteProfile from "./screens/auth/CompleteProfile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SellerModeProvider } from "./context/SellerModeContext";
 import { UserProvider } from "./context/UserContext";
+import Search from "./screens/Search";
+import { SearchResultsProvider } from "./context/SearchResultsContext";
 
 const Stack = createStackNavigator();
 
@@ -57,54 +59,65 @@ export default function App() {
   return (
     <UserProvider>
       <SellerModeProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName={user ? "TabNavigator" : "OnBoarding"}>
-            <Stack.Screen
-              name="TabNavigator"
-              options={{ headerShown: false }}
-              component={TabNavigator}
-            />
-            <Stack.Screen
-              name="Register"
-              options={{ headerShown: false }}
-              component={Register}
-            />
-            <Stack.Screen
-              name="Login"
-              options={{
-                headerShown: false,
-                headerTitle: "Sign In",
-                headerTitleStyle: {
-                  fontFamily: "InterBold",
-                  // borderWidth:8
-                },
-              }}
-              component={Login}
-            />
-            <Stack.Screen
-              name="OnBoarding"
-              options={{ headerShown: false }}
-              component={Onboarding}
-            />
-            <Stack.Screen
-              name="Verify"
-              options={{
-                headerTitle: "",
-                headerLeft: () => <BackButton />,
-              }}
-              component={Verify}
-            />
-            <Stack.Screen
-              name="CompleteProfile"
-              options={{
-                headerTitle: "",
-                headerLeft: () => <BackButton />,
-              }}
-              component={CompleteProfile}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <SearchResultsProvider>
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName={user ? "TabNavigator" : "OnBoarding"}>
+              <Stack.Screen
+                name="TabNavigator"
+                options={{ headerShown: false }}
+                component={TabNavigator}
+              />
+              <Stack.Screen
+                name="Register"
+                options={{ headerShown: false }}
+                component={Register}
+              />
+              <Stack.Screen
+                name="Login"
+                options={{
+                  headerShown: false,
+                  headerTitle: "Sign In",
+                  headerTitleStyle: {
+                    fontFamily: "InterBold",
+                    // borderWidth:8
+                  },
+                }}
+                component={Login}
+              />
+              <Stack.Screen
+                name="OnBoarding"
+                options={{ headerShown: false }}
+                component={Onboarding}
+              />
+              <Stack.Screen
+                name="Verify"
+                options={{
+                  headerTitle: "",
+                  headerLeft: () => <BackButton />,
+                }}
+                component={Verify}
+              />
+              <Stack.Screen
+                name="CompleteProfile"
+                options={{
+                  headerTitle: "",
+                  headerLeft: () => <BackButton />,
+                }}
+                component={CompleteProfile}
+              />
+              <Stack.Screen
+                name="Search"
+                options={{
+                  headerTitle: "Results",
+                  headerTitleAlign: "center",
+                  headerLeft: () => <BackButton />,
+                }}
+                component={Search}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SearchResultsProvider>
       </SellerModeProvider>
     </UserProvider>
   );

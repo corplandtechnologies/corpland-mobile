@@ -30,9 +30,9 @@ const ProductCard = () => {
             />
             <View>
               <Text style={styles.AvatarText}>Sylvester</Text>
-              <View style={styles.levelView}>
+              {/* <View style={styles.levelView}>
                 <Text style={styles.levelText}>Level 1</Text>
-              </View>
+              </View> */}
             </View>
           </View>
           <View>
@@ -46,8 +46,30 @@ const ProductCard = () => {
           </View>
         </View>
         <Text style={styles.productTitle}>Quality Round Neck Tops</Text>
-        <Text style={styles.productDesc}>{truncatedTitle}</Text>
-        <Text style={styles.productPrice}>GHC 400</Text>
+        {/* <Text style={styles.productDesc}>{truncatedTitle}</Text> */}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 2,
+            }}>
+            <Icon
+              name="location"
+              size={20}
+              color={COLORS.GRAY}
+            />
+            <Text style={{ color: COLORS.GRAY, fontFamily: "InterRegular" }}>
+              Accra, Ghana
+            </Text>
+          </View>
+          <Text style={styles.productPrice}>GHC 400</Text>
+        </View>
       </View>
     </View>
   );
@@ -57,7 +79,6 @@ export default ProductCard;
 
 const styles = StyleSheet.create({
   productMain: {
-    borderWidth: 1,
     backgroundColor: COLORS.SECONDARY,
     borderRadius: 10,
     shadowOffset: {
@@ -69,6 +90,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginVertical: 10,
     marginHorizontal: 10,
+    width: 250,
   },
   productImage: {
     width: "100%",
@@ -82,6 +104,8 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontFamily: "InterExtraBold",
+    color: COLORS.COMPLIMENTARY,
+    fontSize: 18,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
@@ -125,7 +149,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "InterBold",
   },
-    productView: {
+  productView: {
     flexDirection: "row",
     overflow: "hidden",
     paddingHorizontal: 10, // Adjust paddingHorizontal to prevent stretching

@@ -15,13 +15,46 @@ import Section from "../components/Section";
 import Category from "../components/Category";
 import { storeCatergories } from "../data/dummyData";
 import ProductCard from "../components/ProductCard";
+import { useNavigation } from "@react-navigation/native";
+import { searchProducts } from "../api/api";
+import { Snackbar } from "react-native-paper";
+import { useSearchResults } from "../context/SearchResultsContext";
 
 const Home = () => {
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [snackbarVisible, setSnackbarVisible] = useState(false); // New state for Snackbar visibility
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const { setSearchResults } = useSearchResults();
+
+  const navigation = useNavigation();
+
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      if (!search) {
+        setSnackbarMessage("All fields are required");
+        setSnackbarVisible(true);
+        return;
+      }
+      const res = await searchProducts(search);
+      setSearchResults(res.data)
+      setSnackbarVisible(true);
+      setSnackbarMessage("Search Completed!");
+      setSearch("")
+      navigation.navigate("Search");
+    } catch (error) {
+      console.log(error);
+      setSnackbarMessage(error.response.data);
+      setSnackbarVisible(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* <UserInfo navigation={navigation} /> */}
         <FormInput
           icon="search"
@@ -29,6 +62,8 @@ const Home = () => {
           isButtoned={true}
           isButtonedIcon="options"
           onChangeText={setSearch}
+          loading={loading}
+          onPress={handleSearch}
         />
         <Banner />
         <View style={styles.sectionView}>
@@ -44,23 +79,44 @@ const Home = () => {
               ))}
             </View>
           </Section>
+          <Section headerText="Featured">
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <ProductCard />
+              <ProductCard />
+              <ProductCard />
+              <ProductCard />
+            </ScrollView>
+          </Section>
           <Section headerText="Trending">
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
+            <ScrollView horizontal={true}>
+              <ProductCard />
+              <ProductCard />
+              <ProductCard />
+              <ProductCard />
+            </ScrollView>
           </Section>
         </View>
       </ScrollView>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        action={{
+          label: "Close",
+          onPress: () => {
+            setSnackbarVisible(false);
+          },
+        }}>
+        {snackbarMessage}
+      </Snackbar>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    paddingHorizontal: 10,
     backgroundColor: COLORS.SECONDARY,
     height: "100%",
   },
