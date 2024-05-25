@@ -101,7 +101,11 @@ const Product = ({ route }) => {
     getRelatedProducts();
   }, [product]);
 
-
+  const resetProductState = () => {
+    setProduct(null);
+    setUser(null);
+    setRelatedProducts([]);
+  };
 
   const handleCallNow = () => {
     const phoneNumber = user?.phoneNumber || ""; // Ensure there's a valid phone number

@@ -77,7 +77,7 @@ const Home = () => {
                 <TouchableOpacity key={index}>
                   <Category
                     iconImagePath={category.iconImagePath}
-                    category={category.categoryName}
+                    category={category.category}
                   />
                 </TouchableOpacity>
               ))}

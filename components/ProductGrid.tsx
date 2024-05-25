@@ -33,7 +33,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
     setIsLiked(!isLiked);
   };
 
-  const truncatedTitle =
+  const truncatedDesc =
     description.length > 50
       ? `${description.substring(0, 50)}...`
       : description;
@@ -55,7 +55,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
           style={styles.productImage}
         />
       </View>
-      <View style={{ flex: 2, padding: 10, justifyContent: "space-between" }}>
+      <View style={{ flex: 1, padding: 10, justifyContent: "space-between" }}>
         <View>
           <View>
             <Text style={styles.productTitle}>{title}</Text>
@@ -68,9 +68,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
                 <Avatar.Image
                   size={20}
                   source={{
-                    uri:
-                      userDetails[0].profilePicture ||
-                      userDetails.profilePicture,
+                    uri: userDetails[0].profilePicture,
                   }}
                 />
               ) : (
@@ -100,7 +98,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
             </View>
           </View>
           <View>
-            <Text style={styles.productDesc}>{truncatedTitle}</Text>
+            <Text style={styles.productDesc}>{truncatedDesc}</Text>
           </View>
         </View>
         <View
@@ -117,10 +115,15 @@ const ProductGrid: React.FC<ProductItemProps> = ({
             }}>
             <Icon
               name="location"
-              size={20}
+              size={10}
               color={COLORS.GRAY}
             />
-            <Text style={{ color: COLORS.GRAY, fontFamily: "InterRegular" }}>
+            <Text
+              style={{
+                color: COLORS.GRAY,
+                fontFamily: "InterRegular",
+                fontSize: 11,
+              }}>
               {region}
             </Text>
           </View>
@@ -141,13 +144,11 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 3.84,
     elevation: 5,
+    shadowRadius: 3.84,
     width: "100%",
     flexDirection: "column",
-    height: 200,
-    marginVertical: 10,
-    gap: 10,
+    height: 300,
   },
   productImage: {
     width: "100%",
@@ -157,16 +158,16 @@ const styles = StyleSheet.create({
   },
   productTitle: {
     fontFamily: "InterBold",
-    fontSize: 18,
+    fontSize: 16,
   },
   productPrice: {
     fontFamily: "InterExtraBold",
     color: COLORS.COMPLIMENTARY,
-    fontSize: 18,
+    fontSize: 14,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
-    fontSize: 14,
+    fontSize: 8,
     fontFamily: "InterBold",
     // maxWidth: "80%",
   },
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
   },
   productDesc: {
     fontFamily: "InterRegular",
-    fontSize: 16,
+    fontSize: 11,
   },
   userView: {
     flexDirection: "row",

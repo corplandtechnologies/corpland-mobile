@@ -31,7 +31,6 @@ export const UserProvider: React.FC = ({ children }: { children: any }) => {
       setLoading(true);
       try {
         const userInfo = await AsyncStorage.getItem("user");
-        console.log("usernfo", userInfo);
         const parsedUserInfo = JSON.parse(userInfo);
         const response = await getUserById(parsedUserInfo._id);
         setUser(response?.data?.user);

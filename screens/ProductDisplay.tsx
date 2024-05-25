@@ -1,27 +1,34 @@
 // ProductDisplay.tsx
 
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View, TouchableOpacity } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
 import ProductGrid from "../components/ProductGrid";
 import { searchProducts } from "../api/api";
-import { Dimensions } from "react-native";
+import { COLORS } from "../utils/color";
 
 const ProductDisplay = ({ route }) => {
-  const numColumns = 2;
-  const size = Dimensions.get("window").width / numColumns;
   const category = route.params.category;
   const [products, setProducts] = useState([]);
-  console.log(products);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setIsLoading(true); // Start loading
       try {
-        const fetchedProducts = await searchProducts(category); // Implement this function in your API
-        console.log(fetchedProducts.data);
-
+        const fetchedProducts = await searchProducts(category);
         setProducts(fetchedProducts.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false); // End loading regardless of success or failure
       }
     };
 
@@ -29,8 +36,7 @@ const ProductDisplay = ({ route }) => {
   }, [category]);
 
   const renderItem = ({ item }) => (
-    // Render each product item here. You might want to create a separate component for this.
-    <TouchableOpacity style={{ width: size, height: size, gap: 10 }}>
+    <TouchableOpacity style={{ width: "50%", alignSelf: "center" }}>
       <ProductGrid
         key={item._id}
         image={item.image}
@@ -40,18 +46,39 @@ const ProductDisplay = ({ route }) => {
         description={item.description}
         userDetails={item.userDetails}
         _id={item._id}
-        // onReset={resetProductState}
       />
     </TouchableOpacity>
   );
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator
+          size="large"
+          color={COLORS.PRIMARY}
+        />
+      </View>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>
+          There are no products in this category yet
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <FlatList
         data={products}
         renderItem={renderItem}
-        keyExtractor={(item) => item._id} // Make sure to replace 'id' with the actual unique identifier of your product items
+        keyExtractor={(item) => item._id}
         numColumns={2}
+        contentContainerStyle={{ height: "100%" }}
       />
     </View>
   );
@@ -59,8 +86,25 @@ const ProductDisplay = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#fff",
-    height: "100%",
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  emptyText: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#333",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
 });
 
