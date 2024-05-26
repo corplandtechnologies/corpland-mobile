@@ -21,6 +21,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useSearchResults } from "../context/SearchResultsContext";
 import {
   deleteProduct,
+  dialProduct,
   getProductById,
   getUserById,
   searchProducts,
@@ -107,23 +108,33 @@ const Product = ({ route }) => {
     setRelatedProducts([]);
   };
 
-  const handleCallNow = () => {
+  const handleCallNow = async () => {
     const phoneNumber = user?.phoneNumber || ""; // Ensure there's a valid phone number
     if (!phoneNumber) {
       console.error("Phone number not found");
+      setSnackbarMessage("Phone number not found");
+      setSnackbarVisible(true);
       return;
     }
-
-    // Check if the device supports opening links with tel:
+   
     Linking.canOpenURL(`tel:${phoneNumber}`)
       .then((supported) => {
         if (!supported) {
           console.log(`Can't handle url: ${phoneNumber}`);
+          setSnackbarMessage(`Can't handle url: ${phoneNumber}`);
+          setSnackbarVisible(true);
         } else {
           return Linking.openURL(`tel:${phoneNumber}`);
         }
       })
       .catch((err) => console.error("An error occurred", err));
+     try {
+       await dialProduct(productId, currentUser?._id);
+       setSnackbarMessage("Contact Successful");
+       setSnackbarVisible(true);
+     } catch (error) {
+       console.log(error);
+     }
   };
 
   const handleDelete = async () => {

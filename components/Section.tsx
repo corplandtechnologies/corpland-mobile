@@ -6,13 +6,19 @@ interface SectionProps {
   headerText: string;
   children: ReactNode;
   onPress?: () => void;
+  routeName?: string | undefined;
 }
-const Section: FC<SectionProps> = ({ headerText, children, onPress }) => {
+const Section: FC<SectionProps> = ({
+  headerText,
+  children,
+  onPress,
+  routeName,
+}) => {
   return (
     <View>
       <View style={styles.header}>
         <Text style={styles.headerText}>{headerText}</Text>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={() => onPress && onPress(routeName)}>
           <Text style={styles.headerOptions}>See All</Text>
         </TouchableOpacity>
       </View>

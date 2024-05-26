@@ -40,7 +40,7 @@ const Login = () => {
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
       await AsyncStorage.setItem("token", res.token);
       setSnackbarVisible(true);
-      setSnackbarMessage(res.message);
+      setSnackbarMessage(res.data.message);
       navigation.navigate("TabNavigator");
     } catch (error) {
       console.log(error);

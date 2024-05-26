@@ -1,30 +1,35 @@
-// ProductDisplay.tsx
-
-import React, { useEffect, useState } from "react";
 import {
-  FlatList,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
-  Dimensions,
   ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { FlatList } from "react-native";
 import ProductGrid from "../components/ProductGrid";
-import { searchProducts } from "../api/api";
+import { getProducts } from "../api/api";
 import { COLORS } from "../utils/color";
-import UserHeader from "../components/UserHeader";
 
-const ProductDisplay = ({ route }) => {
-  const category = route.params.category;
+const ProductGrids = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const header = route.params?.title;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: header || "Default Title",
+    });
+  }, [navigation]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true); // Start loading
       try {
-        const fetchedProducts = await searchProducts(category);
+        const fetchedProducts = await getProducts();
         setProducts(fetchedProducts.data);
       } catch (error) {
         console.log(error);
@@ -34,7 +39,7 @@ const ProductDisplay = ({ route }) => {
     };
 
     fetchProducts();
-  }, [category]);
+  }, [header]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={{ width: "50%", alignSelf: "center" }}>
@@ -86,6 +91,8 @@ const ProductDisplay = ({ route }) => {
   );
 };
 
+export default ProductGrids;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -109,5 +116,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
-
-export default ProductDisplay;

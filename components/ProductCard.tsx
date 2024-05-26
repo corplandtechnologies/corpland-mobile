@@ -1,72 +1,110 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import { COLORS } from "../utils/color";
 import { Avatar } from "react-native-paper";
-import Card from "./ui/Card";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
+import { getUserById } from "../api/api";
+import ProductStats from "./ProductStats";
 
-const ProductCard = () => {
+interface Product {
+  title: string;
+  description: string;
+  price: string;
+  image: string;
+  location: string;
+}
+
+interface ProductCardProps {
+  product: Product;
+  onReset?: () => void;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const toggleIsLiked = () => {
-    setIsLiked(!isLiked);
+  const [userInfo, setUserInfo] = useState({});
+  const navigation = useNavigation();
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUser = async () => {
+        try {
+          const res = await getUserById(product.userId);
+          setUserInfo(res.data.user);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchUser();
+    }, [])
+  );
+  const truncatedDesc =
+    product.description?.length > 20
+      ? `${product.description.substring(0, 20)}...`
+      : product.description;
+
+  const productNavigate = () => {
+    if (onReset) {
+      onReset();
+    }
+    navigation.navigate("Product", { productId: product._id });
   };
-  const dummyText =
-    "To limit the title to a specific number of letters and add .. if it exceeds that length, you can't directly use the Text component's numberOfLines and ellipsizeMode props because they are designed for line-based truncation. Instead, you'll need to manually truncate the string in your component's logic before rendering it.";
-  const truncatedTitle =
-    dummyText.length > 100 ? `${dummyText.substring(0, 100)}...` : dummyText;
 
   return (
-    <View style={styles.productMain}>
+    <TouchableOpacity
+      style={styles.productMain}
+      onPress={productNavigate}>
       <Image
-        source={require("../assets/clothingImage.jpg")}
+        source={{ uri: product.image }}
         style={styles.productImage}
       />
 
-      <View style={{ padding: 10 }}>
-        <Text style={styles.productTitle}>
-          Quality RoundRoundRoundRoundRound Neck Tops
-        </Text>
-
-        <View style={styles.userView}>
-          <View style={styles.avatarContainer}>
-            <Avatar.Image
-              size={20}
-              source={require("../assets/shopping.jpg")}
-            />
-            <View>
-              <Text style={styles.AvatarText}>Sylvester</Text>
-              {/* <View style={styles.levelView}>
-                <Text style={styles.levelText}>Level 1</Text>
-              </View> */}
+      <View style={styles.contentContainer}>
+        <View style={styles.topContent}>
+          <Text style={styles.productTitle}>{product.title}</Text>
+          <ProductStats
+            icon={"call"}
+            value={product.dials.length}
+            name="Dials"
+          />
+          <View style={styles.userView}>
+            <View style={styles.avatarContainer}>
+              {userInfo.profilePicture ? (
+                <Avatar.Image
+                  size={20}
+                  source={{
+                    uri: userInfo.profilePicture,
+                  }}
+                />
+              ) : (
+                <Avatar.Image
+                  size={20}
+                  source={require("../assets/user.png")}
+                />
+              )}
+              <View>
+                <Text style={styles.AvatarText}>{userInfo.name}</Text>
+              </View>
             </View>
           </View>
+          <Text style={styles.productDesc}>{truncatedDesc}</Text>
         </View>
-        {/* <Text style={styles.productDesc}>{truncatedTitle}</Text> */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 2,
-            }}>
+
+        <View style={styles.bottomContent}>
+          <View style={styles.locationContainer}>
             <Icon
               name="location"
               size={20}
               color={COLORS.GRAY}
             />
             <Text style={{ color: COLORS.GRAY, fontFamily: "InterRegular" }}>
-              Accra, Ghana
+              {product.region}
             </Text>
           </View>
-          <Text style={styles.productPrice}>GHC 400</Text>
+          <Text style={styles.productPrice}>GHC{product.price}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -84,7 +122,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     width: 250,
-    marginRight: 20,
+    marginRight: 10,
     marginBottom: 20,
   },
   productImage: {
@@ -93,10 +131,29 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     objectFit: "cover",
   },
+  contentContainer: {
+    flex: 1,
+    padding: 10,
+  },
+  topContent: {
+    flex: 1,
+  },
+  bottomContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderTopWidth: 1,
+    borderColor: COLORS.TERTIARY,
+    paddingTop: 10,
+    marginTop: 10,
+  },
+  locationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   productTitle: {
     fontFamily: "InterBold",
     fontSize: 20,
-  
   },
   productPrice: {
     fontFamily: "InterExtraBold",
@@ -105,7 +162,7 @@ const styles = StyleSheet.create({
   },
   AvatarText: {
     color: COLORS.PRIMARY,
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "InterBold",
     marginTop: 5,
   },
@@ -125,29 +182,5 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  levelView: {
-    backgroundColor: COLORS.COMPLIMENTARY,
-    borderRadius: 10,
-    padding: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    gap: 10,
-  },
-  levelText: {
-    color: COLORS.SECONDARY,
-    textAlign: "center",
-    fontFamily: "InterBold",
-  },
-  productView: {
-    flexDirection: "row",
-    overflow: "hidden",
-    paddingHorizontal: 10, // Adjust paddingHorizontal to prevent stretching
   },
 });

@@ -1,9 +1,11 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { COLORS } from "../utils/color";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { getUserById } from "../api/api";
+import ProductStats from "./ProductStats";
 
 interface ProductItemProps {
   image: string;
@@ -11,9 +13,10 @@ interface ProductItemProps {
   price: number;
   region: string;
   description: string;
-  userDetails: any;
   _id: string | number;
   onReset?: () => void;
+  userId: string | number;
+  dials: string[];
 }
 
 const ProductGrid: React.FC<ProductItemProps> = ({
@@ -22,12 +25,14 @@ const ProductGrid: React.FC<ProductItemProps> = ({
   price,
   region,
   description,
-  userDetails,
   _id,
   onReset,
+  userId,
+  dials,
 }) => {
-  const [isLiked, setIsLiked] = useState(false);
-
+  const [isLiked, setIsLiked] = useState<Boolean>(false);
+  const [userInfo, setUserInfo] = useState<Object>({});
+  console.log(dials);
   const navigation = useNavigation();
   const toggleIsLiked = () => {
     setIsLiked(!isLiked);
@@ -45,6 +50,17 @@ const ProductGrid: React.FC<ProductItemProps> = ({
     navigation.navigate("Product", { productId: _id });
   };
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getUserById(userId);
+        setUserInfo(res.data.user);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUser();
+  }, []);
   return (
     <TouchableOpacity
       style={styles.productMain}
@@ -59,16 +75,20 @@ const ProductGrid: React.FC<ProductItemProps> = ({
         <View>
           <View>
             <Text style={styles.productTitle}>{title}</Text>
+            <ProductStats
+              icon={"call"}
+              value={dials?.length}
+              name="Dials"
+              card
+            />
           </View>
           <View style={styles.userView}>
             <View style={styles.avatarContainer}>
-              {userDetails &&
-              userDetails.length > 0 &&
-              userDetails[0]?.profilePicture ? (
+              {userInfo?.profilePicture ? (
                 <Avatar.Image
                   size={20}
                   source={{
-                    uri: userDetails[0].profilePicture,
+                    uri: userInfo.profilePicture,
                   }}
                 />
               ) : (
@@ -79,11 +99,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
               )}
               <View>
                 <Text style={styles.AvatarText}>
-                  {(userDetails &&
-                    userDetails.length > 0 &&
-                    userDetails[0]?.name) ||
-                    userDetails.name ||
-                    "Unknown User"}
+                  {userInfo.name || "Unknown User"}
                 </Text>
               </View>
               {/* <View>
@@ -148,7 +164,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     width: "100%",
     flexDirection: "column",
-    height: 300,
+    height: 350,
   },
   productImage: {
     width: "100%",

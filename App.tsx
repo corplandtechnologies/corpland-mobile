@@ -25,12 +25,13 @@ import EditProfile from "./screens/auth/EditProfile";
 import MyProducts from "./screens/seller/MyProducts";
 import EditProduct from "./screens/seller/EditProduct";
 import ProductDisplay from "./screens/ProductDisplay";
+import ProductGrids from "./screens/ProductGrids";
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [isFontLoaded, setFontLoaded] = useState(false);
-  const [user, setUser] = useState({});
+  const [isFontLoaded, setFontLoaded] = useState<Boolean>(false);
+  const [user, setUser] = useState<Object>({});
 
   useEffect(() => {
     async function loadFonts() {
@@ -57,7 +58,7 @@ export default function App() {
           setUser(parsedUserInfo._id);
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 
@@ -74,9 +75,7 @@ export default function App() {
           <ProductProvider>
             <NavigationContainer>
               <Stack.Navigator
-                initialRouteName={
-                  user === null ? "OnBoarding" : "TabNavigator"
-                }>
+                initialRouteName={!user ? "OnBoarding" : "TabNavigator"}>
                 <Stack.Screen
                   name="TabNavigator"
                   options={{ headerShown: false }}
@@ -122,6 +121,18 @@ export default function App() {
                 />
                 <Stack.Screen
                   name="ProductDisplay"
+                  component={ProductDisplay}
+                  options={({ route }) => ({
+                    headerTitle: route.params?.category || "Products",
+                    headerLeft: () => <BackButton />,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                      fontFamily: "InterBold",
+                    },
+                  })}
+                />
+                <Stack.Screen
+                  name="ProductGrids"
                   options={{
                     headerTitle: "Products",
                     headerLeft: () => <BackButton />,
@@ -130,7 +141,7 @@ export default function App() {
                       fontFamily: "InterBold",
                     },
                   }}
-                  component={ProductDisplay}
+                  component={ProductGrids}
                 />
                 <Stack.Screen
                   name="Search"

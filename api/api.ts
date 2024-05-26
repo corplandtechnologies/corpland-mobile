@@ -152,3 +152,21 @@ export const toggleFavorites = async (userId: string, productId: string) => {
 
 export const getUserProductsById = (userId: string) =>
   API.get(`/products/user/${userId}`);
+
+export const getProducts = () => API.get("/products");
+export const getTrendingProducts = () => API.get("/products/trending");
+
+export const dialProduct = async (productId: string, userId: string) => {
+  try {
+    const data: object = {
+      userId: userId,
+    };
+    const response = await API.post(`/products/dial/${productId}`, data);
+    return response.data; // Assuming the API returns the user data upon successful sign up
+  } catch (error) {
+    console.log("Error getting favorite Products:", error);
+    throw error; // Rethrow the error to be handled by the caller
+  }
+};
+export const getFavoriteProducts = (userId: string) =>
+  API.get(`/products/favorites/${userId}`);

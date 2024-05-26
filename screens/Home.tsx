@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import Category from "../components/Category";
 import { storeCatergories } from "../data/dummyData";
 import ProductCard from "../components/ProductCard";
 import { useNavigation } from "@react-navigation/native";
-import { searchProducts } from "../api/api";
+import { getProducts, getTrendingProducts, searchProducts } from "../api/api";
 import { Snackbar } from "react-native-paper";
 import { useSearchResults } from "../context/SearchResultsContext";
 
@@ -26,6 +26,8 @@ const Home = () => {
   const [snackbarVisible, setSnackbarVisible] = useState(false); // New state for Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const { setSearchResults } = useSearchResults();
+  const [products, setProducts] = useState([]);
+  const [trendingProducts, setTrendingProducts] = useState([]);
 
   const navigation = useNavigation();
 
@@ -52,6 +54,28 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await getProducts();
+        const res = await getTrendingProducts();
+        setProducts(response.data);
+        setTrendingProducts(res.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleSeeAll = (routeName: string, title: string) => {
+    navigation.navigate(routeName, { title });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -74,7 +98,13 @@ const Home = () => {
             }}>
             <View style={styles.catView}>
               {storeCatergories.slice(0, 4).map((category, index) => (
-                <TouchableOpacity key={index}>
+                <TouchableOpacity
+                  key={index}
+                  onPress={() =>
+                    navigation.navigate("ProductDisplay", {
+                      category: category.category,
+                    })
+                  }>
                   <Category
                     iconImagePath={category.iconImagePath}
                     category={category.category}
@@ -83,23 +113,34 @@ const Home = () => {
               ))}
             </View>
           </Section>
-          <Section headerText="Featured">
+          <Section
+            headerText="Discover"
+            onPress={(routeName) => handleSeeAll(routeName, "Discover")}
+            routeName="ProductGrids">
             <ScrollView
               horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={styles.productView}>
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
+              showsHorizontalScrollIndicator={false}>
+              {products.map((product, index) => (
+                <ProductCard
+                  key={index}
+                  product={product}
+                />
+              ))}
             </ScrollView>
           </Section>
-          <Section headerText="Trending">
-            <ScrollView horizontal={true}>
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
+          <Section
+            headerText="Trending"
+            onPress={(routeName) => handleSeeAll(routeName, "Trending")}
+            routeName="ProductGrids">
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              {trendingProducts.map((product, index) => (
+                <ProductCard
+                  key={index}
+                  product={product.product}
+                />
+              ))}
             </ScrollView>
           </Section>
         </View>

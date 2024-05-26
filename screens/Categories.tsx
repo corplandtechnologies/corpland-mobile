@@ -37,6 +37,7 @@ const Categories = () => {
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
+        contentContainerStyle={{ height: "100%" }}
       />
     </View>
   );

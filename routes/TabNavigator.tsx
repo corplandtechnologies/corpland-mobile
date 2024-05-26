@@ -27,6 +27,8 @@ const BadgedIcon = withBadge(0)(Icon);
 export default function TabNavigator() {
   const [isRequest, setIsRequest] = useState(false);
   const { isSellerMode, toggleSellerMode } = useSellerMode();
+  const [loading, setLoading] = useState<Boolean>(false);
+
 
   const onToggleSwitch = () => setIsRequest(!isRequest);
 
