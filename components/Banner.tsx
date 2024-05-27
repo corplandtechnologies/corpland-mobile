@@ -1,20 +1,60 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, ScrollView, Image, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  ScrollView,
+  Image,
+  StyleSheet,
+  View,
+  Linking,
+  TouchableOpacity,
+} from "react-native";
 import { COLORS } from "../utils/color";
 
 const Banner = () => {
   const images = [
-    require("../assets/shopping.jpg"),
-    require("../assets/clothingImage.jpg"),
+    require("../assets/AdBannerCaution.jpg"),
+    require("../assets/AdBannerCautionPurple.jpg"),
+    require("../assets/AdBannerCautionGold.jpg"),
     require("../assets/CORPLAND (3).png"),
     require("../assets/CORPLAND5.png"),
-    require("../assets/Designer.jpeg"),
-    require("../assets/E-commerce.jpeg"),
     // Add more images as needed
+  ];
+
+  // Phone numbers for WhatsApp
+  const whatsAppPhoneNumbers = [
+    "+233201027084",
+    "+233201027084",
+    "+233201027084",
+  ];
+
+  // Phone numbers for fallback dialer
+  const dialerPhoneNumbers = [
+    "+233246815631",
+    "+233246815631",
+    "+233246815631",
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
+
+  const openWhatsAppOrDial = (whatsAppNumber: string, dialerNumber: string) => {
+    // Construct the WhatsApp URL
+    const url = `whatsapp://send?phone=${whatsAppNumber}`;
+
+    // Check if WhatsApp is available
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          // Open WhatsApp
+          return Linking.openURL(url);
+        } else {
+          // Fallback to dialer with a different number
+          const dialUrl = `tel:${dialerNumber}`;
+          return Linking.openURL(dialUrl);
+        }
+      })
+      .catch((err) => console.error("An error occurred", err));
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -33,14 +73,21 @@ const Banner = () => {
 
   const renderImages = () => {
     return images.map((image, index) => (
-      <View
+      <TouchableOpacity
         key={index}
-        style={{ width: Dimensions.get("window").width }}>
-        <Image
-          source={image}
-          style={styles.imageStyle}
-        />
-      </View>
+        onPress={() =>
+          openWhatsAppOrDial(
+            whatsAppPhoneNumbers[index],
+            dialerPhoneNumbers[index]
+          )
+        }>
+        <View style={{ width: Dimensions.get("window").width }}>
+          <Image
+            source={image}
+            style={styles.imageStyle}
+          />
+        </View>
+      </TouchableOpacity>
     ));
   };
 

@@ -3,6 +3,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
@@ -12,13 +13,15 @@ import ProductItem from "../../components/ProductItem";
 import { getUserById, getUserProductsById } from "../../api/api";
 import { useUser } from "../../context/UserContext";
 import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 
 const MyProducts = () => {
   const [userProducts, setUserProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
   const { user } = useUser();
-  console.log("products", userProducts);
+  const navigation = useNavigation(); // Initialize navigation
+
   useFocusEffect(
     useCallback(() => {
       const getUserProducts = async () => {
@@ -36,6 +39,7 @@ const MyProducts = () => {
       getUserProducts();
     }, [])
   );
+
   return (
     <View style={styles.main}>
       {isLoading ? (
@@ -43,9 +47,21 @@ const MyProducts = () => {
           size={50}
           color={COLORS.PRIMARY}
         />
+      ) : userProducts.length === 0 ? (
+        <View style={styles.centeredContainer}>
+          <Text style={styles.noProductsText}>
+            You don't have any listed Products,
+          </Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("TabNavigator", { screen: "Add" })
+            }>
+            <Text style={styles.tapHereText}>Tap Here to Make one</Text>
+          </TouchableOpacity>
+        </View>
       ) : (
         <ScrollView>
-          {userProducts?.map((result) => (
+          {userProducts.map((result) => (
             <ProductItem
               key={result._id}
               image={result.image}
@@ -67,7 +83,24 @@ export default MyProducts;
 
 const styles = StyleSheet.create({
   main: {
-    height: "100%",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: COLORS.SECONDARY,
+  },
+  centeredContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noProductsText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  tapHereText: {
+    fontSize: 16,
+    color: COLORS.PRIMARY,
+    textDecorationLine: "underline",
   },
 });

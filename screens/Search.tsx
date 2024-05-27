@@ -9,6 +9,7 @@ import React from "react";
 import { COLORS } from "../utils/color";
 import SearchResult from "../components/SearchResult";
 import { useSearchResults } from "../context/SearchResultsContext";
+import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
 
 const Search = () => {
   const { searchResults } = useSearchResults();
@@ -16,18 +17,21 @@ const Search = () => {
 
   return (
     <View style={styles.main}>
-      {searchResults?.map((result) => (
-        <SearchResult
-          key={result._id}
-          image={result.image}
-          title={result.title}
-          price={result.price}
-          region={result.region}
-          description={result.description}
-          userDetails={result.userDetails}
-          _id={result._id}
-        />
-      ))}
+      <ScrollView contentContainerStyle={{ height: "100%", gap: 10 }}>
+        {searchResults?.map((result) => (
+          <SearchResult
+            key={result._id}
+            image={result.image}
+            title={result.title}
+            price={result.price}
+            region={result.region}
+            description={result.description}
+            userDetails={result.userDetails}
+            _id={result._id}
+            dials={result.dials}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 };

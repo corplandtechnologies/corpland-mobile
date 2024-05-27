@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../utils/color";
@@ -15,7 +16,7 @@ import Section from "../components/Section";
 import Category from "../components/Category";
 import { storeCatergories } from "../data/dummyData";
 import ProductCard from "../components/ProductCard";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { getProducts, getTrendingProducts, searchProducts } from "../api/api";
 import { Snackbar } from "react-native-paper";
 import { useSearchResults } from "../context/SearchResultsContext";
@@ -53,24 +54,25 @@ const Home = () => {
       setLoading(false);
     }
   };
+  useFocusEffect(
+    useCallback(() => {
+      const fetchProducts = async () => {
+        try {
+          setLoading(true);
+          const response = await getProducts();
+          const res = await getTrendingProducts();
+          setProducts(response.data);
+          setTrendingProducts(res.data);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await getProducts();
-        const res = await getTrendingProducts();
-        setProducts(response.data);
-        setTrendingProducts(res.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+      fetchProducts();
+    }, [])
+  );
 
   const handleSeeAll = (routeName: string, title: string) => {
     navigation.navigate(routeName, { title });
@@ -117,32 +119,48 @@ const Home = () => {
             headerText="Discover"
             onPress={(routeName) => handleSeeAll(routeName, "Discover")}
             routeName="ProductGrids">
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {products.map((product, index) => (
-                <ProductCard
-                  key={index}
-                  product={product}
-                />
-              ))}
-            </ScrollView>
+            {loading ? (
+              <ActivityIndicator
+                size="large"
+                color={COLORS.PRIMARY}
+              />
+            ) : (
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {products.map((product, index) => (
+                  <ProductCard
+                    key={index}
+                    product={product}
+                  />
+                ))}
+              </ScrollView>
+            )}
           </Section>
-          <Section
-            headerText="Trending"
-            onPress={(routeName) => handleSeeAll(routeName, "Trending")}
-            routeName="ProductGrids">
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {trendingProducts.map((product, index) => (
-                <ProductCard
-                  key={index}
-                  product={product.product}
+          {trendingProducts && (
+            <Section
+              headerText="Trending"
+              onPress={(routeName) => handleSeeAll(routeName, "Trending")}
+              routeName="ProductGrids">
+              {loading ? (
+                <ActivityIndicator
+                  size="large"
+                  color={COLORS.PRIMARY}
                 />
-              ))}
-            </ScrollView>
-          </Section>
+              ) : (
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}>
+                  {trendingProducts.map((product, index) => (
+                    <ProductCard
+                      key={index}
+                      product={product.product}
+                    />
+                  ))}
+                </ScrollView>
+              )}
+            </Section>
+          )}
         </View>
       </ScrollView>
       <Snackbar

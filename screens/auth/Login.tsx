@@ -30,21 +30,32 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      setSnackbarMessage("All Fields are required!");
+      setSnackbarVisible(true);
+      return;
+    }
     setLoading(true);
     try {
+      console.log({
+        email: email,
+        password: password,
+      });
       const res = await login({
         email: email,
         password: password,
       });
+
       // Assuming user object contains userInfo and token
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
       await AsyncStorage.setItem("token", res.token);
       setSnackbarVisible(true);
-      setSnackbarMessage(res.data.message);
-      navigation.navigate("TabNavigator");
+      setSnackbarMessage(res.data?.message);
+      navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
       console.log(error);
-      setSnackbarMessage(error.response.data.message);
+      setSnackbarMessage(error.response.data?.message);
+
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -103,13 +114,13 @@ const Login = () => {
         disabled={!password}
       />
 
-      <View style={styles.separatorContainer}>
+      {/* <View style={styles.separatorContainer}>
         <View style={styles.separatorLine} />
         <Text style={styles.separatorText}>or</Text>
         <View style={styles.separatorLine} />
-      </View>
+      </View> */}
 
-      <View style={styles.socialSignInContainer}>
+      {/* <View style={styles.socialSignInContainer}>
         <TouchableOpacity onPress={() => console.log("Google Sign In")}>
           <Icon
             name="google"
@@ -131,18 +142,18 @@ const Login = () => {
             color={COLORS.GRAY}
           />
         </TouchableOpacity>
-        <Snackbar
-          visible={snackbarVisible}
-          onDismiss={() => setSnackbarVisible(false)}
-          action={{
-            label: "Close",
-            onPress: () => {
-              setSnackbarVisible(false);
-            },
-          }}>
-          {snackbarMessage}
-        </Snackbar>
-      </View>
+      </View> */}
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        action={{
+          label: "Close",
+          onPress: () => {
+            setSnackbarVisible(false);
+          },
+        }}>
+        {snackbarMessage}
+      </Snackbar>
 
       {/* "Don't have an account? Sign In" Text */}
       <TouchableOpacity onPress={() => navigation.navigate("Register")}>
@@ -219,6 +230,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: COLORS.GRAY,
     fontSize: 16,
+    marginTop: 10,
   },
   forgotPasswordText: {
     textAlign: "right",

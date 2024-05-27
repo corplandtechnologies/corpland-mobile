@@ -32,6 +32,8 @@ const Stack = createStackNavigator();
 export default function App() {
   const [isFontLoaded, setFontLoaded] = useState<Boolean>(false);
   const [user, setUser] = useState<Object>({});
+  const [loggedInUser, setLoggedInUser] = useState<object | null>(null);
+  console.log(loggedInUser);
 
   useEffect(() => {
     async function loadFonts() {
@@ -56,6 +58,7 @@ export default function App() {
         if (userInfo) {
           const parsedUserInfo = JSON.parse(userInfo);
           setUser(parsedUserInfo._id);
+          setLoggedInUser(parsedUserInfo);
         }
       } catch (error) {
         console.log(error);
@@ -75,7 +78,9 @@ export default function App() {
           <ProductProvider>
             <NavigationContainer>
               <Stack.Navigator
-                initialRouteName={!user ? "OnBoarding" : "TabNavigator"}>
+                initialRouteName={
+                  loggedInUser === null ? "OnBoarding" : "TabNavigator"
+                }>
                 <Stack.Screen
                   name="TabNavigator"
                   options={{ headerShown: false }}

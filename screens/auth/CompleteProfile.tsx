@@ -31,7 +31,7 @@ const CompleteProfile = () => {
   const [userId, setUserId] = useState("");
   const [user, setUser] = useState(null);
 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,10 +63,15 @@ const CompleteProfile = () => {
     }
   };
   const handleProfileUpdate = async () => {
+    if (!name || !phoneNumber) {
+      setSnackbarMessage("All Fields are required!");
+      setSnackbarVisible(true);
+      return;
+    }
     setLoading(true);
     try {
       const data = {
-        name: name,
+        name: name || user?.name,
         phoneNumber: phoneNumber,
         profilePicture: selectedImage,
         userId: userId,
@@ -76,7 +81,7 @@ const CompleteProfile = () => {
       const res = await completeProfile(data);
       setSnackbarVisible(true);
       setSnackbarMessage(res.message);
-      navigation.navigate("TabNavigator");
+      navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
       console.log(error);
       const err = error as Error;

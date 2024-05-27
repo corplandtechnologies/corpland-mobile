@@ -14,6 +14,7 @@ import { Snackbar } from "react-native-paper"; // Ensure this is imported
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import UserHeader from "../../components/UserHeader";
+import FormInput from "../../components/ui/FormInput";
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -34,6 +35,11 @@ const Register = () => {
   };
 
   const handleSignUp = async () => {
+    if (!email || !password || !name) {
+      setSnackbarMessage("All Fields are required!");
+      setSnackbarVisible(true);
+      return
+    }
     setLoading(true);
     try {
       const res = await signUp({
@@ -50,7 +56,7 @@ const Register = () => {
       navigation.navigate("Verify");
     } catch (error) {
       console.log(error);
-      setSnackbarMessage(error.message);
+      setSnackbarMessage(error.response.data);
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -62,54 +68,40 @@ const Register = () => {
         title="Create Account"
         description="Fill your information below or register with your social account"
       />
-
-      <View style={styles.inputContainer}>
-        <Icon
-          name="user"
-          type="font-awesome"
-          color={COLORS.GRAY}
-        />
-        <TextInput
+      <View style={{ gap: 10 }}>
+        <FormInput
+          icon="user"
           placeholder="Name"
-          style={styles.input}
-          placeholderTextColor={COLORS.TERTIARY}
           onChangeText={setName}
         />
-      </View>
-      <View style={styles.inputContainer}>
-        <Icon
-          name="envelope"
-          type="font-awesome"
-          color={COLORS.GRAY}
-        />
-        <TextInput
+        <FormInput
+          icon="envelope"
           placeholder="Email"
-          style={styles.input}
-          placeholderTextColor={COLORS.TERTIARY}
           onChangeText={setEmail}
         />
-      </View>
-      <View style={styles.inputContainer}>
-        <Icon
-          name="lock"
-          type="font-awesome"
-          color={COLORS.GRAY}
-        />
-        <TextInput
-          placeholder="Password"
-          secureTextEntry={!isPasswordVisible}
-          style={styles.input}
-          placeholderTextColor={COLORS.TERTIARY}
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity
-          onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+        <View style={styles.inputContainer}>
           <Icon
-            name={isPasswordVisible ? "eye-slash" : "eye"}
+            name="lock"
             type="font-awesome"
             color={COLORS.GRAY}
           />
-        </TouchableOpacity>
+          <TextInput
+            placeholder="Password"
+            secureTextEntry={!isPasswordVisible}
+            style={styles.input}
+            placeholderTextColor={COLORS.TERTIARY}
+            onChangeText={setPassword}
+            cursorColor={COLORS.PRIMARY}
+          />
+          <TouchableOpacity
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+            <Icon
+              name={isPasswordVisible ? "eye-slash" : "eye"}
+              type="font-awesome"
+              color={COLORS.GRAY}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <CheckBox
@@ -127,7 +119,7 @@ const Register = () => {
         loading={loading}
       />
 
-      <View style={styles.separatorContainer}>
+      {/* <View style={styles.separatorContainer}>
         <View style={styles.separatorLine} />
         <Text style={styles.separatorText}>or</Text>
         <View style={styles.separatorLine} />
@@ -155,7 +147,7 @@ const Register = () => {
             color={COLORS.GRAY}
           />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       {/* "Don't have an account? Sign In" Text */}
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
@@ -255,6 +247,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: COLORS.GRAY,
     fontSize: 16,
+    marginTop: 10,
   },
 });
 

@@ -35,7 +35,7 @@ export default function TabNavigator() {
   // Custom header left component for Home screen
   const CustomHeaderLeft = () => {
     const navigation = useNavigation();
-    const [userInfo, setUserInfo] = useState({});
+    const [userInfo, setUserInfo] = useState(null);
     const { user } = useUser();
 
     useFocusEffect(
@@ -93,6 +93,7 @@ export default function TabNavigator() {
         name="notifications"
         type="ionicon"
         size={25}
+        
       />
     </View>
   );
@@ -112,7 +113,7 @@ export default function TabNavigator() {
           ),
           headerTitle: "",
           headerLeft: () => <CustomHeaderLeft />,
-          headerRight: () => <CustomHeaderRight />,
+          // headerRight: () => <CustomHeaderRight />,
         }}
       />
       <Tab.Screen

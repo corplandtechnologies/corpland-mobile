@@ -15,7 +15,7 @@ interface FormInputProps {
   isButtoned?: boolean;
   isButtonedIcon?: string;
   loading?: boolean;
-  onPress: () => void;
+  onPress?: () => void;
   defaultValue?: string;
   value?: string;
 }

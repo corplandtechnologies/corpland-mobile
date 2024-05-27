@@ -5,6 +5,7 @@ import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import noProfilePic from "../assets/user.png";
 import { useNavigation } from "@react-navigation/native";
+import ProductStats from "./ProductStats";
 
 interface SearchResultProps {
   image: string;
@@ -14,6 +15,7 @@ interface SearchResultProps {
   description: string;
   userDetails: any;
   _id: string | number;
+  dials: string | number;
 }
 
 const SearchResult: React.FC<SearchResultProps> = ({
@@ -24,6 +26,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
   description,
   userDetails,
   _id,
+  dials,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const toggleIsLiked = () => {
@@ -53,6 +56,11 @@ const SearchResult: React.FC<SearchResultProps> = ({
         <View>
           <View>
             <Text style={styles.productTitle}>{title}</Text>
+            <ProductStats
+              icon={"call"}
+              value={dials.length}
+              name="Dials"
+            />
           </View>
           <View style={styles.userView}>
             <View style={styles.avatarContainer}>
@@ -129,7 +137,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: "100%",
     flexDirection: "row",
-    height: "25%",
+    height: "30%",
   },
   productImage: {
     width: "100%",

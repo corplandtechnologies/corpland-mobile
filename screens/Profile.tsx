@@ -66,7 +66,7 @@ const Profile = () => {
   };
 
   const handleEmail = (subject: string, body: string) => {
-    const emailUrl = `mailto:corpland.gh@gmail.com?subject=${encodeURIComponent(
+    const emailUrl = `mailto:corplandtechnologies@gmail.com?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;
     Linking.canOpenURL(emailUrl)

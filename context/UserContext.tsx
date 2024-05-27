@@ -32,7 +32,7 @@ export const UserProvider: React.FC = ({ children }: { children: any }) => {
       try {
         const userInfo = await AsyncStorage.getItem("user");
         const parsedUserInfo = JSON.parse(userInfo);
-        const response = await getUserById(parsedUserInfo._id);
+        const response = await getUserById(parsedUserInfo?._id);
         setUser(response?.data?.user);
       } catch (error) {
         setError(error);
