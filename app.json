@@ -6,12 +6,19 @@
     "orientation": "portrait",
     "icon": "./assets/CORPLAND5.png",
     "userInterfaceStyle": "light",
+    "updates": {
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/19c4e40a-011e-40e2-893b-0284fc4a4888"
+    },
     "splash": {
       "image": "./assets/CORPLAND-2-no-bg.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -20,16 +27,21 @@
         "foregroundImage": "./assets/CORPLAND5.png",
         "backgroundColor": "#ffffff"
       },
-    "package": "com.soluservant.corpland"
+      "package": "com.soluservant.corpland"
     },
     "web": {
       "favicon": "./assets/CORPLAND5.png"
     },
-    "owner": "soluservant",
-    "plugins": ["expo-font"],
+    "owner": "corplandtechnologies",
+    "plugins": [
+      "expo-font"
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "extra": {
       "eas": {
-        "projectId": "a84f5db7-a1e3-4149-b0ef-db4daee77a20"
+        "projectId": "19c4e40a-011e-40e2-893b-0284fc4a4888"
       }
     }
   }

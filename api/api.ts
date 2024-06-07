@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 export const API = axios.create({
-  baseURL: "https://corpland-backend.onrender.com/api/v1",
+  baseURL: "https://corplandbackend.onrender.com/api/v1",
   withCredentials: true,
 });
 
@@ -71,6 +71,7 @@ export const completeProfile = async (userData: any) => {
   const formData: any = new FormData();
   formData.append("name", userData.name);
   formData.append("phoneNumber", userData.phoneNumber);
+  formData.append("password", userData.password);
   formData.append("profilePicture", {
     uri: userData.profilePicture,
     type: "image/jpeg",

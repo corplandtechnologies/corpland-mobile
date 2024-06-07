@@ -143,7 +143,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
               {region}
             </Text>
           </View>
-          <Text style={styles.productPrice}>GHC {price}</Text>
+          <Text style={styles.productPrice}>GH₵ {price}</Text>
         </View>
       </View>
     </TouchableOpacity>

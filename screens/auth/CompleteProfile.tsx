@@ -20,6 +20,7 @@ import EditAvatar from "../../components/ui/EditAvatar";
 import PhoneInput from "react-native-phone-input";
 import * as ImagePicker from "expo-image-picker";
 import { completeProfile } from "../../api/api";
+import FormInput from "../../components/ui/FormInput";
 
 const CompleteProfile = () => {
   const [loading, setLoading] = useState(false);
@@ -63,7 +64,7 @@ const CompleteProfile = () => {
     }
   };
   const handleProfileUpdate = async () => {
-    if (!name || !phoneNumber) {
+    if (!phoneNumber) {
       setSnackbarMessage("All Fields are required!");
       setSnackbarVisible(true);
       return;
@@ -73,7 +74,7 @@ const CompleteProfile = () => {
       const data = {
         name: name || user?.name,
         phoneNumber: phoneNumber,
-        profilePicture: selectedImage,
+        profilePicture: selectedImage || user?.profilePicture,
         userId: userId,
       };
       console.log(data);
@@ -81,11 +82,10 @@ const CompleteProfile = () => {
       const res = await completeProfile(data);
       setSnackbarVisible(true);
       setSnackbarMessage(res.message);
-      navigation.navigate("TabNavigator", { screen: "Home" });
+      navigation.navigate("TabNavigator", { name: "Home" });
     } catch (error) {
       console.log(error);
-      const err = error as Error;
-      setSnackbarMessage(err.message);
+      setSnackbarMessage(error.response.data);
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -122,20 +122,15 @@ const CompleteProfile = () => {
             onPress={handlePickImage}
           />
         </View>
-        <View style={styles.inputContainer}>
-          <Icon
-            name="user"
-            type="font-awesome"
-            color={COLORS.GRAY}
-          />
-          <TextInput
-            placeholder="Name"
-            style={styles.input}
-            placeholderTextColor={COLORS.TERTIARY}
-            onChangeText={setName}
-            defaultValue={user?.name}
-          />
-        </View>
+        <FormInput
+          icon={"user"}
+          placeholder="Name"
+          onChangeText={setName}
+          defaultValue={user?.name}
+          style={{
+            marginBottom: 10,
+          }}
+        />
         <View style={styles.inputContainer}>
           <Icon
             name="phone"
@@ -146,6 +141,7 @@ const CompleteProfile = () => {
             initialCountry={"gh"}
             textProps={{
               placeholder: "Enter a phone number...",
+              cursorColor: COLORS.PRIMARY,
             }}
             style={styles.input}
             pickerBackgroundColor={COLORS.TERTIARY}

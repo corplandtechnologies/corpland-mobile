@@ -38,10 +38,16 @@ const Register = () => {
     if (!email || !password || !name) {
       setSnackbarMessage("All Fields are required!");
       setSnackbarVisible(true);
-      return
+      return;
     }
     setLoading(true);
     try {
+      console.log({
+        name,
+        email,
+        password,
+        termsAccepted,
+      });
       const res = await signUp({
         name,
         email,

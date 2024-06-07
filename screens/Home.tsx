@@ -137,7 +137,7 @@ const Home = () => {
               </ScrollView>
             )}
           </Section>
-          {trendingProducts && (
+          {trendingProducts !== [] && (
             <Section
               headerText="Trending"
               onPress={(routeName) => handleSeeAll(routeName, "Trending")}

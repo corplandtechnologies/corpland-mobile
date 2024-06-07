@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ScreenContextWrapper from "../../components/ScreenContextWrapper";
 import Card from "../../components/ui/Card";
 import Input from "../../components/ui/Input";
@@ -18,11 +18,12 @@ import * as ImagePicker from "expo-image-picker";
 import { categories, regionsByCountry } from "../../data/dummyData";
 import { getUserCountry, getUserLocation } from "../../utils/modules";
 import { Snackbar } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
-import { createProduct } from "../../api/api";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { createProduct, getUserById } from "../../api/api";
 import FormInput from "../../components/ui/FormInput";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useUser } from "../../context/UserContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CreateProduct = () => {
   const [title, setTitle] = useState("");
@@ -41,7 +42,7 @@ const CreateProduct = () => {
   const [countryOptions, setCountryOptions] = useState<string[]>([]);
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [price, setPrice] = useState("");
-  const { user } = useUser();
+  const [user, setUser] = useState<object>({});
 
   const [loading, setLoading] = useState(false);
 
@@ -51,6 +52,25 @@ const CreateProduct = () => {
     const newPrice = text.replace(/[^0-9]/g, "");
     setPrice(newPrice);
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      const getUserInfo = async () => {
+        try {
+          const parsedUserInfo = JSON.parse(
+            (await AsyncStorage.getItem("user")) || "{}"
+          );
+          const res = await getUserById(parsedUserInfo?._id);
+          setUser
+          
+          (res?.data.user);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getUserInfo();
+    }, [user?._id])
+  );
 
   useEffect(() => {
     const fetchLocationOptions = async () => {

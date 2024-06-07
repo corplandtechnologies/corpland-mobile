@@ -46,7 +46,7 @@ const Option = ({
       <Icon
         name="chevron-forward"
         size={24}
-        color={COLORS.PRIMARY}
+        color={COLORS.GRAY}
       />
     </TouchableOpacity>
   );
@@ -167,10 +167,10 @@ const styles = StyleSheet.create({
     fontFamily: "InterBold",
   },
   optionContainer: {
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 7.5,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.PRIMARY,
+    borderBottomColor: COLORS.TERTIARY,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

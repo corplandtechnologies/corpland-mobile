@@ -9,7 +9,6 @@ import React from "react";
 import { COLORS } from "../utils/color";
 import SearchResult from "../components/SearchResult";
 import { useSearchResults } from "../context/SearchResultsContext";
-import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
 
 const Search = () => {
   const { searchResults } = useSearchResults();

@@ -38,6 +38,7 @@ const EditProfile = () => {
   const [selectedCountry, setSelectedCountry] = useState(userInfo?.country);
   const [selectedRegion, setSelectedRegion] = useState(userInfo?.region);
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
+  const [newPassword, setNewPassword] = useState<string>("");
 
   const navigation = useNavigation();
 
@@ -47,7 +48,8 @@ const EditProfile = () => {
     useCallback(() => {
       const getUserInfo = async () => {
         try {
-          const res = await getUserById(user?._id);
+          const parsedUserInfo = JSON.parse(await AsyncStorage.getItem("user"));
+          const res = await getUserById(parsedUserInfo?._id);
           setUserInfo(res.data.user);
         } catch (error) {
           console.log(error);
@@ -88,7 +90,7 @@ const EditProfile = () => {
   const handleProfileUpdate = async () => {
     setLoading(true);
     try {
-      const data = {
+      let data = {
         name: name || userInfo?.name,
         phoneNumber: phoneNumber || userInfo?.phoneNumber,
         profilePicture: selectedImage || userInfo?.profilePicture,
@@ -96,6 +98,12 @@ const EditProfile = () => {
         region: selectedRegion || userInfo?.region,
         userId: user._id,
       };
+
+      // Only add the password field if newPassword has been set
+      if (newPassword) {
+        data.password = newPassword;
+      }
+
       console.log(data);
 
       const res = await completeProfile(data);
@@ -161,6 +169,12 @@ const EditProfile = () => {
           defaultValue={userInfo?.name}
           style={styles.input}
         />
+        <FormInput
+          icon="lock"
+          placeholder="new password"
+          onChangeText={setNewPassword}
+          style={styles.input}
+        />
         <View style={styles.inputContainer}>
           <Icon
             name="phone"
@@ -171,13 +185,13 @@ const EditProfile = () => {
             initialCountry={"gh"}
             textProps={{
               placeholder: "Enter a phone number...",
+              defaultValue: userInfo?.phoneNumber,
             }}
             pickerBackgroundColor={COLORS.TERTIARY}
             onChangePhoneNumber={(text) => {
               setPhoneNumber(text);
             }}
             autoFormat={true}
-            
           />
         </View>
         <Select

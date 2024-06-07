@@ -34,7 +34,9 @@ const Profile = () => {
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const res = await getUserById(user?._id);
+          const userInfo = await AsyncStorage.getItem("user");
+          const parsedUserInfo = JSON.parse(userInfo || "{}");
+          const res = await getUserById(parsedUserInfo?._id);
           setUserInfo(res.data?.user);
         } catch (error) {
           console.error("Failed to fetch user data:", error);
@@ -69,15 +71,7 @@ const Profile = () => {
     const emailUrl = `mailto:corplandtechnologies@gmail.com?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;
-    Linking.canOpenURL(emailUrl)
-      .then((supported) => {
-        if (supported) {
-          return Linking.openURL(emailUrl);
-        } else {
-          console.log(`Can't handle url: ${emailUrl}`);
-        }
-      })
-      .catch((err) => console.error("An error occurred", err));
+    Linking.openURL(emailUrl);
   };
 
   return (
@@ -94,7 +88,7 @@ const Profile = () => {
             source={require("../assets/user.png")}
           />
         )}
-        <Text style={styles.AvatarText}>{user?.name}</Text>
+        <Text style={styles.AvatarText}>{userInfo?.name}</Text>
       </View>
       {/* <View style={styles.modeView}>
         <Text style={styles.modeText}>Seller Mode</Text>

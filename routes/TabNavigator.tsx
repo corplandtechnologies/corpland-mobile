@@ -19,6 +19,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useUser } from "../context/UserContext";
 import { getUserById } from "../api/api";
 import Favorite from "../screens/Favorite";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,7 +30,6 @@ export default function TabNavigator() {
   const { isSellerMode, toggleSellerMode } = useSellerMode();
   const [loading, setLoading] = useState<Boolean>(false);
 
-
   const onToggleSwitch = () => setIsRequest(!isRequest);
 
   // Custom header left component for Home screen
@@ -37,12 +37,14 @@ export default function TabNavigator() {
     const navigation = useNavigation();
     const [userInfo, setUserInfo] = useState(null);
     const { user } = useUser();
+    console.log("user home", user);
 
     useFocusEffect(
       useCallback(() => {
         const getUserInfo = async () => {
           try {
-            const res = await getUserById(user?._id);
+            const parsedUserInfo = JSON.parse(await AsyncStorage.getItem("user")|| "{}");
+            const res = await getUserById(parsedUserInfo?._id);
             setUserInfo(res?.data.user);
           } catch (error) {
             console.log(error);
@@ -69,7 +71,7 @@ export default function TabNavigator() {
           <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
             {userInfo ? (
               <Text style={{ color: COLORS.PRIMARY, fontFamily: "InterBold" }}>
-                {userInfo.region}, {userInfo.country}
+                {userInfo?.region},{userInfo?.country}
               </Text>
             ) : (
               <Text style={{ color: COLORS.PRIMARY, fontFamily: "InterBold" }}>
@@ -93,7 +95,6 @@ export default function TabNavigator() {
         name="notifications"
         type="ionicon"
         size={25}
-        
       />
     </View>
   );

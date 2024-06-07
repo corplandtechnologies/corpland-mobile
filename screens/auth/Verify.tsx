@@ -26,10 +26,7 @@ const Verify = () => {
 
   const navigation = useNavigation();
 
-  const input1Ref = useRef(null);
-  const input2Ref = useRef(null);
-  const input3Ref = useRef(null);
-  const input4Ref = useRef(null);
+  const inputRefs = useRef([null, null, null, null]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -47,6 +44,25 @@ const Verify = () => {
     fetchUser();
   }, []);
 
+  const handleInputChange = (index: number, text: string) => {
+    let newCode = verificationCode;
+
+    // If the input is being cleared, remove the corresponding character
+    if (text.length === 0) {
+      newCode = newCode.slice(0, index) + newCode.slice(index + 1);
+    } else {
+      // Otherwise, insert the new character at the correct position
+      newCode = newCode.slice(0, index) + text + newCode.slice(index);
+    }
+
+    setVerificationCode(newCode);
+
+    // Move focus to the next input if there is one
+    if (index < inputRefs.current.length - 1 && inputRefs.current[index + 1]) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
   const handleVerify = async () => {
     setLoading(true);
     try {
@@ -62,12 +78,13 @@ const Verify = () => {
       navigation.navigate("CompleteProfile");
     } catch (error) {
       console.log(error);
-      setSnackbarMessage("Sign up failed. Please try again.");
+      setSnackbarMessage("Invalid Code. Check and Try again!");
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
       <UserHeader
@@ -76,58 +93,17 @@ const Verify = () => {
       />
 
       <View style={styles.inputContainer}>
-        <TextInput
-          ref={input1Ref}
-          style={styles.input}
-          maxLength={1}
-          keyboardType="numeric"
-          placeholder="-"
-          onChangeText={(text) => {
-            if (text.length === 1 && input2Ref.current) {
-              input2Ref.current.focus();
-              setVerificationCode((prevCode) => prevCode + text);
-            }
-          }}
-        />
-        <TextInput
-          ref={input2Ref}
-          style={styles.input}
-          maxLength={1}
-          keyboardType="numeric"
-          placeholder="-"
-          onChangeText={(text) => {
-            if (text.length === 1 && input3Ref.current) {
-              input3Ref.current.focus();
-              setVerificationCode((prevCode) => prevCode + text);
-            }
-          }}
-        />
-        <TextInput
-          ref={input3Ref}
-          style={styles.input}
-          maxLength={1}
-          keyboardType="numeric"
-          placeholder="-"
-          onChangeText={(text) => {
-            if (text.length === 1 && input4Ref.current) {
-              input4Ref.current.focus();
-              setVerificationCode((prevCode) => prevCode + text);
-            }
-          }}
-        />
-        <TextInput
-          ref={input4Ref}
-          style={styles.input}
-          maxLength={1}
-          keyboardType="numeric"
-          placeholder="-"
-          onChangeText={(text) => {
-            if (text.length === 1) {
-              input4Ref.current.focus();
-              setVerificationCode((prevCode) => prevCode + text);
-            }
-          }}
-        />
+        {[...Array(4)].map((_, index) => (
+          <TextInput
+            key={index}
+            ref={(ref) => (inputRefs.current[index] = ref)}
+            style={styles.input}
+            maxLength={1}
+            keyboardType="numeric"
+            placeholder="-"
+            onChangeText={(text) => handleInputChange(index, text)}
+          />
+        ))}
       </View>
 
       {/* <TouchableOpacity onPress={() => console.log("Forgot Password")}>

@@ -7,13 +7,11 @@ import { useUser } from "../../context/UserContext";
 import { getUserById, toggleFavorites } from "../../api/api";
 
 interface FavoriteIconProps {
-  toggleIsLiked: () => void;
   style?: Object;
   productId: any;
 }
 
 const FavoriteIcon: React.FC<FavoriteIconProps> = ({
-  toggleIsLiked,
   style,
   productId,
 }) => {

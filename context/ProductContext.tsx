@@ -1,5 +1,11 @@
 // Import necessary modules and functions
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getProductById } from "../api/api"; // Assuming you have a function to get product by ID
 
@@ -12,8 +18,9 @@ interface ProductContextType {
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-
-export const ProductProvider: React.FC = ({ children }) => {
+export const ProductProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [productId, setProductId] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
@@ -65,4 +72,3 @@ export const useProduct = () => {
   }
   return context;
 };
-

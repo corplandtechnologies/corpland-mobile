@@ -1,5 +1,5 @@
 // contexts/SellerModeContext.tsx
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 
 interface SellerModeContextType {
   isSellerMode: boolean;
@@ -18,7 +18,11 @@ export const useSellerMode = () => {
   return context;
 };
 
-export const SellerModeProvider: React.FC = ({ children }: { children : React.ReactNode}) => {
+export const SellerModeProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [isSellerMode, setIsSellerMode] = useState(false);
 
   const toggleSellerMode = () => {

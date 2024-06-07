@@ -16,7 +16,15 @@ import Search from "./screens/Search";
 import { SearchResultsProvider } from "./context/SearchResultsContext";
 import Product from "./screens/Product";
 import { COLORS } from "./utils/color";
-import { TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  Image,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import FavoriteIcon from "./components/ui/FavoriteIcon";
 import { ProductProvider, useProduct } from "./context/ProductContext";
@@ -26,15 +34,17 @@ import MyProducts from "./screens/seller/MyProducts";
 import EditProduct from "./screens/seller/EditProduct";
 import ProductDisplay from "./screens/ProductDisplay";
 import ProductGrids from "./screens/ProductGrids";
+import NetInfo from "@react-native-community/netinfo";
+import PrimaryButton from "./components/ui/PrimaryButton";
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  const [isConnected, setIsConnected] = useState<boolean>(true);
   const [isFontLoaded, setFontLoaded] = useState<Boolean>(false);
   const [user, setUser] = useState<Object>({});
   const [loggedInUser, setLoggedInUser] = useState<object | null>(null);
   console.log(loggedInUser);
-
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
@@ -52,6 +62,16 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected && state.isInternetReachable);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [user]);
+
+  useEffect(() => {
     const fetchUser = async () => {
       try {
         const userInfo = await AsyncStorage.getItem("user");
@@ -66,11 +86,24 @@ export default function App() {
     };
 
     fetchUser();
-  }, []);
+  }, [user]);
 
   if (!isFontLoaded) {
     return null; // or a loading indicator
   }
+
+  if (!isConnected) {
+    return (
+      <View style={styles.container}>
+        <Image source={require("./assets/no-wifi.png")} />
+        <Text style={styles.mainError}>Ooops...</Text>
+
+        <Text style={styles.message}>No Internet Connection Found.</Text>
+        <Text style={styles.message}>Check your connection.</Text>
+      </View>
+    );
+  }
+
   return (
     <UserProvider>
       <SellerModeProvider>
@@ -240,3 +273,18 @@ export default function App() {
     </UserProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  message: {
+    fontFamily: "InterExtraBold",
+  },
+  mainError: {
+    fontFamily: "InterExtraBold",
+    fontSize: 36,
+  },
+});

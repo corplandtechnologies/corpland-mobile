@@ -1,16 +1,15 @@
-// UserContext.tsx
 import React, {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useState,
+  ReactNode, // Import ReactNode
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUserById } from "../api/api";
 
 interface UserContextType {
-  user: any; // You might want to define a more specific type for your user
+  user: any; // Consider defining a more specific type for your user
   loading: boolean;
   error: any;
   fetchUserById: (userId: string) => Promise<void>;
@@ -19,21 +18,23 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider: React.FC = ({ children }: { children: any }) => {
+export const UserProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
   const [userData, setUserData] = useState();
-  console.log("userData", user);
+        console.log("Context User",user);
+
 
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);
       try {
         const userInfo = await AsyncStorage.getItem("user");
-        const parsedUserInfo = JSON.parse(userInfo);
-        const response = await getUserById(parsedUserInfo?._id);
-        setUser(response?.data?.user);
+        const parsedUserInfo = JSON.parse(userInfo || "{}");
+        setUser(parsedUserInfo);
       } catch (error) {
         setError(error);
       } finally {

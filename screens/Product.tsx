@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -44,6 +44,7 @@ const Product = ({ route }) => {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const { user: currentUser } = useUser();
+  console.log("Related Products", relatedProducts);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -92,9 +93,13 @@ const Product = ({ route }) => {
       setIsLoading(true); // Set loading to true before fetching data
       try {
         const response = await searchProducts(product?.category);
-        setRelatedProducts(response?.data);
+        // Filter out the current product based on its ID
+        const filteredProducts = response?.data.filter(
+          (item) => item._id !== productId
+        );
+        setRelatedProducts(filteredProducts);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
@@ -110,31 +115,30 @@ const Product = ({ route }) => {
 
   const handleCallNow = async () => {
     const phoneNumber = user?.phoneNumber || ""; // Ensure there's a valid phone number
-    if (!phoneNumber) {
-      console.error("Phone number not found");
-      setSnackbarMessage("Phone number not found");
-      setSnackbarVisible(true);
-      return;
+    const productTitle = product?.title || "this product";
+    const message = `Hello, I am trying to inquire about your ${productTitle}.`;
+
+    // Check if WhatsApp is installed
+    const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
+      message
+    )}`;
+    const canOpen = await Linking.canOpenURL(url);
+
+    if (canOpen) {
+      // Open WhatsApp
+      Linking.openURL(url);
+    } else {
+      // Fallback to dialer
+      Linking.openURL(`tel:${phoneNumber}`);
     }
-   
-    Linking.canOpenURL(`tel:${phoneNumber}`)
-      .then((supported) => {
-        if (!supported) {
-          console.log(`Can't handle url: ${phoneNumber}`);
-          setSnackbarMessage(`Can't handle url: ${phoneNumber}`);
-          setSnackbarVisible(true);
-        } else {
-          return Linking.openURL(`tel:${phoneNumber}`);
-        }
-      })
-      .catch((err) => console.error("An error occurred", err));
-     try {
-       await dialProduct(productId, currentUser?._id);
-       setSnackbarMessage("Contact Successful");
-       setSnackbarVisible(true);
-     } catch (error) {
-       console.log(error);
-     }
+
+    try {
+      await dialProduct(productId, currentUser?._id);
+      setSnackbarMessage("Contact Successful");
+      setSnackbarVisible(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDelete = async () => {
@@ -239,32 +243,34 @@ const Product = ({ route }) => {
                   </>
                 )}
                 <View>
-                  <Section headerText="Related Products">
-                    <ScrollView showsHorizontalScrollIndicator={false}>
-                      {isLoading ? (
-                        <ActivityIndicator
-                          size={50}
-                          color={COLORS.PRIMARY}
-                        />
-                      ) : (
-                        <>
-                          {relatedProducts?.map((result) => (
-                            <ProductItem
-                              key={result._id}
-                              image={result.image}
-                              title={result.title}
-                              price={result.price}
-                              region={result.region}
-                              description={result.description}
-                              userDetails={result.userDetails}
-                              _id={result._id}
-                              onReset={resetProductState}
-                            />
-                          ))}
-                        </>
-                      )}
-                    </ScrollView>
-                  </Section>
+                  {relatedProducts && (
+                    <Section headerText="Related Products">
+                      <ScrollView showsHorizontalScrollIndicator={false}>
+                        {isLoading ? (
+                          <ActivityIndicator
+                            size={50}
+                            color={COLORS.PRIMARY}
+                          />
+                        ) : (
+                          <>
+                            {relatedProducts?.map((result) => (
+                              <ProductItem
+                                key={result._id}
+                                image={result.image}
+                                title={result.title}
+                                price={result.price}
+                                region={result.region}
+                                description={result.description}
+                                userDetails={result.userDetails}
+                                _id={result._id}
+                                onReset={resetProductState}
+                              />
+                            ))}
+                          </>
+                        )}
+                      </ScrollView>
+                    </Section>
+                  )}
                 </View>
               </View>
             </View>
@@ -273,7 +279,7 @@ const Product = ({ route }) => {
       </ScrollView>
       <View style={styles.bottomContainer}>
         <View style={styles.priceView}>
-          <Text style={styles.priceText}>GHC{product?.price}</Text>
+          <Text style={styles.priceText}>GH₵{product?.price}</Text>
         </View>
         <View style={styles.CTAView}>
           <PrimaryButton
