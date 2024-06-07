@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { getUserById } from "../api/api";
 import ProductStats from "./ProductStats";
+import { formatPrice } from "../utils";
 
 interface ProductItemProps {
   image: string;
@@ -39,8 +40,8 @@ const ProductGrid: React.FC<ProductItemProps> = ({
   };
 
   const truncatedDesc =
-    description.length > 50
-      ? `${description.substring(0, 50)}...`
+    description.length > 20
+      ? `${description.substring(0, 20)}...`
       : description;
 
   const productNavigate = () => {
@@ -143,7 +144,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
               {region}
             </Text>
           </View>
-          <Text style={styles.productPrice}>GH₵ {price}</Text>
+          <Text style={styles.productPrice}>GH₵{formatPrice(price)}</Text>
         </View>
       </View>
     </TouchableOpacity>

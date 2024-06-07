@@ -71,6 +71,7 @@ export const completeProfile = async (userData: any) => {
   const formData: any = new FormData();
   formData.append("name", userData.name);
   formData.append("phoneNumber", userData.phoneNumber);
+  formData.append("email", userData.email);
   formData.append("password", userData.password);
   formData.append("profilePicture", {
     uri: userData.profilePicture,

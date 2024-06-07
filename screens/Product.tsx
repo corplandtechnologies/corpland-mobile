@@ -279,7 +279,7 @@ const Product = ({ route }) => {
       </ScrollView>
       <View style={styles.bottomContainer}>
         <View style={styles.priceView}>
-          <Text style={styles.priceText}>GH₵{product?.price}</Text>
+          <Text style={styles.priceText}>GH₵{formatPrice(product?.price)}</Text>
         </View>
         <View style={styles.CTAView}>
           <PrimaryButton

@@ -39,6 +39,7 @@ const EditProfile = () => {
   const [selectedRegion, setSelectedRegion] = useState(userInfo?.region);
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [newPassword, setNewPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
   const navigation = useNavigation();
 
@@ -94,6 +95,7 @@ const EditProfile = () => {
         name: name || userInfo?.name,
         phoneNumber: phoneNumber || userInfo?.phoneNumber,
         profilePicture: selectedImage || userInfo?.profilePicture,
+        email: email || userInfo?.email,
         country: selectedCountry || userInfo?.country,
         region: selectedRegion || userInfo?.region,
         userId: user._id,
@@ -168,6 +170,11 @@ const EditProfile = () => {
           onChangeText={setName}
           defaultValue={userInfo?.name}
           style={styles.input}
+        />
+        <FormInput
+          icon="envelope"
+          placeholder="Email"
+          onChangeText={setEmail}
         />
         <FormInput
           icon="lock"

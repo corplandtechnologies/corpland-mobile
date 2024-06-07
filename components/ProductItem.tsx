@@ -4,6 +4,7 @@ import { COLORS } from "../utils/color";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { formatPrice } from "../utils";
 
 interface ProductItemProps {
   image: string;
@@ -124,7 +125,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
               {region}
             </Text>
           </View>
-          <Text style={styles.productPrice}>GH₵ {price}</Text>
+          <Text style={styles.productPrice}>GH₵{formatPrice(price)}</Text>
         </View>
       </View>
     </TouchableOpacity>
