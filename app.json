@@ -9,7 +9,7 @@
     "updates": {
       "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/19c4e40a-011e-40e2-893b-0284fc4a4888"
+      "url": "https://u.expo.dev/10827b59-ffb4-4220-a797-4f00a99998bf"
     },
     "splash": {
       "image": "./assets/CORPLAND-2-no-bg.png",
@@ -41,7 +41,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "19c4e40a-011e-40e2-893b-0284fc4a4888"
+        "projectId": "10827b59-ffb4-4220-a797-4f00a99998bf"
       }
     }
   }

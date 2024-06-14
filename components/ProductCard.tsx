@@ -101,9 +101,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
               {product.region}
             </Text>
           </View>
-          <Text style={styles.productPrice}>
-            GH₵{formatPrice(product.price)}
-          </Text>
+          <Text style={styles.productPrice}>GH₵{product.price}</Text>
         </View>
       </View>
     </TouchableOpacity>

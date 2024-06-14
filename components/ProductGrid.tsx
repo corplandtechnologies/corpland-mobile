@@ -6,7 +6,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { getUserById } from "../api/api";
 import ProductStats from "./ProductStats";
-import { formatPrice } from "../utils";
 
 interface ProductItemProps {
   image: string;
@@ -144,7 +143,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
               {region}
             </Text>
           </View>
-          <Text style={styles.productPrice}>GH₵{formatPrice(price)}</Text>
+          <Text style={styles.productPrice}>GH₵{price}</Text>
         </View>
       </View>
     </TouchableOpacity>
