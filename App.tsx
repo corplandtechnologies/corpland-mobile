@@ -1,6 +1,6 @@
+import "react-native-url-polyfill/auto";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import TabNavigator from "./routes/TabNavigator";
 import Register from "./screens/auth/Register";
 import Login from "./screens/auth/Login";
 import Onboarding from "./screens/Onboarding";
@@ -35,7 +35,8 @@ import EditProduct from "./screens/seller/EditProduct";
 import ProductDisplay from "./screens/ProductDisplay";
 import ProductGrids from "./screens/ProductGrids";
 import NetInfo from "@react-native-community/netinfo";
-import PrimaryButton from "./components/ui/PrimaryButton";
+import TabNavigator from "./routes/TabNavigator";
+
 
 const Stack = createStackNavigator();
 
