@@ -34,8 +34,8 @@ const ProductItem: React.FC<ProductItemProps> = ({
   };
 
   const truncatedTitle =
-    description.length > 50
-      ? `${description.substring(0, 50)}...`
+    description.length > 20
+      ? `${description.substring(0, 20)}...`
       : description;
 
   const productNavigate = () => {

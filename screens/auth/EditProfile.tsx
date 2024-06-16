@@ -171,11 +171,7 @@ const EditProfile = () => {
           defaultValue={userInfo?.name}
           style={styles.input}
         />
-        <FormInput
-          icon="envelope"
-          placeholder="Email"
-          onChangeText={setEmail}
-        />
+
         <FormInput
           icon="lock"
           placeholder="new password"

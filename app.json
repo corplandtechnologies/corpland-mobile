@@ -6,14 +6,11 @@
     "orientation": "portrait",
     "icon": "./assets/CORPLAND5.png",
     "userInterfaceStyle": "light",
-<<<<<<< HEAD
     "updates": {
       "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/10827b59-ffb4-4220-a797-4f00a99998bf"
     },
-=======
->>>>>>> c46f11148a102b9f6b7563ec67188a3189daf236
     "splash": {
       "image": "./assets/CORPLAND-2-no-bg.png",
       "resizeMode": "contain",

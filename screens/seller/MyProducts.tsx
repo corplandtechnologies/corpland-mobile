@@ -14,12 +14,12 @@ import { getUserById, getUserProductsById } from "../../api/api";
 import { useUser } from "../../context/UserContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MyProducts = () => {
   const [userProducts, setUserProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
-  const { user } = useUser();
   const navigation = useNavigation(); // Initialize navigation
 
   useFocusEffect(
@@ -27,7 +27,9 @@ const MyProducts = () => {
       const getUserProducts = async () => {
         setIsLoading(true); // Set loading to true before fetching data
         try {
-          const response = await getUserProductsById(user?._id);
+          const userInfo = await AsyncStorage.getItem("user");
+          const parsedUserInfo = JSON.parse(userInfo || "{}");
+          const response = await getUserProductsById(parsedUserInfo?._id);
           setUserProducts(response?.data);
         } catch (error) {
           console.log(error);
