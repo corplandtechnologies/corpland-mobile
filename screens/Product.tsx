@@ -312,7 +312,7 @@ const Product = ({ route }) => {
                             {relatedProducts?.map((result) => (
                               <ProductItem
                                 key={result._id}
-                                image={result.image}
+                                image={result.images[0]}
                                 title={result.title}
                                 price={result.price}
                                 region={result.region}

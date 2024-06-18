@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "updates": {
       "checkAutomatically": "ON_LOAD",
-      "fallbackToCacheTimeout": 60000,
+      "fallbackToCacheTimeout": 10000,
       "url": "https://u.expo.dev/10827b59-ffb4-4220-a797-4f00a99998bf"
     },
     "splash": {
@@ -41,6 +41,9 @@
       "eas": {
         "projectId": "10827b59-ffb4-4220-a797-4f00a99998bf"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }

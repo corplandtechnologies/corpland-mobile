@@ -67,7 +67,7 @@ const MyProducts = () => {
           {userProducts?.map((result, index) => (
             <ProductItem
               key={result._id}
-              image={result.images}
+              image={result.images[0]}
               title={result.title}
               price={result.price}
               region={result.region}

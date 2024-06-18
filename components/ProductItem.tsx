@@ -51,7 +51,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
       onPress={productNavigate}>
       <View style={{ flex: 1 }}>
         <Image
-          source={{ uri: image[0] }}
+          source={{ uri: image }}
           style={styles.productImage}
         />
       </View>
