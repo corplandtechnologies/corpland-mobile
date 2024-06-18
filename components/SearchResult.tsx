@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import ProductStats from "./ProductStats";
 
 interface SearchResultProps {
-  image: string;
+  image: any[];
   title: string;
   price: number;
   region: string;
@@ -32,6 +32,8 @@ const SearchResult: React.FC<SearchResultProps> = ({
   const toggleIsLiked = () => {
     setIsLiked(!isLiked);
   };
+
+  console.log("userDetails",userDetails)
 
   const truncatedTitle =
     description.length > 50
@@ -64,10 +66,10 @@ const SearchResult: React.FC<SearchResultProps> = ({
           </View>
           <View style={styles.userView}>
             <View style={styles.avatarContainer}>
-              {userDetails[0]?.profilePicture ? (
+              {userDetails.profilePicture ? (
                 <Avatar.Image
                   size={20}
-                  source={{ uri: userDetails[0].profilePicture }}
+                  source={{ uri: userDetails.profilePicture }}
                 />
               ) : (
                 <Avatar.Image
@@ -77,7 +79,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
               )}
               <View>
                 <Text style={styles.AvatarText}>
-                  {userDetails[0]?.name || "Unknown User"}
+                  {userDetails.name || "Unknown User"}
                 </Text>
               </View>
               {/* <View>

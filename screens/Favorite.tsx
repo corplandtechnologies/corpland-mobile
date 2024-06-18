@@ -52,7 +52,7 @@ const Favorite = () => {
     <TouchableOpacity style={{ width: "50%", alignSelf: "center" }}>
       <ProductGrid
         key={item._id}
-        image={item.image}
+        image={item.images[0]}
         title={item.title}
         price={item.price}
         region={item.region}

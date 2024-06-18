@@ -36,7 +36,7 @@ import ProductDisplay from "./screens/ProductDisplay";
 import ProductGrids from "./screens/ProductGrids";
 import NetInfo from "@react-native-community/netinfo";
 import TabNavigator from "./routes/TabNavigator";
-
+import * as Updates from "expo-updates";
 
 const Stack = createStackNavigator();
 
@@ -61,6 +61,23 @@ export default function App() {
 
     loadFonts();
   }, []);
+
+  useEffect(() => {
+    reactToUpdates();
+  }, []);
+
+  const reactToUpdates = () => {
+    Updates.addUpdatesStateChangeListener((event) => {
+      if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
+        alert(
+          "We are restarting the app in a few seconds in order to allow the latest update take effect"
+        );
+        setTimeout(() => {
+          Updates.reloadAsync();
+        }, 10000);
+      }
+    });
+  };
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -198,9 +215,9 @@ export default function App() {
                 <Stack.Screen
                   name="Product"
                   options={{
-                    headerTitle: "",
+                    headerTitle: "Details",
                     headerTitleAlign: "center",
-                    headerLeft: () => <BackButton details />,
+                    headerLeft: () => <BackButton />,
                     headerRight: () => {
                       const { productId } = useProduct();
 
@@ -209,12 +226,12 @@ export default function App() {
                           productId={productId} // Use the local state instead of the context
                           style={{
                             padding: 15,
-                            marginRight: 10,
+                            // marginRight: 10,
                           }}
                         />
                       );
                     },
-                    headerTransparent: true,
+                    // headerTransparent: true,
                   }}
                   component={Product}
                 />

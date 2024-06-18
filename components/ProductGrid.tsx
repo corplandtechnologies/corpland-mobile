@@ -8,7 +8,7 @@ import { getUserById } from "../api/api";
 import ProductStats from "./ProductStats";
 
 interface ProductItemProps {
-  image: string;
+  image: any;
   title: string;
   price: number;
   region: string;
@@ -32,7 +32,17 @@ const ProductGrid: React.FC<ProductItemProps> = ({
 }) => {
   const [isLiked, setIsLiked] = useState<Boolean>(false);
   const [userInfo, setUserInfo] = useState<Object>({});
-  console.log(dials);
+  console.log("IMAGES", {
+    image,
+    title,
+    price,
+    region,
+    description,
+    _id,
+    onReset,
+    userId,
+    dials,
+  });
   const navigation = useNavigation();
   const toggleIsLiked = () => {
     setIsLiked(!isLiked);
@@ -61,6 +71,8 @@ const ProductGrid: React.FC<ProductItemProps> = ({
     };
     fetchUser();
   }, []);
+
+  useEffect(() => {}, [_id]);
   return (
     <TouchableOpacity
       style={styles.productMain}
@@ -97,10 +109,22 @@ const ProductGrid: React.FC<ProductItemProps> = ({
                   source={require("../assets/user.png")}
                 />
               )}
-              <View>
-                <Text style={styles.AvatarText}>
-                  {userInfo.name || "Unknown User"}
-                </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  maxWidth: "90%",
+                  flexWrap: "wrap",
+                  gap: 5,
+                }}>
+                <Text style={styles.AvatarText}>{userInfo.name}</Text>
+                {userInfo.verified && (
+                  <Icon
+                    name="checkmark-circle"
+                    size={10}
+                    color={COLORS.PRIMARY}
+                  />
+                )}
               </View>
               {/* <View>
               <TouchableOpacity onPress={toggleIsLiked}>

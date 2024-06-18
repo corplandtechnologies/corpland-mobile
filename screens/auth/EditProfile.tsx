@@ -96,10 +96,11 @@ const EditProfile = () => {
         phoneNumber: phoneNumber || userInfo?.phoneNumber,
         profilePicture: selectedImage || userInfo?.profilePicture,
         email: email || userInfo?.email,
-        country: selectedCountry || userInfo?.country,
-        region: selectedRegion || userInfo?.region,
+        country: selectedCountry ? selectedCountry : userInfo?.country,
+        region: selectedRegion ? selectedRegion : userInfo?.region,
         userId: user._id,
       };
+      console.log(data);
 
       // Only add the password field if newPassword has been set
       if (newPassword) {

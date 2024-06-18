@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
+  Dimensions,
   ScrollView,
+  Image,
+  StyleSheet,
+  View,
+  Text,
   ActivityIndicator,
-  Linking,
   TouchableOpacity,
 } from "react-native";
 import { Avatar, Snackbar } from "react-native-paper";
@@ -43,8 +43,12 @@ const Product = ({ route }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { user: currentUser } = useUser();
+  const productImages = product?.images || product?.image;
   console.log("Related Products", relatedProducts);
+  console.log("Current Product", product);
+  console.log("ProductId", productId);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -154,9 +158,23 @@ const Product = ({ route }) => {
       setSnackbarVisible(true);
     }
   };
+
+  const renderProductImages = () => {
+    const images = product?.images || [];
+    return images.map((image: string, index: number) => (
+      <View
+        key={index}
+        style={{ width: Dimensions.get("window").width }}>
+        <Image
+          source={{ uri: image }}
+          style={styles.productImage}
+        />
+      </View>
+    ));
+  };
   return (
     <>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ backgroundColor: COLORS.SECONDARY }}>
         <View style={{ height: "100%" }}>
           <View style={{ height: "100%" }}>
             {isLoading ? (
@@ -173,12 +191,34 @@ const Product = ({ route }) => {
                 />
               </View>
             ) : (
-              <Image
-                source={{ uri: product?.image }} // Replace with your image path
-                style={styles.backgroundImage}
-              />
+              <View>
+                <ScrollView
+                  horizontal
+                  pagingEnabled
+                  showsHorizontalScrollIndicator={false}
+                  onMomentumScrollEnd={(event) => {
+                    const newIndex = Math.round(
+                      event.nativeEvent.contentOffset.x /
+                        Dimensions.get("window").width
+                    );
+                    setCurrentImageIndex(newIndex);
+                  }}
+                  scrollEventThrottle={16}>
+                  {renderProductImages()}
+                </ScrollView>
+                <View style={styles.dotsContainer}>
+                  {(productImages || []).map((_, index) => (
+                    <View
+                      key={index}
+                      style={[
+                        styles.dot,
+                        currentImageIndex === index ? styles.activeDot : {},
+                      ]}
+                    />
+                  ))}
+                </View>
+              </View>
             )}
-
             <View style={styles.slideUp}>
               <View style={{ padding: 10, gap: 10 }}>
                 <View style={styles.bar}></View>
@@ -235,8 +275,22 @@ const Product = ({ route }) => {
                             source={require("../assets/user.png")}
                           />
                         )}
-                        <View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            maxWidth: "90%",
+                            gap: 5,
+                          }}>
                           <Text style={styles.AvatarText}>{user?.name}</Text>
+                          {user?.verified && (
+                            <Icon
+                              name="checkmark-circle"
+                              size={18}
+                              color={COLORS.COMPLIMENTARY}
+                            />
+                          )}
                         </View>
                       </View>
                     </View>
@@ -244,7 +298,9 @@ const Product = ({ route }) => {
                 )}
                 <View>
                   {relatedProducts && (
-                    <Section headerText="Related Products">
+                    <Section
+                      limited
+                      headerText="Related Products">
                       <ScrollView showsHorizontalScrollIndicator={false}>
                         {isLoading ? (
                           <ActivityIndicator
@@ -353,6 +409,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "InterBold",
   },
+
   avatarContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -385,6 +442,29 @@ const styles = StyleSheet.create({
   iconsView: {
     flexDirection: "row",
     gap: 10,
+  },
+  productImage: {
+    width: "100%",
+    height: 350,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  dot: {
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.GRAY_LIGHT,
+    marginHorizontal: 5,
+  },
+  activeDot: {
+    backgroundColor: COLORS.SECONDARY,
+  },
+  dotsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: 10, // Adjust this value as needed
+    width: "100%",
   },
 });
 

@@ -79,6 +79,9 @@ export const completeProfile = async (userData: any) => {
     name: `profilePicture.jpg`,
   });
   formData.append("userId", userData.userId);
+  formData.append("country", userData.country);
+  formData.append("region", userData.region);
+
 
   const config = {
     headers: { "Content-Type": "multipart/form-data" },
@@ -94,17 +97,21 @@ export const createProduct = async (newProduct: any) => {
   formData.append("title", newProduct.title);
   formData.append("description", newProduct.description);
   formData.append("category", newProduct.category);
-  formData.append("image", {
-    uri: newProduct.image,
-    type: "image/jpeg",
-    name: `adImage.jpg`,
-  });
   formData.append("country", newProduct.country);
   formData.append("region", newProduct.region);
   formData.append("price", newProduct.price);
   formData.append("userId", newProduct.userId);
+  newProduct.images.map((image: any) => {
+    formData.append("images", {
+      uri: image.uri,
+      type: "image/jpeg",
+      name: "productImage.jpg",
+    });
+  });
 
   const token = await AsyncStorage.getItem("token");
+
+  console.log("Formdata", formData);
 
   const config = {
     headers: { "Content-Type": "multipart/form-data" },
@@ -119,15 +126,17 @@ export const updateProduct = async (newProduct: any, id: any) => {
   formData.append("title", newProduct.title);
   formData.append("description", newProduct.description);
   formData.append("category", newProduct.category);
-  formData.append("image", {
-    uri: newProduct.image,
-    type: "image/jpeg",
-    name: `adImage.jpg`,
-  });
   formData.append("country", newProduct.country);
   formData.append("region", newProduct.region);
   formData.append("price", newProduct.price);
   formData.append("userId", newProduct.userId);
+  newProduct.images.map((image: any) => {
+    formData.append("images", {
+      uri: image.uri ? image.uri : image,
+      type: "image/jpeg",
+      name: "productImage.jpg",
+    });
+  });
 
   const token = await AsyncStorage.getItem("token");
 
@@ -136,6 +145,7 @@ export const updateProduct = async (newProduct: any, id: any) => {
     Authorization: `Bearer ${token}`,
   };
 
+  console.log("update Product", formData);
   return API.put(`/products/${id}`, formData, config);
 };
 

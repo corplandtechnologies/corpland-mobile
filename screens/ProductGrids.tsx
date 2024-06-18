@@ -45,7 +45,7 @@ const ProductGrids = () => {
     <TouchableOpacity style={{ width: "50%", alignSelf: "center" }}>
       <ProductGrid
         key={item._id}
-        image={item.image}
+        image={item.images[0]} // Pass the entire images array
         title={item.title}
         price={item.price}
         region={item.region}
@@ -56,7 +56,6 @@ const ProductGrids = () => {
       />
     </TouchableOpacity>
   );
-
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>

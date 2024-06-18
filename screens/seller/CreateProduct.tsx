@@ -29,7 +29,7 @@ const CreateProduct = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState([]);
   const [imageObject, setImageObject] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -61,9 +61,7 @@ const CreateProduct = () => {
             (await AsyncStorage.getItem("user")) || "{}"
           );
           const res = await getUserById(parsedUserInfo?._id);
-          setUser
-          
-          (res?.data.user);
+          setUser(res?.data.user);
         } catch (error) {
           console.log(error);
         }
@@ -119,20 +117,40 @@ const CreateProduct = () => {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      multiple: true,
     });
-    console.log(result);
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      setImageObject(result.assets[0]);
+    if (!result.cancelled) {
+      let newImages = [];
+
+      // Check if assets array is available, otherwise fallback to single URI
+      if (Array.isArray(result.assets)) {
+        newImages = result.assets.map((asset) => ({
+          uri: asset.uri,
+          type: "image/jpeg",
+          name: `${Date.now()}.jpg`,
+        }));
+      } else if (result.uri) {
+        newImages.push({
+          uri: result.uri,
+          type: "image/jpeg",
+          name: `${Date.now()}.jpg`,
+        });
+      }
+
+      const mergedImages = [...images, ...newImages];
+      const maxImages = 5;
+      const finalImages = mergedImages.slice(0, maxImages);
+
+      setImages(finalImages);
     }
   };
 
-  const removeImage = () => {
-    setImage("");
+  const removeImage = (index: number) => {
+    const newImages = [...images];
+    newImages.splice(index, 1); // Remove the image at the specified index
+    setImages(newImages);
   };
-
-  // CreateProduct.tsx
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -145,7 +163,7 @@ const CreateProduct = () => {
       const newProduct = {
         title: title,
         description: desc,
-        image: image,
+        images: images,
         country: selectedCountry,
         region: selectedRegion,
         category: selectedCategory,
@@ -153,18 +171,20 @@ const CreateProduct = () => {
         userId: user._id,
       };
       const response = await createProduct(newProduct);
+      console.log("Product data", newProduct);
       console.log(response.data);
-      navigation.navigate("Home");
+      navigation.navigate("MyProducts");
       setSnackbarMessage("Product created successfully");
       setSnackbarVisible(true);
       setTitle("");
       setDesc("");
-      setImage("");
+      setImages([]);
       setSelectedCountry("");
       setSelectedRegion("");
       setPrice("");
     } catch (error) {
       console.log(error);
+      setSnackbarMessage(error);
       setSnackbarMessage(error.response.data);
       setSnackbarVisible(true);
     } finally {
@@ -182,28 +202,34 @@ const CreateProduct = () => {
             onSelect={(selectedOption) => setSelectedCategory(selectedOption)} // Update the selected category state
           />
           <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
-          <View style={styles.imageContainer}>
-            {image && (
-              <View style={styles.imageWrapper}>
-                <Image
-                  source={{ uri: image }}
-                  style={styles.image}
-                />
-                <TouchableOpacity
-                  style={styles.removeImageButton}
-                  onPress={removeImage}>
-                  <Text style={styles.removeImageText}>x</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            <TouchableOpacity
-              style={styles.addImageBox}
-              onPress={pickImage}>
-              <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
-                +
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            <View style={styles.imageContainer}>
+              {images.map((image, index) => (
+                <View
+                  key={index}
+                  style={styles.imageWrapper}>
+                  <Image
+                    source={{ uri: image.uri }}
+                    style={styles.image}
+                  />
+                  <TouchableOpacity
+                    style={styles.removeImageButton}
+                    onPress={() => removeImage(index)}>
+                    <Text style={styles.removeImageText}>x</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+              <TouchableOpacity
+                style={styles.addImageBox}
+                onPress={pickImage}>
+                <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
+                  +
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
           <Select
             touchableText={selectedCountry || "Country*"} // Display the selected category or the placeholder text
             title="Country"

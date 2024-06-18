@@ -33,6 +33,8 @@ const EditProduct = ({ route }) => {
   const [desc, setDesc] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [image, setImage] = useState(product.image);
+  const [newImages, setNewImages] = useState(product.images);
+  const [images, setImages] = useState([...product?.images]);
   const [imageObject, setImageObject] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -46,9 +48,9 @@ const EditProduct = ({ route }) => {
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
+  console.log("product Images", images);
 
   const navigation = useNavigation();
-
 
   const handlePriceChange = (text) => {
     const newPrice = text.replace(/[^0-9]/g, "");
@@ -96,34 +98,62 @@ const EditProduct = ({ route }) => {
     // Handle the selected region
   };
 
+  // Inside EditProduct.tsx
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      multiple: true,
     });
-    console.log(result);
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      setImageObject(result.assets[0]);
+    if (!result.cancelled) {
+      let newImages = [];
+
+      if (Array.isArray(result.assets)) {
+        newImages = result.assets.map((asset) => ({
+          uri: asset.uri,
+          type: "image/jpeg",
+          name: `${Date.now()}.jpg`,
+        }));
+      } else if (result.uri) {
+        newImages.push({
+          uri: result.uri,
+          type: "image/jpeg",
+          name: `${Date.now()}.jpg`,
+        });
+      }
+
+      const mergedImages = [...images, ...newImages];
+      const maxImages = 5; // Adjusted to match CreateProduct.tsx
+      const finalImages = mergedImages.slice(0, maxImages);
+
+      setImages(finalImages);
     }
   };
 
-  const removeImage = () => {
-    setImage("");
+  const removeImage = (index: number) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
   };
 
-  // EditProduct.tsx
-
   const handleSubmit = async () => {
+    if (
+      images.length === 0
+    ) {
+      setSnackbarMessage("You need at least one photo!");
+      setSnackbarVisible(true);
+      return;
+    }
     setLoading(true);
     try {
       const newProduct = {
         title: title || product.title,
         description: desc || product.description,
-        image: image || product.image,
+        images: images,
         country: selectedCountry || product.country,
         region: selectedRegion || product.region,
         category: selectedCategory || product.category,
@@ -150,7 +180,6 @@ const EditProduct = ({ route }) => {
     }
   };
 
-
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -163,28 +192,34 @@ const EditProduct = ({ route }) => {
             initialValue={product.category}
           />
           <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
-          <View style={styles.imageContainer}>
-            {image && (
-              <View style={styles.imageWrapper}>
-                <Image
-                  source={{ uri: image }}
-                  style={styles.image}
-                />
-                <TouchableOpacity
-                  style={styles.removeImageButton}
-                  onPress={removeImage}>
-                  <Text style={styles.removeImageText}>x</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            <TouchableOpacity
-              style={styles.addImageBox}
-              onPress={pickImage}>
-              <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
-                +
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            <View style={styles.imageContainer}>
+              {images.map((image, index) => (
+                <View
+                  key={index}
+                  style={styles.imageWrapper}>
+                  <Image
+                    source={{ uri: image.uri || image }}
+                    style={styles.image}
+                  />
+                  <TouchableOpacity
+                    style={styles.removeImageButton}
+                    onPress={() => removeImage(index)}>
+                    <Text style={styles.removeImageText}>x</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+              <TouchableOpacity
+                style={styles.addImageBox}
+                onPress={pickImage}>
+                <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
+                  +
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
           <Select
             touchableText={selectedCountry || "Country*"} // Display the selected category or the placeholder text
             title="Country"
@@ -245,7 +280,6 @@ const EditProduct = ({ route }) => {
           </Snackbar>
         </View>
       </ScrollView>
-    
     </View>
   );
 };

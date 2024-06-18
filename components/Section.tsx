@@ -7,20 +7,24 @@ interface SectionProps {
   children: ReactNode;
   onPress?: () => void;
   routeName?: string | undefined;
+  limited?: boolean;
 }
 const Section: FC<SectionProps> = ({
   headerText,
   children,
   onPress,
   routeName,
+  limited,
 }) => {
   return (
     <View>
       <View style={styles.header}>
         <Text style={styles.headerText}>{headerText}</Text>
-        <TouchableOpacity onPress={() => onPress && onPress(routeName)}>
-          <Text style={styles.headerOptions}>See All</Text>
-        </TouchableOpacity>
+        {!limited && (
+          <TouchableOpacity onPress={() => onPress && onPress(routeName)}>
+            <Text style={styles.headerOptions}>See All</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.childrenView}>{children}</View>
     </View>

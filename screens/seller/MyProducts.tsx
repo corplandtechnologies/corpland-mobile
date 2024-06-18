@@ -21,6 +21,7 @@ const MyProducts = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
   const navigation = useNavigation(); // Initialize navigation
+  console.log("user Prods", userProducts);
 
   useFocusEffect(
     useCallback(() => {
@@ -63,15 +64,16 @@ const MyProducts = () => {
         </View>
       ) : (
         <ScrollView>
-          {userProducts.map((result) => (
+          {userProducts?.map((result, index) => (
             <ProductItem
               key={result._id}
-              image={result.image}
+              image={result.images}
               title={result.title}
               price={result.price}
               region={result.region}
               description={result.description}
               userDetails={result.userDetails}
+              images={result.images}
               _id={result._id}
             />
           ))}

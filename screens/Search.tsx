@@ -13,6 +13,15 @@ import { useSearchResults } from "../context/SearchResultsContext";
 const Search = () => {
   const { searchResults } = useSearchResults();
   console.log(searchResults?.map((item) => item.userDetails));
+  console.log("Search Results", searchResults);
+
+  if (searchResults?.length === 0) {
+    return (
+      <View style={styles.emptyState}>
+        <Text style={styles.emptyStateText}>Oops! No Products found.</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.main}>
@@ -20,12 +29,12 @@ const Search = () => {
         {searchResults?.map((result) => (
           <SearchResult
             key={result._id}
-            image={result.image}
+            image={result.images[0]}
             title={result.title}
             price={result.price}
             region={result.region}
             description={result.description}
-            userDetails={result.userDetails}
+            userDetails={result?.userDetails}
             _id={result._id}
             dials={result.dials}
           />
@@ -43,5 +52,16 @@ const styles = StyleSheet.create({
     height: "100%",
     padding: 10,
     gap: 10,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.SECONDARY,
+  },
+  emptyStateText: {
+    fontSize: 18,
+    color: COLORS.PRIMARY,
+    fontFamily: "InterBold",
   },
 });

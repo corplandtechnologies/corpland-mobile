@@ -88,7 +88,23 @@ const Profile = () => {
             source={require("../assets/user.png")}
           />
         )}
-        <Text style={styles.AvatarText}>{userInfo?.name}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            maxWidth: "90%",
+            flexWrap: "wrap",
+            gap: 5,
+          }}>
+          <Text style={styles.AvatarText}>{userInfo?.name}</Text>
+          {userInfo.verified && (
+            <Icon
+              name="checkmark-circle"
+              size={18}
+              color={COLORS.COMPLIMENTARY}
+            />
+          )}
+        </View>
       </View>
       {/* <View style={styles.modeView}>
         <Text style={styles.modeText}>Seller Mode</Text>

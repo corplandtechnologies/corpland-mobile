@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 
 interface ProductItemProps {
-  image: string;
+  image: any[];
   title: string;
   price: number;
   region: string;
@@ -51,7 +51,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
       onPress={productNavigate}>
       <View style={{ flex: 1 }}>
         <Image
-          source={{ uri: image }}
+          source={{ uri: image[0] }}
           style={styles.productImage}
         />
       </View>
@@ -79,7 +79,14 @@ const ProductItem: React.FC<ProductItemProps> = ({
                   source={require("../assets/user.png")}
                 />
               )}
-              <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  maxWidth: "90%",
+                  flexWrap: "wrap",
+                  gap: 5,
+                }}>
                 <Text style={styles.AvatarText}>
                   {(userDetails &&
                     userDetails.length > 0 &&
@@ -87,6 +94,13 @@ const ProductItem: React.FC<ProductItemProps> = ({
                     userDetails.name ||
                     "Unknown User"}
                 </Text>
+                {userDetails.verified && (
+                  <Icon
+                    name="checkmark-circle"
+                    size={15}
+                    color={COLORS.PRIMARY}
+                  />
+                )}
               </View>
               {/* <View>
               <TouchableOpacity onPress={toggleIsLiked}>
@@ -165,7 +179,7 @@ const styles = StyleSheet.create({
   },
   AvatarText: {
     color: COLORS.PRIMARY,
-    fontSize: 14,
+    fontSize: 11,
     fontFamily: "InterBold",
     // maxWidth: "80%",
   },

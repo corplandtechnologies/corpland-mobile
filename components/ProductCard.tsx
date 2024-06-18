@@ -55,10 +55,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
       style={styles.productMain}
       onPress={productNavigate}>
       <Image
-        source={{ uri: product.image }}
+        source={{ uri: product?.image || product?.images[0] }}
         style={styles.productImage}
       />
-
       <View style={styles.contentContainer}>
         <View style={styles.topContent}>
           <Text style={styles.productTitle}>{product.title}</Text>
@@ -82,8 +81,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
                   source={require("../assets/user.png")}
                 />
               )}
-              <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  maxWidth: "90%",
+                  gap: 5,
+                }}>
                 <Text style={styles.AvatarText}>{userInfo.name}</Text>
+                {userInfo.verified && (
+                  <Icon
+                    name="checkmark-circle"
+                    size={18}
+                    color={COLORS.COMPLIMENTARY}
+                  />
+                )}
               </View>
             </View>
           </View>
@@ -121,7 +134,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: 250,
+    width: 300,
     marginRight: 10,
     marginBottom: 20,
   },
@@ -168,10 +181,9 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     flexDirection: "row",
-    justifyContent: "flex-start",
     alignItems: "center",
     marginVertical: 10,
-    gap: 10,
+    gap: 5,
   },
   productDesc: {
     fontFamily: "InterRegular",
