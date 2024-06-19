@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 export const API = axios.create({
-  baseURL: "http://192.168.77.158:3000/api/v1",
+  baseURL: "https://corplandbackend.onrender.com/api/v1",
   withCredentials: true,
 });
 
