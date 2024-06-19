@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 export const API = axios.create({
-  baseURL: "https://corplandbackend.onrender.com/api/v1",
+  baseURL: "http://192.168.77.158:3000/api/v1",
   withCredentials: true,
 });
 
@@ -67,21 +67,36 @@ export const createAd = async (newAd: any) => {
   return API.post("/ads", formData, config);
 };
 
+export const updateUser = async (userData: any) => {
+  const formData: any = new FormData();
+  formData.append("name", userData.name);
+  formData.append("phoneNumber", userData.phoneNumber);
+  formData.append("profilePicture", {
+    uri: userData.profilePicture,
+    type: "image/jpeg",
+    name: `profilePicture.jpg`,
+  });
+  formData.append("country", userData.country);
+  formData.append("region", userData.region);
+  formData.append("userId", userData.userId);
+
+  const config = {
+    headers: { "Content-Type": "multipart/form-data" },
+  };
+
+  return API.put("/users", formData, config);
+};
+
 export const completeProfile = async (userData: any) => {
   const formData: any = new FormData();
   formData.append("name", userData.name);
   formData.append("phoneNumber", userData.phoneNumber);
-  formData.append("email", userData.email);
-  formData.append("password", userData.password);
   formData.append("profilePicture", {
     uri: userData.profilePicture,
     type: "image/jpeg",
     name: `profilePicture.jpg`,
   });
   formData.append("userId", userData.userId);
-  formData.append("country", userData.country);
-  formData.append("region", userData.region);
-
 
   const config = {
     headers: { "Content-Type": "multipart/form-data" },

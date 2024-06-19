@@ -28,7 +28,6 @@ const Profile = () => {
   const { isSellerMode, toggleSellerMode } = useSellerMode();
   const [userInfo, setUserInfo] = useState({});
   const { user } = useUser();
-  console.log(user);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -77,17 +76,10 @@ const Profile = () => {
   return (
     <View style={styles.headerView}>
       <View style={styles.avatarContainer}>
-        {userInfo?.profilePicture ? (
-          <Avatar.Image
-            size={100}
-            source={{ uri: userInfo?.profilePicture }}
-          />
-        ) : (
-          <Avatar.Image
-            size={100}
-            source={require("../assets/user.png")}
-          />
-        )}
+        <Avatar.Image
+          size={100}
+          source={{ uri: userInfo?.profilePicture }}
+        />
         <View
           style={{
             flexDirection: "row",

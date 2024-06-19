@@ -19,7 +19,7 @@ import UserHeader from "../../components/UserHeader";
 import EditAvatar from "../../components/ui/EditAvatar";
 import PhoneInput from "react-native-phone-input";
 import * as ImagePicker from "expo-image-picker";
-import { completeProfile, getUserById } from "../../api/api";
+import { completeProfile, getUserById, updateUser } from "../../api/api";
 import FormInput from "../../components/ui/FormInput";
 import { useUser } from "../../context/UserContext";
 import Select from "../../components/ui/Select";
@@ -95,23 +95,14 @@ const EditProfile = () => {
         name: name || userInfo?.name,
         phoneNumber: phoneNumber || userInfo?.phoneNumber,
         profilePicture: selectedImage || userInfo?.profilePicture,
-        email: email || userInfo?.email,
         country: selectedCountry ? selectedCountry : userInfo?.country,
         region: selectedRegion ? selectedRegion : userInfo?.region,
-        userId: user._id,
+        userId: userInfo._id,
       };
-      console.log(data);
 
-      // Only add the password field if newPassword has been set
-      if (newPassword) {
-        data.password = newPassword;
-      }
-
-      console.log(data);
-
-      const res = await completeProfile(data);
+      const res = await updateUser(data);
       setSnackbarVisible(true);
-      setSnackbarMessage(res.message);
+      setSnackbarMessage(res.data.message);
       navigation.navigate("TabNavigator");
     } catch (error) {
       console.log(error);
@@ -170,13 +161,6 @@ const EditProfile = () => {
           placeholder="Name"
           onChangeText={setName}
           defaultValue={userInfo?.name}
-          style={styles.input}
-        />
-
-        <FormInput
-          icon="lock"
-          placeholder="new password"
-          onChangeText={setNewPassword}
           style={styles.input}
         />
         <View style={styles.inputContainer}>

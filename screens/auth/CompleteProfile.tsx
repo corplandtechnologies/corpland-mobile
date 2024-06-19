@@ -81,7 +81,7 @@ const CompleteProfile = () => {
 
       const res = await completeProfile(data);
       setSnackbarVisible(true);
-      setSnackbarMessage(res.message);
+      setSnackbarMessage(res.data.message);
       navigation.navigate("TabNavigator", { name: "Home" });
     } catch (error) {
       console.log(error);

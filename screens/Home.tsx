@@ -128,7 +128,7 @@ const Home = () => {
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
-                {products.map((product, index) => (
+                {products?.map((product, index) => (
                   <ProductCard
                     key={index}
                     product={product}
@@ -151,7 +151,7 @@ const Home = () => {
                 <ScrollView
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}>
-                  {trendingProducts.map((product, index) => (
+                  {trendingProducts?.map((product, index) => (
                     <ProductCard
                       key={index}
                       product={product.product}
