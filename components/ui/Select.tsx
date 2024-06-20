@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS } from "../../utils/color";
 import ScreenContextWrapper from "../ScreenContextWrapper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Touchable = (text = "Select an Option", onPress: () => void) => {
   const TouchableComponent = () => {
@@ -82,12 +83,12 @@ const Select = ({
 
   return (
     <View>
-      <TouchableComponent />
-      <Modal
-        visible={visible}
-        animationType="slide">
-        <ScreenContextWrapper>
-          <SafeAreaView>
+      <ScrollView>
+        <TouchableComponent />
+
+        <Modal
+          visible={visible}
+          animationType="slide">
             <View style={styles.header}>
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>{title}</Text>
@@ -104,11 +105,10 @@ const Select = ({
                 />
               </TouchableOpacity>
             </View>
-            <FlatList
-              data={options} // Use the options prop directly
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
+            <ScrollView>
+              {options.map((item, index) => (
                 <Option
+                  key={index} // It's important to provide a unique key for each child in a list
                   optionText={item}
                   onSelect={() => {
                     console.log("Option selected:", item);
@@ -116,11 +116,10 @@ const Select = ({
                     setVisible(false); // Close the modal or perform other actions
                   }}
                 />
-              )}
-            />
-          </SafeAreaView>
-        </ScreenContextWrapper>
-      </Modal>
+              ))}
+            </ScrollView>
+        </Modal>
+      </ScrollView>
     </View>
   );
 };
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
     fontFamily: "InterBold",
   },
   optionContainer: {
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingHorizontal: 7.5,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.TERTIARY,

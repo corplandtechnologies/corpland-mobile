@@ -14,7 +14,6 @@ export const categories = [
   "Pets",
   "Property",
   "Repair & Construction",
-  "Services",
   "Sports, Arts & Outdoors",
   "Vehicles",
 ];
