@@ -8,6 +8,7 @@ import {
   Text,
   ActivityIndicator,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import { Avatar, Snackbar } from "react-native-paper";
 import { COLORS } from "../utils/color";
