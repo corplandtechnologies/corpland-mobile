@@ -232,7 +232,7 @@ const Product = ({ route }) => {
                 ) : (
                   <>
                     <View style={styles.titleView}>
-                      <View>
+                      <View style={{ flex: 4 }}>
                         <Text style={styles.titleText}>{product?.title}</Text>
                       </View>
                       {product?.userId === currentUser?._id && (
