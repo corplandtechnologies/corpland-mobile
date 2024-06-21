@@ -127,7 +127,7 @@ const Product = ({ route }) => {
     const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
       message
     )}`;
-    const canOpen = await Linking.canOpenURL(url);
+    const canOpen = await Linking.openURL(url);
 
     if (canOpen) {
       // Open WhatsApp

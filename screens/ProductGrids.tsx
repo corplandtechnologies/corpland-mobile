@@ -11,6 +11,7 @@ import { FlatList } from "react-native";
 import ProductGrid from "../components/ProductGrid";
 import { getProducts } from "../api/api";
 import { COLORS } from "../utils/color";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ProductGrids = () => {
   const navigation = useNavigation();
@@ -79,13 +80,24 @@ const ProductGrids = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={products}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-        numColumns={2}
-        contentContainerStyle={{ height: "100%" }}
-      />
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {products.map((product) => (
+          <TouchableOpacity
+            key={product._id}
+            style={{ width: "50%", alignSelf: "center" }}>
+            <ProductGrid
+              image={product.images[0]}
+              title={product.title}
+              price={product.price}
+              region={product.region}
+              description={product.description}
+              _id={product._id}
+              userId={product.userId}
+              dials={product.dials}
+            />
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -96,6 +108,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  scrollViewContent: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
   },
   emptyContainer: {
     flex: 1,
