@@ -396,6 +396,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: "InterBold",
     fontSize: 18,
+    flex: 3,
   },
   descTitle: {
     fontFamily: "InterBold",
@@ -443,6 +444,7 @@ const styles = StyleSheet.create({
   iconsView: {
     flexDirection: "row",
     gap: 10,
+    flex: 1,
   },
   productImage: {
     width: "100%",
