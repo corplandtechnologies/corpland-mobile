@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   editButton: {
     marginTop: 15,
-    backgroundColor: COLORS.GRAY,
+    backgroundColor: COLORS.COMPLIMENTARY,
     borderRadius: 5,
   },
   selectedImage: {

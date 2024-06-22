@@ -37,8 +37,9 @@ export default PrimaryButton;
 
 const styles = StyleSheet.create({
   primaryButton: {
-    backgroundColor: COLORS.PRIMARY,
+    backgroundColor: COLORS.COMPLIMENTARY,
     padding: 20,
     borderRadius: 10,
+    marginTop: 10,
   },
 });

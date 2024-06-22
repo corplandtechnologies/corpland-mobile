@@ -14,6 +14,7 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Snackbar } from "react-native-paper";
 import { login } from "../../api/auth.api";
+import AuthOption from "../../components/auth/AuthOption";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -155,10 +156,10 @@ const Login = () => {
         {snackbarMessage}
       </Snackbar>
 
-      {/* "Don't have an account? Sign In" Text */}
-      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-        <Text style={styles.signInText}>Don't have an account? Sign Up</Text>
-      </TouchableOpacity>
+      <AuthOption
+        option="Sign Up"
+        screen="Register"
+      />
     </View>
   );
 };

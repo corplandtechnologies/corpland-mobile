@@ -6,10 +6,12 @@ import {
   ImageBackground,
   Dimensions,
   Animated,
+  TouchableOpacity,
 } from "react-native";
 import { Button } from "react-native-paper";
 import { COLORS } from "../utils/color";
 import { useNavigation } from "@react-navigation/native";
+import AuthOption from "../components/auth/AuthOption";
 
 const Onboarding = () => {
   const navigation = useNavigation();
@@ -49,7 +51,7 @@ const Onboarding = () => {
 
   return (
     <ImageBackground
-      source={require("../assets/shopping.jpg")} // Replace with your image path
+      source={require("../assets/Designer3.jpeg")} // Replace with your image path
       style={styles.backgroundImage}>
       <Animated.View
         style={[
@@ -94,6 +96,11 @@ const Onboarding = () => {
             onPress={() => navigation.navigate("Register")}>
             Get Started
           </Button>
+          <AuthOption
+            isRegistered
+            option="Sign In"
+            screen="Login"
+          />
         </Animated.View>
       </Animated.View>
     </ImageBackground>

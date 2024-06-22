@@ -43,7 +43,9 @@ export default function TabNavigator() {
       useCallback(() => {
         const getUserInfo = async () => {
           try {
-            const parsedUserInfo = JSON.parse(await AsyncStorage.getItem("user")|| "{}");
+            const parsedUserInfo = JSON.parse(
+              (await AsyncStorage.getItem("user")) || "{}"
+            );
             const res = await getUserById(parsedUserInfo?._id);
             setUserInfo(res?.data.user);
           } catch (error) {
@@ -66,7 +68,7 @@ export default function TabNavigator() {
           <Icon
             name="location"
             size={20}
-            color={COLORS.PRIMARY}
+            color={COLORS.COMPLIMENTARY}
           />
           <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
             {userInfo ? (
@@ -100,7 +102,8 @@ export default function TabNavigator() {
   );
 
   return (
-    <Tab.Navigator screenOptions={{ tabBarActiveTintColor: COLORS.PRIMARY }}>
+    <Tab.Navigator
+      screenOptions={{ tabBarActiveTintColor: COLORS.COMPLIMENTARY }}>
       <Tab.Screen
         name="Home"
         component={Home}

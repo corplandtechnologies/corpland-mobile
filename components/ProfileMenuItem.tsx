@@ -31,13 +31,15 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
       <Icon
         name={iconName}
         size={24}
-        color={COLORS.PRIMARY}
+        color={COLORS.COMPLIMENTARY}
       />
-      <Text style={{ marginLeft: 10, flex: 1, fontFamily:"InterRegular" }}>{title}</Text>
+      <Text style={{ marginLeft: 10, flex: 1, fontFamily: "InterRegular" }}>
+        {title}
+      </Text>
       <Icon
         name="chevron-forward"
         size={24}
-        color={COLORS.PRIMARY}
+        color={COLORS.COMPLIMENTARY}
       />
     </TouchableOpacity>
   );

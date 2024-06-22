@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchButton: {
-    backgroundColor: COLORS.PRIMARY,
+    backgroundColor: COLORS.COMPLIMENTARY,
     borderRadius: 10,
     padding: 18,
   },

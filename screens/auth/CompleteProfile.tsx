@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   editButton: {
+    backgroundColor: COLORS.COMPLIMENTARY,
     marginTop: 15,
-    backgroundColor: COLORS.GRAY,
     borderRadius: 5,
   },
   selectedImage: {

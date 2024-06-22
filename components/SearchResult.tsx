@@ -33,11 +33,11 @@ const SearchResult: React.FC<SearchResultProps> = ({
     setIsLiked(!isLiked);
   };
 
-  console.log("userDetails",userDetails)
+  console.log("userDetails", userDetails);
 
   const truncatedTitle =
-    description.length > 50
-      ? `${description.substring(0, 50)}...`
+    description.length > 20
+      ? `${description.substring(0, 20)}...`
       : description;
 
   const navigation = useNavigation();
@@ -139,7 +139,8 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: "100%",
     flexDirection: "row",
-    height: "30%",
+    height: 250,
+    marginTop: 10,
   },
   productImage: {
     width: "100%",

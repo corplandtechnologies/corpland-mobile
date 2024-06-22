@@ -54,25 +54,23 @@ const Home = () => {
       setLoading(false);
     }
   };
-  useFocusEffect(
-    useCallback(() => {
-      const fetchProducts = async () => {
-        try {
-          setLoading(true);
-          const response = await getProducts();
-          const res = await getTrendingProducts();
-          setProducts(response.data);
-          setTrendingProducts(res.data);
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setLoading(false);
-        }
-      };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await getProducts();
+        const res = await getTrendingProducts();
+        setProducts(response.data);
+        setTrendingProducts(res.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchProducts();
-    }, [])
-  );
+    fetchProducts();
+  }, []);
 
   const handleSeeAll = (routeName: string, title: string) => {
     navigation.navigate(routeName, { title });

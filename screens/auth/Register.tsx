@@ -15,6 +15,7 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import UserHeader from "../../components/UserHeader";
 import FormInput from "../../components/ui/FormInput";
+import AuthOption from "../../components/auth/AuthOption";
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -155,10 +156,11 @@ const Register = () => {
         </TouchableOpacity>
       </View> */}
 
-      {/* "Don't have an account? Sign In" Text */}
-      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-        <Text style={styles.signInText}>Already have an Account? Sign In</Text>
-      </TouchableOpacity>
+      <AuthOption
+        isRegistered
+        option="Sign In"
+        screen="Login"
+      />
       <Snackbar
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
@@ -248,12 +250,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginVertical: 20,
-  },
-  signInText: {
-    textAlign: "center",
-    color: COLORS.GRAY,
-    fontSize: 16,
-    marginTop: 10,
   },
 });
 

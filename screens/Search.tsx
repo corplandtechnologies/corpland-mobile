@@ -25,7 +25,7 @@ const Search = () => {
 
   return (
     <View style={styles.main}>
-      <ScrollView contentContainerStyle={{ height: "100%", gap: 10 }}>
+      <ScrollView>
         {searchResults?.map((result) => (
           <SearchResult
             key={result._id}
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
   main: {
     backgroundColor: COLORS.SECONDARY,
     height: "100%",
-    padding: 10,
     gap: 10,
   },
   emptyState: {
