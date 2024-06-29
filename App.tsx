@@ -37,6 +37,10 @@ import ProductGrids from "./screens/ProductGrids";
 import NetInfo from "@react-native-community/netinfo";
 import TabNavigator from "./routes/TabNavigator";
 import * as Updates from "expo-updates";
+import Wallet from "./screens/Wallet";
+import Deposit from "./screens/Deposit";
+import MyCoupons from "./screens/MyCoupons";
+import Redeem from "./screens/Redeem";
 
 const Stack = createStackNavigator();
 
@@ -282,6 +286,58 @@ export default function App() {
                     },
                   }}
                   component={MyProducts}
+                />
+                <Stack.Screen
+                  name="Wallet"
+                  options={{
+                    headerTitle: "Wallet",
+                    headerTitleAlign: "center",
+                    headerLeft: () => <BackButton />,
+                    headerTitleStyle: {
+                      fontFamily: "InterBold",
+                      // borderWidth:8
+                    },
+                  }}
+                  component={Wallet}
+                />
+                <Stack.Screen
+                  name="Deposit"
+                  options={{
+                    headerTitle: "Deposit",
+                    headerTitleAlign: "center",
+                    headerLeft: () => <BackButton />,
+                    headerTitleStyle: {
+                      fontFamily: "InterBold",
+                      // borderWidth:8
+                    },
+                  }}
+                  component={Deposit}
+                />
+                <Stack.Screen
+                  name="MyCoupons"
+                  options={{
+                    headerTitle: "My Coupons",
+                    headerTitleAlign: "center",
+                    headerLeft: () => <BackButton />,
+                    headerTitleStyle: {
+                      fontFamily: "InterBold",
+                      // borderWidth:8
+                    },
+                  }}
+                  component={MyCoupons}
+                />
+                <Stack.Screen
+                  name="Redeem"
+                  options={{
+                    headerTitle: "Redeem",
+                    headerTitleAlign: "center",
+                    headerLeft: () => <BackButton />,
+                    headerTitleStyle: {
+                      fontFamily: "InterBold",
+                      // borderWidth:8
+                    },
+                  }}
+                  component={Redeem}
                 />
               </Stack.Navigator>
             </NavigationContainer>

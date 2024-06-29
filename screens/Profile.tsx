@@ -117,6 +117,16 @@ const Profile = () => {
           iconName="pricetags-outline"
           onPress={() => navigation.navigate("MyProducts")}
         />
+        <ProfileMenuItem
+          title="Wallet"
+          iconName="wallet-outline"
+          onPress={() => navigation.navigate("Wallet")}
+        />
+        <ProfileMenuItem
+          title="My Coupons"
+          iconName="ticket-outline"
+          onPress={() => navigation.navigate("MyCoupons")}
+        />
         {/* <ProfileMenuItem
           title="Settings"
           iconName="settings-outline"
@@ -165,7 +175,7 @@ const styles = StyleSheet.create({
     color: COLORS.PRIMARY,
     fontSize: 16,
     fontFamily: "InterBold",
-    marginTop: 5,
+    marginTop: 30,
   },
   avatarContainer: {
     flexDirection: "column",

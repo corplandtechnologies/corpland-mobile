@@ -117,7 +117,7 @@ export default function TabNavigator() {
           ),
           headerTitle: "",
           headerLeft: () => <CustomHeaderLeft />,
-          // headerRight: () => <CustomHeaderRight />,
+          headerRight: () => <CustomHeaderRight />,
         }}
       />
       <Tab.Screen

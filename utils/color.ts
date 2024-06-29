@@ -7,4 +7,5 @@ export const COLORS = {
   GRAY_LIGHT: "#E5E4E2",
   TRANSPARENT: "rgba(0,0,0,0.5)",
   DESTRUCTIVE: "#FF4136",
+  WRAPPER: "rgba(0,116,217,0.2)",
 };

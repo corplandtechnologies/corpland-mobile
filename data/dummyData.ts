@@ -135,3 +135,6 @@ export const productCards = [
   { title: "Luxury Watches" },
   // Add more products as needed
 ];
+
+
+export const predefinedPrices = [500, 1000, 1500, 2000, 2500];

@@ -11,10 +11,7 @@ interface FavoriteIconProps {
   productId: any;
 }
 
-const FavoriteIcon: React.FC<FavoriteIconProps> = ({
-  style,
-  productId,
-}) => {
+const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
   const { user } = useUser();
   const [isFavorite, setIsFavorite] = useState(
     user?.favorites.includes(productId)

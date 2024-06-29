@@ -89,35 +89,35 @@ const Select = ({
         <Modal
           visible={visible}
           animationType="slide">
-            <View style={styles.header}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.title}>{title}</Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  console.log("Back icon pressed");
-                  setVisible(false);
-                }}>
-                <Icon
-                  name="close"
-                  size={26}
-                  color={COLORS.PRIMARY}
-                />
-              </TouchableOpacity>
+          <View style={styles.header}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>{title}</Text>
             </View>
-            <ScrollView>
-              {options.map((item, index) => (
-                <Option
-                  key={index} // It's important to provide a unique key for each child in a list
-                  optionText={item}
-                  onSelect={() => {
-                    console.log("Option selected:", item);
-                    onSelect(item); // Call the passed onSelect function with the selected item
-                    setVisible(false); // Close the modal or perform other actions
-                  }}
-                />
-              ))}
-            </ScrollView>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("Back icon pressed");
+                setVisible(false);
+              }}>
+              <Icon
+                name="close"
+                size={26}
+                color={COLORS.PRIMARY}
+              />
+            </TouchableOpacity>
+          </View>
+          <ScrollView>
+            {options.map((item, index) => (
+              <Option
+                key={index} // It's important to provide a unique key for each child in a list
+                optionText={item}
+                onSelect={() => {
+                  console.log("Option selected:", item);
+                  onSelect(item); // Call the passed onSelect function with the selected item
+                  setVisible(false); // Close the modal or perform other actions
+                }}
+              />
+            ))}
+          </ScrollView>
         </Modal>
       </ScrollView>
     </View>
