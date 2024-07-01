@@ -37,6 +37,7 @@ import ProductGrids from "./screens/ProductGrids";
 import NetInfo from "@react-native-community/netinfo";
 import TabNavigator from "./routes/TabNavigator";
 import * as Updates from "expo-updates";
+import { StatusBar } from "expo-status-bar";
 
 const Stack = createStackNavigator();
 
@@ -123,172 +124,176 @@ export default function App() {
   }
 
   return (
-    <UserProvider>
-      <SellerModeProvider>
-        <SearchResultsProvider>
-          <ProductProvider>
-            <NavigationContainer>
-              <Stack.Navigator
-                initialRouteName={
-                  loggedInUser === null ? "OnBoarding" : "TabNavigator"
-                }>
-                <Stack.Screen
-                  name="TabNavigator"
-                  options={{ headerShown: false }}
-                  component={TabNavigator}
-                />
-                <Stack.Screen
-                  name="Register"
-                  options={{ headerShown: false }}
-                  component={Register}
-                />
-                <Stack.Screen
-                  name="Login"
-                  options={{
-                    headerShown: false,
-                    headerTitle: "Sign In",
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={Login}
-                />
-                <Stack.Screen
-                  name="OnBoarding"
-                  options={{ headerShown: false }}
-                  component={Onboarding}
-                />
-                <Stack.Screen
-                  name="Verify"
-                  options={{
-                    headerTitle: "",
-                    headerLeft: () => <BackButton />,
-                  }}
-                  component={Verify}
-                />
-                <Stack.Screen
-                  name="CompleteProfile"
-                  options={{
-                    headerTitle: "",
-                    headerLeft: () => <BackButton />,
-                  }}
-                  component={CompleteProfile}
-                />
-                <Stack.Screen
-                  name="ProductDisplay"
-                  component={ProductDisplay}
-                  options={({ route }) => ({
-                    headerTitle: route.params?.category || "Products",
-                    headerLeft: () => <BackButton />,
-                    headerTitleAlign: "center",
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                    },
-                  })}
-                />
-                <Stack.Screen
-                  name="ProductGrids"
-                  options={{
-                    headerTitle: "Products",
-                    headerLeft: () => <BackButton />,
-                    headerTitleAlign: "center",
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                    },
-                  }}
-                  component={ProductGrids}
-                />
-                <Stack.Screen
-                  name="Search"
-                  options={{
-                    headerTitle: "Results",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={Search}
-                />
-                <Stack.Screen
-                  name="Product"
-                  options={{
-                    headerTitle: "Details",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerRight: () => {
-                      const { productId } = useProduct();
+    <>
+      <StatusBar translucent={true} />
 
-                      return (
-                        <FavoriteIcon
-                          productId={productId} // Use the local state instead of the context
-                          style={{
-                            padding: 15,
-                            // marginRight: 10,
-                          }}
-                        />
-                      );
-                    },
-                    // headerTransparent: true,
-                  }}
-                  component={Product}
-                />
+      <UserProvider>
+        <SellerModeProvider>
+          <SearchResultsProvider>
+            <ProductProvider>
+              <NavigationContainer>
+                <Stack.Navigator
+                  initialRouteName={
+                    loggedInUser === null ? "OnBoarding" : "TabNavigator"
+                  }>
+                  <Stack.Screen
+                    name="TabNavigator"
+                    options={{ headerShown: false }}
+                    component={TabNavigator}
+                  />
+                  <Stack.Screen
+                    name="Register"
+                    options={{ headerShown: false }}
+                    component={Register}
+                  />
+                  <Stack.Screen
+                    name="Login"
+                    options={{
+                      headerShown: false,
+                      headerTitle: "Sign In",
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={Login}
+                  />
+                  <Stack.Screen
+                    name="OnBoarding"
+                    options={{ headerShown: false }}
+                    component={Onboarding}
+                  />
+                  <Stack.Screen
+                    name="Verify"
+                    options={{
+                      headerTitle: "",
+                      headerLeft: () => <BackButton />,
+                    }}
+                    component={Verify}
+                  />
+                  <Stack.Screen
+                    name="CompleteProfile"
+                    options={{
+                      headerTitle: "",
+                      headerLeft: () => <BackButton />,
+                    }}
+                    component={CompleteProfile}
+                  />
+                  <Stack.Screen
+                    name="ProductDisplay"
+                    component={ProductDisplay}
+                    options={({ route }) => ({
+                      headerTitle: route.params?.category || "Products",
+                      headerLeft: () => <BackButton />,
+                      headerTitleAlign: "center",
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                      },
+                    })}
+                  />
+                  <Stack.Screen
+                    name="ProductGrids"
+                    options={{
+                      headerTitle: "Products",
+                      headerLeft: () => <BackButton />,
+                      headerTitleAlign: "center",
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                      },
+                    }}
+                    component={ProductGrids}
+                  />
+                  <Stack.Screen
+                    name="Search"
+                    options={{
+                      headerTitle: "Results",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={Search}
+                  />
+                  <Stack.Screen
+                    name="Product"
+                    options={{
+                      headerTitle: "Details",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerRight: () => {
+                        const { productId } = useProduct();
 
-                <Stack.Screen
-                  name="Categories"
-                  options={{
-                    headerTitle: "Categories",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={Categories}
-                />
-                <Stack.Screen
-                  name="EditProfile"
-                  options={{
-                    headerTitle: "",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                  }}
-                  component={EditProfile}
-                />
-                <Stack.Screen
-                  name="EditProduct"
-                  options={{
-                    headerTitle: "Edit Your Product",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                    },
-                  }}
-                  component={EditProduct}
-                />
-                <Stack.Screen
-                  name="MyProducts"
-                  options={{
-                    headerTitle: "My Products",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={MyProducts}
-                />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </ProductProvider>
-        </SearchResultsProvider>
-      </SellerModeProvider>
-    </UserProvider>
+                        return (
+                          <FavoriteIcon
+                            productId={productId} // Use the local state instead of the context
+                            style={{
+                              padding: 15,
+                              // marginRight: 10,
+                            }}
+                          />
+                        );
+                      },
+                      // headerTransparent: true,
+                    }}
+                    component={Product}
+                  />
+
+                  <Stack.Screen
+                    name="Categories"
+                    options={{
+                      headerTitle: "Categories",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={Categories}
+                  />
+                  <Stack.Screen
+                    name="EditProfile"
+                    options={{
+                      headerTitle: "",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                    }}
+                    component={EditProfile}
+                  />
+                  <Stack.Screen
+                    name="EditProduct"
+                    options={{
+                      headerTitle: "Edit Your Product",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                      },
+                    }}
+                    component={EditProduct}
+                  />
+                  <Stack.Screen
+                    name="MyProducts"
+                    options={{
+                      headerTitle: "My Products",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={MyProducts}
+                  />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </ProductProvider>
+          </SearchResultsProvider>
+        </SellerModeProvider>
+      </UserProvider>
+    </>
   );
 }
 
