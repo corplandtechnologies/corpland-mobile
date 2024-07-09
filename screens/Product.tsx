@@ -235,6 +235,13 @@ const Product = ({ route }) => {
                       <View style={{ flex: 4 }}>
                         <Text style={styles.titleText}>{product?.title}</Text>
                       </View>
+                      <TouchableOpacity >
+                        <Icon
+                          name="share-social"
+                          size={30}
+                          color={COLORS.COMPLIMENTARY}
+                        />
+                      </TouchableOpacity>
                       {product?.userId === currentUser?._id && (
                         <View style={styles.iconsView}>
                           <TouchableOpacity
