@@ -38,6 +38,7 @@ import NetInfo from "@react-native-community/netinfo";
 import TabNavigator from "./routes/TabNavigator";
 import * as Updates from "expo-updates";
 import { StatusBar } from "expo-status-bar";
+import { Analytics } from "@vercel/analytics/react";
 
 const Stack = createStackNavigator();
 
@@ -113,20 +114,23 @@ export default function App() {
 
   if (!isConnected) {
     return (
-      <View style={styles.container}>
-        <Image source={require("./assets/no-wifi.png")} />
-        <Text style={styles.mainError}>Ooops...</Text>
+      <>
+        <StatusBar translucent={true} />
+        <View style={styles.container}>
+          <Image source={require("./assets/no-wifi.png")} />
+          <Text style={styles.mainError}>Ooops...</Text>
 
-        <Text style={styles.message}>No Internet Connection Found.</Text>
-        <Text style={styles.message}>Check your connection.</Text>
-      </View>
+          <Text style={styles.message}>No Internet Connection Found.</Text>
+          <Text style={styles.message}>Check your connection.</Text>
+        </View>
+      </>
     );
   }
 
   return (
     <>
       <StatusBar translucent={true} />
-
+      <Analytics />
       <UserProvider>
         <SellerModeProvider>
           <SearchResultsProvider>
@@ -135,7 +139,8 @@ export default function App() {
                 <Stack.Navigator
                   initialRouteName={
                     loggedInUser === null ? "OnBoarding" : "TabNavigator"
-                  }>
+                  }
+                >
                   <Stack.Screen
                     name="TabNavigator"
                     options={{ headerShown: false }}
