@@ -16,7 +16,7 @@ interface FavoriteIconProps {
 const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
   const [user, setUser] = useState();
   const [isFavorite, setIsFavorite] = useState(
-    user.favorites?.includes(productId)
+    user?.favorites?.includes(productId)
   );
 
   useFocusEffect(
