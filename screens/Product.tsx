@@ -32,6 +32,7 @@ import ProductItem from "../components/ProductItem";
 import { useProduct } from "../context/ProductContext";
 import { useUser } from "../context/UserContext";
 import ConfirmationModal from "../components/ConfirmationModal";
+import { Platform } from "react-native";
 
 const Product = ({ route }) => {
   const navigation = useNavigation();
@@ -119,20 +120,33 @@ const Product = ({ route }) => {
     setRelatedProducts([]);
   };
 
-  const shareProduct = async () => {
-    const messageId = await generateShareLink(productId);
-    // Use any method to share text
-    Share.share({
-      message: `Check out my ${product?.title} \n ${messageId}`,
-      title: `Check out ${product?.title}`,
-      url: messageId,
-    });
-  };
+const shareProduct = async () => {
+  const productId = route.params.productId;
+  const productTitle = product?.title || "this product";
+  let shareMessage;
 
-  const generateShareLink = (productId) => {
-    // Generate a full URL including the scheme and product ID
-    return `https://corpland.corplandtechnologies.com/product/${productId}`; // Or `yourapp://products/${productId}`
-  };
+  // Generate a dynamic share link based on the environment
+  const baseUrl =
+    Platform.OS === "web"
+      ? window.location.origin
+      : "https://corpland.corplandtechnologies.com";
+  const fullShareLink = `${baseUrl}/product/${productId}`;
+
+  shareMessage = `Check out ${productTitle}: ${fullShareLink}`;
+
+  if (Platform.OS === "web") {
+    // For web, just copy the link to clipboard
+    navigator.clipboard.writeText(fullShareLink);
+    alert("Link copied to clipboard!");
+  } else {
+    // For mobile, use the Share API
+    Share.share({
+      message: shareMessage,
+      title: `Check out my ${productTitle}`,
+      url: fullShareLink,
+    });
+  }
+};
 
   const handleCallNow = async () => {
     const phoneNumber = user?.phoneNumber || ""; // Ensure there's a valid phone number
