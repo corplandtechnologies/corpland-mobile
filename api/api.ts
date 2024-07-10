@@ -76,6 +76,9 @@ export const updateUser = async (userData: any) => {
     type: "image/jpeg",
     name: `profilePicture.jpg`,
   });
+
+  console.log(userData.profilePicture);
+
   formData.append("country", userData.country);
   formData.append("region", userData.region);
   formData.append("userId", userData.userId);

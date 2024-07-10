@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/CORPLAND5.png",
     "userInterfaceStyle": "light",
+    "scheme": "corpland",
     "updates": {
       "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 10000,
@@ -16,9 +17,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.soluservant.corpland"
@@ -34,12 +33,18 @@
       "favicon": "./assets/CORPLAND5.png"
     },
     "owner": "corplandtechnologies",
-    "plugins": [
-      "expo-font"
-    ],
+    "plugins": ["expo-font"],
     "extra": {
       "eas": {
         "projectId": "10827b59-ffb4-4220-a797-4f00a99998bf"
+      }
+    },
+    "universalLinks": {
+      "ios": {
+        "allowedDomains": ["corpland.corplandtechnologies.com"]
+      },
+      "android": {
+        "allowedDomains": ["corpland.corplandtechnologies.com"]
       }
     },
     "runtimeVersion": {

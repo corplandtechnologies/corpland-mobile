@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Linking,
+  Share,
 } from "react-native";
 import { Avatar, Snackbar } from "react-native-paper";
 import { COLORS } from "../utils/color";
@@ -118,6 +119,21 @@ const Product = ({ route }) => {
     setRelatedProducts([]);
   };
 
+  const shareProduct = async () => {
+    const messageId = await generateShareLink(productId);
+    // Use any method to share text
+    Share.share({
+      message: `Check out my ${product?.title} \n ${messageId}`,
+      title: `Check out ${product?.title}`,
+      url: messageId,
+    });
+  };
+
+  const generateShareLink = (productId) => {
+    // Generate a full URL including the scheme and product ID
+    return `https://corpland.corplandtechnologies.com/product/${productId}`; // Or `yourapp://products/${productId}`
+  };
+
   const handleCallNow = async () => {
     const phoneNumber = user?.phoneNumber || ""; // Ensure there's a valid phone number
     const productTitle = product?.title || "this product";
@@ -163,13 +179,8 @@ const Product = ({ route }) => {
   const renderProductImages = () => {
     const images = product?.images || [];
     return images.map((image: string, index: number) => (
-      <View
-        key={index}
-        style={{ width: Dimensions.get("window").width }}>
-        <Image
-          source={{ uri: image }}
-          style={styles.productImage}
-        />
+      <View key={index} style={{ width: Dimensions.get("window").width }}>
+        <Image source={{ uri: image }} style={styles.productImage} />
       </View>
     ));
   };
@@ -185,11 +196,9 @@ const Product = ({ route }) => {
                   justifyContent: "center",
                   alignItems: "center",
                   ...styles.backgroundImage,
-                }}>
-                <ActivityIndicator
-                  size={50}
-                  color={COLORS.PRIMARY}
-                />
+                }}
+              >
+                <ActivityIndicator size={50} color={COLORS.PRIMARY} />
               </View>
             ) : (
               <View>
@@ -204,7 +213,8 @@ const Product = ({ route }) => {
                     );
                     setCurrentImageIndex(newIndex);
                   }}
-                  scrollEventThrottle={16}>
+                  scrollEventThrottle={16}
+                >
                   {renderProductImages()}
                 </ScrollView>
                 <View style={styles.dotsContainer}>
@@ -225,21 +235,19 @@ const Product = ({ route }) => {
                 <View style={styles.bar}></View>
 
                 {isLoading ? (
-                  <ActivityIndicator
-                    size={20}
-                    color={COLORS.PRIMARY}
-                  />
+                  <ActivityIndicator size={20} color={COLORS.PRIMARY} />
                 ) : (
                   <>
                     <View style={styles.titleView}>
                       <View style={{ flex: 4 }}>
                         <Text style={styles.titleText}>{product?.title}</Text>
                       </View>
-                      <TouchableOpacity >
+                      <TouchableOpacity>
                         <Icon
                           name="share-social"
                           size={30}
                           color={COLORS.COMPLIMENTARY}
+                          onPress={shareProduct}
                         />
                       </TouchableOpacity>
                       {product?.userId === currentUser?._id && (
@@ -249,7 +257,8 @@ const Product = ({ route }) => {
                               navigation.navigate("EditProduct", {
                                 product: product,
                               })
-                            }>
+                            }
+                          >
                             <Icon
                               name="create-outline"
                               size={30}
@@ -257,11 +266,7 @@ const Product = ({ route }) => {
                             />
                           </TouchableOpacity>
                           <TouchableOpacity onPress={showModal}>
-                            <Icon
-                              name="trash"
-                              size={30}
-                              color={"red"}
-                            />
+                            <Icon name="trash" size={30} color={"red"} />
                           </TouchableOpacity>
                         </View>
                       )}
@@ -290,7 +295,8 @@ const Product = ({ route }) => {
                             justifyContent: "space-between",
                             maxWidth: "90%",
                             gap: 5,
-                          }}>
+                          }}
+                        >
                           <Text style={styles.AvatarText}>{user?.name}</Text>
                           {user?.verified && (
                             <Icon
@@ -306,15 +312,10 @@ const Product = ({ route }) => {
                 )}
                 <View>
                   {relatedProducts && (
-                    <Section
-                      limited
-                      headerText="Related Products">
+                    <Section limited headerText="Related Products">
                       <ScrollView showsHorizontalScrollIndicator={false}>
                         {isLoading ? (
-                          <ActivityIndicator
-                            size={50}
-                            color={COLORS.PRIMARY}
-                          />
+                          <ActivityIndicator size={50} color={COLORS.PRIMARY} />
                         ) : (
                           <>
                             {relatedProducts?.map((result) => (
@@ -349,11 +350,7 @@ const Product = ({ route }) => {
           <PrimaryButton
             value="Call Now"
             icon={
-              <Icon
-                name="call-outline"
-                size={24}
-                color={COLORS.SECONDARY}
-              />
+              <Icon name="call-outline" size={24} color={COLORS.SECONDARY} />
             }
             onPress={handleCallNow}
             isIcon
@@ -370,7 +367,8 @@ const Product = ({ route }) => {
       <Snackbar
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
-        duration={Snackbar.DURATION_SHORT}>
+        duration={Snackbar.DURATION_SHORT}
+      >
         {snackbarMessage}
       </Snackbar>
     </>
