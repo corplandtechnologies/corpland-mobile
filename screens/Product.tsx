@@ -120,33 +120,34 @@ const Product = ({ route }) => {
     setRelatedProducts([]);
   };
 
-const shareProduct = async () => {
-  const productId = route.params.productId;
-  const productTitle = product?.title || "this product";
-  let shareMessage;
+  const shareProduct = async () => {
+    const productId = route.params.productId;
+    const productTitle = product?.title || "this product";
+    let shareMessage;
 
-  // Generate a dynamic share link based on the environment
-  const baseUrl =
-    Platform.OS === "web"
-      ? window.location.origin
-      : "https://corpland.corplandtechnologies.com";
-  const fullShareLink = `${baseUrl}/product/${productId}`;
+    // Generate a dynamic share link based on the environment
+    const baseUrl =
+      Platform.OS === "web"
+        ? window.location.origin
+        : "https://corpland.corplandtechnologies.com";
+    const fullShareLink = `${baseUrl}/product/${productId}`;
 
-  shareMessage = `Check out ${productTitle}: ${fullShareLink}`;
+    // Construct the share message including the first image URL if available
+    shareMessage = `Check out ${productTitle}: ${fullShareLink}`;
 
-  if (Platform.OS === "web") {
-    // For web, just copy the link to clipboard
-    navigator.clipboard.writeText(fullShareLink);
-    alert("Link copied to clipboard!");
-  } else {
-    // For mobile, use the Share API
-    Share.share({
-      message: shareMessage,
-      title: `Check out my ${productTitle}`,
-      url: fullShareLink,
-    });
-  }
-};
+    if (Platform.OS === "web") {
+      // For web, just copy the link to clipboard
+      navigator.clipboard.writeText(fullShareLink);
+      alert("Link copied to clipboard!");
+    } else {
+      // For mobile, use the Share API
+      Share.share({
+        message: shareMessage,
+        title: `Check out my ${productTitle}`,
+        url: fullShareLink,
+      });
+    }
+  };
 
   const handleCallNow = async () => {
     const phoneNumber = user?.phoneNumber || ""; // Ensure there's a valid phone number
@@ -322,6 +323,27 @@ const shareProduct = async () => {
                         </View>
                       </View>
                     </View>
+                    <View style={styles.bottomContainer}>
+                      <View style={styles.priceView}>
+                        <Text style={styles.priceText}>
+                          GH₵{product?.price}
+                        </Text>
+                      </View>
+                      <View style={styles.CTAView}>
+                        <PrimaryButton
+                          value="Call Now"
+                          icon={
+                            <Icon
+                              name="call-outline"
+                              size={24}
+                              color={COLORS.SECONDARY}
+                            />
+                          }
+                          onPress={handleCallNow}
+                          isIcon
+                        />
+                      </View>
+                    </View>
                   </>
                 )}
                 <View>
@@ -356,21 +378,6 @@ const shareProduct = async () => {
           </View>
         </View>
       </ScrollView>
-      <View style={styles.bottomContainer}>
-        <View style={styles.priceView}>
-          <Text style={styles.priceText}>GH₵{product?.price}</Text>
-        </View>
-        <View style={styles.CTAView}>
-          <PrimaryButton
-            value="Call Now"
-            icon={
-              <Icon name="call-outline" size={24} color={COLORS.SECONDARY} />
-            }
-            onPress={handleCallNow}
-            isIcon
-          />
-        </View>
-      </View>
       <ConfirmationModal
         isVisible={isModalVisible}
         onClose={hideModal}
