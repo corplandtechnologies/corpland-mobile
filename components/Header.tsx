@@ -17,7 +17,7 @@ const Header = () => {
     } else {
       // Link to download page for Android users
       window.location.href =
-        "https://drive.usercontent.google.com/download?id=10XVpQCi2wt9tJVyT_hJTuarEqxELdOVT&export=download&authuser=0&confirm=t&uuid=10f76ac9-fc0e-4965-952b-a6ffa3a8e1c8&at=APZUnTXYICZu_dHQK3A5PMBr0lTt:1720668004147";
+        "https://download946.mediafire.com/wyfbyqqm6rlgrbi4CQ6-0gYhvr1ajIIsgJZd_Ufhq1RiOlyB3Psuzpb4H4X0mb1AVqWEdfbXgNuNcXsYtXLAhlJeozhS35Oj9vy1exXBL597KIF5wWeadkE-S0EkfMsQyjaktJt0T04TvD_zERYK0qIWfFgZ0IUPigpOtGKtQjUw/efpne7xyiyr8oak/Corpland+1.2.2.apk";
     }
   };
 
