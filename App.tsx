@@ -38,6 +38,8 @@ import NetInfo from "@react-native-community/netinfo";
 import TabNavigator from "./routes/TabNavigator";
 import * as Updates from "expo-updates";
 import { StatusBar } from "expo-status-bar";
+import Header from "./components/Header";
+import { Platform } from "react-native";
 
 const linking = {
   prefixes: ["https://corpland.corplandtechnologies.com"],
@@ -134,9 +136,9 @@ export default function App() {
   }
 
   return (
-    <>
+    <View style={{ flexDirection: "column", width: "100%" }}>
       <StatusBar translucent={true} />
-
+      {Platform.OS === "web" && <Header />}
       <UserProvider>
         <SellerModeProvider>
           <SearchResultsProvider>
@@ -304,7 +306,7 @@ export default function App() {
           </SearchResultsProvider>
         </SellerModeProvider>
       </UserProvider>
-    </>
+    </View>
   );
 }
 
