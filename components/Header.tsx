@@ -17,7 +17,7 @@ const Header = () => {
     } else {
       // Link to download page for Android users
       window.location.href =
-        "https://download946.mediafire.com/wyfbyqqm6rlgrbi4CQ6-0gYhvr1ajIIsgJZd_Ufhq1RiOlyB3Psuzpb4H4X0mb1AVqWEdfbXgNuNcXsYtXLAhlJeozhS35Oj9vy1exXBL597KIF5wWeadkE-S0EkfMsQyjaktJt0T04TvD_zERYK0qIWfFgZ0IUPigpOtGKtQjUw/efpne7xyiyr8oak/Corpland+1.2.2.apk";
+        "https://dl.dropboxusercontent.com/scl/fi/r8ikl80ypa80kq58ctcj5/Corpland-1.2.2.apk?rlkey=sm0kue6fmelaxl5jlppomc48s&st=05lav4ko&dl=0";
     }
   };
 
