@@ -60,7 +60,7 @@ const Register = () => {
       await AsyncStorage.setItem("token", res.token);
       setSnackbarVisible(true);
       setSnackbarMessage(res.message);
-      navigation.navigate("Verify");
+      navigation.navigate("CompleteProfile");
     } catch (error) {
       console.log(error);
       setSnackbarMessage(error.response.data);
@@ -81,7 +81,6 @@ const Register = () => {
           icon="envelope"
           placeholder="Email"
           onChangeText={setEmail}
-          
         />
         <View style={styles.inputContainer}>
           <Icon name="lock" type="font-awesome" color={COLORS.GRAY} />
