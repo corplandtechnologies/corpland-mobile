@@ -33,6 +33,7 @@ const CompleteProfile = () => {
   const [userId, setUserId] = useState("");
   const [user, setUser] = useState(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const navigation = useNavigation();
 
@@ -55,7 +56,11 @@ const CompleteProfile = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0]);
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      // Create a URL for the selected file and set it to the previewImage state
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImage(previewUrl);
     }
   };
 
@@ -110,10 +115,10 @@ const CompleteProfile = () => {
           description="Don't worry, Only you can see your personal data. No one else would be able to see it."
         />
         <View style={styles.avatarView}>
-          {selectedImage ? (
+          {selectedImage || previewImage ? (
             <>
               <Image
-                source={{ uri: selectedImage }}
+                source={{ uri: selectedImage || previewImage }}
                 style={styles.selectedImage}
               />
             </>

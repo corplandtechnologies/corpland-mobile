@@ -42,6 +42,8 @@ const EditProfile = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
   const navigation = useNavigation();
 
   console.log(user);
@@ -77,11 +79,15 @@ const EditProfile = () => {
     fetchUser();
   }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0]);
-    }
-  };
+const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (event.target.files && event.target.files.length > 0) {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    // Create a URL for the selected file and set it to the previewImage state
+    const previewUrl = URL.createObjectURL(file);
+    setPreviewImage(previewUrl);
+  }
+};
 
   const handlePickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -145,10 +151,13 @@ const EditProfile = () => {
           description="Don't worry, Only you can see your personal data. No one else would be able to see it."
         />
         <View style={styles.avatarView}>
-          {selectedImage || userInfo?.profilePicture ? (
+          {selectedImage || userInfo?.profilePicture || previewImage ? (
             <>
               <Image
-                source={{ uri: selectedImage || userInfo?.profilePicture }}
+                source={{
+                  uri:
+                    selectedImage || previewImage || userInfo?.profilePicture,
+                }}
                 style={styles.selectedImage}
               />
             </>
