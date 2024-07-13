@@ -55,8 +55,19 @@ const Login = () => {
       navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
       console.log(error);
-      setSnackbarMessage(error.response.data?.message);
-
+      let errorMessage = "An unexpected error occurred.";
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = error.response.data.message || error.response.statusText;
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = "No response received from the server.";
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = error.message;
+      }
+      setSnackbarMessage(errorMessage);
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -69,11 +80,7 @@ const Login = () => {
         description="Fill your information below or register with your social account"
       />
       <View style={styles.inputContainer}>
-        <Icon
-          name="envelope"
-          type="font-awesome"
-          color={COLORS.GRAY}
-        />
+        <Icon name="envelope" type="font-awesome" color={COLORS.GRAY} />
         <TextInput
           placeholder="Email"
           style={styles.input}
@@ -82,11 +89,7 @@ const Login = () => {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Icon
-          name="lock"
-          type="font-awesome"
-          color={COLORS.GRAY}
-        />
+        <Icon name="lock" type="font-awesome" color={COLORS.GRAY} />
         <TextInput
           placeholder="Password"
           secureTextEntry={!isPasswordVisible}
@@ -95,7 +98,8 @@ const Login = () => {
           onChangeText={setPassword}
         />
         <TouchableOpacity
-          onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+          onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+        >
           <Icon
             name={isPasswordVisible ? "eye-slash" : "eye"}
             type="font-awesome"
@@ -152,14 +156,12 @@ const Login = () => {
           onPress: () => {
             setSnackbarVisible(false);
           },
-        }}>
+        }}
+      >
         {snackbarMessage}
       </Snackbar>
 
-      <AuthOption
-        option="Sign Up"
-        screen="Register"
-      />
+      <AuthOption option="Sign Up" screen="Register" />
     </View>
   );
 };

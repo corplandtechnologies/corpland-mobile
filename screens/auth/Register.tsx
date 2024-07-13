@@ -59,11 +59,23 @@ const Register = () => {
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
       await AsyncStorage.setItem("token", res.token);
       setSnackbarVisible(true);
-      setSnackbarMessage(res.message);
+      setSnackbarMessage(res.data.message);
       navigation.navigate("CompleteProfile");
     } catch (error) {
       console.log(error);
-      setSnackbarMessage(error.response.data);
+      let errorMessage = "An unexpected error occurred.";
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = error.response.data.message || error.response.statusText;
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = "No response received from the server.";
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = error.message;
+      }
+      setSnackbarMessage(errorMessage);
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
