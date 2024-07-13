@@ -74,7 +74,7 @@ const Verify = () => {
 
       const res = await verifyEmail(data);
       setSnackbarVisible(true);
-      setSnackbarMessage(res.message);
+      setSnackbarMessage("Verification Successful!");
       navigation.navigate("CompleteProfile");
     } catch (error) {
       console.log(error);
@@ -123,7 +123,8 @@ const Verify = () => {
           onPress: () => {
             setSnackbarVisible(false);
           },
-        }}>
+        }}
+      >
         {snackbarMessage}
       </Snackbar>
     </View>

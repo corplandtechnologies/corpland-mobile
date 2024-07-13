@@ -37,6 +37,7 @@ const EditProduct = ({ route }) => {
   const [image, setImage] = useState(product.image);
   const [newImages, setNewImages] = useState(product.images);
   const [images, setImages] = useState([...product?.images]);
+  const [selectedFiles, setSelectedFiles] = useState([...product?.images]);
   const [imageObject, setImageObject] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -120,11 +121,11 @@ const EditProduct = ({ route }) => {
         newImages.push(file);
       });
 
-      const mergedImages = [...images, ...newImages];
+      const mergedImages = [...selectedFiles, ...newImages];
       const maxImages = 20;
-      const finalImages = mergedImages.slice(0, maxImages);
+      const finalImages: any = mergedImages.slice(0, maxImages);
 
-      setImages(finalImages);
+      setSelectedFiles(finalImages);
     }
   };
 
@@ -168,6 +169,12 @@ const EditProduct = ({ route }) => {
     setImages(newImages);
   };
 
+  const removeFile = (index: number) => {
+    const newImages = [...selectedFiles];
+    newImages.splice(index, 1); // Remove the image at the specified index
+    setSelectedFiles(newImages);
+  };
+
   const handleSubmit = async () => {
     if (images.length === 0) {
       setSnackbarMessage("You need at least one photo!");
@@ -187,9 +194,23 @@ const EditProduct = ({ route }) => {
         userId: user._id || product.userId,
       };
 
-      console.log("New Product data",newProduct);
+      const newWebProduct = {
+        title: title || product.title,
+        description: desc || product.description,
+        images: selectedFiles,
+        country: selectedCountry || product.country,
+        region: selectedRegion || product.region,
+        category: selectedCategory || product.category,
+        price: price || product.price,
+        userId: user._id || product.userId,
+      };
 
-      const response = await updateProduct(newProduct, product._id);
+      console.log("New Product data", newProduct);
+
+      const response = await updateProduct(
+        Platform.OS === "web" ? newWebProduct : newProduct,
+        product._id
+      );
       console.log(response.data);
       navigation.navigate("MyProducts");
       setSnackbarMessage("Product created successfully");
@@ -201,8 +222,19 @@ const EditProduct = ({ route }) => {
       setSelectedRegion("");
       setPrice("");
     } catch (error) {
-      console.log(error);
-      setSnackbarMessage(error.response.data);
+      let errorMessage = "An unexpected error occurred.";
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = error.response.data.message || error.response.statusText;
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = "No response received from the server.";
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = error.message;
+      }
+      setSnackbarMessage(errorMessage);
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -223,25 +255,45 @@ const EditProduct = ({ route }) => {
           <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.imageContainer}>
-              {images.map((image, index) => (
-                <View key={index} style={styles.imageWrapper}>
-                  <Image
-                    source={{
-                      uri:
-                        typeof image === "object"
-                          ? createObjectURL(image)
-                          : image || image.uri,
-                    }}
-                    style={styles.image}
-                  />
-                  <TouchableOpacity
-                    style={styles.removeImageButton}
-                    onPress={() => removeImage(index)}
-                  >
-                    <Text style={styles.removeImageText}>x</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
+                  {Platform.OS === "web" ? (
+                    <>
+                      {selectedFiles?.map((image, index) => (
+                        <View key={index} style={styles.imageWrapper}>
+                          <Image
+                            source={{
+                              uri: createObjectURL(image) || image,
+                            }}
+                            style={styles.image}
+                          />
+                          <TouchableOpacity
+                            style={styles.removeImageButton}
+                            onPress={() => removeFile(index)}
+                          >
+                            <Text style={styles.removeImageText}>x</Text>
+                          </TouchableOpacity>
+                        </View>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {images.map((image, index) => (
+                        <View key={index} style={styles.imageWrapper}>
+                          <Image
+                            source={{
+                              uri: image.uri || image,
+                            }}
+                            style={styles.image}
+                          />
+                          <TouchableOpacity
+                            style={styles.removeImageButton}
+                            onPress={() => removeImage(index)}
+                          >
+                            <Text style={styles.removeImageText}>x</Text>
+                          </TouchableOpacity>
+                        </View>
+                      ))}
+                    </>
+                  )}
               {Platform.OS === "web" ? (
                 <>
                   <input

@@ -32,7 +32,7 @@ const CreateProduct = () => {
   const [desc, setDesc] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [images, setImages] = useState([]);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<any>([]);
   const [imagePreview, setImagePreview] = useState([]);
   const [imageObject, setImageObject] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -48,6 +48,8 @@ const CreateProduct = () => {
   const [price, setPrice] = useState("");
   const [user, setUser] = useState<object>({});
   const [loading, setLoading] = useState(false);
+
+  console.log("seelcted files", selectedFiles);
 
   const navigation = useNavigation();
 
@@ -75,11 +77,11 @@ const CreateProduct = () => {
 
   useEffect(() => {
     return () => {
-      images.forEach((image) => {
+      selectedFiles?.forEach((image) => {
         URL.revokeObjectURL(createObjectURL(image));
       });
     };
-  }, [images]);
+  }, [selectedFiles]);
 
   useEffect(() => {
     const fetchLocationOptions = async () => {
@@ -120,11 +122,11 @@ const CreateProduct = () => {
         newImages.push(file);
       });
 
-      const mergedImages = [...images, ...newImages];
+      const mergedImages = [...selectedFiles, ...newImages];
       const maxImages = 20;
-      const finalImages = mergedImages.slice(0, maxImages);
+      const finalImages: any = mergedImages.slice(0, maxImages);
 
-      setImages(finalImages);
+      setSelectedFiles(finalImages);
     }
   };
   const handleCountrySelect = (selectedOption: string) => {
@@ -178,6 +180,11 @@ const CreateProduct = () => {
     newImages.splice(index, 1); // Remove the image at the specified index
     setImages(newImages);
   };
+  const removeFile = (index: number) => {
+    const newImages = [...selectedFiles];
+    newImages.splice(index, 1); // Remove the image at the specified index
+    setSelectedFiles(newImages);
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -197,7 +204,22 @@ const CreateProduct = () => {
         price: price,
         userId: user._id,
       };
-      const response = await createProduct(newProduct);
+      const newWebProduct = {
+        title: title,
+        description: desc,
+        images: selectedFiles,
+        country: selectedCountry,
+        region: selectedRegion,
+        category: selectedCategory,
+        price: price,
+        userId: user._id,
+      };
+
+      console.log("new product", newProduct);
+
+      const response = await createProduct(
+        Platform.OS === "web" ? newWebProduct : newProduct
+      );
       console.log("Product data", newProduct);
       console.log(response.data);
       navigation.navigate("MyProducts");
@@ -231,22 +253,45 @@ const CreateProduct = () => {
           <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.imageContainer}>
-              {images.map((image, index) => (
-                <View key={index} style={styles.imageWrapper}>
-                  <Image
-                    source={{
-                      uri: image.uri || createObjectURL(image) || imagePreview,
-                    }}
-                    style={styles.image}
-                  />
-                  <TouchableOpacity
-                    style={styles.removeImageButton}
-                    onPress={() => removeImage(index)}
-                  >
-                    <Text style={styles.removeImageText}>x</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
+              {Platform.OS === "web" ? (
+                <>
+                  {selectedFiles?.map((image, index) => (
+                    <View key={index} style={styles.imageWrapper}>
+                      <Image
+                        source={{
+                          uri: createObjectURL(image) || imagePreview,
+                        }}
+                        style={styles.image}
+                      />
+                      <TouchableOpacity
+                        style={styles.removeImageButton}
+                        onPress={() => removeFile(index)}
+                      >
+                        <Text style={styles.removeImageText}>x</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {images.map((image, index) => (
+                    <View key={index} style={styles.imageWrapper}>
+                      <Image
+                        source={{
+                          uri: image.uri || imagePreview,
+                        }}
+                        style={styles.image}
+                      />
+                      <TouchableOpacity
+                        style={styles.removeImageButton}
+                        onPress={() => removeImage(index)}
+                      >
+                        <Text style={styles.removeImageText}>x</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </>
+              )}
               {Platform.OS === "web" ? (
                 <>
                   <input
