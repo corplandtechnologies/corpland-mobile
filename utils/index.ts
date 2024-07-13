@@ -9,3 +9,7 @@ export const getStorageItem = async (item: string) => {
     console.log(error);
   }
 };
+
+export const createObjectURL = (file: any) => {
+  return URL.createObjectURL(file);
+};

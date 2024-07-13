@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Platform,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import ScreenContextWrapper from "../../components/ScreenContextWrapper";
@@ -24,12 +25,14 @@ import FormInput from "../../components/ui/FormInput";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useUser } from "../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createObjectURL } from "../../utils";
 
 const CreateProduct = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [images, setImages] = useState([]);
+  const [imagePreview, setImagePreview] = useState([]);
   const [imageObject, setImageObject] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -43,7 +46,6 @@ const CreateProduct = () => {
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [price, setPrice] = useState("");
   const [user, setUser] = useState<object>({});
-
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
@@ -69,6 +71,14 @@ const CreateProduct = () => {
       getUserInfo();
     }, [user?._id])
   );
+
+  useEffect(() => {
+    return () => {
+      images.forEach((image) => {
+        URL.revokeObjectURL(createObjectURL(image));
+      });
+    };
+  }, [images]);
 
   useEffect(() => {
     const fetchLocationOptions = async () => {
@@ -100,6 +110,22 @@ const CreateProduct = () => {
     fetchLocationOptions();
   }, []);
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      let newImages: any[] = [];
+
+      // Directly iterate over event.target.files which is a FileList
+      Array.from(event.target.files).forEach((file) => {
+        newImages.push(file);
+      });
+
+      const mergedImages = [...images, ...newImages];
+      const maxImages = 20;
+      const finalImages = mergedImages.slice(0, maxImages);
+
+      setImages(finalImages);
+    }
+  };
   const handleCountrySelect = (selectedOption: string) => {
     setSelectedCountry(selectedOption);
     // Update region options based on the selected country
@@ -202,32 +228,53 @@ const CreateProduct = () => {
             onSelect={(selectedOption) => setSelectedCategory(selectedOption)} // Update the selected category state
           />
           <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.imageContainer}>
               {images.map((image, index) => (
-                <View
-                  key={index}
-                  style={styles.imageWrapper}>
+                <View key={index} style={styles.imageWrapper}>
                   <Image
-                    source={{ uri: image.uri }}
+                    source={{
+                      uri: image.uri || createObjectURL(image) || imagePreview,
+                    }}
                     style={styles.image}
                   />
                   <TouchableOpacity
                     style={styles.removeImageButton}
-                    onPress={() => removeImage(index)}>
+                    onPress={() => removeImage(index)}
+                  >
                     <Text style={styles.removeImageText}>x</Text>
                   </TouchableOpacity>
                 </View>
               ))}
-              <TouchableOpacity
-                style={styles.addImageBox}
-                onPress={pickImage}>
-                <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
-                  +
-                </Text>
-              </TouchableOpacity>
+              {Platform.OS === "web" ? (
+                <>
+                  <input
+                    id="productImageUpload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    style={{ display: "none" }} // Hide the default file input
+                  />
+                  <label htmlFor="productImageUpload">
+                    <TouchableOpacity style={styles.addImageBox}>
+                      <Text
+                        style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}
+                      >
+                        +
+                      </Text>
+                    </TouchableOpacity>
+                  </label>
+                </>
+              ) : (
+                <TouchableOpacity
+                  style={styles.addImageBox}
+                  onPress={pickImage}
+                >
+                  <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
+                    +
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </ScrollView>
           <Select
@@ -280,7 +327,8 @@ const CreateProduct = () => {
           <Snackbar
             visible={snackbarVisible}
             onDismiss={() => setSnackbarVisible(false)}
-            duration={Snackbar.DURATION_SHORT}>
+            duration={Snackbar.DURATION_SHORT}
+          >
             {snackbarMessage}
           </Snackbar>
         </View>

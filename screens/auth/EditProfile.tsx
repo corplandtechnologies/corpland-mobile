@@ -79,15 +79,15 @@ const EditProfile = () => {
     fetchUser();
   }, []);
 
-const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  if (event.target.files && event.target.files.length > 0) {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-    // Create a URL for the selected file and set it to the previewImage state
-    const previewUrl = URL.createObjectURL(file);
-    setPreviewImage(previewUrl);
-  }
-};
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      // Create a URL for the selected file and set it to the previewImage state
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImage(previewUrl);
+    }
+  };
 
   const handlePickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

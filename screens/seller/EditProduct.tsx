@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import ScreenContextWrapper from "../../components/ScreenContextWrapper";
@@ -24,6 +25,7 @@ import FormInput from "../../components/ui/FormInput";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useUser } from "../../context/UserContext";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { createObjectURL } from "../../utils";
 
 const EditProduct = ({ route }) => {
   const { user } = useUser();
@@ -87,6 +89,16 @@ const EditProduct = ({ route }) => {
     fetchLocationOptions();
   }, []);
 
+  useEffect(() => {
+    return () => {
+      images.forEach((image) => {
+        if (typeof image === "object") {
+          URL.revokeObjectURL(createObjectURL(image));
+        }
+      });
+    };
+  }, [images]);
+
   const handleCountrySelect = (selectedOption: string) => {
     setSelectedCountry(selectedOption);
     // Update region options based on the selected country
@@ -99,6 +111,22 @@ const EditProduct = ({ route }) => {
   };
 
   // Inside EditProduct.tsx
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      let newImages: any[] = [];
+
+      // Directly iterate over event.target.files which is a FileList
+      Array.from(event.target.files).forEach((file) => {
+        newImages.push(file);
+      });
+
+      const mergedImages = [...images, ...newImages];
+      const maxImages = 20;
+      const finalImages = mergedImages.slice(0, maxImages);
+
+      setImages(finalImages);
+    }
+  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -141,9 +169,7 @@ const EditProduct = ({ route }) => {
   };
 
   const handleSubmit = async () => {
-    if (
-      images.length === 0
-    ) {
+    if (images.length === 0) {
       setSnackbarMessage("You need at least one photo!");
       setSnackbarVisible(true);
       return;
@@ -160,6 +186,9 @@ const EditProduct = ({ route }) => {
         price: price || product.price,
         userId: user._id || product.userId,
       };
+
+      console.log("New Product data",newProduct);
+
       const response = await updateProduct(newProduct, product._id);
       console.log(response.data);
       navigation.navigate("MyProducts");
@@ -192,32 +221,56 @@ const EditProduct = ({ route }) => {
             initialValue={product.category}
           />
           <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.imageContainer}>
               {images.map((image, index) => (
-                <View
-                  key={index}
-                  style={styles.imageWrapper}>
+                <View key={index} style={styles.imageWrapper}>
                   <Image
-                    source={{ uri: image.uri || image }}
+                    source={{
+                      uri:
+                        typeof image === "object"
+                          ? createObjectURL(image)
+                          : image || image.uri,
+                    }}
                     style={styles.image}
                   />
                   <TouchableOpacity
                     style={styles.removeImageButton}
-                    onPress={() => removeImage(index)}>
+                    onPress={() => removeImage(index)}
+                  >
                     <Text style={styles.removeImageText}>x</Text>
                   </TouchableOpacity>
                 </View>
               ))}
-              <TouchableOpacity
-                style={styles.addImageBox}
-                onPress={pickImage}>
-                <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
-                  +
-                </Text>
-              </TouchableOpacity>
+              {Platform.OS === "web" ? (
+                <>
+                  <input
+                    id="productImageUpload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    style={{ display: "none" }} // Hide the default file input
+                  />
+                  <label htmlFor="productImageUpload">
+                    <TouchableOpacity style={styles.addImageBox}>
+                      <Text
+                        style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}
+                      >
+                        +
+                      </Text>
+                    </TouchableOpacity>
+                  </label>
+                </>
+              ) : (
+                <TouchableOpacity
+                  style={styles.addImageBox}
+                  onPress={pickImage}
+                >
+                  <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
+                    +
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </ScrollView>
           <Select
@@ -275,7 +328,8 @@ const EditProduct = ({ route }) => {
           <Snackbar
             visible={snackbarVisible}
             onDismiss={() => setSnackbarVisible(false)}
-            duration={Snackbar.DURATION_SHORT}>
+            duration={Snackbar.DURATION_SHORT}
+          >
             {snackbarMessage}
           </Snackbar>
         </View>
