@@ -60,7 +60,7 @@ const Register = () => {
       await AsyncStorage.setItem("token", res.token);
       setSnackbarVisible(true);
       setSnackbarMessage("Registration Completed Successfully!");
-      navigation.navigate("CompleteProfile");
+      navigation.navigate("Verify");
     } catch (error) {
       console.log(error);
       let errorMessage = "An unexpected error occurred.";

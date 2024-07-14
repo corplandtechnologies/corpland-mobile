@@ -58,10 +58,6 @@ const Product = ({ route }) => {
         if (userInfo) {
           const parsedUserInfo = JSON.parse(userInfo);
           setCurrentUser(parsedUserInfo);
-
-          const res = await getUserById(parsedUserInfo._id);
-          console.log("res", res.data);
-          setUser(res.data.user);
         }
       } catch (error) {
         console.log(error);
@@ -169,22 +165,23 @@ const Product = ({ route }) => {
 
   const handleCallNow = async () => {
     const phoneNumber = user?.phoneNumber || ""; // Ensure there's a valid phone number
-    const productTitle = product?.title || "this product";
-    const message = `Hello, I am trying to inquire about your ${productTitle}.`;
+    // const productTitle = product?.title || "this product";
+    // const message = `Hello, I am trying to inquire about your ${productTitle}.`;
 
-    // Check if WhatsApp is installed
-    const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
-      message
-    )}`;
-    const canOpen = await Linking.openURL(url);
+    // // Check if WhatsApp is installed
+    // const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
+    //   message
+    // )}`;
+    // const canOpen = await Linking.openURL(url);
 
-    if (canOpen) {
-      // Open WhatsApp
-      Linking.openURL(url);
-    } else {
-      // Fallback to dialer
-      Linking.openURL(`tel:${phoneNumber}`);
-    }
+    // if (canOpen) {
+    //   // Open WhatsApp
+    //   Linking.openURL(url);
+    // } else {
+    //   // Fallback to dialer
+    //   Linking.openURL(`tel:${phoneNumber}`);
+    // }
+    Linking.openURL(`tel:${phoneNumber}`);
 
     try {
       await dialProduct(productId, currentUser?._id);

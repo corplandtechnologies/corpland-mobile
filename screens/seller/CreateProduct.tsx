@@ -26,6 +26,7 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useUser } from "../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createObjectURL } from "../../utils";
+import { Linking } from "react-native";
 
 const CreateProduct = () => {
   const [title, setTitle] = useState("");
@@ -366,9 +367,19 @@ const CreateProduct = () => {
             />
           </TouchableOpacity>
           <Text style={{ textAlign: "center" }}>
-            By clicking on Product, you accept the Terms of Use , confirm that
-            you will abide by the Safety Tips, and declare that this posting
-            does not include any Prohibited Products.
+            By clicking on Product, you accept the{" "}
+            <Text
+              style={{ textDecorationLine: "underline", color: COLORS.COMPLIMENTARY }}
+              onPress={() =>
+                Linking.openURL(
+                  "https://www.termsfeed.com/live/ba293553-5fc9-4f66-be64-9613b78987e8"
+                )
+              }
+            >
+              Terms of Use
+            </Text>
+            , confirm that you will abide by the Safety Tips, and declare that
+            this posting does not include any Prohibited Products.
           </Text>
           <Snackbar
             visible={snackbarVisible}

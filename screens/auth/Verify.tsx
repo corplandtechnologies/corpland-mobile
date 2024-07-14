@@ -106,9 +106,20 @@ const Verify = () => {
         ))}
       </View>
 
-      {/* <TouchableOpacity onPress={() => console.log("Forgot Password")}>
-        <Text style={styles.otp}>Didn't receive OTP?</Text>
-      </TouchableOpacity> */}
+      <TouchableOpacity onPress={() => console.log("Forgot Password")}>
+        <Text style={styles.otp}>
+          Didn't receive OTP?{" "}
+          <Text
+            style={{
+              textDecorationLine: "underline",
+              color: COLORS.COMPLIMENTARY,
+            }}
+            onPress={() => navigation.navigate("CompleteProfile")}
+          >
+            Skip
+          </Text>
+        </Text>
+      </TouchableOpacity>
       <PrimaryButton
         value="Verify"
         loading={loading}

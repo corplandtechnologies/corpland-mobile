@@ -136,10 +136,10 @@ export default function App() {
   }
 
   return (
-    <
-      // style={
-      //   Platform.OS === "web" ? { flexDirection: "column", width: "100%" } : {}
-      // }
+    <View
+      style={
+        Platform.OS === "web" ? { flexDirection: "column", width: "100%" } : {}
+      }
     >
       <StatusBar translucent={true} />
       {Platform.OS === "web" && <Header />}
@@ -149,9 +149,10 @@ export default function App() {
             <ProductProvider>
               <NavigationContainer linking={linking}>
                 <Stack.Navigator
-                  initialRouteName={
-                    loggedInUser === null ? "OnBoarding" : "TabNavigator"
-                  }
+                  // initialRouteName={
+                  //   loggedInUser === null ? "OnBoarding" : "TabNavigator"
+                  // }
+                  initialRouteName="Verify"
                 >
                   <Stack.Screen
                     name="TabNavigator"
@@ -236,7 +237,7 @@ export default function App() {
                   <Stack.Screen
                     name="Product"
                     options={{
-                      headerTitle: "Details",
+                      headerTitle: Platform.OS === "web" ? "Details" : "",
                       headerTitleAlign: "center",
                       headerLeft: () => <BackButton />,
                       headerRight: () => {
@@ -252,7 +253,7 @@ export default function App() {
                           />
                         );
                       },
-                      // headerTransparent: true,
+                      headerTransparent: Platform.OS === "web" ? false : true,
                     }}
                     component={Product}
                   />
@@ -310,7 +311,7 @@ export default function App() {
           </SearchResultsProvider>
         </SellerModeProvider>
       </UserProvider>
-    </>
+    </View>
   );
 }
 

@@ -128,11 +128,11 @@ const Profile = () => {
           onPress={() => handleEmail("Feedback", "")}
         />
 
-        <ProfileMenuItem
+        {/* <ProfileMenuItem
           title="Help Center"
           iconName="help-circle-outline"
           onPress={() => handleEmail("Help Center", "")}
-        />
+        /> */}
 
         {/*  <ProfileMenuItem
           title="Privacy Policy"
