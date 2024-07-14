@@ -33,6 +33,7 @@ import { useProduct } from "../context/ProductContext";
 import { useUser } from "../context/UserContext";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Product = ({ route }) => {
   const navigation = useNavigation();
@@ -47,11 +48,28 @@ const Product = ({ route }) => {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { user: currentUser } = useUser();
   const productImages = product?.images || product?.image;
-  console.log("Related Products", relatedProducts);
-  console.log("Current Product", product);
-  console.log("ProductId", productId);
+  const [currentUser, setCurrentUser] = useState({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userInfo = await AsyncStorage.getItem("user");
+        if (userInfo) {
+          const parsedUserInfo = JSON.parse(userInfo);
+          setCurrentUser(parsedUserInfo);
+
+          const res = await getUserById(parsedUserInfo._id);
+          console.log("res", res.data);
+          setUser(res.data.user);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUser();
+  }, [user]);
 
   const showModal = () => {
     setIsModalVisible(true);

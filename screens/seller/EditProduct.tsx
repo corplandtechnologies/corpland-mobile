@@ -255,45 +255,48 @@ const EditProduct = ({ route }) => {
           <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.imageContainer}>
-                  {Platform.OS === "web" ? (
-                    <>
-                      {selectedFiles?.map((image, index) => (
-                        <View key={index} style={styles.imageWrapper}>
-                          <Image
-                            source={{
-                              uri: createObjectURL(image) || image,
-                            }}
-                            style={styles.image}
-                          />
-                          <TouchableOpacity
-                            style={styles.removeImageButton}
-                            onPress={() => removeFile(index)}
-                          >
-                            <Text style={styles.removeImageText}>x</Text>
-                          </TouchableOpacity>
-                        </View>
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      {images.map((image, index) => (
-                        <View key={index} style={styles.imageWrapper}>
-                          <Image
-                            source={{
-                              uri: image.uri || image,
-                            }}
-                            style={styles.image}
-                          />
-                          <TouchableOpacity
-                            style={styles.removeImageButton}
-                            onPress={() => removeImage(index)}
-                          >
-                            <Text style={styles.removeImageText}>x</Text>
-                          </TouchableOpacity>
-                        </View>
-                      ))}
-                    </>
-                  )}
+              {Platform.OS === "web" ? (
+                <>
+                  {selectedFiles?.map((image, index) => (
+                    <View key={index} style={styles.imageWrapper}>
+                      <Image
+                        source={{
+                          uri:
+                            typeof image === "object"
+                              ? createObjectURL(image)
+                              : image,
+                        }}
+                        style={styles.image}
+                      />
+                      <TouchableOpacity
+                        style={styles.removeImageButton}
+                        onPress={() => removeFile(index)}
+                      >
+                        <Text style={styles.removeImageText}>x</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {images.map((image, index) => (
+                    <View key={index} style={styles.imageWrapper}>
+                      <Image
+                        source={{
+                          uri: image.uri || image,
+                        }}
+                        style={styles.image}
+                      />
+                      <TouchableOpacity
+                        style={styles.removeImageButton}
+                        onPress={() => removeImage(index)}
+                      >
+                        <Text style={styles.removeImageText}>x</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </>
+              )}
               {Platform.OS === "web" ? (
                 <>
                   <input
