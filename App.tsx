@@ -136,10 +136,10 @@ export default function App() {
   }
 
   return (
-    <View
-      style={
-        Platform.OS === "web" ? { flexDirection: "column", width: "100%" } : {}
-      }
+    <
+      // style={
+      //   Platform.OS === "web" ? { flexDirection: "column", width: "100%" } : {}
+      // }
     >
       <StatusBar translucent={true} />
       {Platform.OS === "web" && <Header />}
@@ -310,7 +310,7 @@ export default function App() {
           </SearchResultsProvider>
         </SellerModeProvider>
       </UserProvider>
-    </View>
+    </>
   );
 }
 
