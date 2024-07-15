@@ -238,7 +238,7 @@ export default function App() {
                     options={{
                       headerTitle: Platform.OS === "web" ? "Details" : "",
                       headerTitleAlign: "center",
-                      headerLeft: () => <BackButton />,
+                      headerLeft: () => <BackButton details={true} />,
                       headerRight: () => {
                         const { productId } = useProduct();
 
