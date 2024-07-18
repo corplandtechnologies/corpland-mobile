@@ -140,12 +140,12 @@ export default function App() {
   }
 
   return (
-    <View
-      style={
-        Platform.OS === "web" || Platform.OS === "android"
-          ? { flexDirection: "column", width: "100%" }
-          : {}
-      }
+    <
+      // style={
+      //   Platform.OS === "web" || Platform.OS === "android"
+      //     ? { flexDirection: "column", width: "100%" }
+      //     : {}
+      // }
     >
       <StatusBar translucent={true} />
       {Platform.OS === "web" && <Header />}
@@ -263,59 +263,112 @@ export default function App() {
                     component={Product}
                   />
 
-                <Stack.Screen
-                  name="Categories"
-                  options={{
-                    headerTitle: "Categories",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={Categories}
-                />
-                <Stack.Screen
-                  name="EditProfile"
-                  options={{
-                    headerTitle: "",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                  }}
-                  component={EditProfile}
-                />
-                <Stack.Screen
-                  name="EditProduct"
-                  options={{
-                    headerTitle: "Edit Your Product",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                    },
-                  }}
-                  component={EditProduct}
-                />
-                <Stack.Screen
-                  name="MyProducts"
-                  options={{
-                    headerTitle: "My Products",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={MyProducts}
-                />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </ProductProvider>
-        </SearchResultsProvider>
-      </SellerModeProvider>
-    </UserProvider>
+                  <Stack.Screen
+                    name="Categories"
+                    options={{
+                      headerTitle: "Categories",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={Categories}
+                  />
+                  <Stack.Screen
+                    name="EditProfile"
+                    options={{
+                      headerTitle: "",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                    }}
+                    component={EditProfile}
+                  />
+                  <Stack.Screen
+                    name="EditProduct"
+                    options={{
+                      headerTitle: "Edit Your Product",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                      },
+                    }}
+                    component={EditProduct}
+                  />
+                  <Stack.Screen
+                    name="MyProducts"
+                    options={{
+                      headerTitle: "My Products",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={MyProducts}
+                  />
+                  <Stack.Screen
+                    name="Wallet"
+                    options={{
+                      headerTitle: "Wallet",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={Wallet}
+                  />
+                  <Stack.Screen
+                    name="Deposit"
+                    options={{
+                      headerTitle: "Deposit",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={Deposit}
+                  />
+                  <Stack.Screen
+                    name="MyCoupons"
+                    options={{
+                      headerTitle: "My Coupons",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={MyCoupons}
+                  />
+                  <Stack.Screen
+                    name="Redeem"
+                    options={{
+                      headerTitle: "Redeem",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={Redeem}
+                  />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </ProductProvider>
+          </SearchResultsProvider>
+        </SellerModeProvider>
+      </UserProvider>
+    </>
   );
 }
 
