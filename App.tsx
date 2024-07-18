@@ -138,7 +138,9 @@ export default function App() {
   return (
     <View
       style={
-        Platform.OS === "web" ? { flexDirection: "column", width: "100%" } : {}
+        Platform.OS === "web" || Platform.OS === "android"
+          ? { flexDirection: "column", width: "100%" }
+          : {}
       }
     >
       <StatusBar translucent={true} />
