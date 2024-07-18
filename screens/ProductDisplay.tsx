@@ -55,10 +55,7 @@ const ProductDisplay = ({ route }) => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator
-          size="large"
-          color={COLORS.PRIMARY}
-        />
+        <ActivityIndicator size="large" color={COLORS.PRIMARY} />
       </View>
     );
   }

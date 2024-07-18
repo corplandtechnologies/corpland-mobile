@@ -59,11 +59,23 @@ const Register = () => {
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
       await AsyncStorage.setItem("token", res.token);
       setSnackbarVisible(true);
-      setSnackbarMessage(res.message);
+      setSnackbarMessage("Registration Completed Successfully!");
       navigation.navigate("Verify");
     } catch (error) {
       console.log(error);
-      setSnackbarMessage(error.response.data);
+      let errorMessage = "An unexpected error occurred.";
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = error.response.data.message || error.response.statusText;
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = "No response received from the server.";
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = error.message;
+      }
+      setSnackbarMessage(errorMessage);
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -76,22 +88,14 @@ const Register = () => {
         description="Fill your information below or register with your social account"
       />
       <View style={{ gap: 10 }}>
-        <FormInput
-          icon="user"
-          placeholder="Name"
-          onChangeText={setName}
-        />
+        <FormInput icon="user" placeholder="Name" onChangeText={setName} />
         <FormInput
           icon="envelope"
           placeholder="Email"
           onChangeText={setEmail}
         />
         <View style={styles.inputContainer}>
-          <Icon
-            name="lock"
-            type="font-awesome"
-            color={COLORS.GRAY}
-          />
+          <Icon name="lock" type="font-awesome" color={COLORS.GRAY} />
           <TextInput
             placeholder="Password"
             secureTextEntry={!isPasswordVisible}
@@ -101,7 +105,8 @@ const Register = () => {
             cursorColor={COLORS.PRIMARY}
           />
           <TouchableOpacity
-            onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
             <Icon
               name={isPasswordVisible ? "eye-slash" : "eye"}
               type="font-awesome"
@@ -156,11 +161,7 @@ const Register = () => {
         </TouchableOpacity>
       </View> */}
 
-      <AuthOption
-        isRegistered
-        option="Sign In"
-        screen="Login"
-      />
+      <AuthOption isRegistered option="Sign In" screen="Login" />
       <Snackbar
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
@@ -169,7 +170,8 @@ const Register = () => {
           onPress: () => {
             setSnackbarVisible(false);
           },
-        }}>
+        }}
+      >
         {snackbarMessage}
       </Snackbar>
     </View>
@@ -220,6 +222,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
+    outline: "none",
   },
   checkboxContainer: {
     backgroundColor: "transparent",

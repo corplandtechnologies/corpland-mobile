@@ -17,9 +17,14 @@ import Category from "../components/Category";
 import { storeCatergories } from "../data/dummyData";
 import ProductCard from "../components/ProductCard";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { getProducts, getTrendingProducts, searchProducts } from "../api/api";
+import {
+  getProducts,
+  getTrendingProducts,
+  searchProducts,
+} from "../api/api";
 import { Snackbar } from "react-native-paper";
 import { useSearchResults } from "../context/SearchResultsContext";
+import { getStorageItem } from "../utils";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -29,8 +34,21 @@ const Home = () => {
   const { setSearchResults } = useSearchResults();
   const [products, setProducts] = useState([]);
   const [trendingProducts, setTrendingProducts] = useState([]);
-
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const getLoggedInUser = async () => {
+      const user = await getStorageItem("user");
+      console.log("user", user);
+
+      if (!user) {
+        alert("Please Login to continue using Corpland. Thank you!");
+        navigation.navigate("Login");
+        return;
+      }
+    };
+    getLoggedInUser();
+  }, []);
 
   const handleSearch = async () => {
     setLoading(true);
@@ -95,7 +113,8 @@ const Home = () => {
             headerText="Categories"
             onPress={() => {
               navigation.navigate("Categories");
-            }}>
+            }}
+          >
             <View style={styles.catView}>
               {storeCatergories.slice(0, 4).map((category, index) => (
                 <TouchableOpacity
@@ -104,7 +123,8 @@ const Home = () => {
                     navigation.navigate("ProductDisplay", {
                       category: category.category,
                     })
-                  }>
+                  }
+                >
                   <Category
                     iconImagePath={category.iconImagePath}
                     category={category.category}
@@ -116,44 +136,36 @@ const Home = () => {
           <Section
             headerText="Discover"
             onPress={(routeName) => handleSeeAll(routeName, "Discover")}
-            routeName="ProductGrids">
+            routeName="ProductGrids"
+          >
             {loading ? (
-              <ActivityIndicator
-                size="large"
-                color={COLORS.PRIMARY}
-              />
+              <ActivityIndicator size="large" color={COLORS.PRIMARY} />
             ) : (
               <ScrollView
                 horizontal={true}
-                showsHorizontalScrollIndicator={false}>
+                showsHorizontalScrollIndicator={false}
+              >
                 {products?.map((product, index) => (
-                  <ProductCard
-                    key={index}
-                    product={product}
-                  />
+                  <ProductCard key={index} product={product} />
                 ))}
               </ScrollView>
             )}
           </Section>
-          {trendingProducts !== [] && (
+          {trendingProducts?.length > 0 && (
             <Section
               headerText="Trending"
               onPress={(routeName) => handleSeeAll(routeName, "Trending")}
-              routeName="ProductGrids">
+              routeName="ProductGrids"
+            >
               {loading ? (
-                <ActivityIndicator
-                  size="large"
-                  color={COLORS.PRIMARY}
-                />
+                <ActivityIndicator size="large" color={COLORS.PRIMARY} />
               ) : (
                 <ScrollView
                   horizontal={true}
-                  showsHorizontalScrollIndicator={false}>
+                  showsHorizontalScrollIndicator={false}
+                >
                   {trendingProducts?.map((product, index) => (
-                    <ProductCard
-                      key={index}
-                      product={product.product}
-                    />
+                    <ProductCard key={index} product={product.product} />
                   ))}
                 </ScrollView>
               )}
@@ -169,7 +181,8 @@ const Home = () => {
           onPress: () => {
             setSnackbarVisible(false);
           },
-        }}>
+        }}
+      >
         {snackbarMessage}
       </Snackbar>
     </View>

@@ -87,12 +87,12 @@ const ProductGrid: React.FC<ProductItemProps> = ({
         <View>
           <View>
             <Text style={styles.productTitle}>{title}</Text>
-            <ProductStats
+            {/* <ProductStats
               icon={"call"}
               value={dials?.length}
               name="Dials"
               card
-            />
+            /> */}
           </View>
           <View style={styles.userView}>
             <View style={styles.avatarContainer}>

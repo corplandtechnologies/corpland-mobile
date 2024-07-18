@@ -74,7 +74,7 @@ const Verify = () => {
 
       const res = await verifyEmail(data);
       setSnackbarVisible(true);
-      setSnackbarMessage(res.message);
+      setSnackbarMessage("Verification Successful!");
       navigation.navigate("CompleteProfile");
     } catch (error) {
       console.log(error);
@@ -106,9 +106,20 @@ const Verify = () => {
         ))}
       </View>
 
-      {/* <TouchableOpacity onPress={() => console.log("Forgot Password")}>
-        <Text style={styles.otp}>Didn't receive OTP?</Text>
-      </TouchableOpacity> */}
+      <TouchableOpacity onPress={() => console.log("Forgot Password")}>
+        <Text style={styles.otp}>
+          Didn't receive OTP?{" "}
+          <Text
+            style={{
+              textDecorationLine: "underline",
+              color: COLORS.COMPLIMENTARY,
+            }}
+            onPress={() => navigation.navigate("CompleteProfile")}
+          >
+            Skip
+          </Text>
+        </Text>
+      </TouchableOpacity>
       <PrimaryButton
         value="Verify"
         loading={loading}
@@ -123,7 +134,8 @@ const Verify = () => {
           onPress: () => {
             setSnackbarVisible(false);
           },
-        }}>
+        }}
+      >
         {snackbarMessage}
       </Snackbar>
     </View>

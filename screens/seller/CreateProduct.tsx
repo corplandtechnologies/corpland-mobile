@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Platform,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import ScreenContextWrapper from "../../components/ScreenContextWrapper";
@@ -24,12 +25,16 @@ import FormInput from "../../components/ui/FormInput";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useUser } from "../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createObjectURL } from "../../utils";
+import { Linking } from "react-native";
 
 const CreateProduct = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [images, setImages] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState<any>([]);
+  const [imagePreview, setImagePreview] = useState([]);
   const [imageObject, setImageObject] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -43,8 +48,9 @@ const CreateProduct = () => {
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [price, setPrice] = useState("");
   const [user, setUser] = useState<object>({});
-
   const [loading, setLoading] = useState(false);
+
+  console.log("seelcted files", selectedFiles);
 
   const navigation = useNavigation();
 
@@ -69,6 +75,14 @@ const CreateProduct = () => {
       getUserInfo();
     }, [user?._id])
   );
+
+  useEffect(() => {
+    return () => {
+      selectedFiles?.forEach((image) => {
+        URL.revokeObjectURL(createObjectURL(image));
+      });
+    };
+  }, [selectedFiles]);
 
   useEffect(() => {
     const fetchLocationOptions = async () => {
@@ -100,6 +114,22 @@ const CreateProduct = () => {
     fetchLocationOptions();
   }, []);
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      let newImages: any[] = [];
+
+      // Directly iterate over event.target.files which is a FileList
+      Array.from(event.target.files).forEach((file) => {
+        newImages.push(file);
+      });
+
+      const mergedImages = [...selectedFiles, ...newImages];
+      const maxImages = 20;
+      const finalImages: any = mergedImages.slice(0, maxImages);
+
+      setSelectedFiles(finalImages);
+    }
+  };
   const handleCountrySelect = (selectedOption: string) => {
     setSelectedCountry(selectedOption);
     // Update region options based on the selected country
@@ -151,6 +181,11 @@ const CreateProduct = () => {
     newImages.splice(index, 1); // Remove the image at the specified index
     setImages(newImages);
   };
+  const removeFile = (index: number) => {
+    const newImages = [...selectedFiles];
+    newImages.splice(index, 1); // Remove the image at the specified index
+    setSelectedFiles(newImages);
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -170,7 +205,22 @@ const CreateProduct = () => {
         price: price,
         userId: user._id,
       };
-      const response = await createProduct(newProduct);
+      const newWebProduct = {
+        title: title,
+        description: desc,
+        images: selectedFiles,
+        country: selectedCountry,
+        region: selectedRegion,
+        category: selectedCategory,
+        price: price,
+        userId: user._id,
+      };
+
+      console.log("new product", newProduct);
+
+      const response = await createProduct(
+        Platform.OS === "web" ? newWebProduct : newProduct
+      );
       console.log("Product data", newProduct);
       console.log(response.data);
       navigation.navigate("MyProducts");
@@ -202,32 +252,76 @@ const CreateProduct = () => {
             onSelect={(selectedOption) => setSelectedCategory(selectedOption)} // Update the selected category state
           />
           <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.imageContainer}>
-              {images.map((image, index) => (
-                <View
-                  key={index}
-                  style={styles.imageWrapper}>
-                  <Image
-                    source={{ uri: image.uri }}
-                    style={styles.image}
+              {Platform.OS === "web" ? (
+                <>
+                  {selectedFiles?.map((image, index) => (
+                    <View key={index} style={styles.imageWrapper}>
+                      <Image
+                        source={{
+                          uri: createObjectURL(image) || imagePreview,
+                        }}
+                        style={styles.image}
+                      />
+                      <TouchableOpacity
+                        style={styles.removeImageButton}
+                        onPress={() => removeFile(index)}
+                      >
+                        <Text style={styles.removeImageText}>x</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {images.map((image, index) => (
+                    <View key={index} style={styles.imageWrapper}>
+                      <Image
+                        source={{
+                          uri: image.uri || imagePreview,
+                        }}
+                        style={styles.image}
+                      />
+                      <TouchableOpacity
+                        style={styles.removeImageButton}
+                        onPress={() => removeImage(index)}
+                      >
+                        <Text style={styles.removeImageText}>x</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </>
+              )}
+              {Platform.OS === "web" ? (
+                <>
+                  <input
+                    id="productImageUpload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    style={{ display: "none" }} // Hide the default file input
                   />
-                  <TouchableOpacity
-                    style={styles.removeImageButton}
-                    onPress={() => removeImage(index)}>
-                    <Text style={styles.removeImageText}>x</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
-              <TouchableOpacity
-                style={styles.addImageBox}
-                onPress={pickImage}>
-                <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
-                  +
-                </Text>
-              </TouchableOpacity>
+                  <label htmlFor="productImageUpload">
+                    <TouchableOpacity style={styles.addImageBox}>
+                      <Text
+                        style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}
+                      >
+                        +
+                      </Text>
+                    </TouchableOpacity>
+                  </label>
+                </>
+              ) : (
+                <TouchableOpacity
+                  style={styles.addImageBox}
+                  onPress={pickImage}
+                >
+                  <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
+                    +
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </ScrollView>
           <Select
@@ -273,14 +367,25 @@ const CreateProduct = () => {
             />
           </TouchableOpacity>
           <Text style={{ textAlign: "center" }}>
-            By clicking on Product, you accept the Terms of Use , confirm that
-            you will abide by the Safety Tips, and declare that this posting
-            does not include any Prohibited Products.
+            By clicking on Product, you accept the{" "}
+            <Text
+              style={{ textDecorationLine: "underline", color: COLORS.COMPLIMENTARY }}
+              onPress={() =>
+                Linking.openURL(
+                  "https://www.termsfeed.com/live/ba293553-5fc9-4f66-be64-9613b78987e8"
+                )
+              }
+            >
+              Terms of Use
+            </Text>
+            , confirm that you will abide by the Safety Tips, and declare that
+            this posting does not include any Prohibited Products.
           </Text>
           <Snackbar
             visible={snackbarVisible}
             onDismiss={() => setSnackbarVisible(false)}
-            duration={Snackbar.DURATION_SHORT}>
+            duration={Snackbar.DURATION_SHORT}
+          >
             {snackbarMessage}
           </Snackbar>
         </View>

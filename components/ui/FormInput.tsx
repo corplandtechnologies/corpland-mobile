@@ -36,11 +36,7 @@ const FormInput: React.FC<FormInputProps> = ({
   return (
     <View style={styles.main}>
       <View style={[styles.inputContainer, style]}>
-        <FormIcons
-          name={icon}
-          type="font-awesome"
-          color={COLORS.GRAY}
-        />
+        <FormIcons name={icon} type="font-awesome" color={COLORS.GRAY} />
         <TextInput
           placeholder={placeholder}
           style={styles.input}
@@ -56,13 +52,7 @@ const FormInput: React.FC<FormInputProps> = ({
       {isButtoned && (
         <View style={styles.buttonContainer}>
           <Button
-            icon={
-              <Icon
-                name={isButtonedIcon}
-                size={20}
-                color="white"
-              />
-            }
+            icon={<Icon name={isButtonedIcon} size={20} color="white" />}
             onPress={onPress}
             buttonStyle={styles.searchButton}
             loading={loading}
@@ -93,6 +83,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "90%",
+    outline: "none",
   },
   buttonContainer: {
     flex: 1,

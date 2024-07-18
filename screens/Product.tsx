@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Linking,
+  Share,
 } from "react-native";
 import { Avatar, Snackbar } from "react-native-paper";
 import { COLORS } from "../utils/color";
@@ -31,6 +32,8 @@ import ProductItem from "../components/ProductItem";
 import { useProduct } from "../context/ProductContext";
 import { useUser } from "../context/UserContext";
 import ConfirmationModal from "../components/ConfirmationModal";
+import { Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Product = ({ route }) => {
   const navigation = useNavigation();
@@ -45,11 +48,24 @@ const Product = ({ route }) => {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { user: currentUser } = useUser();
   const productImages = product?.images || product?.image;
-  console.log("Related Products", relatedProducts);
-  console.log("Current Product", product);
-  console.log("ProductId", productId);
+  const [currentUser, setCurrentUser] = useState({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userInfo = await AsyncStorage.getItem("user");
+        if (userInfo) {
+          const parsedUserInfo = JSON.parse(userInfo);
+          setCurrentUser(parsedUserInfo);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUser();
+  }, [user]);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -118,24 +134,54 @@ const Product = ({ route }) => {
     setRelatedProducts([]);
   };
 
+  const shareProduct = async () => {
+    const productId = route.params.productId;
+    const productTitle = product?.title || "this product";
+    let shareMessage;
+
+    // Generate a dynamic share link based on the environment
+    const baseUrl =
+      Platform.OS === "web"
+        ? window.location.origin
+        : "https://corpland.corplandtechnologies.com";
+    const fullShareLink = `${baseUrl}/product/${productId}`;
+
+    // Construct the share message including the first image URL if available
+    shareMessage = `Check out ${productTitle}: ${fullShareLink}`;
+
+    if (Platform.OS === "web") {
+      // For web, just copy the link to clipboard
+      navigator.clipboard.writeText(fullShareLink);
+      alert("Link copied to clipboard!");
+    } else {
+      // For mobile, use the Share API
+      Share.share({
+        message: shareMessage,
+        title: `Check out my ${productTitle}`,
+        url: fullShareLink,
+      });
+    }
+  };
+
   const handleCallNow = async () => {
     const phoneNumber = user?.phoneNumber || ""; // Ensure there's a valid phone number
-    const productTitle = product?.title || "this product";
-    const message = `Hello, I am trying to inquire about your ${productTitle}.`;
+    // const productTitle = product?.title || "this product";
+    // const message = `Hello, I am trying to inquire about your ${productTitle}.`;
 
-    // Check if WhatsApp is installed
-    const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
-      message
-    )}`;
-    const canOpen = await Linking.openURL(url);
+    // // Check if WhatsApp is installed
+    // const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
+    //   message
+    // )}`;
+    // const canOpen = await Linking.openURL(url);
 
-    if (canOpen) {
-      // Open WhatsApp
-      Linking.openURL(url);
-    } else {
-      // Fallback to dialer
-      Linking.openURL(`tel:${phoneNumber}`);
-    }
+    // if (canOpen) {
+    //   // Open WhatsApp
+    //   Linking.openURL(url);
+    // } else {
+    //   // Fallback to dialer
+    //   Linking.openURL(`tel:${phoneNumber}`);
+    // }
+    Linking.openURL(`tel:${phoneNumber}`);
 
     try {
       await dialProduct(productId, currentUser?._id);
@@ -163,13 +209,8 @@ const Product = ({ route }) => {
   const renderProductImages = () => {
     const images = product?.images || [];
     return images.map((image: string, index: number) => (
-      <View
-        key={index}
-        style={{ width: Dimensions.get("window").width }}>
-        <Image
-          source={{ uri: image }}
-          style={styles.productImage}
-        />
+      <View key={index} style={{ width: Dimensions.get("window").width }}>
+        <Image source={{ uri: image }} style={styles.productImage} />
       </View>
     ));
   };
@@ -185,11 +226,9 @@ const Product = ({ route }) => {
                   justifyContent: "center",
                   alignItems: "center",
                   ...styles.backgroundImage,
-                }}>
-                <ActivityIndicator
-                  size={50}
-                  color={COLORS.PRIMARY}
-                />
+                }}
+              >
+                <ActivityIndicator size={50} color={COLORS.PRIMARY} />
               </View>
             ) : (
               <View>
@@ -204,7 +243,8 @@ const Product = ({ route }) => {
                     );
                     setCurrentImageIndex(newIndex);
                   }}
-                  scrollEventThrottle={16}>
+                  scrollEventThrottle={16}
+                >
                   {renderProductImages()}
                 </ScrollView>
                 <View style={styles.dotsContainer}>
@@ -225,16 +265,21 @@ const Product = ({ route }) => {
                 <View style={styles.bar}></View>
 
                 {isLoading ? (
-                  <ActivityIndicator
-                    size={20}
-                    color={COLORS.PRIMARY}
-                  />
+                  <ActivityIndicator size={20} color={COLORS.PRIMARY} />
                 ) : (
                   <>
                     <View style={styles.titleView}>
                       <View style={{ flex: 4 }}>
                         <Text style={styles.titleText}>{product?.title}</Text>
                       </View>
+                      <TouchableOpacity>
+                        <Icon
+                          name="share-social"
+                          size={30}
+                          color={COLORS.COMPLIMENTARY}
+                          onPress={shareProduct}
+                        />
+                      </TouchableOpacity>
                       {product?.userId === currentUser?._id && (
                         <View style={styles.iconsView}>
                           <TouchableOpacity
@@ -242,7 +287,8 @@ const Product = ({ route }) => {
                               navigation.navigate("EditProduct", {
                                 product: product,
                               })
-                            }>
+                            }
+                          >
                             <Icon
                               name="create-outline"
                               size={30}
@@ -250,11 +296,7 @@ const Product = ({ route }) => {
                             />
                           </TouchableOpacity>
                           <TouchableOpacity onPress={showModal}>
-                            <Icon
-                              name="trash"
-                              size={30}
-                              color={"red"}
-                            />
+                            <Icon name="trash" size={30} color={"red"} />
                           </TouchableOpacity>
                         </View>
                       )}
@@ -283,7 +325,8 @@ const Product = ({ route }) => {
                             justifyContent: "space-between",
                             maxWidth: "90%",
                             gap: 5,
-                          }}>
+                          }}
+                        >
                           <Text style={styles.AvatarText}>{user?.name}</Text>
                           {user?.verified && (
                             <Icon
@@ -295,19 +338,35 @@ const Product = ({ route }) => {
                         </View>
                       </View>
                     </View>
+                    <View style={styles.bottomContainer}>
+                      <View style={styles.priceView}>
+                        <Text style={styles.priceText}>
+                          GH₵{product?.price}
+                        </Text>
+                      </View>
+                      <View style={styles.CTAView}>
+                        <PrimaryButton
+                          value="Call Now"
+                          icon={
+                            <Icon
+                              name="call-outline"
+                              size={24}
+                              color={COLORS.SECONDARY}
+                            />
+                          }
+                          onPress={handleCallNow}
+                          isIcon
+                        />
+                      </View>
+                    </View>
                   </>
                 )}
                 <View>
                   {relatedProducts && (
-                    <Section
-                      limited
-                      headerText="Related Products">
+                    <Section limited headerText="Related Products">
                       <ScrollView showsHorizontalScrollIndicator={false}>
                         {isLoading ? (
-                          <ActivityIndicator
-                            size={50}
-                            color={COLORS.PRIMARY}
-                          />
+                          <ActivityIndicator size={50} color={COLORS.PRIMARY} />
                         ) : (
                           <>
                             {relatedProducts?.map((result) => (
@@ -334,25 +393,6 @@ const Product = ({ route }) => {
           </View>
         </View>
       </ScrollView>
-      <View style={styles.bottomContainer}>
-        <View style={styles.priceView}>
-          <Text style={styles.priceText}>GH₵{product?.price}</Text>
-        </View>
-        <View style={styles.CTAView}>
-          <PrimaryButton
-            value="Call Now"
-            icon={
-              <Icon
-                name="call-outline"
-                size={24}
-                color={COLORS.SECONDARY}
-              />
-            }
-            onPress={handleCallNow}
-            isIcon
-          />
-        </View>
-      </View>
       <ConfirmationModal
         isVisible={isModalVisible}
         onClose={hideModal}
@@ -363,7 +403,8 @@ const Product = ({ route }) => {
       <Snackbar
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
-        duration={Snackbar.DURATION_SHORT}>
+        duration={Snackbar.DURATION_SHORT}
+      >
         {snackbarMessage}
       </Snackbar>
     </>

@@ -61,11 +61,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
       <View style={styles.contentContainer}>
         <View style={styles.topContent}>
           <Text style={styles.productTitle}>{product.title}</Text>
-          <ProductStats
+          {/* <ProductStats
             icon={"call"}
             value={product.dials.length}
             name="Dials"
-          />
+          /> */}
           <View style={styles.userView}>
             <View style={styles.avatarContainer}>
               {userInfo.profilePicture ? (

@@ -37,10 +37,23 @@ import ProductGrids from "./screens/ProductGrids";
 import NetInfo from "@react-native-community/netinfo";
 import TabNavigator from "./routes/TabNavigator";
 import * as Updates from "expo-updates";
+import { StatusBar } from "expo-status-bar";
+import Header from "./components/Header";
+import { Platform } from "react-native";
 import Wallet from "./screens/Wallet";
 import Deposit from "./screens/Deposit";
 import MyCoupons from "./screens/MyCoupons";
 import Redeem from "./screens/Redeem";
+
+const linking = {
+  prefixes: ["https://corpland.corplandtechnologies.com"],
+  config: {
+    screens: {
+      Product: "product/:productId",
+      // other screens...
+    },
+  },
+};
 
 const Stack = createStackNavigator();
 
@@ -127,118 +140,128 @@ export default function App() {
   }
 
   return (
-    <UserProvider>
-      <SellerModeProvider>
-        <SearchResultsProvider>
-          <ProductProvider>
-            <NavigationContainer>
-              <Stack.Navigator
-                initialRouteName={
-                  loggedInUser === null ? "OnBoarding" : "TabNavigator"
-                }>
-                <Stack.Screen
-                  name="TabNavigator"
-                  options={{ headerShown: false }}
-                  component={TabNavigator}
-                />
-                <Stack.Screen
-                  name="Register"
-                  options={{ headerShown: false }}
-                  component={Register}
-                />
-                <Stack.Screen
-                  name="Login"
-                  options={{
-                    headerShown: false,
-                    headerTitle: "Sign In",
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={Login}
-                />
-                <Stack.Screen
-                  name="OnBoarding"
-                  options={{ headerShown: false }}
-                  component={Onboarding}
-                />
-                <Stack.Screen
-                  name="Verify"
-                  options={{
-                    headerTitle: "",
-                    headerLeft: () => <BackButton />,
-                  }}
-                  component={Verify}
-                />
-                <Stack.Screen
-                  name="CompleteProfile"
-                  options={{
-                    headerTitle: "",
-                    headerLeft: () => <BackButton />,
-                  }}
-                  component={CompleteProfile}
-                />
-                <Stack.Screen
-                  name="ProductDisplay"
-                  component={ProductDisplay}
-                  options={({ route }) => ({
-                    headerTitle: route.params?.category || "Products",
-                    headerLeft: () => <BackButton />,
-                    headerTitleAlign: "center",
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                    },
-                  })}
-                />
-                <Stack.Screen
-                  name="ProductGrids"
-                  options={{
-                    headerTitle: "Products",
-                    headerLeft: () => <BackButton />,
-                    headerTitleAlign: "center",
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                    },
-                  }}
-                  component={ProductGrids}
-                />
-                <Stack.Screen
-                  name="Search"
-                  options={{
-                    headerTitle: "Results",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={Search}
-                />
-                <Stack.Screen
-                  name="Product"
-                  options={{
-                    headerTitle: "Details",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerRight: () => {
-                      const { productId } = useProduct();
+    <View
+      style={
+        Platform.OS === "web" || Platform.OS === "android"
+          ? { flexDirection: "column", width: "100%" }
+          : {}
+      }
+    >
+      <StatusBar translucent={true} />
+      {Platform.OS === "web" && <Header />}
+      <UserProvider>
+        <SellerModeProvider>
+          <SearchResultsProvider>
+            <ProductProvider>
+              <NavigationContainer linking={linking}>
+                <Stack.Navigator
+                  initialRouteName={
+                    loggedInUser === null ? "OnBoarding" : "TabNavigator"
+                  }
+                >
+                  <Stack.Screen
+                    name="TabNavigator"
+                    options={{ headerShown: false }}
+                    component={TabNavigator}
+                  />
+                  <Stack.Screen
+                    name="Register"
+                    options={{ headerShown: false }}
+                    component={Register}
+                  />
+                  <Stack.Screen
+                    name="Login"
+                    options={{
+                      headerShown: false,
+                      headerTitle: "Sign In",
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={Login}
+                  />
+                  <Stack.Screen
+                    name="OnBoarding"
+                    options={{ headerShown: false }}
+                    component={Onboarding}
+                  />
+                  <Stack.Screen
+                    name="Verify"
+                    options={{
+                      headerTitle: "",
+                      headerLeft: () => <BackButton />,
+                    }}
+                    component={Verify}
+                  />
+                  <Stack.Screen
+                    name="CompleteProfile"
+                    options={{
+                      headerTitle: "",
+                      headerLeft: () => <BackButton />,
+                    }}
+                    component={CompleteProfile}
+                  />
+                  <Stack.Screen
+                    name="ProductDisplay"
+                    component={ProductDisplay}
+                    options={({ route }) => ({
+                      headerTitle: route.params?.category || "Products",
+                      headerLeft: () => <BackButton />,
+                      headerTitleAlign: "center",
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                      },
+                    })}
+                  />
+                  <Stack.Screen
+                    name="ProductGrids"
+                    options={{
+                      headerTitle: "Products",
+                      headerLeft: () => <BackButton />,
+                      headerTitleAlign: "center",
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                      },
+                    }}
+                    component={ProductGrids}
+                  />
+                  <Stack.Screen
+                    name="Search"
+                    options={{
+                      headerTitle: "Results",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton />,
+                      headerTitleStyle: {
+                        fontFamily: "InterBold",
+                        // borderWidth:8
+                      },
+                    }}
+                    component={Search}
+                  />
+                  <Stack.Screen
+                    name="Product"
+                    options={{
+                      headerTitle: Platform.OS === "web" ? "Details" : "",
+                      headerTitleAlign: "center",
+                      headerLeft: () => <BackButton details={true} />,
+                      headerRight: () => {
+                        const { productId } = useProduct();
 
-                      return (
-                        <FavoriteIcon
-                          productId={productId} // Use the local state instead of the context
-                          style={{
-                            padding: 15,
-                            // marginRight: 10,
-                          }}
-                        />
-                      );
-                    },
-                    // headerTransparent: true,
-                  }}
-                  component={Product}
-                />
+                        return (
+                          <FavoriteIcon
+                            productId={productId} // Use the local state instead of the context
+                            style={{
+                              padding: 15,
+                              // marginRight: 10,
+                            }}
+                          />
+                        );
+                      },
+                      headerTransparent: Platform.OS === "web" ? false : true,
+                    }}
+                    component={Product}
+                  />
 
                 <Stack.Screen
                   name="Categories"
@@ -286,58 +309,6 @@ export default function App() {
                     },
                   }}
                   component={MyProducts}
-                />
-                <Stack.Screen
-                  name="Wallet"
-                  options={{
-                    headerTitle: "Wallet",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={Wallet}
-                />
-                <Stack.Screen
-                  name="Deposit"
-                  options={{
-                    headerTitle: "Deposit",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={Deposit}
-                />
-                <Stack.Screen
-                  name="MyCoupons"
-                  options={{
-                    headerTitle: "My Coupons",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={MyCoupons}
-                />
-                <Stack.Screen
-                  name="Redeem"
-                  options={{
-                    headerTitle: "Redeem",
-                    headerTitleAlign: "center",
-                    headerLeft: () => <BackButton />,
-                    headerTitleStyle: {
-                      fontFamily: "InterBold",
-                      // borderWidth:8
-                    },
-                  }}
-                  component={Redeem}
                 />
               </Stack.Navigator>
             </NavigationContainer>

@@ -18,7 +18,7 @@ const BackButton: FC<BackButtonProps> = ({ details }) => {
     : {};
   return (
     <TouchableOpacity
-      onPress={() => navigation.goBack()}
+      onPress={() => navigation.goBack() || navigation.navigate("TabNavigator")}
       style={[styles.backButton, detailStyles]}>
       <Icon
         name="arrow-back"

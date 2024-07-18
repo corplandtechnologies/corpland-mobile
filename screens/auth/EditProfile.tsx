@@ -24,6 +24,7 @@ import FormInput from "../../components/ui/FormInput";
 import { useUser } from "../../context/UserContext";
 import Select from "../../components/ui/Select";
 import { regionsByCountry } from "../../data/dummyData";
+import { Platform } from "react-native";
 
 const EditProfile = () => {
   const { user } = useUser();
@@ -40,6 +41,8 @@ const EditProfile = () => {
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [newPassword, setNewPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const navigation = useNavigation();
 
@@ -76,6 +79,16 @@ const EditProfile = () => {
     fetchUser();
   }, []);
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      // Create a URL for the selected file and set it to the previewImage state
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImage(previewUrl);
+    }
+  };
+
   const handlePickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -94,11 +107,16 @@ const EditProfile = () => {
       let data = {
         name: name || userInfo?.name,
         phoneNumber: phoneNumber || userInfo?.phoneNumber,
-        profilePicture: selectedImage || userInfo?.profilePicture,
+        profilePicture:
+          Platform.OS === "web"
+            ? selectedFile || userInfo?.profilePicture
+            : selectedImage || userInfo?.profilePicture,
         country: selectedCountry ? selectedCountry : userInfo?.country,
         region: selectedRegion ? selectedRegion : userInfo?.region,
         userId: userInfo._id,
       };
+
+      console.log("data", data);
 
       const res = await updateUser(data);
       setSnackbarVisible(true);
@@ -133,28 +151,46 @@ const EditProfile = () => {
           description="Don't worry, Only you can see your personal data. No one else would be able to see it."
         />
         <View style={styles.avatarView}>
-          {selectedImage || userInfo?.profilePicture ? (
+          {selectedImage || userInfo?.profilePicture || previewImage ? (
             <>
               <Image
-                source={{ uri: selectedImage || userInfo?.profilePicture }}
+                source={{
+                  uri:
+                    selectedImage || previewImage || userInfo?.profilePicture,
+                }}
                 style={styles.selectedImage}
               />
             </>
           ) : (
             <View style={styles.circleBackground}>
-              <Icon
-                name="user"
-                type="font-awesome"
-                size={30}
-                color="#fff"
-              />
+              <Icon name="user" type="font-awesome" size={30} color="#fff" />
             </View>
           )}
-          <Button
-            title="Change"
-            buttonStyle={styles.editButton}
-            onPress={handlePickImage}
-          />
+          {Platform.OS === "web" ? (
+            <input
+              id="fileUpload"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: "none" }} // Hide the default file input
+            />
+          ) : (
+            <Button
+              title="Change"
+              buttonStyle={styles.editButton}
+              onPress={handlePickImage}
+            />
+          )}
+          {/* Add a label for the hidden file input on web */}
+          {Platform.OS === "web" && (
+            <label htmlFor="fileUpload">
+              <Button
+                title="Change"
+                buttonStyle={styles.editButton}
+                onPress={() => document.getElementById("fileUpload").click()}
+              />
+            </label>
+          )}
         </View>
         <FormInput
           icon="user"
@@ -164,11 +200,7 @@ const EditProfile = () => {
           style={styles.input}
         />
         <View style={styles.inputContainer}>
-          <Icon
-            name="phone"
-            type="font-awesome"
-            color={COLORS.GRAY}
-          />
+          <Icon name="phone" type="font-awesome" color={COLORS.GRAY} />
           <PhoneInput
             initialCountry={"gh"}
             textProps={{
@@ -215,7 +247,8 @@ const EditProfile = () => {
             onPress: () => {
               setSnackbarVisible(false);
             },
-          }}>
+          }}
+        >
           {snackbarMessage}
         </Snackbar>
       </View>
