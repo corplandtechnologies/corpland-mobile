@@ -58,7 +58,6 @@ export default function App() {
   const [isFontLoaded, setFontLoaded] = useState<Boolean>(false);
   const [user, setUser] = useState<Object>({});
   const [loggedInUser, setLoggedInUser] = useState<object | null>(null);
-  console.log(loggedInUser);
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
@@ -136,12 +135,12 @@ export default function App() {
   }
 
   return (
-    <View
-      style={
-        Platform.OS === "web" || Platform.OS === "android"
-          ? { flexDirection: "column", width: "100%" }
-          : {}
-      }
+    <
+      // style={
+      //   Platform.OS === "web" || Platform.OS === "android"
+      //     ? { flexDirection: "column", width: "100%" }
+      //     : {}
+      // }
     >
       <StatusBar translucent={true} />
       {Platform.OS === "web" && <Header />}
@@ -312,7 +311,7 @@ export default function App() {
           </SearchResultsProvider>
         </SellerModeProvider>
       </UserProvider>
-    </View>
+    </>
   );
 }
 

@@ -32,17 +32,6 @@ const ProductGrid: React.FC<ProductItemProps> = ({
 }) => {
   const [isLiked, setIsLiked] = useState<Boolean>(false);
   const [userInfo, setUserInfo] = useState<Object>({});
-  console.log("IMAGES", {
-    image,
-    title,
-    price,
-    region,
-    description,
-    _id,
-    onReset,
-    userId,
-    dials,
-  });
   const navigation = useNavigation();
   const toggleIsLiked = () => {
     setIsLiked(!isLiked);

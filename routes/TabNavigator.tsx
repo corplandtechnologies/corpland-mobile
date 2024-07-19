@@ -37,7 +37,6 @@ export default function TabNavigator() {
     const navigation = useNavigation();
     const [userInfo, setUserInfo] = useState(null);
     const { user } = useUser();
-    console.log("user home", user);
 
     useFocusEffect(
       useCallback(() => {

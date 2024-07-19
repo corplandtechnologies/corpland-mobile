@@ -21,7 +21,6 @@ const MyProducts = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
   const navigation = useNavigation(); // Initialize navigation
-  console.log("user Prods", userProducts);
 
   useFocusEffect(
     useCallback(() => {

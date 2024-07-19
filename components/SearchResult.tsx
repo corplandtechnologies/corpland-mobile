@@ -33,7 +33,6 @@ const SearchResult: React.FC<SearchResultProps> = ({
     setIsLiked(!isLiked);
   };
 
-  console.log("userDetails", userDetails);
 
   const truncatedTitle =
     description.length > 20
@@ -58,11 +57,11 @@ const SearchResult: React.FC<SearchResultProps> = ({
         <View>
           <View>
             <Text style={styles.productTitle}>{title}</Text>
-            <ProductStats
+            {/* <ProductStats
               icon={"call"}
               value={dials.length}
               name="Dials"
-            />
+            /> */}
           </View>
           <View style={styles.userView}>
             <View style={styles.avatarContainer}>

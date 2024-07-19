@@ -12,8 +12,6 @@ import { useSearchResults } from "../context/SearchResultsContext";
 
 const Search = () => {
   const { searchResults } = useSearchResults();
-  console.log(searchResults?.map((item) => item.userDetails));
-  console.log("Search Results", searchResults);
 
   if (searchResults?.length === 0) {
     return (

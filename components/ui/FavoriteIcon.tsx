@@ -35,9 +35,6 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
       getUserInfo();
     }, [])
   );
-  console.log(isFavorite);
-
-  console.log("ProdId", productId);
   useEffect(() => {
     const fetchUserById = async () => {
       try {
@@ -51,10 +48,8 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
   }, [user, productId]);
   const handleToggleFavorites = async () => {
     try {
-      console.log(user?._id, productId);
       const res = await toggleFavorites(user?._id, productId);
       setIsFavorite(!isFavorite);
-      console.log(res.data.user);
     } catch (error) {
       console.log(error);
     }

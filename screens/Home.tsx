@@ -39,8 +39,6 @@ const Home = () => {
   useEffect(() => {
     const getLoggedInUser = async () => {
       const user = await getStorageItem("user");
-      console.log("user", user);
-
       if (!user) {
         alert("Please Login to continue using Corpland. Thank you!");
         navigation.navigate("Login");

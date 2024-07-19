@@ -93,8 +93,6 @@ const CompleteProfile = () => {
             : selectedImage || user?.profilePicture,
         userId: userId,
       };
-      console.log(data);
-
       const res = await completeProfile(data);
       setSnackbarVisible(true);
       setSnackbarMessage(res.data.message);

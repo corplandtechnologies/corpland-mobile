@@ -84,7 +84,6 @@ export const updateUser = async (userData: any) => {
         }
   );
 
-  console.log("user Profile Picture", userData.profilePicture);
 
   formData.append("country", userData.country);
   formData.append("region", userData.region);
@@ -149,7 +148,6 @@ export const createProduct = async (newProduct: any) => {
 
   const token = await AsyncStorage.getItem("token");
 
-  console.log("Formdata", formData);
 
   const config = {
     headers: { "Content-Type": "multipart/form-data" },
@@ -174,12 +172,12 @@ export const updateProduct = async (newProduct: any, id: any) => {
       formData.append("images", image);
     });
   } else {
-    newProduct.images.map((image: any) => {
-      formData.append("images", {
-        uri: image.uri,
-        type: "image/jpeg",
-        name: "productImage.jpg",
-      });
+    newProduct.images.forEach((image: any) => {
+       formData.append("images", {
+         uri: image.uri || image,
+         type: "image/jpeg",
+         name: "productImage.jpg",
+       });
     });
   }
 

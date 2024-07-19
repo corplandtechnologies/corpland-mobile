@@ -95,7 +95,6 @@ const Select = ({
               </View>
               <TouchableOpacity
                 onPress={() => {
-                  console.log("Back icon pressed");
                   setVisible(false);
                 }}>
                 <Icon
@@ -111,7 +110,6 @@ const Select = ({
                   key={index} // It's important to provide a unique key for each child in a list
                   optionText={item}
                   onSelect={() => {
-                    console.log("Option selected:", item);
                     onSelect(item); // Call the passed onSelect function with the selected item
                     setVisible(false); // Close the modal or perform other actions
                   }}

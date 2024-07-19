@@ -28,7 +28,6 @@ const Favorite = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
-  console.log("user", products);
 
   useFocusEffect(
     useCallback(() => {

@@ -50,7 +50,6 @@ const CreateProduct = () => {
   const [user, setUser] = useState<object>({});
   const [loading, setLoading] = useState(false);
 
-  console.log("seelcted files", selectedFiles);
 
   const navigation = useNavigation();
 
@@ -90,18 +89,14 @@ const CreateProduct = () => {
       if (location) {
         // Location granted, proceed as usual
         const country = await getUserCountry(location);
-        console.log(location);
-        console.log(country);
 
         if (country && country in regionsByCountry) {
           // If it is, set locationOptions to the array of regions for that country
           setLocationOptions(
             regionsByCountry[country as keyof typeof regionsByCountry]
           );
-          console.log(locationOptions);
         } else {
           // Default to global locations if user is not in a specific region
-          console.log(regionsByCountry);
         }
       } else {
         // Location refused, set locationRefused to true
@@ -216,13 +211,10 @@ const CreateProduct = () => {
         userId: user._id,
       };
 
-      console.log("new product", newProduct);
 
       const response = await createProduct(
         Platform.OS === "web" ? newWebProduct : newProduct
       );
-      console.log("Product data", newProduct);
-      console.log(response.data);
       navigation.navigate("MyProducts");
       setSnackbarMessage("Product created successfully");
       setSnackbarVisible(true);

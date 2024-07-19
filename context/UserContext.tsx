@@ -25,8 +25,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
   const [userData, setUserData] = useState();
-        console.log("Context User",user);
-
 
   useEffect(() => {
     const fetchUser = async () => {

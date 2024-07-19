@@ -30,14 +30,17 @@ import { createObjectURL } from "../../utils";
 const EditProduct = ({ route }) => {
   const { user } = useUser();
   const product = route.params.product;
-  console.log(product);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [image, setImage] = useState(product.image);
   const [newImages, setNewImages] = useState(product.images);
-  const [images, setImages] = useState([...product?.images]);
-  const [selectedFiles, setSelectedFiles] = useState([...product?.images]);
+  const [images, setImages] = useState([
+    ...(product?.images || []).filter(Boolean),
+  ]);
+  const [selectedFiles, setSelectedFiles] = useState(
+    Platform.OS === "web" ? [...(product?.images || []).filter(Boolean)] : []
+  );
   const [imageObject, setImageObject] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -66,18 +69,14 @@ const EditProduct = ({ route }) => {
       if (location) {
         // Location granted, proceed as usual
         const country = await getUserCountry(location);
-        console.log(location);
-        console.log(country);
 
         if (country && country in regionsByCountry) {
           // If it is, set locationOptions to the array of regions for that country
           setLocationOptions(
             regionsByCountry[country as keyof typeof regionsByCountry]
           );
-          console.log(locationOptions);
         } else {
           // Default to global locations if user is not in a specific region
-          console.log(regionsByCountry);
         }
       } else {
         // Location refused, set locationRefused to true
@@ -90,15 +89,17 @@ const EditProduct = ({ route }) => {
     fetchLocationOptions();
   }, []);
 
-  useEffect(() => {
-    return () => {
-      images.forEach((image) => {
-        if (typeof image === "object") {
-          URL.revokeObjectURL(createObjectURL(image));
-        }
-      });
-    };
-  }, [images]);
+  if (Platform.OS === "web") {
+    useEffect(() => {
+      return () => {
+        selectedFiles.forEach((image) => {
+          if (typeof image === "object") {
+            URL.revokeObjectURL(createObjectURL(image));
+          }
+        });
+      };
+    }, [selectedFiles]);
+  }
 
   const handleCountrySelect = (selectedOption: string) => {
     setSelectedCountry(selectedOption);
@@ -156,7 +157,7 @@ const EditProduct = ({ route }) => {
       }
 
       const mergedImages = [...images, ...newImages];
-      const maxImages = 5; // Adjusted to match CreateProduct.tsx
+      const maxImages = 20;
       const finalImages = mergedImages.slice(0, maxImages);
 
       setImages(finalImages);
@@ -211,7 +212,6 @@ const EditProduct = ({ route }) => {
         Platform.OS === "web" ? newWebProduct : newProduct,
         product._id
       );
-      console.log(response.data);
       navigation.navigate("MyProducts");
       setSnackbarMessage("Product created successfully");
       setSnackbarVisible(true);
@@ -283,7 +283,7 @@ const EditProduct = ({ route }) => {
                     <View key={index} style={styles.imageWrapper}>
                       <Image
                         source={{
-                          uri: image.uri || image,
+                          uri: image?.uri || image,
                         }}
                         style={styles.image}
                       />

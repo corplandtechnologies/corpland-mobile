@@ -195,7 +195,6 @@ const Product = ({ route }) => {
   const handleDelete = async () => {
     try {
       const response = await deleteProduct(productId);
-      console.log(response.data);
       navigation.navigate("MyProducts");
       setSnackbarMessage("Product deleted successfully");
       setSnackbarVisible(true);
