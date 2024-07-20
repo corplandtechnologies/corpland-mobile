@@ -3,6 +3,7 @@ export const COLORS = {
   SECONDARY: "#fff",
   TERTIARY: "#CFCFCF",
   COMPLIMENTARY: "#0074D9",
+  BLUE_LIGHT: "#F0F8FF",
   GRAY: "#808080",
   GRAY_LIGHT: "#E5E4E2",
   TRANSPARENT: "rgba(0,0,0,0.5)",

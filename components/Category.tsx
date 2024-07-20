@@ -10,12 +10,11 @@ const Category: FC<CategoryProps> = ({ category, iconImagePath }) => {
   return (
     <View style={styles.main}>
       <View style={styles.wrapper}>
-        <Image
-          source={iconImagePath}
-          style={styles.catImage}
-        />
+        <Image source={iconImagePath} style={styles.catImage} />
       </View>
-      <Text style={{ fontFamily: "InterMedium", textAlign:"center" }}>{category}</Text>
+      <Text style={{ fontFamily: "InterMedium", textAlign: "center" }}>
+        {category}
+      </Text>
     </View>
   );
 };
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   wrapper: {
-    backgroundColor: COLORS.GRAY_LIGHT,
+    backgroundColor: COLORS.BLUE_LIGHT,
     padding: 30,
     width: 50,
     height: 50,
