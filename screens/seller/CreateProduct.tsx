@@ -50,7 +50,6 @@ const CreateProduct = () => {
   const [user, setUser] = useState<object>({});
   const [loading, setLoading] = useState(false);
 
-
   const navigation = useNavigation();
 
   const handlePriceChange = (text) => {
@@ -185,11 +184,19 @@ const CreateProduct = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      if (!title || !desc || !selectedCountry || !selectedCategory) {
-        setSnackbarMessage("All fields are required");
-        setSnackbarVisible(true);
-        return;
-      }
+          if (
+            !title ||
+            !desc ||
+            !selectedCountry ||
+            !selectedCategory ||
+            (!images.length && !selectedFiles.length)
+          ) {
+            setSnackbarMessage(
+              "All fields are required and at least one image must be added"
+            );
+            setSnackbarVisible(true);
+            return;
+          }
       const newProduct = {
         title: title,
         description: desc,
@@ -210,7 +217,6 @@ const CreateProduct = () => {
         price: price,
         userId: user._id,
       };
-
 
       const response = await createProduct(
         Platform.OS === "web" ? newWebProduct : newProduct
@@ -361,7 +367,10 @@ const CreateProduct = () => {
           <Text style={{ textAlign: "center" }}>
             By clicking on Product, you accept the{" "}
             <Text
-              style={{ textDecorationLine: "underline", color: COLORS.COMPLIMENTARY }}
+              style={{
+                textDecorationLine: "underline",
+                color: COLORS.COMPLIMENTARY,
+              }}
               onPress={() =>
                 Linking.openURL(
                   "https://www.termsfeed.com/live/ba293553-5fc9-4f66-be64-9613b78987e8"
