@@ -33,7 +33,16 @@
       "favicon": "./assets/CORPLAND5.png"
     },
     "owner": "corplandtechnologies",
-    "plugins": ["expo-font"],
+    "plugins": [
+      "expo-font",
+      "expo-build-properties",
+      {
+        "android": {
+          "enableProguardInReleaseBuilds": true,
+          "extraProguardRules": "-keep public class com.horcrux.svg.** {*;} -dontwarn com.google.android.gms.**"
+        }
+      }
+    ],
     "extra": {
       "eas": {
         "projectId": "10827b59-ffb4-4220-a797-4f00a99998bf"
