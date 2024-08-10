@@ -34,14 +34,16 @@
     },
     "owner": "corplandtechnologies",
     "plugins": [
-      "expo-font",
-      "expo-build-properties",
-      {
-        "android": {
-          "enableProguardInReleaseBuilds": true,
-          "extraProguardRules": "-keep public class com.horcrux.svg.** {*;} -dontwarn com.google.android.gms.**"
+      ["expo-font"],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true,
+            "extraProguardRules": "-keep public class com.horcrux.svg.** {*;} -dontwarn com.google.android.gms.**"
+          }
         }
-      }
+      ]
     ],
     "extra": {
       "eas": {
