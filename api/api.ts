@@ -3,7 +3,7 @@ import axios from "axios";
 import { Platform } from "react-native";
 
 export const API = axios.create({
-  baseURL: "https://corplandbackend.onrender.com/api/v1",
+  baseURL: "https://corpland-backend.onrender.com/api/v1",
   withCredentials: true,
 });
 
