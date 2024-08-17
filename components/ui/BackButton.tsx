@@ -8,7 +8,7 @@ interface BackButtonProps {
   details?: any;
 }
 const BackButton: FC<BackButtonProps> = ({ details }) => {
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   const detailStyles = details
     ? {
@@ -19,12 +19,9 @@ const BackButton: FC<BackButtonProps> = ({ details }) => {
   return (
     <TouchableOpacity
       onPress={() => navigation.goBack() || navigation.navigate("TabNavigator")}
-      style={[styles.backButton, detailStyles]}>
-      <Icon
-        name="arrow-back"
-        size={24}
-        color={COLORS.PRIMARY}
-      />
+      style={[styles.backButton, detailStyles]}
+    >
+      <Icon name="arrow-back" size={24} color={COLORS.PRIMARY} />
     </TouchableOpacity>
   );
 };

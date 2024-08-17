@@ -138,3 +138,34 @@ export const productCards = [
 
 
 export const predefinedPrices = [500, 1000, 1500, 2000, 2500];
+
+export const orders = [
+  {
+    _id: 1,
+    transactionId: "#QR45HGJF",
+    orderDate: "16, Sep",
+    total: 25,
+    status: 0,
+  },
+  {
+    _id: 2,
+    transactionId: "#QR45HGJF",
+    orderDate: "16, Sep",
+    total: 25,
+    status: 1,
+  },
+  {
+    _id: 3,
+    transactionId: "#QR45HGJF",
+    orderDate: "16, Sep",
+    total: 25,
+    status: 2,
+  },
+  {
+    _id: 4,
+    transactionId: "#QR45HGJF",
+    orderDate: "16, Sep",
+    total: 25,
+    status: 3,
+  },
+];

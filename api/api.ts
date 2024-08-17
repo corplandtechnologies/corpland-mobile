@@ -3,9 +3,14 @@ import axios from "axios";
 import { Platform } from "react-native";
 
 export const API = axios.create({
-  baseURL: "https://corplandbackend.onrender.com/api/v1",
+  baseURL: "http://192.168.10.158:3000/api/v1",
   withCredentials: true,
 });
+
+// export const API = axios.create({
+//   baseURL: "https://corpland-backend.onrender.com/api/v1",
+//   withCredentials: true,
+// });
 
 const getToken = async () => {
   return await AsyncStorage.getItem("token");
@@ -83,8 +88,6 @@ export const updateUser = async (userData: any) => {
           name: `profilePicture.jpg`,
         }
   );
-
-  console.log("user Profile Picture", userData.profilePicture);
 
   formData.append("country", userData.country);
   formData.append("region", userData.region);
@@ -189,7 +192,6 @@ export const updateProduct = async (newProduct: any, id: any) => {
     headers: { "Content-Type": "multipart/form-data" },
     Authorization: `Bearer ${token}`,
   };
-  console.log("update Product", formData);
   return API.put(`/products/${id}`, formData, config);
 };
 
@@ -226,3 +228,57 @@ export const dialProduct = async (productId: string, userId: string) => {
 };
 export const getFavoriteProducts = (userId: string) =>
   API.get(`/products/favorites/${userId}`);
+
+export const deposit = (
+  email: string,
+  amount: number | string,
+  userId: string
+) =>
+  API.post("/users/initialize-payment", {
+    email: email,
+    amount: amount,
+    userId: userId,
+  });
+
+export const createOrder = (
+  sellerId: string,
+  buyerId: string,
+  productId: string,
+  quantity: number,
+  total: number
+) => API.post("/orders", { sellerId, buyerId, productId, quantity, total });
+
+export const getUserOrders = (userId: string) =>
+  API.get(`/orders/user/${userId}`);
+
+export const updateOrderStatus = (
+  orderId: string,
+  status: number,
+  sellerId?: string,
+  buyerId?: string
+) =>
+  API.put(`/orders/status/${orderId}`, {
+    sellerId,
+    status,
+    buyerId,
+  });
+
+export const createTransferRecipient = (
+  name: string,
+  accountNumber: string,
+  bankCode: string,
+  userId: string
+) =>
+  API.post("/users/create-transfer-recipient", {
+    name,
+    accountNumber,
+    bankCode,
+    userId,
+  });
+
+export const withdrawal = (amount: number, recipient: string, userId: string) =>
+  API.post("/users/initialize-withdrawal", {
+    amount,
+    recipient,
+    userId,
+  });

@@ -50,9 +50,9 @@ const Register = () => {
         termsAccepted,
       });
       const res = await signUp({
-        name,
-        email,
-        password,
+        name: name.trim(),
+        email: email.trim(),
+        password: password.trim(),
         termsAccepted,
       });
       // Assuming user object contains userInfo and token

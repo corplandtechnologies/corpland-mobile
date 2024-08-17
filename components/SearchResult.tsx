@@ -33,7 +33,6 @@ const SearchResult: React.FC<SearchResultProps> = ({
     setIsLiked(!isLiked);
   };
 
-  console.log("userDetails", userDetails);
 
   const truncatedTitle =
     description.length > 20
@@ -45,24 +44,19 @@ const SearchResult: React.FC<SearchResultProps> = ({
     navigation.navigate("Product", { productId: _id });
   };
   return (
-    <TouchableOpacity
-      style={styles.productMain}
-      onPress={productNavigate}>
+    <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
       <View style={{ flex: 1 }}>
-        <Image
-          source={{ uri: image }}
-          style={styles.productImage}
-        />
+        <Image source={{ uri: image }} style={styles.productImage} />
       </View>
       <View style={{ flex: 2, padding: 10, justifyContent: "space-between" }}>
         <View>
           <View>
             <Text style={styles.productTitle}>{title}</Text>
-            <ProductStats
+            {/* <ProductStats
               icon={"call"}
               value={dials.length}
               name="Dials"
-            />
+            /> */}
           </View>
           <View style={styles.userView}>
             <View style={styles.avatarContainer}>
@@ -102,18 +96,16 @@ const SearchResult: React.FC<SearchResultProps> = ({
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-          }}>
+          }}
+        >
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               gap: 2,
-            }}>
-            <Icon
-              name="location"
-              size={20}
-              color={COLORS.GRAY}
-            />
+            }}
+          >
+            <Icon name="location" size={20} color={COLORS.GRAY} />
             <Text style={{ color: COLORS.GRAY, fontFamily: "InterRegular" }}>
               {region}
             </Text>

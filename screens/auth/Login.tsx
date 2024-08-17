@@ -43,15 +43,15 @@ const Login = () => {
         password: password,
       });
       const res = await login({
-        email: email,
-        password: password,
+        email: email.trim(),
+        password: password.trim(),
       });
 
       // Assuming user object contains userInfo and token
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
       await AsyncStorage.setItem("token", res.token);
       setSnackbarVisible(true);
-     setSnackbarMessage("Logged In Successfully!");
+      setSnackbarMessage("Logged In Successfully!");
       navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
       console.log(error);

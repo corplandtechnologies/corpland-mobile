@@ -31,10 +31,10 @@ const CreateAd = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [locationOptions, setLocationOptions] = useState<string[]>([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [locationRefused, setLocationRefused] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [locationRefused, setLocationRefused] = useState<boolean>(false);
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [countryOptions, setCountryOptions] = useState<string[]>([]);
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -47,18 +47,14 @@ const CreateAd = () => {
       if (location) {
         // Location granted, proceed as usual
         const country = await getUserCountry(location);
-        console.log(location);
-        console.log(country);
 
         if (country && country in regionsByCountry) {
           // If it is, set locationOptions to the array of regions for that country
           setLocationOptions(
             regionsByCountry[country as keyof typeof regionsByCountry]
           );
-          console.log(locationOptions);
         } else {
           // Default to global locations if user is not in a specific region
-          console.log(regionsByCountry);
         }
       } else {
         // Location refused, set locationRefused to true
@@ -89,8 +85,6 @@ const CreateAd = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log(result);
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       setImageObject(result.assets[0]);
@@ -120,7 +114,6 @@ const CreateAd = () => {
         phoneNumber: phoneNumber,
       };
       const response = await createAd(newAd);
-      console.log(response.data);
       navigation.navigate("Home");
       setSnackbarMessage("Ad created successfully");
       setSnackbarVisible(true);

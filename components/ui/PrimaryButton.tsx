@@ -5,11 +5,14 @@ import { COLORS } from "../../utils/color";
 
 interface primaryButtonProps {
   value: string;
-  onPress?: () => void;
+  onPress?: any;
   disabled?: boolean;
   loading?: boolean;
-  icon?: string | JSX.Element;
+  icon?: string | JSX.Element | any;
   isIcon?: boolean;
+  secondary?: boolean;
+  fontFamily?: string;
+  style?: any;
 }
 
 const PrimaryButton: FC<primaryButtonProps> = ({
@@ -19,27 +22,40 @@ const PrimaryButton: FC<primaryButtonProps> = ({
   loading,
   icon,
   isIcon,
+  secondary,
+  fontFamily,
+  style,
 }) => {
   return (
     <Button
       title={value}
-      buttonStyle={styles.primaryButton}
+      buttonStyle={{
+        backgroundColor: secondary ? COLORS.BLUE_LIGHT : COLORS.COMPLIMENTARY,
+        padding: 20,
+      }}
+      containerStyle={[
+        {
+          backgroundColor: secondary ? COLORS.BLUE_LIGHT : COLORS.COMPLIMENTARY,
+          borderRadius: 10,
+        },
+        style,
+      ]}
       onPress={onPress}
       disabled={disabled}
       loading={loading}
       icon={icon}
-      titleStyle={isIcon ? { marginLeft: 10 } : {}}
+      titleStyle={
+        isIcon
+          ? { marginLeft: 10 }
+          : {
+              color: secondary ? COLORS.COMPLIMENTARY : COLORS.SECONDARY,
+              fontFamily: fontFamily ? fontFamily : "InterMedium",
+            }
+      }
     />
   );
 };
 
 export default PrimaryButton;
 
-const styles = StyleSheet.create({
-  primaryButton: {
-    backgroundColor: COLORS.COMPLIMENTARY,
-    padding: 20,
-    borderRadius: 10,
-    marginTop: 10,
-  },
-});
+const styles = StyleSheet.create({});

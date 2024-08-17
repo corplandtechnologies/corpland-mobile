@@ -32,17 +32,6 @@ const ProductGrid: React.FC<ProductItemProps> = ({
 }) => {
   const [isLiked, setIsLiked] = useState<Boolean>(false);
   const [userInfo, setUserInfo] = useState<Object>({});
-  console.log("IMAGES", {
-    image,
-    title,
-    price,
-    region,
-    description,
-    _id,
-    onReset,
-    userId,
-    dials,
-  });
   const navigation = useNavigation();
   const toggleIsLiked = () => {
     setIsLiked(!isLiked);
@@ -70,18 +59,12 @@ const ProductGrid: React.FC<ProductItemProps> = ({
       }
     };
     fetchUser();
-  }, []);
+  }, [userId]);
 
-  useEffect(() => {}, [_id]);
   return (
-    <TouchableOpacity
-      style={styles.productMain}
-      onPress={productNavigate}>
+    <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
       <View style={{ flex: 1 }}>
-        <Image
-          source={{ uri: image }}
-          style={styles.productImage}
-        />
+        <Image source={{ uri: image }} style={styles.productImage} />
       </View>
       <View style={{ flex: 1, padding: 10, justifyContent: "space-between" }}>
         <View>
@@ -116,7 +99,8 @@ const ProductGrid: React.FC<ProductItemProps> = ({
                   maxWidth: "90%",
                   flexWrap: "wrap",
                   gap: 5,
-                }}>
+                }}
+              >
                 <Text style={styles.AvatarText}>{userInfo.name}</Text>
                 {userInfo.verified && (
                   <Icon
@@ -146,24 +130,23 @@ const ProductGrid: React.FC<ProductItemProps> = ({
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-          }}>
+          }}
+        >
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               gap: 2,
-            }}>
-            <Icon
-              name="location"
-              size={10}
-              color={COLORS.GRAY}
-            />
+            }}
+          >
+            <Icon name="location" size={10} color={COLORS.GRAY} />
             <Text
               style={{
                 color: COLORS.GRAY,
                 fontFamily: "InterRegular",
                 fontSize: 11,
-              }}>
+              }}
+            >
               {region}
             </Text>
           </View>

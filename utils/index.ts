@@ -13,3 +13,15 @@ export const getStorageItem = async (item: string) => {
 export const createObjectURL = (file: any) => {
   return URL.createObjectURL(file);
 };
+
+export const handleError = (error: any) => {
+  let errorMessage = "An unexpected error occurred.";
+  if (error.response) {
+    errorMessage = error.response.data.message || error.response.statusText;
+  } else if (error.request) {
+    errorMessage = "No response received from the server.";
+  } else {
+    errorMessage = error.message;
+  }
+  return errorMessage;
+};

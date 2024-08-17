@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS } from "../utils/color";
@@ -20,41 +20,43 @@ import { useUser } from "../context/UserContext";
 import { getUserById } from "../api/api";
 import Favorite from "../screens/Favorite";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import WalletBox from "../components/WalletBox";
+import Orders from "../screens/Orders/Orders";
+import { useApp } from "../context/AppContext";
 
 const Tab = createBottomTabNavigator();
 
 const BadgedIcon = withBadge(0)(Icon);
 
 export default function TabNavigator() {
+  const { user, setUser } = useApp();
   const [isRequest, setIsRequest] = useState(false);
   const { isSellerMode, toggleSellerMode } = useSellerMode();
-  const [loading, setLoading] = useState<Boolean>(false);
+  // const [user, setUser] = useState(null);
+  console.log(user);
 
   const onToggleSwitch = () => setIsRequest(!isRequest);
 
+  const getUserInfo = async () => {
+    try {
+      const parsedUserInfo: any = JSON.parse(
+        (await AsyncStorage.getItem("user")) || "{}"
+      );
+      const res = await getUserById(parsedUserInfo?._id);
+      setUser(res?.data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useFocusEffect(
+    useCallback(() => {
+      getUserInfo();
+    }, [])
+  );
   // Custom header left component for Home screen
   const CustomHeaderLeft = () => {
     const navigation = useNavigation();
-    const [userInfo, setUserInfo] = useState(null);
-    const { user } = useUser();
-    console.log("user home", user);
 
-    useFocusEffect(
-      useCallback(() => {
-        const getUserInfo = async () => {
-          try {
-            const parsedUserInfo = JSON.parse(
-              (await AsyncStorage.getItem("user")) || "{}"
-            );
-            const res = await getUserById(parsedUserInfo?._id);
-            setUserInfo(res?.data.user);
-          } catch (error) {
-            console.log(error);
-          }
-        };
-        getUserInfo();
-      }, [user?._id])
-    );
     return (
       <View style={{ paddingLeft: 10 }}>
         <Text style={{ color: COLORS.TERTIARY }}>Location</Text>
@@ -64,16 +66,13 @@ export default function TabNavigator() {
             alignItems: "center",
             justifyContent: "center",
             gap: 2,
-          }}>
-          <Icon
-            name="location"
-            size={20}
-            color={COLORS.COMPLIMENTARY}
-          />
+          }}
+        >
+          <Icon name="location" size={20} color={COLORS.COMPLIMENTARY} />
           <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
-            {userInfo ? (
+            {user ? (
               <Text style={{ color: COLORS.PRIMARY, fontFamily: "InterBold" }}>
-                {userInfo?.region},{userInfo?.country}
+                {user?.region},{user?.country}
               </Text>
             ) : (
               <Text style={{ color: COLORS.PRIMARY, fontFamily: "InterBold" }}>
@@ -81,39 +80,36 @@ export default function TabNavigator() {
               </Text>
             )}
           </TouchableOpacity>
-          <Icon
-            name="chevron-down"
-            size={20}
-            color={COLORS.PRIMARY}
-          />
+          <Icon name="chevron-down" size={20} color={COLORS.PRIMARY} />
         </View>
       </View>
     );
   };
 
   const CustomHeaderRight = () => (
-    <View style={{ paddingRight: 10 }}>
-      <BadgedIcon
-        name="notifications"
-        type="ionicon"
-        size={25}
-      />
+    <View
+      style={{
+        paddingRight: 10,
+        flexDirection: "row",
+        gap: 10,
+        alignItems: "center",
+      }}
+    >
+      {/* <WalletBox /> */}
+      <BadgedIcon name="notifications" type="ionicon" size={25} />
     </View>
   );
 
   return (
     <Tab.Navigator
-      screenOptions={{ tabBarActiveTintColor: COLORS.COMPLIMENTARY }}>
+      screenOptions={{ tabBarActiveTintColor: COLORS.COMPLIMENTARY }}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon
-              name="home"
-              color={color}
-              size={size}
-            />
+            <Icon name="home" color={color} size={size} />
           ),
           headerTitle: "",
           headerLeft: () => <CustomHeaderLeft />,
@@ -126,20 +122,12 @@ export default function TabNavigator() {
         // component={isSellerMode ? CreateProduct : CreateRequest}
         options={({ route }) => ({
           tabBarIcon: ({ color, size }) => (
-            <Icon
-              name="heart"
-              color={color}
-              size={size}
-            />
+            <Icon name="heart" color={color} size={size} />
           ),
           // headerTitle: isSellerMode ? "Post a Product" : "Make a Request",
           headerTitle: "Favorites",
           headerTitleStyle: {
             fontFamily: "InterBold",
-          },
-
-          headerTitleStyle: {
-            fontFamily: "InterMedium",
           },
           headerRight: () => (
             <View style={{ marginRight: 10 }}>
@@ -160,17 +148,13 @@ export default function TabNavigator() {
         // component={isSellerMode ? CreateProduct : CreateRequest}
         options={({ route }) => ({
           tabBarIcon: ({ color, size }) => (
-            <Icon
-              name="add-circle"
-              color={color}
-              size={size}
-            />
+            <Icon name="add-circle" color={color} size={size} />
           ),
           // headerTitle: isSellerMode ? "Post a Product" : "Make a Request",
           headerTitle: "Post a Product",
 
           headerTitleStyle: {
-            fontFamily: "InterMedium",
+            fontFamily: "InterBold",
           },
           headerRight: () => (
             <View style={{ marginRight: 10 }}>
@@ -187,17 +171,31 @@ export default function TabNavigator() {
       />
 
       <Tab.Screen
+        name="Orders"
+        component={Orders}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="bag" color={color} size={size} />
+          ),
+          headerTitle: "My Orders",
+          headerTitleStyle: {
+            fontFamily: "InterBold",
+          },
+          headerLeft: () => <BackButton />,
+          headerTitleAlign: "center",
+        }}
+      />
+      <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon
-              name="person"
-              color={color}
-              size={size}
-            />
+            <Icon name="person" color={color} size={size} />
           ),
           headerTitle: "Profile",
+          headerTitleStyle: {
+            fontFamily: "InterBold",
+          },
           headerLeft: () => <BackButton />,
           headerTitleAlign: "center",
         }}

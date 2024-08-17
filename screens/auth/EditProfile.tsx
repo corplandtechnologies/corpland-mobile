@@ -46,8 +46,6 @@ const EditProfile = () => {
 
   const navigation = useNavigation();
 
-  console.log(user);
-
   useFocusEffect(
     useCallback(() => {
       const getUserInfo = async () => {

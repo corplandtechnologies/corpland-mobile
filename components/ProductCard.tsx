@@ -25,19 +25,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const navigation = useNavigation();
-  useFocusEffect(
-    useCallback(() => {
-      const fetchUser = async () => {
-        try {
-          const res = await getUserById(product.userId);
-          setUserInfo(res.data.user);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchUser();
-    }, [])
-  );
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getUserById(product.userId);
+        setUserInfo(res.data.user);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUser();
+  }, [product?.userId]);
   const truncatedDesc =
     product.description?.length > 20
       ? `${product.description.substring(0, 20)}...`
@@ -51,9 +49,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
   };
 
   return (
-    <TouchableOpacity
-      style={styles.productMain}
-      onPress={productNavigate}>
+    <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
       <Image
         source={{ uri: product?.image || product?.images[0] }}
         style={styles.productImage}
@@ -88,7 +84,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
                   justifyContent: "center",
                   maxWidth: "90%",
                   gap: 5,
-                }}>
+                }}
+              >
                 <Text style={styles.AvatarText}>{userInfo.name}</Text>
                 {userInfo.verified && (
                   <Icon
@@ -105,11 +102,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
 
         <View style={styles.bottomContent}>
           <View style={styles.locationContainer}>
-            <Icon
-              name="location"
-              size={20}
-              color={COLORS.GRAY}
-            />
+            <Icon name="location" size={20} color={COLORS.GRAY} />
             <Text style={{ color: COLORS.GRAY, fontFamily: "InterRegular" }}>
               {product.region}
             </Text>

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../utils/color";
@@ -17,11 +18,7 @@ import Category from "../components/Category";
 import { storeCatergories } from "../data/dummyData";
 import ProductCard from "../components/ProductCard";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import {
-  getProducts,
-  getTrendingProducts,
-  searchProducts,
-} from "../api/api";
+import { getProducts, getTrendingProducts, searchProducts } from "../api/api";
 import { Snackbar } from "react-native-paper";
 import { useSearchResults } from "../context/SearchResultsContext";
 import { getStorageItem } from "../utils";
@@ -34,12 +31,12 @@ const Home = () => {
   const { setSearchResults } = useSearchResults();
   const [products, setProducts] = useState([]);
   const [trendingProducts, setTrendingProducts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
     const getLoggedInUser = async () => {
       const user = await getStorageItem("user");
-      console.log("user", user);
 
       if (!user) {
         alert("Please Login to continue using Corpland. Thank you!");
@@ -72,21 +69,21 @@ const Home = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await getProducts();
-        const res = await getTrendingProducts();
-        setProducts(response.data);
-        setTrendingProducts(res.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await getProducts();
+      const res = await getTrendingProducts();
+      setProducts(response.data);
+      setTrendingProducts(res.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchProducts();
   }, []);
 
@@ -96,7 +93,23 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              try {
+                fetchProducts();
+                setRefreshing(false);
+              } catch (error) {
+                setRefreshing(false);
+              }
+            }}
+          />
+        }
+      >
         {/* <UserInfo navigation={navigation} /> */}
         <FormInput
           icon="search"

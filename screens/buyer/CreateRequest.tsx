@@ -58,18 +58,14 @@ const CreateRequest = () => {
       if (location) {
         // Location granted, proceed as usual
         const country = await getUserCountry(location);
-        console.log(location);
-        console.log(country);
 
         if (country && country in regionsByCountry) {
           // If it is, set locationOptions to the array of regions for that country
           setLocationOptions(
             regionsByCountry[country as keyof typeof regionsByCountry]
           );
-          console.log(locationOptions);
         } else {
           // Default to global locations if user is not in a specific region
-          console.log(regionsByCountry);
         }
       } else {
         // Location refused, set locationRefused to true
@@ -133,7 +129,6 @@ const CreateRequest = () => {
         userId: user._id,
       };
       const response = await createRequest(newRequest);
-      console.log(response.data);
       navigation.navigate("Home");
       setSnackbarMessage("Request created successfully");
       setSnackbarVisible(true);

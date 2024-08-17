@@ -15,6 +15,8 @@ const WalletModal: React.FC<walletModalProps> = ({
   placeholder,
   icon,
   keyboardType,
+  onChangeText,
+  loading,
 }) => {
   return (
     <View style={styles.walletWrapper}>
@@ -25,21 +27,18 @@ const WalletModal: React.FC<walletModalProps> = ({
             <Text style={styles.walletFunds}>GH₵ {balance}.00</Text>
           </View>
           <View style={styles.walletIcon}>
-            <Icon
-              name="wallet"
-              color={COLORS.COMPLIMENTARY}
-              size={36}
-            />
+            <Icon name="wallet" color={COLORS.COMPLIMENTARY} size={36} />
           </View>
         </View>
       )}
       {isDeposit && (
-        <View style={styles.addMoneyView}>
+        <View>
           <View>
             <FormInput
               icon={icon}
               placeholder={placeholder}
               keyboardType={keyboardType}
+              onChangeText={onChangeText}
             />
           </View>
         </View>
@@ -48,6 +47,7 @@ const WalletModal: React.FC<walletModalProps> = ({
         <PrimaryButton
           value={actionButtonText}
           onPress={onPress}
+          loading={loading}
         />
       </View>
     </View>

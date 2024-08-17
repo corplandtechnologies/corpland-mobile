@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -34,9 +34,12 @@ import { useUser } from "../context/UserContext";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useApp } from "../context/AppContext";
+import CartContext from "../context/CartContext";
 
 const Product = ({ route }) => {
-  const navigation = useNavigation();
+  const { user: currentUser } = useApp();
+  const navigation: any = useNavigation();
   const { setProductId } = useProduct();
   const { searchResults } = useSearchResults();
   const productId = route.params.productId;
@@ -49,23 +52,20 @@ const Product = ({ route }) => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const productImages = product?.images || product?.image;
-  const [currentUser, setCurrentUser] = useState({});
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userInfo = await AsyncStorage.getItem("user");
-        if (userInfo) {
-          const parsedUserInfo = JSON.parse(userInfo);
-          setCurrentUser(parsedUserInfo);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+  const { addProductToCart }: any = useContext(CartContext);
+  const handleBuyNow = () => {
+    const productDetails = {
+      _id: product._id,
+      title: product.title,
+      image: product.images[0],
+      category: product.category,
+      price: product.price,
+      quantity: 1,
+      sellerId: product.userId,
     };
-
-    fetchUser();
-  }, [user]);
+    addProductToCart(productDetails);
+    navigation.navigate("Cart");
+  };
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -195,7 +195,6 @@ const Product = ({ route }) => {
   const handleDelete = async () => {
     try {
       const response = await deleteProduct(productId);
-      console.log(response.data);
       navigation.navigate("MyProducts");
       setSnackbarMessage("Product deleted successfully");
       setSnackbarVisible(true);
@@ -214,6 +213,7 @@ const Product = ({ route }) => {
       </View>
     ));
   };
+
   return (
     <>
       <ScrollView contentContainerStyle={{ backgroundColor: COLORS.SECONDARY }}>
@@ -272,33 +272,28 @@ const Product = ({ route }) => {
                       <View style={{ flex: 4 }}>
                         <Text style={styles.titleText}>{product?.title}</Text>
                       </View>
-                      <TouchableOpacity>
-                        <Icon
-                          name="share-social"
-                          size={30}
-                          color={COLORS.COMPLIMENTARY}
-                          onPress={shareProduct}
-                        />
-                      </TouchableOpacity>
+                      <View style={styles.actionView}>
+                        <TouchableOpacity>
+                          <Icon
+                            name="share-social"
+                            size={30}
+                            color={COLORS.COMPLIMENTARY}
+                            onPress={shareProduct}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                          <Icon
+                            name="call"
+                            size={30}
+                            color={COLORS.COMPLIMENTARY}
+                            onPress={handleCallNow}
+                          />
+                        </TouchableOpacity>
+                      </View>
                       {product?.userId === currentUser?._id && (
-                        <View style={styles.iconsView}>
-                          <TouchableOpacity
-                            onPress={() =>
-                              navigation.navigate("EditProduct", {
-                                product: product,
-                              })
-                            }
-                          >
-                            <Icon
-                              name="create-outline"
-                              size={30}
-                              color={COLORS.COMPLIMENTARY}
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity onPress={showModal}>
-                            <Icon name="trash" size={30} color={"red"} />
-                          </TouchableOpacity>
-                        </View>
+                        <TouchableOpacity onPress={showModal}>
+                          <Icon name="trash" size={30} color={"red"} />
+                        </TouchableOpacity>
                       )}
                     </View>
                     <View>
@@ -345,18 +340,41 @@ const Product = ({ route }) => {
                         </Text>
                       </View>
                       <View style={styles.CTAView}>
-                        <PrimaryButton
-                          value="Call Now"
-                          icon={
-                            <Icon
-                              name="call-outline"
-                              size={24}
-                              color={COLORS.SECONDARY}
+                        {currentUser?._id === product?.userId ? (
+                          <>
+                            <PrimaryButton
+                              value="Edit Product"
+                              icon={
+                                <Icon
+                                  name="create"
+                                  size={24}
+                                  color={COLORS.SECONDARY}
+                                />
+                              }
+                              onPress={() =>
+                                navigation.navigate("EditProduct", {
+                                  product: product,
+                                })
+                              }
+                              isIcon
                             />
-                          }
-                          onPress={handleCallNow}
-                          isIcon
-                        />
+                          </>
+                        ) : (
+                          <>
+                            <PrimaryButton
+                              value="Buy Now"
+                              icon={
+                                <Icon
+                                  name="bag"
+                                  size={24}
+                                  color={COLORS.SECONDARY}
+                                />
+                              }
+                              onPress={handleBuyNow}
+                              isIcon
+                            />
+                          </>
+                        )}
                       </View>
                     </View>
                   </>
@@ -509,6 +527,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 10, // Adjust this value as needed
     width: "100%",
+  },
+  actionView: {
+    flexDirection: "row",
+    gap: 10,
   },
 });
 

@@ -21,14 +21,14 @@ import ProductGrid from "../components/ProductGrid";
 import { getFavoriteProducts, getProducts } from "../api/api";
 import { COLORS } from "../utils/color";
 import { useUser } from "../context/UserContext";
+import { useApp } from "../context/AppContext";
 
 const Favorite = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useUser();
-  console.log("user", products);
+  const { user } = useApp();
 
   useFocusEffect(
     useCallback(() => {
@@ -67,10 +67,7 @@ const Favorite = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator
-          size="large"
-          color={COLORS.PRIMARY}
-        />
+        <ActivityIndicator size="large" color={COLORS.PRIMARY} />
       </View>
     );
   }

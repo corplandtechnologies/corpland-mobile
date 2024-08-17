@@ -13,7 +13,6 @@ const SearchResultsContext = createContext<SearchResultsContextType>({
 
 export const SearchResultsProvider = ({ children }: { children: React.ReactNode }) => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  console.log(searchResults);
 
   return (
     <SearchResultsContext.Provider value={{ searchResults, setSearchResults }}>

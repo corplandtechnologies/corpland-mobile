@@ -22,29 +22,12 @@ import { useSellerMode } from "../context/SellerModeContext";
 import { useUser } from "../context/UserContext";
 import ProductCard from "../components/ProductCard";
 import ConfirmationModal from "../components/ConfirmationModal";
+import { useApp } from "../context/AppContext";
 
 const Profile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { isSellerMode, toggleSellerMode } = useSellerMode();
-  const [userInfo, setUserInfo] = useState({});
-  const { user } = useUser();
-
-  useFocusEffect(
-    React.useCallback(() => {
-      const fetchData = async () => {
-        try {
-          const userInfo = await AsyncStorage.getItem("user");
-          const parsedUserInfo = JSON.parse(userInfo || "{}");
-          const res = await getUserById(parsedUserInfo?._id);
-          setUserInfo(res.data?.user);
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
-        }
-      };
-
-      fetchData();
-    }, [])
-  );
+  const { user } = useApp();
 
   const navigation = useNavigation();
 
@@ -61,6 +44,7 @@ const Profile = () => {
       await AsyncStorage.removeItem("user");
       await AsyncStorage.removeItem("token");
       navigation.navigate("Login");
+      setIsModalVisible(false);
     } catch (error) {
       console.log(error);
     }
@@ -76,10 +60,7 @@ const Profile = () => {
   return (
     <View style={styles.headerView}>
       <View style={styles.avatarContainer}>
-        <Avatar.Image
-          size={100}
-          source={{ uri: userInfo?.profilePicture }}
-        />
+        <Avatar.Image size={100} source={{ uri: user?.profilePicture }} />
         <View
           style={{
             flexDirection: "row",
@@ -87,9 +68,10 @@ const Profile = () => {
             maxWidth: "90%",
             flexWrap: "wrap",
             gap: 5,
-          }}>
-          <Text style={styles.AvatarText}>{userInfo?.name}</Text>
-          {userInfo.verified && (
+          }}
+        >
+          <Text style={styles.AvatarText}>{user?.name}</Text>
+          {user?.verified && (
             <Icon
               name="checkmark-circle"
               size={18}
@@ -103,7 +85,8 @@ const Profile = () => {
         <Switch
           value={isSellerMode}
           onValueChange={toggleSellerMode}
-          color={COLORS.COMPLIMENTARY}
+          color={COLORS.BLUE_LIGHT}
+          trackColor={COLORS.PRIMARY}
         />
       </View> */}
       <View style={{ marginTop: 20 }}>
@@ -121,6 +104,11 @@ const Profile = () => {
           title="Wallet"
           iconName="wallet-outline"
           onPress={() => navigation.navigate("Wallet")}
+        />
+        <ProfileMenuItem
+          title="Withdraw"
+          iconName="card-outline"
+          onPress={() => navigation.navigate("Withdraw")}
         />
         <ProfileMenuItem
           title="My Coupons"
@@ -188,13 +176,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: COLORS.TERTIARY,
+    backgroundColor: COLORS.COMPLIMENTARY,
     paddingHorizontal: 15,
     marginVertical: 10,
     borderRadius: 10,
   },
   modeText: {
     fontFamily: "InterBold",
+    color: COLORS.SECONDARY,
   },
   modalContainer: {
     flex: 1,

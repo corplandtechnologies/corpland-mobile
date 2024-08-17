@@ -9,8 +9,30 @@ export interface walletModalProps {
   balance: number | string;
   onPress: () => void;
   actionButtonText: string;
-  isWallet: boolean;
+  isWallet?: boolean;
   placeholder: string;
   icon: string;
-  keyboardType: string;
+  keyboardType?: string;
+  onChangeText?: (text: any) => void;
+  loading?: boolean;
+}
+
+export interface BadgeProps {
+  bgColor: string;
+  text: string;
+  isOrder?: boolean;
+}
+
+export interface ViewProps {
+  children: React.ReactNode;
+  style?: any;
+  padding?: number;
+}
+
+export interface TextProps {
+  children: React.ReactNode;
+  fontFamily?: string;
+  fontSize?: number;
+  color?: string;
+  textAlign?: string;
 }
