@@ -162,7 +162,9 @@ export default function App() {
                 <ProductProvider>
                   <NavigationContainer linking={linking}>
                     <Stack.Navigator
-                      initialRouteName={!user ? "OnBoarding" : "TabNavigator"}
+                      initialRouteName={
+                        user === null ? "OnBoarding" : "TabNavigator"
+                      }
                     >
                       <Stack.Screen
                         name="TabNavigator"
