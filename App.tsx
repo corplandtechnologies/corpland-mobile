@@ -95,7 +95,7 @@ export default function App() {
 
   const reactToUpdates = () => {
     Updates.addUpdatesStateChangeListener((event: any) => {
-      if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
+      if (event.type === Updates.UpdateEventType?.UPDATE_AVAILABLE) {
         alert(
           "We are restarting the app in a few seconds in order to allow the latest update take effect"
         );

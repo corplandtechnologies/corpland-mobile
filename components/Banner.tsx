@@ -164,8 +164,10 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { COLORS } from "../utils/color";
 import AnimatedView from "./animated/AnimatedView";
+import { useNavigation } from "@react-navigation/native";
 
 const Banner = () => {
+  const navigation: any = useNavigation();
   return (
     <AnimatedView>
       <View style={styles.discover}>
@@ -176,7 +178,9 @@ const Banner = () => {
           </Text>
           <TouchableOpacity
             style={styles.buttonStyle}
-            onPress={() => console.log("Button pressed")}
+            onPress={() =>
+              navigation.navigate("ProductDisplay", { category: "Food" })
+            }
           >
             <Text style={styles.buttonText}>Shop Now</Text>
           </TouchableOpacity>
