@@ -15,14 +15,14 @@ export default WalletBox;
 const styles = StyleSheet.create({
   main: {
     borderWidth: 1,
-    borderColor: COLORS.COMPLIMENTARY,
+    borderColor: COLORS.PRIMARY,
     borderRadius: 5,
     padding: 5,
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
   },
   balance: {
     color: COLORS.SECONDARY,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
     fontSize: 14,
   },
 });

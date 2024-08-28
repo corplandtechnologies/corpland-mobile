@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import noProfilePic from "../assets/user.png";
 import { useNavigation } from "@react-navigation/native";
 import ProductStats from "./ProductStats";
+import Card from "./ui/Card";
 
 interface SearchResultProps {
   image: any[];
@@ -33,7 +34,6 @@ const SearchResult: React.FC<SearchResultProps> = ({
     setIsLiked(!isLiked);
   };
 
-
   const truncatedTitle =
     description.length > 20
       ? `${description.substring(0, 20)}...`
@@ -44,39 +44,40 @@ const SearchResult: React.FC<SearchResultProps> = ({
     navigation.navigate("Product", { productId: _id });
   };
   return (
-    <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
-      <View style={{ flex: 1 }}>
-        <Image source={{ uri: image }} style={styles.productImage} />
-      </View>
-      <View style={{ flex: 2, padding: 10, justifyContent: "space-between" }}>
-        <View>
+    <TouchableOpacity onPress={productNavigate}>
+      <Card style={styles.productMain}>
+        <View style={{ flex: 1, padding: 10 }}>
+          <Image source={{ uri: image }} style={styles.productImage} />
+        </View>
+        <View style={{ flex: 3, padding: 10, justifyContent: "space-between" }}>
           <View>
-            <Text style={styles.productTitle}>{title}</Text>
-            {/* <ProductStats
+            <View>
+              <Text style={styles.productTitle}>{title}</Text>
+              {/* <ProductStats
               icon={"call"}
               value={dials.length}
               name="Dials"
             /> */}
-          </View>
-          <View style={styles.userView}>
-            <View style={styles.avatarContainer}>
-              {userDetails.profilePicture ? (
-                <Avatar.Image
-                  size={20}
-                  source={{ uri: userDetails.profilePicture }}
-                />
-              ) : (
-                <Avatar.Image
-                  size={20}
-                  source={require("../assets/user.png")}
-                />
-              )}
-              <View>
-                <Text style={styles.AvatarText}>
-                  {userDetails.name || "Unknown User"}
-                </Text>
-              </View>
-              {/* <View>
+            </View>
+            <View style={styles.userView}>
+              <View style={styles.avatarContainer}>
+                {userDetails.profilePicture ? (
+                  <Avatar.Image
+                    size={20}
+                    source={{ uri: userDetails.profilePicture }}
+                  />
+                ) : (
+                  <Avatar.Image
+                    size={20}
+                    source={require("../assets/user.png")}
+                  />
+                )}
+                <View>
+                  <Text style={styles.AvatarText}>
+                    {userDetails.name || "Unknown User"}
+                  </Text>
+                </View>
+                {/* <View>
               <TouchableOpacity onPress={toggleIsLiked}>
                 <Icon
                   name={isLiked ? "heart" : "heart-outline"}
@@ -85,34 +86,37 @@ const SearchResult: React.FC<SearchResultProps> = ({
                 />
               </TouchableOpacity>
             </View> */}
+              </View>
             </View>
-          </View>
-          <View>
+            {/* <View>
             <Text style={styles.productDesc}>{truncatedTitle}</Text>
+          </View> */}
           </View>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              gap: 2,
+              justifyContent: "space-between",
             }}
           >
-            <Icon name="location" size={20} color={COLORS.GRAY} />
-            <Text style={{ color: COLORS.GRAY, fontFamily: "InterRegular" }}>
-              {region}
-            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              <Icon name="location" size={20} color={COLORS.GRAY} />
+              <Text
+                style={{ color: COLORS.GRAY, fontFamily: "PoppinsRegular" }}
+              >
+                {region}
+              </Text>
+            </View>
+            <Text style={styles.productPrice}>GH₵ {price}</Text>
           </View>
-          <Text style={styles.productPrice}>GH₵ {price}</Text>
         </View>
-      </View>
+      </Card>
     </TouchableOpacity>
   );
 };
@@ -121,38 +125,42 @@ export default SearchResult;
 const styles = StyleSheet.create({
   productMain: {
     backgroundColor: COLORS.SECONDARY,
-    borderRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderRadius: 20,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: 5,
     width: "100%",
     flexDirection: "row",
-    height: 250,
-    marginTop: 10,
+    // height: 200,
+    marginVertical: 5,
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: COLORS.GRAY_LIGHT,
   },
   productImage: {
-    width: "100%",
+    // width: 100,
     height: "100%",
     borderRadius: 10,
     objectFit: "cover",
+    borderWidth: 1,
   },
   productTitle: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsSemiBold",
     fontSize: 18,
   },
   productPrice: {
-    fontFamily: "InterExtraBold",
-    color: COLORS.COMPLIMENTARY,
+    fontFamily: "PoppinsBold",
+    color: COLORS.PRIMARY,
     fontSize: 18,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
-    fontSize: 14,
-    fontFamily: "InterBold",
+    fontSize: 12,
+    fontFamily: "PoppinsBold",
     // maxWidth: "80%",
   },
   avatarContainer: {
@@ -163,7 +171,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   productDesc: {
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     fontSize: 16,
   },
   userView: {
@@ -172,7 +180,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   levelView: {
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
     borderRadius: 10,
     padding: 10,
     shadowColor: "#000",
@@ -188,7 +196,7 @@ const styles = StyleSheet.create({
   levelText: {
     color: COLORS.SECONDARY,
     textAlign: "center",
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   productView: {
     flexDirection: "row",

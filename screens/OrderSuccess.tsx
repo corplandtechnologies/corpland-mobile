@@ -9,6 +9,7 @@ import PrimaryButton from "../components/ui/PrimaryButton";
 import AnimatedView from "../components/animated/AnimatedView";
 import { useNavigation } from "@react-navigation/native";
 import BottomActionCard from "../components/BottomActionCard";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const OrderSuccess = () => {
   const navigation: any = useNavigation();
@@ -19,17 +20,18 @@ const OrderSuccess = () => {
   return (
     <MainView style={styles.main}>
       <View style={styles.topView}>
-        <Image
+        {/* <Image
           source={require("../assets/check.png")}
           style={{ width: 100, height: 100 }}
-        />
+        /> */}
+        <Icon name="checkmark-circle" color={COLORS.COMPLIMENTARY} size={150} />
         <TextElement textAlign="center" fontSize={24}>
           Your order has been made successfully!
         </TextElement>
         <TextElement
           textAlign="center"
           color={COLORS.GRAY}
-          fontFamily="InterMedium"
+          fontFamily="PoppinsMedium"
         >
           You can track your delivery in the "Orders" section.
         </TextElement>

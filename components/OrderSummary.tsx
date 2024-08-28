@@ -27,7 +27,6 @@ const OrderSummary = () => {
     setLoading,
   }: any = useApp();
 
-
   const handleOrder = async () => {
     if (total > currentUser?.wallet) {
       setSnackbarVisible(true);
@@ -122,10 +121,10 @@ const styles = StyleSheet.create({
   },
   descText: {
     color: COLORS.GRAY,
-    fontFamily: "InterMedium",
+    fontFamily: "PoppinsMedium",
   },
   priceText: {
     color: COLORS.PRIMARY,
-    fontFamily: "InterExtraBold",
+    fontFamily: "PoppinsSemiBold",
   },
 });

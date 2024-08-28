@@ -17,26 +17,25 @@ const ProductStats: FC<ProductStatsProps> = ({ icon, value, name, card }) => {
         gap: 5,
         marginTop: 5,
         alignItems: "center",
-      }}>
-      <Icon
-        name={icon}
-        size={card ? 10 : 20}
-        color={COLORS.GRAY}
-      />
+      }}
+    >
+      <Icon name={icon} size={card ? 10 : 20} color={COLORS.GRAY} />
       <Text
         style={{
           color: COLORS.GRAY,
-          fontFamily: "InterRegular",
+          fontFamily: "PoppinsRegular",
           fontSize: card ? 10 : 16,
-        }}>
+        }}
+      >
         {value}
       </Text>
       <Text
         style={{
           color: COLORS.GRAY,
-          fontFamily: "InterRegular",
+          fontFamily: "PoppinsRegular",
           fontSize: card ? 10 : 16,
-        }}>
+        }}
+      >
         {name}
       </Text>
     </View>

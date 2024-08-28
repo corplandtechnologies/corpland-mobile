@@ -114,8 +114,6 @@ const EditProfile = () => {
         userId: userInfo._id,
       };
 
-      console.log("data", data);
-
       const res = await updateUser(data);
       setSnackbarVisible(true);
       setSnackbarMessage(res.data.message);
@@ -287,7 +285,7 @@ const styles = StyleSheet.create({
   },
   editButton: {
     marginTop: 15,
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
     borderRadius: 5,
   },
   selectedImage: {

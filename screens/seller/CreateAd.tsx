@@ -129,27 +129,21 @@ const CreateAd = () => {
     <ScreenContextWrapper>
       <ScrollView>
         <Card>
-          <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
+          <Text style={{ fontFamily: "PoppinsRegular" }}>Add a photo</Text>
           <View style={styles.imageContainer}>
             {image && (
               <View style={styles.imageWrapper}>
-                <Image
-                  source={{ uri: image }}
-                  style={styles.image}
-                />
+                <Image source={{ uri: image }} style={styles.image} />
                 <TouchableOpacity
                   style={styles.removeImageButton}
-                  onPress={removeImage}>
+                  onPress={removeImage}
+                >
                   <Text style={styles.removeImageText}>x</Text>
                 </TouchableOpacity>
               </View>
             )}
-            <TouchableOpacity
-              style={styles.addImageBox}
-              onPress={pickImage}>
-              <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
-                +
-              </Text>
+            <TouchableOpacity style={styles.addImageBox} onPress={pickImage}>
+              <Text style={{ fontSize: 20, color: COLORS.PRIMARY }}>+</Text>
             </TouchableOpacity>
           </View>
         </Card>
@@ -158,7 +152,7 @@ const CreateAd = () => {
             mode="outlined"
             placeholder="What's available?"
             label={"Title"}
-            outlineColor={COLORS.COMPLIMENTARY}
+            outlineColor={COLORS.PRIMARY}
             activeOutlineColor={COLORS.PRIMARY}
             style={styles.textInput}
             value={title} // Bind the state value
@@ -212,12 +206,10 @@ const CreateAd = () => {
               icon="post"
               mode="contained"
               onPress={handleSubmit}
-              style={styles.createAd}>
+              style={styles.createAd}
+            >
               {loading ? (
-                <ActivityIndicator
-                  size="small"
-                  color="white"
-                />
+                <ActivityIndicator size="small" color="white" />
               ) : (
                 "Ad"
               )}
@@ -233,7 +225,8 @@ const CreateAd = () => {
         <Snackbar
           visible={snackbarVisible}
           onDismiss={() => setSnackbarVisible(false)}
-          duration={Snackbar.DURATION_SHORT}>
+          duration={Snackbar.DURATION_SHORT}
+        >
           {snackbarMessage}
         </Snackbar>
       </ScrollView>
@@ -243,7 +236,7 @@ const CreateAd = () => {
 
 const styles = StyleSheet.create({
   textInput: {
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     backgroundColor: COLORS.SECONDARY,
   },
   addImageBox: {
@@ -256,7 +249,7 @@ const styles = StyleSheet.create({
   },
   textInputDesc: {
     paddingLeft: 10,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     height: "100%",
   },
   createAd: {
@@ -291,7 +284,7 @@ const styles = StyleSheet.create({
   removeImageText: {
     fontSize: 16,
     color: COLORS.SECONDARY,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
 });
 

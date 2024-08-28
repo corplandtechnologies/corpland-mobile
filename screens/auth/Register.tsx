@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: "center",
     marginBottom: 20,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   descriptiveText: {
     fontSize: 16,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   },
   termsText: {
     fontSize: 14,
-    color: COLORS.COMPLIMENTARY,
+    color: COLORS.PRIMARY,
     textDecorationLine: "underline",
   },
   separatorContainer: {

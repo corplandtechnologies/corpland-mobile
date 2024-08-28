@@ -47,9 +47,11 @@ const Cancelled = () => {
     }
   };
 
-  useEffect(() => {
-    getOrders();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getOrders();
+    }, [])
+  );
 
   return (
     <ScrollView

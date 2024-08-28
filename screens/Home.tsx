@@ -18,10 +18,17 @@ import Category from "../components/Category";
 import { storeCatergories } from "../data/dummyData";
 import ProductCard from "../components/ProductCard";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { getProducts, getTrendingProducts, searchProducts } from "../api/api";
+import {
+  getProducts,
+  getTrendingProducts,
+  getUserById,
+  searchProducts,
+} from "../api/api";
 import { Snackbar } from "react-native-paper";
 import { useSearchResults } from "../context/SearchResultsContext";
-import { getStorageItem } from "../utils";
+import { getStorageItem, handleError } from "../utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useApp } from "../context/AppContext";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -32,7 +39,9 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [trendingProducts, setTrendingProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
+  const { user, setUser } = useApp();
+  const [searchLoading, setSearchLoading] = useState(false);
 
   useEffect(() => {
     const getLoggedInUser = async () => {
@@ -47,8 +56,10 @@ const Home = () => {
     getLoggedInUser();
   }, []);
 
-  const handleSearch = async () => {
-    setLoading(true);
+  const handleSearch = async (
+    setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setLoadingState(true);
     try {
       if (!search) {
         setSnackbarMessage("All fields are required");
@@ -57,16 +68,18 @@ const Home = () => {
       }
       const res = await searchProducts(search);
       setSearchResults(res.data);
+      setLoadingState(false);
       setSnackbarVisible(true);
       setSnackbarMessage("Search Completed!");
       setSearch("");
       navigation.navigate("Search");
     } catch (error) {
       console.log(error);
-      setSnackbarMessage(error.response.data);
+      setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
+      setLoadingState(false);
     } finally {
-      setLoading(false);
+      setLoadingState(false);
     }
   };
 
@@ -87,6 +100,20 @@ const Home = () => {
     fetchProducts();
   }, []);
 
+  const fetchUser = async () => {
+    try {
+      const userInfo: any = await AsyncStorage.getItem("user");
+      const parsedUserInfo = JSON.parse(userInfo);
+      const res: any = await getUserById(parsedUserInfo?._id);
+      setUser(res?.data?.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   const handleSeeAll = (routeName: string, title: string) => {
     navigation.navigate(routeName, { title });
   };
@@ -102,6 +129,7 @@ const Home = () => {
               setRefreshing(true);
               try {
                 fetchProducts();
+                fetchUser();
                 setRefreshing(false);
               } catch (error) {
                 setRefreshing(false);
@@ -117,8 +145,8 @@ const Home = () => {
           isButtoned={true}
           isButtonedIcon="options"
           onChangeText={setSearch}
-          loading={loading}
-          onPress={handleSearch}
+          loading={searchLoading}
+          onPress={() => handleSearch(setSearchLoading)}
         />
         <Banner />
         <View style={styles.sectionView}>

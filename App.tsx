@@ -68,18 +68,20 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [isConnected, setIsConnected] = useState<boolean>(true);
-  const [isFontLoaded, setFontLoaded] = useState<Boolean>(false);
+  const [isFontLoaded, setFontLoaded] = useState<boolean>(false);
   const { user, setUser } = useApp();
+  const [loggedInUser, setLoggedInUser] = useState<object>({});
 
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
-        InterExtraBold: require("./fonts/Inter/static/Inter-ExtraBold.ttf"),
-        InterBold: require("./fonts/Inter/static/Inter-Bold.ttf"),
-        InterMedium: require("./fonts/Inter/static/Inter-Medium.ttf"),
-        InterRegular: require("./fonts/Inter/static/Inter-Regular.ttf"),
-        InterLight: require("./fonts/Inter/static/Inter-light.ttf"),
-        InterThin: require("./fonts/Inter/static/Inter-Thin.ttf"),
+        PoppinsExtraBold: require("./fonts/Poppins/Poppins-ExtraBold.ttf"),
+        PoppinsBold: require("./fonts/Poppins/Poppins-Bold.ttf"),
+        PoppinsSemiBold: require("./fonts/Poppins/Poppins-SemiBold.ttf"),
+        PoppinsMedium: require("./fonts/Poppins/Poppins-Medium.ttf"),
+        PoppinsRegular: require("./fonts/Poppins/Poppins-Regular.ttf"),
+        PoppinsLight: require("./fonts/Poppins/Poppins-Light.ttf"),
+        PoppinsThin: require("./fonts/Poppins/Poppins-Thin.ttf"),
       });
       setFontLoaded(true);
     }
@@ -118,6 +120,7 @@ export default function App() {
     try {
       const userInfo = await AsyncStorage.getItem("user");
       const parsedUserInfo = JSON.parse(userInfo);
+      setLoggedInUser(parsedUserInfo);
       const res: any = await getUserById(parsedUserInfo?._id);
       setUser(res.data?.user);
     } catch (error) {
@@ -163,7 +166,7 @@ export default function App() {
                   <NavigationContainer linking={linking}>
                     <Stack.Navigator
                       initialRouteName={
-                        user === null ? "OnBoarding" : "TabNavigator"
+                        loggedInUser ? "TabNavigator" : "OnBoarding"
                       }
                     >
                       <Stack.Screen
@@ -182,7 +185,7 @@ export default function App() {
                           headerShown: false,
                           headerTitle: "Sign In",
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -217,7 +220,7 @@ export default function App() {
                           headerLeft: () => <BackButton />,
                           headerTitleAlign: "center",
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                           },
                         })}
                       />
@@ -228,7 +231,7 @@ export default function App() {
                           headerLeft: () => <BackButton />,
                           headerTitleAlign: "center",
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                           },
                         }}
                         component={ProductGrids}
@@ -240,7 +243,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -278,7 +281,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -300,7 +303,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                           },
                         }}
                         component={EditProduct}
@@ -312,7 +315,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -325,7 +328,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -338,7 +341,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -351,7 +354,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -364,7 +367,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -377,7 +380,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -390,7 +393,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -403,7 +406,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -416,7 +419,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -429,7 +432,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -442,7 +445,7 @@ export default function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "InterBold",
+                            fontFamily: "PoppinsBold",
                             // borderWidth:8
                           },
                         }}
@@ -467,10 +470,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   message: {
-    fontFamily: "InterExtraBold",
+    fontFamily: "PoppinsExtraBold",
   },
   mainError: {
-    fontFamily: "InterExtraBold",
+    fontFamily: "PoppinsExtraBold",
     fontSize: 36,
   },
 });

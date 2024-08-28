@@ -29,10 +29,10 @@ const stepIndicatorStyles = {
   currentStepIndicatorSize: 40,
   separatorStrokeWidth: 3,
   currentStepStrokeWidth: 5,
-  stepStrokeCurrentColor: COLORS.COMPLIMENTARY,
-  separatorFinishedColor: COLORS.COMPLIMENTARY,
+  stepStrokeCurrentColor: COLORS.PRIMARY,
+  separatorFinishedColor: COLORS.PRIMARY,
   separatorUnFinishedColor: "#aaaaaa",
-  stepIndicatorFinishedColor: COLORS.COMPLIMENTARY,
+  stepIndicatorFinishedColor: COLORS.PRIMARY,
   stepIndicatorUnFinishedColor: "#aaaaaa",
   stepIndicatorCurrentColor: "#ffffff",
   stepIndicatorLabelFontSize: 15,
@@ -171,7 +171,7 @@ const TrackOrder = () => {
               labels={stepTitles.data.map((item) => (
                 <View>
                   <TextElement>{item.title}</TextElement>
-                  <TextElement color={COLORS.GRAY} fontFamily="InterMedium">
+                  <TextElement color={COLORS.GRAY} fontFamily="PoppinsMedium">
                     {item.time}
                   </TextElement>
                 </View>
@@ -183,28 +183,28 @@ const TrackOrder = () => {
               <Icon
                 name={currentStep === 1 ? "clipboard" : "clipboard-outline"}
                 size={24}
-                color={COLORS.COMPLIMENTARY}
+                color={COLORS.PRIMARY}
               />
             </View>
             <View style={styles.stepIconsView}>
               <Icon
                 name={currentStep === 2 ? "cube" : "cube-outline"}
                 size={24}
-                color={COLORS.COMPLIMENTARY}
+                color={COLORS.PRIMARY}
               />
             </View>
             <View style={styles.stepIconsView}>
               <Icon
                 name={currentStep === 3 ? "cart" : "cart-outline"}
                 size={24}
-                color={COLORS.COMPLIMENTARY}
+                color={COLORS.PRIMARY}
               />
             </View>
             <View style={styles.stepIconsView}>
               <Icon
                 name={currentStep === 4 ? "checkbox" : "checkbox-outline"}
                 size={24}
-                color={COLORS.COMPLIMENTARY}
+                color={COLORS.PRIMARY}
               />
             </View>
           </View>
@@ -225,7 +225,11 @@ const TrackOrder = () => {
                 <Card style={styles.wrapper}>
                   <View style={{ flex: 1 }}>
                     <Image
-                      source={{ uri: product?.images?.[0] ?? "" }}
+                      source={{
+                        uri:
+                          product?.images?.[0] ??
+                          "https://img.icons8.com/?size=100&id=12405&format=png&color=000000",
+                      }}
                       style={styles.productImage}
                     />
                   </View>
@@ -321,14 +325,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
     fontSize: 16,
   },
   cat: {
     color: COLORS.GRAY,
   },
   price: {
-    fontFamily: "InterExtraBold",
-    color: COLORS.COMPLIMENTARY,
+    fontFamily: "PoppinsExtraBold",
+    color: COLORS.PRIMARY,
   },
 });

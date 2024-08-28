@@ -77,7 +77,7 @@ const ProductDisplay = ({ route }) => {
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         numColumns={2}
-        contentContainerStyle={{ height: "100%" }}
+        contentContainerStyle={{}}
       />
     </View>
   );
@@ -85,7 +85,7 @@ const ProductDisplay = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "#fff",
   },
   emptyContainer: {

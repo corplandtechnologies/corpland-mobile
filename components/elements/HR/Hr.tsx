@@ -4,14 +4,22 @@ import { COLORS } from "../../../utils/color";
 
 interface HrProps {
   marginHorizontal?: number;
+  marginVertical?: number;
+  height?: number;
 }
-const Hr: React.FC<HrProps> = ({ marginHorizontal }) => {
+const Hr: React.FC<HrProps> = ({
+  marginHorizontal,
+  marginVertical,
+  height,
+}) => {
   return (
     <View
       style={{
-        height: 1,
-        backgroundColor: COLORS.GRAY_LIGHT,
+        height: height ? height : 1,
+        backgroundColor: COLORS.GRAY_LIGHTER,
         marginHorizontal: marginHorizontal ? marginHorizontal : 0,
+        marginVertical: marginVertical ? marginVertical : 0,
+        borderRadius: 9999,
       }}
     />
   );

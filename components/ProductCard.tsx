@@ -50,10 +50,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
 
   return (
     <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
-      <Image
-        source={{ uri: product?.image || product?.images[0] }}
-        style={styles.productImage}
-      />
+      <View style={{ flex: 1 }}>
+        <Image
+          source={{ uri: product?.image || product?.images[0] }}
+          style={styles.productImage}
+        />
+      </View>
       <View style={styles.contentContainer}>
         <View style={styles.topContent}>
           <Text style={styles.productTitle}>{product.title}</Text>
@@ -64,19 +66,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
           /> */}
           <View style={styles.userView}>
             <View style={styles.avatarContainer}>
-              {userInfo.profilePicture ? (
-                <Avatar.Image
-                  size={20}
-                  source={{
-                    uri: userInfo.profilePicture,
-                  }}
-                />
-              ) : (
-                <Avatar.Image
-                  size={20}
-                  source={require("../assets/user.png")}
-                />
-              )}
+              <Avatar.Image
+                size={20}
+                source={{
+                  uri:
+                    userInfo.profilePicture ||
+                    "https://res.cloudinary.com/ddhdyuktu/image/upload/v1717377760/corpland/user_yn44if.png",
+                }}
+              />
+
               <View
                 style={{
                   flexDirection: "row",
@@ -90,24 +88,32 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
                 {userInfo.verified && (
                   <Icon
                     name="checkmark-circle"
-                    size={18}
-                    color={COLORS.COMPLIMENTARY}
+                    // size={18}
+                    color={COLORS.PRIMARY}
                   />
                 )}
               </View>
             </View>
           </View>
-          <Text style={styles.productDesc}>{truncatedDesc}</Text>
+          {/* <Text style={styles.productDesc}>{truncatedDesc}</Text> */}
         </View>
 
         <View style={styles.bottomContent}>
           <View style={styles.locationContainer}>
-            <Icon name="location" size={20} color={COLORS.GRAY} />
-            <Text style={{ color: COLORS.GRAY, fontFamily: "InterRegular" }}>
+            <Icon name="location" size={11} color={COLORS.GRAY} />
+            <Text
+              style={{
+                color: COLORS.GRAY,
+                fontFamily: "PoppinsRegular",
+                fontSize: 11,
+              }}
+            >
               {product.region}
             </Text>
           </View>
-          <Text style={styles.productPrice}>GH₵{product.price}</Text>
+          <View style={styles.priceView}>
+            <Text style={styles.productPrice}>GH₵{product.price}</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -120,29 +126,33 @@ const styles = StyleSheet.create({
   productMain: {
     backgroundColor: COLORS.SECONDARY,
     borderRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    width: 300,
-    marginRight: 10,
+    padding: 10,
+    // shadowColor: COLORS.GRAY,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 5,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: 10,
     marginBottom: 20,
+    marginRight: 10,
+    gap: 2.5,
+    borderWidth: 1,
+    borderColor: COLORS.GRAY_LIGHT,
   },
   productImage: {
-    width: "100%",
-    height: 200,
+    // width: 100,
+    height: 150,
     borderRadius: 10,
-    objectFit: "cover",
   },
   contentContainer: {
     flex: 1,
-    padding: 10,
+    // padding: 10,
+    gap: 10,
   },
   topContent: {
-    flex: 1,
+    gap: 5,
   },
   bottomContent: {
     flexDirection: "row",
@@ -150,42 +160,49 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderTopWidth: 1,
     borderColor: COLORS.TERTIARY,
-    paddingTop: 10,
-    marginTop: 10,
+    gap: 10,
+    flex: 1,
   },
   locationContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "flex-start",
+    flex: 1,
   },
   productTitle: {
-    fontFamily: "InterBold",
-    fontSize: 20,
+    fontFamily: "PoppinsSemiBold",
+    // fontSize: 20,
+    width: 200,
   },
   productPrice: {
-    fontFamily: "InterExtraBold",
-    color: COLORS.COMPLIMENTARY,
-    fontSize: 18,
+    fontFamily: "PoppinsBold",
+    color: COLORS.PRIMARY,
+    // fontSize: 18,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
-    fontSize: 14,
-    fontFamily: "InterBold",
-    marginTop: 5,
+    fontSize: 11,
+    fontFamily: "PoppinsBold",
   },
   avatarContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 10,
     gap: 5,
+    justifyContent: "center",
   },
   productDesc: {
-    fontFamily: "InterRegular",
-    fontSize: 16,
+    fontFamily: "PoppinsRegular",
+    // fontSize: 16,
   },
   userView: {
     flexDirection: "row",
-    width: "100%",
+    // width: "100%",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  priceView: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
 });

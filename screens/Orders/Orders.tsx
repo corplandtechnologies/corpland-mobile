@@ -11,9 +11,13 @@ export default function Orders() {
     <Tab.Navigator
       initialRouteName="Active"
       screenOptions={{
-        tabBarActiveTintColor: COLORS.COMPLIMENTARY,
-        tabBarLabelStyle: { fontFamily: "InterBold" },
+        tabBarActiveTintColor: COLORS.PRIMARY,
+        tabBarLabelStyle: { fontFamily: "PoppinsBold" },
         tabBarInactiveTintColor: COLORS.TERTIARY,
+        tabBarPressColor: COLORS.PRIMARY,
+        tabBarIndicatorStyle: {
+          backgroundColor: COLORS.PRIMARY,
+        },
       }}
     >
       <Tab.Screen

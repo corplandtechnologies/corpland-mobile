@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
     borderRadius: 50,
     textAlign: "center",
     justifyContent: "center",
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginHorizontal: 10,
     color: COLORS.SECONDARY,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
     padding: 2,
   },
   quantity: {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   quantityText: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
     fontSize: 16,
     color: COLORS.SECONDARY,
   },

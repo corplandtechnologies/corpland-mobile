@@ -28,7 +28,6 @@ const Withdraw = () => {
     setTransferRecipient,
   } = useApp();
   const [proceedLoading, setProceedLoading] = useState<boolean>(false);
-  console.log(phoneNumber);
 
   const handleTransferRecipient = async (
     setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
@@ -77,7 +76,7 @@ const Withdraw = () => {
               />
               <TextElement
                 color={COLORS.GRAY}
-                fontFamily="InterMedium"
+                fontFamily="PoppinsMedium"
                 fontSize={16}
               >
                 MTN
@@ -104,7 +103,7 @@ const Withdraw = () => {
               />
               <TextElement
                 color={COLORS.GRAY}
-                fontFamily="InterMedium"
+                fontFamily="PoppinsMedium"
                 fontSize={16}
               >
                 AirtelTigo
@@ -131,7 +130,7 @@ const Withdraw = () => {
               />
               <TextElement
                 color={COLORS.GRAY}
-                fontFamily="InterMedium"
+                fontFamily="PoppinsMedium"
                 fontSize={16}
               >
                 Telecel
@@ -182,6 +181,7 @@ const Withdraw = () => {
               handleTransferRecipient(setProceedLoading);
             }}
             loading={proceedLoading}
+            disabled={phoneNumber.length < 10}
           />
         </BottomActionCard>
       </View>

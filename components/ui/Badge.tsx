@@ -15,7 +15,11 @@ const Badge: FC<BadgeProps> = ({ bgColor, text, isOrder }) => {
       setTextColor(COLORS.DELIVERED);
     } else if (text === "Completed") {
       setTextColor(COLORS.COMPLETED);
-    } else {
+    } else if (text === "Cancelled") {
+      setTextColor(COLORS.CANCELLED);
+    } else if (text === "Under Revision") {
+      setTextColor(COLORS.REVISION);
+    } else if (text === "Cancel Request") {
       setTextColor(COLORS.CANCELLED);
     }
   }, [text]);
@@ -32,9 +36,10 @@ const Badge: FC<BadgeProps> = ({ bgColor, text, isOrder }) => {
     >
       <Text
         style={{
-          fontFamily: "InterBold",
+          fontFamily: "PoppinsSemiBold",
           textAlign: "center",
-          color: isOrder ? textColor : COLORS.COMPLIMENTARY,
+          color: isOrder ? textColor : COLORS.PRIMARY,
+          fontSize: 11,
         }}
       >
         {text}

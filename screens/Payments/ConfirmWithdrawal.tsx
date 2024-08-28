@@ -26,11 +26,9 @@ const ConfirmWithdraw = () => {
     setLoading(true);
     try {
       await withdrawal(amount, transferRecipient, user?._id);
-      setTimeout(() => {
-        setSnackbarVisible(true);
-        setSnackbarMessage("Withdrawal request has been made successfully!");
-        navigation.navigate("Home");
-      }, 3000);
+      setSnackbarVisible(true);
+      setSnackbarMessage("Withdrawal request has been made successfully!");
+      navigation.navigate("Home");
     } catch (error) {
       console.log(error);
       setSnackbarMessage("Something went wrong! Please try again later.");

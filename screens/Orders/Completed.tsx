@@ -47,10 +47,11 @@ const Completed = () => {
     }
   };
 
-  useEffect(() => {
-    getOrders();
-  }, []);
-
+  useFocusEffect(
+    useCallback(() => {
+      getOrders();
+    }, [])
+  );
   return (
     <ScrollView
       refreshControl={
@@ -77,10 +78,7 @@ const Completed = () => {
         ) : (
           <>
             {filteredOrders?.length > 0 ? (
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-              
-              >
+              <ScrollView showsVerticalScrollIndicator={false}>
                 {filteredOrders?.map((filteredOrder: any) => (
                   <Order
                     orders={filteredOrder}

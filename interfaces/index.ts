@@ -36,3 +36,19 @@ export interface TextProps {
   color?: string;
   textAlign?: string;
 }
+
+export interface Transaction {
+  _id: string;
+  amount: number;
+  balanceAfter: number;
+  createdAt: string;
+  description: string;
+  type: "credit" | "debit";
+  updatedAt: string;
+  userId: string;
+}
+
+export interface GroupedTransactions {
+  date: string;
+  transactions: Transaction[];
+}

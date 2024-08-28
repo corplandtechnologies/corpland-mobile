@@ -89,7 +89,7 @@ const Favorite = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         numColumns={2}
-        contentContainerStyle={{ height: "100%" }}
+        contentContainerStyle={{  }}
       />
     </View>
   );

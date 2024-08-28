@@ -3,7 +3,7 @@ import axios from "axios";
 import { Platform } from "react-native";
 
 export const API = axios.create({
-  baseURL: "http://192.168.10.158:3000/api/v1",
+  baseURL: "http://192.168.176.158:3000/api/v1",
   withCredentials: true,
 });
 
@@ -282,3 +282,6 @@ export const withdrawal = (amount: number, recipient: string, userId: string) =>
     recipient,
     userId,
   });
+
+export const getUserTransactions = (userId: string) =>
+  API.get(`/transactions/${userId}`);

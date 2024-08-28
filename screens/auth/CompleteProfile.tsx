@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   editButton: {
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
     marginTop: 15,
     borderRadius: 5,
   },

@@ -13,6 +13,7 @@ interface primaryButtonProps {
   secondary?: boolean;
   fontFamily?: string;
   style?: any;
+  width?: number | string;
 }
 
 const PrimaryButton: FC<primaryButtonProps> = ({
@@ -25,17 +26,19 @@ const PrimaryButton: FC<primaryButtonProps> = ({
   secondary,
   fontFamily,
   style,
+  width,
 }) => {
   return (
     <Button
       title={value}
       buttonStyle={{
-        backgroundColor: secondary ? COLORS.BLUE_LIGHT : COLORS.COMPLIMENTARY,
+        backgroundColor: secondary ? COLORS.GRAY_LIGHT : COLORS.PRIMARY,
         padding: 20,
+        width: width ? width : "auto",
       }}
       containerStyle={[
         {
-          backgroundColor: secondary ? COLORS.BLUE_LIGHT : COLORS.COMPLIMENTARY,
+          backgroundColor: secondary ? COLORS.GRAY_LIGHT : COLORS.PRIMARY,
           borderRadius: 10,
         },
         style,
@@ -48,8 +51,8 @@ const PrimaryButton: FC<primaryButtonProps> = ({
         isIcon
           ? { marginLeft: 10 }
           : {
-              color: secondary ? COLORS.COMPLIMENTARY : COLORS.SECONDARY,
-              fontFamily: fontFamily ? fontFamily : "InterMedium",
+              color: secondary ? COLORS.PRIMARY : COLORS.SECONDARY,
+              fontFamily: fontFamily ? fontFamily : "PoppinsSemiBold",
             }
       }
     />

@@ -199,7 +199,6 @@ const EditProduct = ({ route }) => {
         userId: user._id || product.userId,
       };
 
-
       const response = await updateProduct(
         Platform.OS === "web" ? newWebProduct : newProduct,
         product._id
@@ -244,7 +243,7 @@ const EditProduct = ({ route }) => {
             onSelect={(selectedOption) => setSelectedCategory(selectedOption)}
             initialValue={product.category}
           />
-          <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
+          <Text style={{ fontFamily: "PoppinsRegular" }}>Add a photo</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.imageContainer}>
               {Platform.OS === "web" ? (
@@ -300,9 +299,7 @@ const EditProduct = ({ route }) => {
                   />
                   <label htmlFor="productImageUpload">
                     <TouchableOpacity style={styles.addImageBox}>
-                      <Text
-                        style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}
-                      >
+                      <Text style={{ fontSize: 20, color: COLORS.PRIMARY }}>
                         +
                       </Text>
                     </TouchableOpacity>
@@ -313,9 +310,7 @@ const EditProduct = ({ route }) => {
                   style={styles.addImageBox}
                   onPress={pickImage}
                 >
-                  <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
-                    +
-                  </Text>
+                  <Text style={{ fontSize: 20, color: COLORS.PRIMARY }}>+</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -395,7 +390,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   textInput: {
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     backgroundColor: COLORS.SECONDARY,
   },
   addImageBox: {
@@ -408,7 +403,7 @@ const styles = StyleSheet.create({
   },
   textInputDesc: {
     paddingLeft: 10,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
   createProduct: {
     backgroundColor: COLORS.PRIMARY,
@@ -442,7 +437,7 @@ const styles = StyleSheet.create({
   removeImageText: {
     fontSize: 16,
     color: COLORS.SECONDARY,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
 });
 

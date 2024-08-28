@@ -7,6 +7,7 @@ import { Snackbar } from "react-native-paper";
 import { deposit, getUserById } from "../api/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../context/AppContext";
+import { handleError } from "../utils";
 
 const Deposit = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +15,7 @@ const Deposit = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const { user } = useApp();
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   const handleDeposit = async () => {
     if (!amount) {
@@ -30,19 +31,7 @@ const Deposit = () => {
       navigation.navigate("CompleteDeposit");
     } catch (error) {
       console.log(error);
-      let errorMessage = "An unexpected error occurred.";
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        errorMessage = error.response.data.message || error.response.statusText;
-      } else if (error.request) {
-        // The request was made but no response was received
-        errorMessage = "No response received from the server.";
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        errorMessage = error.message;
-      }
-      setSnackbarMessage(errorMessage);
+      setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
       setLoading(false);

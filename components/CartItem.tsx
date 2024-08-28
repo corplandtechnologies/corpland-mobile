@@ -48,14 +48,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
     fontSize: 16,
   },
   cat: {
     color: COLORS.GRAY,
   },
   price: {
-    fontFamily: "InterExtraBold",
-    color: COLORS.COMPLIMENTARY,
+    fontFamily: "PoppinsBold",
+    color: COLORS.PRIMARY,
   },
 });

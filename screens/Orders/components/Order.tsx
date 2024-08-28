@@ -24,6 +24,7 @@ interface orderProps {
     sellerId: string;
     buyerId: string;
     productId: string;
+    isRevised: boolean;
     _id: string;
   };
   getOrders: () => void;
@@ -64,13 +65,68 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
     } else if (orders.status === 3) {
       setOrderStatus("Completed");
       setStatusColor(COLORS.COMPLETEDBADGE);
-    } else {
+    } else if (orders.status === 4) {
       setOrderStatus("Cancelled");
       setStatusColor(COLORS.CANCELLEDBADGE);
+    } else if (orders.status === 5) {
+      setOrderStatus("Under Revision");
+      setStatusColor(COLORS.REVISIONBADGE);
+    } else if (orders.status === 6) {
+      setOrderStatus("Cancel Request");
+      setStatusColor(COLORS.ORDERPLACEDBADGE);
     }
   }, [orders.status]);
 
   const handleOrderStatus = async (
+    status: number,
+    setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setLoadingState(true);
+    try {
+      if (status === 4 && orders.isRevised === true) {
+        const newStatus =
+          status === 4 &&
+          orders.isRevised === true &&
+          orders.sellerId === user._id
+            ? 4
+            : 6;
+        await updateOrderStatus(
+          orders?._id,
+          newStatus,
+          orders?.sellerId,
+          orders?.buyerId
+        );
+        setSnackbarMessage("Order Status updated successfully!");
+        setSnackbarVisible(true);
+        setLoadingState(false);
+        if (getOrders) {
+          getOrders();
+        }
+      } else {
+        await updateOrderStatus(
+          orders?._id,
+          status,
+          orders?.sellerId,
+          orders?.buyerId
+        );
+        setSnackbarMessage("Order Status updated successfully!");
+        setSnackbarVisible(true);
+        setLoadingState(false);
+        if (getOrders) {
+          getOrders();
+        }
+      }
+    } catch (error: any) {
+      console.log(error);
+      setSnackbarMessage(handleError(error));
+      setSnackbarVisible(true);
+      setLoadingState(false);
+    } finally {
+      setLoadingState(false);
+    }
+  };
+
+  const handleRevision = async (
     status: number,
     setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
@@ -135,7 +191,7 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
       </View>
       <RowView style={styles.transactionInfo}>
         <View>
-          <PrimaryText color={COLORS.GRAY} fontFamily="InterBold">
+          <PrimaryText color={COLORS.GRAY} fontFamily="PoppinsBold">
             Transaction ID
           </PrimaryText>
           <PrimaryText>#{orders.transactionId}</PrimaryText>
@@ -143,7 +199,7 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
         <View>
           <PrimaryText
             color={COLORS.GRAY}
-            fontFamily="InterBold"
+            fontFamily="PoppinsBold"
             textAlign="center"
           >
             Order Date
@@ -153,7 +209,7 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
           </PrimaryText>
         </View>
         <View>
-          <PrimaryText color={COLORS.GRAY} fontFamily="InterBold">
+          <PrimaryText color={COLORS.GRAY} fontFamily="PoppinsBold">
             Total Payment
           </PrimaryText>
           <PrimaryText textAlign="center">
@@ -211,7 +267,7 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
                         style={styles.actionButton}
                         secondary
                         value={"Revise"}
-                        onPress={() => handleOrderStatus(1, setReviseLoading)}
+                        onPress={() => handleOrderStatus(5, setReviseLoading)}
                         loading={reviseLoading}
                       />
                     </View>
@@ -227,26 +283,63 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
                 </>
               ) : (
                 <>
-                  <RowView style={styles.actionView}>
-                    <View style={{ flex: 1 }}>
-                      <PrimaryButton
-                        style={styles.actionButton}
-                        secondary
-                        value={"Cancel"}
-                        onPress={() => handleOrderStatus(4, setCancelLoading)}
-                        loading={cancelLoading}
-                      />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                      <PrimaryButton
-                        style={styles.actionButton}
-                        value={"Track Order"}
-                        onPress={() =>
-                          navigation.navigate("TrackOrder", { order: orders })
-                        }
-                      />
-                    </View>
-                  </RowView>
+                  {orders.status === 6 && orders.sellerId === user._id ? (
+                    <>
+                      <RowView style={styles.actionView}>
+                        <View style={{ flex: 1 }}>
+                          <PrimaryButton
+                            style={styles.actionButton}
+                            secondary
+                            value={"Decline"}
+                            onPress={() =>
+                              handleOrderStatus(1, setDeclineLoading)
+                            }
+                            loading={declineLoading}
+                          />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <PrimaryButton
+                            style={styles.actionButton}
+                            value={"Accept"}
+                            onPress={() =>
+                              handleOrderStatus(4, setCancelLoading)
+                            }
+                            loading={cancelLoading}
+                          />
+                        </View>
+                      </RowView>
+                    </>
+                  ) : (
+                    <>
+                      <RowView style={styles.actionView}>
+                        <View style={{ flex: 1 }}>
+                          <PrimaryButton
+                            style={styles.actionButton}
+                            secondary
+                            value={"Cancel"}
+                            onPress={() =>
+                              handleOrderStatus(4, setCancelLoading)
+                            }
+                            loading={cancelLoading}
+                            disabled={
+                              orders.status === 6 && orders.buyerId === user._id
+                            }
+                          />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <PrimaryButton
+                            style={styles.actionButton}
+                            value={"Track Order"}
+                            onPress={() =>
+                              navigation.navigate("TrackOrder", {
+                                order: orders,
+                              })
+                            }
+                          />
+                        </View>
+                      </RowView>
+                    </>
+                  )}
                 </>
               )}
             </>

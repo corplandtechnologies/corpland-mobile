@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Snackbar } from "react-native-paper";
 import { login } from "../../api/auth.api";
 import AuthOption from "../../components/auth/AuthOption";
+import { handleError } from "../../utils";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -24,7 +25,7 @@ const Login = () => {
   const [snackbarVisible, setSnackbarVisible] = useState(false); // New state for Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -38,10 +39,6 @@ const Login = () => {
     }
     setLoading(true);
     try {
-      console.log({
-        email: email,
-        password: password,
-      });
       const res = await login({
         email: email.trim(),
         password: password.trim(),
@@ -55,19 +52,7 @@ const Login = () => {
       navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
       console.log(error);
-      let errorMessage = "An unexpected error occurred.";
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        errorMessage = error.response.data.message || error.response.statusText;
-      } else if (error.request) {
-        // The request was made but no response was received
-        errorMessage = "No response received from the server.";
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        errorMessage = error.message;
-      }
-      setSnackbarMessage(errorMessage);
+      setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -198,6 +183,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
+    fontFamily: "PoppinsRegular"
   },
   checkboxContainer: {
     backgroundColor: "transparent",
@@ -206,7 +192,7 @@ const styles = StyleSheet.create({
   },
   termsText: {
     fontSize: 14,
-    color: COLORS.COMPLIMENTARY,
+    color: COLORS.PRIMARY,
     textDecorationLine: "underline",
   },
   separatorContainer: {

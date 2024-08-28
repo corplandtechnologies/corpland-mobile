@@ -57,7 +57,7 @@
 //   };
 
 //   useEffect(() => {
-//     const timer = setInterval(() => {
+//     const timer = setPoppinsval(() => {
 //       const nextIndex = (currentImageIndex + 1) % images.length;
 //       setCurrentImageIndex(nextIndex);
 //       // Scroll to the next image
@@ -68,7 +68,7 @@
 //       });
 //     }, 5000); // Change image every 10 seconds
 
-//     return () => clearInterval(timer);
+//     return () => clearPoppinsval(timer);
 //   }, [currentImageIndex]);
 
 //   const renderImages = () => {
@@ -178,10 +178,10 @@ const Banner = () => {
             style={styles.buttonStyle}
             onPress={() => console.log("Button pressed")}
           >
-            <Text style={styles.buttonText}>Discover More</Text>
+            <Text style={styles.buttonText}>Shop Now</Text>
           </TouchableOpacity>
         </View>
-        <View>
+        <View style={styles.imageView}>
           <Image
             source={require("../assets/discoverImage.png")}
             style={styles.imageStyle}
@@ -196,7 +196,7 @@ export default Banner;
 
 const styles = StyleSheet.create({
   discover: {
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.GRAY_LIGHT,
     padding: 20,
     borderRadius: 10,
     flexDirection: "row",
@@ -205,24 +205,26 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     paddingVertical: 20,
+    gap: 20,
   },
   imageStyle: {
     width: 100,
     height: 100,
   },
   discoverText: {
-    color: COLORS.SECONDARY,
-    fontSize: 24,
-    fontFamily: "InterBold",
+    color: COLORS.PRIMARY,
+    fontSize: 20,
+    fontFamily: "PoppinsSemiBold",
   },
   discoverSubText: {
-    color: COLORS.SECONDARY,
+    color: COLORS.TERTIARY,
+
     paddingTop: 10,
     paddingBottom: 10,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsMedium",
   },
   buttonStyle: {
-    backgroundColor: COLORS.SECONDARY,
+    backgroundColor: COLORS.COMPLIMENTARY,
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -234,13 +236,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
+    width: "60%",
   },
   buttonText: {
-    color: COLORS.PRIMARY,
-    fontFamily: "InterBold",
+    color: COLORS.SECONDARY,
+    fontFamily: "PoppinsSemiBold",
+    fontSize: 11,
   },
   discoverTextView: {
-    width: "60%",
+    flex: 2,
+  },
+  imageView: {
+    flex: 1,
   },
 });

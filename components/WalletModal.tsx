@@ -27,7 +27,7 @@ const WalletModal: React.FC<walletModalProps> = ({
             <Text style={styles.walletFunds}>GH₵ {balance}.00</Text>
           </View>
           <View style={styles.walletIcon}>
-            <Icon name="wallet" color={COLORS.COMPLIMENTARY} size={36} />
+            <Icon name="wallet" color={COLORS.PRIMARY} size={36} />
           </View>
         </View>
       )}
@@ -70,10 +70,10 @@ const styles = StyleSheet.create({
   },
   walletTitle: {
     color: COLORS.GRAY,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
   walletFunds: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   fundView: {
     flexDirection: "row",

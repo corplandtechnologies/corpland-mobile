@@ -33,7 +33,11 @@ const Active = () => {
   const [orders, setOrders] = useState([]);
   const filteredOrders = orders?.filter(
     (order: any) =>
-      order.status === 0 || order.status === 1 || order.status === 2
+      order.status === 0 ||
+      order.status === 1 ||
+      order.status === 2 ||
+      order.status === 5 ||
+      order.status === 6
   );
 
   const getOrders = async () => {
@@ -49,10 +53,11 @@ const Active = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    getOrders();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getOrders();
+    }, [])
+  );
 
   return (
     <ScrollView
