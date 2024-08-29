@@ -28,7 +28,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.corplandtechnologies.corpland",
-      "versionCode": 4
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/CORPLAND5.png"
