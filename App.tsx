@@ -66,7 +66,7 @@ const linking = {
 
 const Stack = createStackNavigator();
 
-export default function App() {
+function App() {
   const [isConnected, setIsConnected] = useState<boolean>(true);
   const [isFontLoaded, setFontLoaded] = useState<boolean>(false);
   const { user, setUser } = useApp();
@@ -477,3 +477,11 @@ const styles = StyleSheet.create({
     fontSize: 36,
   },
 });
+
+export default function WrappedApp() {
+  return (
+    <AppProvider>
+      <App />
+    </AppProvider>
+  );
+}

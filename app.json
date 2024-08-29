@@ -24,10 +24,11 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/CORPLAND-2-no-bg.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/CORPLAND5.png",
+        "backgroundColor": "#000000"
       },
-      "package": "com.corplandtechnologies.corpland"
+      "package": "com.corplandtechnologies.corpland",
+      "versionCode": 5
     },
     "web": {
       "favicon": "./assets/CORPLAND5.png"

@@ -14,7 +14,6 @@ import ProductGrid from "../components/ProductGrid";
 import { searchProducts } from "../api/api";
 import { COLORS } from "../utils/color";
 import UserHeader from "../components/UserHeader";
-import { ScrollView } from "react-native";
 
 const ProductDisplay = ({ route }) => {
   const category = route.params.category;
@@ -36,6 +35,22 @@ const ProductDisplay = ({ route }) => {
 
     fetchProducts();
   }, [category]);
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity style={{ width: "50%", alignSelf: "center" }}>
+      <ProductGrid
+        key={item._id}
+        image={item.images[0]}
+        title={item.title}
+        price={item.price}
+        region={item.region}
+        description={item.description}
+        _id={item._id}
+        userId={item.userId}
+        dials={item.dials}
+      />
+    </TouchableOpacity>
+  );
 
   if (isLoading) {
     return (
@@ -89,11 +104,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
-  },
-  scrollViewContent: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
   },
 });
 
