@@ -39,10 +39,7 @@ const Request: React.FC<RequestProps> = ({ post }) => {
       <View style={styles.content}>
         {post.image && (
           <View>
-            <Image
-              source={{ uri: post?.image }}
-              style={styles.image}
-            />
+            <Image source={{ uri: post?.image }} style={styles.image} />
           </View>
         )}
         <View style={styles.titleContainer}>
@@ -58,11 +55,7 @@ const Request: React.FC<RequestProps> = ({ post }) => {
               />
             </TouchableOpacity> */}
             <TouchableOpacity onPress={dialNumber}>
-              <Icon
-                name="call-outline"
-                size={20}
-                color="black"
-              />
+              <Icon name="call-outline" size={20} color="black" />
             </TouchableOpacity>
             {/* <TouchableOpacity>
               <Icon
@@ -77,7 +70,8 @@ const Request: React.FC<RequestProps> = ({ post }) => {
           <Text
             numberOfLines={showFullDescription ? undefined : 3}
             ellipsizeMode="tail"
-            style={styles.description}>
+            style={styles.description}
+          >
             {post.description}
           </Text>
           <TouchableOpacity onPress={toggleDescription}>
@@ -108,7 +102,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   postedTime: {
-    fontFamily: "InterLight",
+    fontFamily: "PoppinsLight",
     marginBottom: 10,
   },
   content: {
@@ -133,7 +127,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   titleText: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
     fontSize: 20,
   },
   iconsContainer: {
@@ -142,7 +136,7 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   description: {
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
   toggleDescription: {
     textDecorationLine: "underline",

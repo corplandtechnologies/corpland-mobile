@@ -4,6 +4,7 @@ import { COLORS } from "../utils/color";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import Card from "./ui/Card";
 
 interface ProductItemProps {
   image: any[];
@@ -46,63 +47,60 @@ const ProductItem: React.FC<ProductItemProps> = ({
   };
 
   return (
-    <TouchableOpacity
-      style={styles.productMain}
-      onPress={productNavigate}>
-      <View style={{ flex: 1 }}>
-        <Image
-          source={{ uri: image }}
-          style={styles.productImage}
-        />
-      </View>
-      <View style={{ flex: 2, padding: 10, justifyContent: "space-between" }}>
-        <View>
+    <TouchableOpacity onPress={productNavigate}>
+      <Card style={styles.productMain}>
+        <View style={{ flex: 1, height: 150 }}>
+          <Image source={{ uri: image }} style={styles.productImage} />
+        </View>
+        <View style={{ flex: 2, padding: 10, justifyContent: "space-between" }}>
           <View>
-            <Text style={styles.productTitle}>{title}</Text>
-          </View>
-          <View style={styles.userView}>
-            <View style={styles.avatarContainer}>
-              {userDetails &&
-              userDetails.length > 0 &&
-              userDetails[0]?.profilePicture ? (
-                <Avatar.Image
-                  size={20}
-                  source={{
-                    uri:
-                      userDetails[0].profilePicture ||
-                      userDetails.profilePicture,
-                  }}
-                />
-              ) : (
-                <Avatar.Image
-                  size={20}
-                  source={require("../assets/user.png")}
-                />
-              )}
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  maxWidth: "90%",
-                  flexWrap: "wrap",
-                  gap: 5,
-                }}>
-                <Text style={styles.AvatarText}>
-                  {(userDetails &&
-                    userDetails.length > 0 &&
-                    userDetails[0]?.name) ||
-                    userDetails.name ||
-                    "Unknown User"}
-                </Text>
-                {userDetails.verified && (
-                  <Icon
-                    name="checkmark-circle"
-                    size={15}
-                    color={COLORS.PRIMARY}
+            <View>
+              <Text style={styles.productTitle}>{title}</Text>
+            </View>
+            <View style={styles.userView}>
+              <View style={styles.avatarContainer}>
+                {userDetails &&
+                userDetails.length > 0 &&
+                userDetails[0]?.profilePicture ? (
+                  <Avatar.Image
+                    size={20}
+                    source={{
+                      uri:
+                        userDetails[0].profilePicture ||
+                        userDetails.profilePicture,
+                    }}
+                  />
+                ) : (
+                  <Avatar.Image
+                    size={20}
+                    source={require("../assets/user.png")}
                   />
                 )}
-              </View>
-              {/* <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    maxWidth: "90%",
+                    flexWrap: "wrap",
+                    gap: 5,
+                  }}
+                >
+                  <Text style={styles.AvatarText}>
+                    {(userDetails &&
+                      userDetails.length > 0 &&
+                      userDetails[0]?.name) ||
+                      userDetails.name ||
+                      "Unknown User"}
+                  </Text>
+                  {userDetails.verified && (
+                    <Icon
+                      name="checkmark-circle"
+                      size={15}
+                      color={COLORS.PRIMARY}
+                    />
+                  )}
+                </View>
+                {/* <View>
               <TouchableOpacity onPress={toggleIsLiked}>
                 <Icon
                   name={isLiked ? "heart" : "heart-outline"}
@@ -111,36 +109,40 @@ const ProductItem: React.FC<ProductItemProps> = ({
                 />
               </TouchableOpacity>
             </View> */}
+              </View>
             </View>
+            {/* <View>
+              <Text style={styles.productDesc}>{truncatedTitle}</Text>
+            </View> */}
           </View>
-          <View>
-            <Text style={styles.productDesc}>{truncatedTitle}</Text>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              gap: 2,
-            }}>
-            <Icon
-              name="location"
-              size={20}
-              color={COLORS.GRAY}
-            />
-            <Text style={{ color: COLORS.GRAY, fontFamily: "InterRegular" }}>
-              {region}
-            </Text>
+              justifyContent: "space-between",
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 2,
+                flex: 1,
+              }}
+            >
+              <Icon name="location" size={20} color={COLORS.GRAY} />
+              <Text
+                style={{ color: COLORS.GRAY, fontFamily: "PoppinsRegular" }}
+              >
+                {region}
+              </Text>
+            </View>
+            <View style={{ flex: 1, alignItems: "flex-end" }}>
+              <Text style={styles.productPrice}>GH₵{price}</Text>
+            </View>
           </View>
-          <Text style={styles.productPrice}>GH₵{price}</Text>
         </View>
-      </View>
+      </Card>
     </TouchableOpacity>
   );
 };
@@ -149,18 +151,20 @@ export default ProductItem;
 const styles = StyleSheet.create({
   productMain: {
     backgroundColor: COLORS.SECONDARY,
-    borderRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderRadius: 20,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: 5,
     width: "100%",
     flexDirection: "row",
-    height: 200,
-    marginVertical: 10,
+    // height: 200,
+    marginVertical: 5,
+    borderWidth: 1,
+    borderColor: COLORS.GRAY_LIGHT,
   },
   productImage: {
     width: "100%",
@@ -169,18 +173,18 @@ const styles = StyleSheet.create({
     objectFit: "cover",
   },
   productTitle: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsSemiBold",
     fontSize: 18,
   },
   productPrice: {
-    fontFamily: "InterExtraBold",
-    color: COLORS.COMPLIMENTARY,
+    fontFamily: "PoppinsSemiBold",
+    color: COLORS.PRIMARY,
     fontSize: 18,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 11,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsSemiBold",
     // maxWidth: "80%",
   },
   avatarContainer: {
@@ -191,7 +195,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   productDesc: {
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     fontSize: 16,
   },
   userView: {
@@ -200,7 +204,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   levelView: {
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
     borderRadius: 10,
     padding: 10,
     shadowColor: "#000",
@@ -216,7 +220,7 @@ const styles = StyleSheet.create({
   levelText: {
     color: COLORS.SECONDARY,
     textAlign: "center",
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   productView: {
     flexDirection: "row",

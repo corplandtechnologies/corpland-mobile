@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../utils/color";
@@ -20,11 +21,14 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   getProducts,
   getTrendingProducts,
+  getUserById,
   searchProducts,
 } from "../api/api";
 import { Snackbar } from "react-native-paper";
 import { useSearchResults } from "../context/SearchResultsContext";
-import { getStorageItem } from "../utils";
+import { getStorageItem, handleError } from "../utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useApp } from "../context/AppContext";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -34,7 +38,10 @@ const Home = () => {
   const { setSearchResults } = useSearchResults();
   const [products, setProducts] = useState([]);
   const [trendingProducts, setTrendingProducts] = useState([]);
-  const navigation = useNavigation();
+  const [refreshing, setRefreshing] = useState(false);
+  const navigation: any = useNavigation();
+  const { user, setUser } = useApp();
+  const [searchLoading, setSearchLoading] = useState(false);
 
   useEffect(() => {
     const getLoggedInUser = async () => {
@@ -48,8 +55,10 @@ const Home = () => {
     getLoggedInUser();
   }, []);
 
-  const handleSearch = async () => {
-    setLoading(true);
+  const handleSearch = async (
+    setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setLoadingState(true);
     try {
       if (!search) {
         setSnackbarMessage("All fields are required");
@@ -58,34 +67,50 @@ const Home = () => {
       }
       const res = await searchProducts(search);
       setSearchResults(res.data);
+      setLoadingState(false);
       setSnackbarVisible(true);
       setSnackbarMessage("Search Completed!");
       setSearch("");
       navigation.navigate("Search");
     } catch (error) {
       console.log(error);
-      setSnackbarMessage(error.response.data);
+      setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
+      setLoadingState(false);
+    } finally {
+      setLoadingState(false);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await getProducts();
+      const res = await getTrendingProducts();
+      setProducts(response.data);
+      setTrendingProducts(res.data);
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await getProducts();
-        const res = await getTrendingProducts();
-        setProducts(response.data);
-        setTrendingProducts(res.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
+  }, []);
+
+  const fetchUser = async () => {
+    try {
+      const userInfo: any = await AsyncStorage.getItem("user");
+      const parsedUserInfo = JSON.parse(userInfo);
+      const res: any = await getUserById(parsedUserInfo?._id);
+      setUser(res?.data?.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchUser();
   }, []);
 
   const handleSeeAll = (routeName: string, title: string) => {
@@ -94,7 +119,24 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              try {
+                fetchProducts();
+                fetchUser();
+                setRefreshing(false);
+              } catch (error) {
+                setRefreshing(false);
+              }
+            }}
+          />
+        }
+      >
         {/* <UserInfo navigation={navigation} /> */}
         <FormInput
           icon="search"
@@ -102,8 +144,8 @@ const Home = () => {
           isButtoned={true}
           isButtonedIcon="options"
           onChangeText={setSearch}
-          loading={loading}
-          onPress={handleSearch}
+          loading={searchLoading}
+          onPress={() => handleSearch(setSearchLoading)}
         />
         <Banner />
         <View style={styles.sectionView}>

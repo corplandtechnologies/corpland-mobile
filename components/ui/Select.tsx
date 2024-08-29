@@ -16,15 +16,9 @@ import { ScrollView } from "react-native-gesture-handler";
 const Touchable = (text = "Select an Option", onPress: () => void) => {
   const TouchableComponent = () => {
     return (
-      <TouchableOpacity
-        onPress={onPress}
-        style={styles.touchableContainer}>
+      <TouchableOpacity onPress={onPress} style={styles.touchableContainer}>
         <Text style={styles.touchableText}>{text}</Text>
-        <Icon
-          name="chevron-forward"
-          size={24}
-          color={COLORS.PRIMARY}
-        />
+        <Icon name="chevron-forward" size={24} color={COLORS.PRIMARY} />
       </TouchableOpacity>
     );
   };
@@ -40,15 +34,9 @@ const Option = ({
   onSelect: () => void;
 }) => {
   return (
-    <TouchableOpacity
-      onPress={onSelect}
-      style={styles.optionContainer}>
+    <TouchableOpacity onPress={onSelect} style={styles.optionContainer}>
       <Text style={styles.optionText}>{optionText}</Text>
-      <Icon
-        name="chevron-forward"
-        size={24}
-        color={COLORS.GRAY}
-      />
+      <Icon name="chevron-forward" size={24} color={COLORS.GRAY} />
     </TouchableOpacity>
   );
 };
@@ -86,36 +74,31 @@ const Select = ({
       <ScrollView>
         <TouchableComponent />
 
-        <Modal
-          visible={visible}
-          animationType="slide">
-            <View style={styles.header}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.title}>{title}</Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  setVisible(false);
-                }}>
-                <Icon
-                  name="close"
-                  size={26}
-                  color={COLORS.PRIMARY}
-                />
-              </TouchableOpacity>
+        <Modal visible={visible} animationType="slide">
+          <View style={styles.header}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>{title}</Text>
             </View>
-            <ScrollView>
-              {options.map((item, index) => (
-                <Option
-                  key={index} // It's important to provide a unique key for each child in a list
-                  optionText={item}
-                  onSelect={() => {
-                    onSelect(item); // Call the passed onSelect function with the selected item
-                    setVisible(false); // Close the modal or perform other actions
-                  }}
-                />
-              ))}
-            </ScrollView>
+            <TouchableOpacity
+              onPress={() => {
+                setVisible(false);
+              }}
+            >
+              <Icon name="close" size={26} color={COLORS.PRIMARY} />
+            </TouchableOpacity>
+          </View>
+          <ScrollView>
+            {options.map((item, index) => (
+              <Option
+                key={index} // It's important to provide a unique key for each child in a list
+                optionText={item}
+                onSelect={() => {
+                  onSelect(item); // Call the passed onSelect function with the selected item
+                  setVisible(false); // Close the modal or perform other actions
+                }}
+              />
+            ))}
+          </ScrollView>
         </Modal>
       </ScrollView>
     </View>
@@ -141,7 +124,7 @@ const styles = StyleSheet.create({
     color: COLORS.PRIMARY,
     fontSize: 14,
     fontWeight: "600",
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
   header: {
     borderBottomColor: COLORS.PRIMARY,
@@ -153,7 +136,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   title: {
     fontSize: 18,
@@ -161,7 +144,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLORS.PRIMARY,
     textAlign: "center",
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   optionContainer: {
     paddingVertical: 15,
@@ -174,6 +157,6 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
 });

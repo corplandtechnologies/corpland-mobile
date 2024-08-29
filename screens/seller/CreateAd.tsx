@@ -31,10 +31,10 @@ const CreateAd = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [locationOptions, setLocationOptions] = useState<string[]>([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [locationRefused, setLocationRefused] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [locationRefused, setLocationRefused] = useState<boolean>(false);
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [countryOptions, setCountryOptions] = useState<string[]>([]);
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -47,18 +47,14 @@ const CreateAd = () => {
       if (location) {
         // Location granted, proceed as usual
         const country = await getUserCountry(location);
-        console.log(location);
-        console.log(country);
 
         if (country && country in regionsByCountry) {
           // If it is, set locationOptions to the array of regions for that country
           setLocationOptions(
             regionsByCountry[country as keyof typeof regionsByCountry]
           );
-          console.log(locationOptions);
         } else {
           // Default to global locations if user is not in a specific region
-          console.log(regionsByCountry);
         }
       } else {
         // Location refused, set locationRefused to true
@@ -89,8 +85,6 @@ const CreateAd = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log(result);
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       setImageObject(result.assets[0]);
@@ -120,7 +114,6 @@ const CreateAd = () => {
         phoneNumber: phoneNumber,
       };
       const response = await createAd(newAd);
-      console.log(response.data);
       navigation.navigate("Home");
       setSnackbarMessage("Ad created successfully");
       setSnackbarVisible(true);
@@ -136,27 +129,21 @@ const CreateAd = () => {
     <ScreenContextWrapper>
       <ScrollView>
         <Card>
-          <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
+          <Text style={{ fontFamily: "PoppinsRegular" }}>Add a photo</Text>
           <View style={styles.imageContainer}>
             {image && (
               <View style={styles.imageWrapper}>
-                <Image
-                  source={{ uri: image }}
-                  style={styles.image}
-                />
+                <Image source={{ uri: image }} style={styles.image} />
                 <TouchableOpacity
                   style={styles.removeImageButton}
-                  onPress={removeImage}>
+                  onPress={removeImage}
+                >
                   <Text style={styles.removeImageText}>x</Text>
                 </TouchableOpacity>
               </View>
             )}
-            <TouchableOpacity
-              style={styles.addImageBox}
-              onPress={pickImage}>
-              <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
-                +
-              </Text>
+            <TouchableOpacity style={styles.addImageBox} onPress={pickImage}>
+              <Text style={{ fontSize: 20, color: COLORS.PRIMARY }}>+</Text>
             </TouchableOpacity>
           </View>
         </Card>
@@ -165,7 +152,7 @@ const CreateAd = () => {
             mode="outlined"
             placeholder="What's available?"
             label={"Title"}
-            outlineColor={COLORS.COMPLIMENTARY}
+            outlineColor={COLORS.PRIMARY}
             activeOutlineColor={COLORS.PRIMARY}
             style={styles.textInput}
             value={title} // Bind the state value
@@ -219,12 +206,10 @@ const CreateAd = () => {
               icon="post"
               mode="contained"
               onPress={handleSubmit}
-              style={styles.createAd}>
+              style={styles.createAd}
+            >
               {loading ? (
-                <ActivityIndicator
-                  size="small"
-                  color="white"
-                />
+                <ActivityIndicator size="small" color="white" />
               ) : (
                 "Ad"
               )}
@@ -240,7 +225,8 @@ const CreateAd = () => {
         <Snackbar
           visible={snackbarVisible}
           onDismiss={() => setSnackbarVisible(false)}
-          duration={Snackbar.DURATION_SHORT}>
+          duration={Snackbar.DURATION_SHORT}
+        >
           {snackbarMessage}
         </Snackbar>
       </ScrollView>
@@ -250,7 +236,7 @@ const CreateAd = () => {
 
 const styles = StyleSheet.create({
   textInput: {
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     backgroundColor: COLORS.SECONDARY,
   },
   addImageBox: {
@@ -263,7 +249,7 @@ const styles = StyleSheet.create({
   },
   textInputDesc: {
     paddingLeft: 10,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     height: "100%",
   },
   createAd: {
@@ -298,7 +284,7 @@ const styles = StyleSheet.create({
   removeImageText: {
     fontSize: 16,
     color: COLORS.SECONDARY,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
 });
 

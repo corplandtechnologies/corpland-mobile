@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Modal,
   Linking,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import ScreenContextWrapper from "../components/ScreenContextWrapper";
@@ -22,29 +23,12 @@ import { useSellerMode } from "../context/SellerModeContext";
 import { useUser } from "../context/UserContext";
 import ProductCard from "../components/ProductCard";
 import ConfirmationModal from "../components/ConfirmationModal";
+import { useApp } from "../context/AppContext";
 
 const Profile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { isSellerMode, toggleSellerMode } = useSellerMode();
-  const [userInfo, setUserInfo] = useState({});
-  const { user } = useUser();
-
-  useFocusEffect(
-    React.useCallback(() => {
-      const fetchData = async () => {
-        try {
-          const userInfo = await AsyncStorage.getItem("user");
-          const parsedUserInfo = JSON.parse(userInfo || "{}");
-          const res = await getUserById(parsedUserInfo?._id);
-          setUserInfo(res.data?.user);
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
-        }
-      };
-
-      fetchData();
-    }, [])
-  );
+  const { user } = useApp();
 
   const navigation = useNavigation();
 
@@ -61,6 +45,7 @@ const Profile = () => {
       await AsyncStorage.removeItem("user");
       await AsyncStorage.removeItem("token");
       navigation.navigate("Login");
+      setIsModalVisible(false);
     } catch (error) {
       console.log(error);
     }
@@ -75,83 +60,100 @@ const Profile = () => {
 
   return (
     <View style={styles.headerView}>
-      <View style={styles.avatarContainer}>
-        <Avatar.Image
-          size={100}
-          source={{ uri: userInfo?.profilePicture }}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            maxWidth: "90%",
-            flexWrap: "wrap",
-            gap: 5,
-          }}>
-          <Text style={styles.AvatarText}>{userInfo?.name}</Text>
-          {userInfo.verified && (
-            <Icon
-              name="checkmark-circle"
-              size={18}
-              color={COLORS.COMPLIMENTARY}
-            />
-          )}
+      <ScrollView
+        contentContainerStyle={{
+          backgroundColor: COLORS.SECONDARY,
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.avatarContainer}>
+          <Avatar.Image size={100} source={{ uri: user?.profilePicture }} />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              maxWidth: "90%",
+              flexWrap: "wrap",
+              gap: 5,
+            }}
+          >
+            <Text style={styles.AvatarText}>{user?.name}</Text>
+            {user?.verified && (
+              <Icon name="checkmark-circle" size={18} color={COLORS.PRIMARY} />
+            )}
+          </View>
         </View>
-      </View>
-      {/* <View style={styles.modeView}>
+        {/* <View style={styles.modeView}>
         <Text style={styles.modeText}>Seller Mode</Text>
         <Switch
           value={isSellerMode}
           onValueChange={toggleSellerMode}
-          color={COLORS.COMPLIMENTARY}
+          color={COLORS.GRAY_LIGHT}
+          trackColor={COLORS.PRIMARY}
         />
       </View> */}
-      <View style={{ marginTop: 20 }}>
-        <ProfileMenuItem
-          title="Edit Profile"
-          iconName="person-outline"
-          onPress={() => navigation.navigate("EditProfile")}
-        />
-        <ProfileMenuItem
-          title="My Products"
-          iconName="pricetags-outline"
-          onPress={() => navigation.navigate("MyProducts")}
-        />
-        {/* <ProfileMenuItem
+        <View style={{ marginTop: 20 }}>
+          <ProfileMenuItem
+            title="Edit Profile"
+            iconName="person-outline"
+            onPress={() => navigation.navigate("EditProfile")}
+          />
+          <ProfileMenuItem
+            title="My Products"
+            iconName="pricetags-outline"
+            onPress={() => navigation.navigate("MyProducts")}
+          />
+          <ProfileMenuItem
+            title="Wallet"
+            iconName="wallet-outline"
+            onPress={() => navigation.navigate("Wallet")}
+          />
+          <ProfileMenuItem
+            title="Withdraw"
+            iconName="card-outline"
+            onPress={() => navigation.navigate("Withdraw")}
+          />
+          {/* <ProfileMenuItem
+            title="My Coupons"
+            iconName="ticket-outline"
+            onPress={() => navigation.navigate("MyCoupons")}
+          /> */}
+          {/* <ProfileMenuItem
           title="Settings"
           iconName="settings-outline"
           onPress={() => console.log("Settings pressed")}
         /> */}
-        <ProfileMenuItem
-          title="Send Feedback"
-          iconName="mail-outline"
-          onPress={() => handleEmail("Feedback", "")}
-        />
+          <ProfileMenuItem
+            title="Send Feedback"
+            iconName="mail-outline"
+            onPress={() => handleEmail("Feedback", "")}
+          />
 
-        {/* <ProfileMenuItem
+          {/* <ProfileMenuItem
           title="Help Center"
           iconName="help-circle-outline"
           onPress={() => handleEmail("Help Center", "")}
         /> */}
 
-        {/*  <ProfileMenuItem
+          {/*  <ProfileMenuItem
           title="Privacy Policy"
           iconName="information-circle-outline"
           onPress={() => console.log("Privacy Policy pressed")}
         /> */}
-        <ProfileMenuItem
-          title="Log Out"
-          iconName="log-out-outline"
-          onPress={showModal}
+          <ProfileMenuItem
+            title="Log Out"
+            iconName="log-out-outline"
+            onPress={showModal}
+          />
+        </View>
+        <ConfirmationModal
+          isVisible={isModalVisible}
+          onClose={hideModal}
+          onConfirm={handleLogout}
+          modalTitle="Are you sure you want to log out?"
+          ConfirmButtonText="Log Out"
         />
-      </View>
-      <ConfirmationModal
-        isVisible={isModalVisible}
-        onClose={hideModal}
-        onConfirm={handleLogout}
-        modalTitle="Are you sure you want to log out?"
-        ConfirmButtonText="Log Out"
-      />
+      </ScrollView>
     </View>
   );
 };
@@ -164,8 +166,8 @@ const styles = StyleSheet.create({
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 16,
-    fontFamily: "InterBold",
-    marginTop: 5,
+    fontFamily: "PoppinsSemiBold",
+    marginTop: 30,
   },
   avatarContainer: {
     flexDirection: "column",
@@ -178,13 +180,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: COLORS.TERTIARY,
+    backgroundColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     marginVertical: 10,
     borderRadius: 10,
   },
   modeText: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
+    color: COLORS.SECONDARY,
   },
   modalContainer: {
     flex: 1,
@@ -198,7 +201,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 24,
     color: COLORS.SECONDARY,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   modalButtons: {
     flexDirection: "column",
@@ -220,13 +223,13 @@ const styles = StyleSheet.create({
     color: COLORS.PRIMARY,
     fontSize: 16,
     textAlign: "center",
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   modalButtonTextLogout: {
     color: COLORS.SECONDARY,
     fontSize: 16,
     textAlign: "center",
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
 });
 

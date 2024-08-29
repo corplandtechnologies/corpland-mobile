@@ -59,18 +59,12 @@ const ProductGrid: React.FC<ProductItemProps> = ({
       }
     };
     fetchUser();
-  }, []);
+  }, [userId]);
 
-  useEffect(() => {}, [_id]);
   return (
-    <TouchableOpacity
-      style={styles.productMain}
-      onPress={productNavigate}>
+    <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
       <View style={{ flex: 1 }}>
-        <Image
-          source={{ uri: image }}
-          style={styles.productImage}
-        />
+        <Image source={{ uri: image }} style={styles.productImage} />
       </View>
       <View style={{ flex: 1, padding: 10, justifyContent: "space-between" }}>
         <View>
@@ -105,7 +99,8 @@ const ProductGrid: React.FC<ProductItemProps> = ({
                   maxWidth: "90%",
                   flexWrap: "wrap",
                   gap: 5,
-                }}>
+                }}
+              >
                 <Text style={styles.AvatarText}>{userInfo.name}</Text>
                 {userInfo.verified && (
                   <Icon
@@ -135,24 +130,23 @@ const ProductGrid: React.FC<ProductItemProps> = ({
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-          }}>
+          }}
+        >
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               gap: 2,
-            }}>
-            <Icon
-              name="location"
-              size={10}
-              color={COLORS.GRAY}
-            />
+            }}
+          >
+            <Icon name="location" size={10} color={COLORS.GRAY} />
             <Text
               style={{
                 color: COLORS.GRAY,
-                fontFamily: "InterRegular",
+                fontFamily: "PoppinsRegular",
                 fontSize: 11,
-              }}>
+              }}
+            >
               {region}
             </Text>
           </View>
@@ -168,13 +162,6 @@ const styles = StyleSheet.create({
   productMain: {
     backgroundColor: COLORS.SECONDARY,
     borderRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    elevation: 5,
-    shadowRadius: 3.84,
     width: "100%",
     flexDirection: "column",
     height: 350,
@@ -186,18 +173,18 @@ const styles = StyleSheet.create({
     objectFit: "cover",
   },
   productTitle: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
     fontSize: 16,
   },
   productPrice: {
-    fontFamily: "InterExtraBold",
-    color: COLORS.COMPLIMENTARY,
+    fontFamily: "PoppinsExtraBold",
+    color: COLORS.PRIMARY,
     fontSize: 14,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 8,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
     // maxWidth: "80%",
   },
   avatarContainer: {
@@ -208,7 +195,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   productDesc: {
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     fontSize: 11,
   },
   userView: {
@@ -217,7 +204,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   levelView: {
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
     borderRadius: 10,
     padding: 10,
     shadowColor: "#000",
@@ -233,7 +220,7 @@ const styles = StyleSheet.create({
   levelText: {
     color: COLORS.SECONDARY,
     textAlign: "center",
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   productView: {
     flexDirection: "row",

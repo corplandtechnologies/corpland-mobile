@@ -57,32 +57,20 @@ const ProductDisplay = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {products.map((product) => (
-          <TouchableOpacity
-            key={product._id}
-            style={{ width: "50%", alignSelf: "center" }}
-          >
-            <ProductGrid
-              image={product.images[0]}
-              title={product.title}
-              price={product.price}
-              region={product.region}
-              description={product.description}
-              _id={product._id}
-              userId={product.userId}
-              dials={product.dials}
-            />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <FlatList
+        data={products}
+        renderItem={renderItem}
+        keyExtractor={(item) => item._id}
+        numColumns={2}
+        contentContainerStyle={{}}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "#fff",
   },
   emptyContainer: {

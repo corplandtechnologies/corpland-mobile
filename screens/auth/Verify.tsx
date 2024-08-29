@@ -112,7 +112,7 @@ const Verify = () => {
           <Text
             style={{
               textDecorationLine: "underline",
-              color: COLORS.COMPLIMENTARY,
+              color: COLORS.PRIMARY,
             }}
             onPress={() => navigation.navigate("CompleteProfile")}
           >

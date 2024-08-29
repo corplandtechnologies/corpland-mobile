@@ -30,11 +30,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   optionText: {
-    color: COLORS.COMPLIMENTARY,
+    color: COLORS.PRIMARY,
     fontSize: 16,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.COMPLIMENTARY,
+    borderBottomColor: COLORS.PRIMARY,
     textDecorationLine: "underline",
   },
 });

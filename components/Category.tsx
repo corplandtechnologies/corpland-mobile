@@ -12,7 +12,7 @@ const Category: FC<CategoryProps> = ({ category, iconImagePath }) => {
       <View style={styles.wrapper}>
         <Image source={iconImagePath} style={styles.catImage} />
       </View>
-      <Text style={{ fontFamily: "InterMedium", textAlign: "center" }}>
+      <Text style={{ fontFamily: "PoppinsMedium", textAlign: "center" }}>
         {category}
       </Text>
     </View>

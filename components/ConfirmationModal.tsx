@@ -18,24 +18,23 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   modalTitle,
   ConfirmButtonText,
 }) => {
- 
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={isVisible}
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+    >
       <View style={styles.modalContainer}>
         <Text style={styles.modalText}>{modalTitle}</Text>
         <View style={styles.modalButtons}>
-          <TouchableOpacity
-            style={styles.modalButton}
-            onPress={onClose}>
+          <TouchableOpacity style={styles.modalButton} onPress={onClose}>
             <Text style={styles.modalButtonText}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.modalButtonConfirm}
-            onPress={onConfirm}>
+            onPress={onConfirm}
+          >
             <Text style={styles.modalButtonTextConfirm}>
               {ConfirmButtonText}
             </Text>
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     margin: 24,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
     color: COLORS.SECONDARY,
   },
   modalSubText: {
@@ -66,7 +65,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 8,
     color: "#888",
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
   modalButtons: {
     flexDirection: "column",
@@ -88,13 +87,13 @@ const styles = StyleSheet.create({
     color: COLORS.PRIMARY,
     fontSize: 16,
     textAlign: "center",
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   modalButtonTextConfirm: {
     color: "#FFF",
     fontSize: 16,
     textAlign: "center",
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
 });
 

@@ -5,11 +5,15 @@ import { COLORS } from "../../utils/color";
 
 interface primaryButtonProps {
   value: string;
-  onPress?: () => void;
+  onPress?: any;
   disabled?: boolean;
   loading?: boolean;
-  icon?: string | JSX.Element;
+  icon?: string | JSX.Element | any;
   isIcon?: boolean;
+  secondary?: boolean;
+  fontFamily?: string;
+  style?: any;
+  width?: number | string;
 }
 
 const PrimaryButton: FC<primaryButtonProps> = ({
@@ -19,27 +23,42 @@ const PrimaryButton: FC<primaryButtonProps> = ({
   loading,
   icon,
   isIcon,
+  secondary,
+  fontFamily,
+  style,
+  width,
 }) => {
   return (
     <Button
       title={value}
-      buttonStyle={styles.primaryButton}
+      buttonStyle={{
+        backgroundColor: secondary ? COLORS.GRAY_LIGHT : COLORS.PRIMARY,
+        padding: 20,
+        width: width ? width : "auto",
+      }}
+      containerStyle={[
+        {
+          backgroundColor: secondary ? COLORS.GRAY_LIGHT : COLORS.PRIMARY,
+          borderRadius: 10,
+        },
+        style,
+      ]}
       onPress={onPress}
       disabled={disabled}
       loading={loading}
       icon={icon}
-      titleStyle={isIcon ? { marginLeft: 10 } : {}}
+      titleStyle={
+        isIcon
+          ? { marginLeft: 10 }
+          : {
+              color: secondary ? COLORS.PRIMARY : COLORS.SECONDARY,
+              fontFamily: fontFamily ? fontFamily : "PoppinsSemiBold",
+            }
+      }
     />
   );
 };
 
 export default PrimaryButton;
 
-const styles = StyleSheet.create({
-  primaryButton: {
-    backgroundColor: COLORS.COMPLIMENTARY,
-    padding: 20,
-    borderRadius: 10,
-    marginTop: 10,
-  },
-});
+const styles = StyleSheet.create({});

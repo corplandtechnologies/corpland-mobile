@@ -57,7 +57,8 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <ProductContext.Provider
-      value={{ productId, setProductId, loading, error }}>
+      value={{ productId, setProductId, loading, error }}
+    >
       {children}
     </ProductContext.Provider>
   );

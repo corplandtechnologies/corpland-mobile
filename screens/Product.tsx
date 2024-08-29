@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -34,9 +34,12 @@ import { useUser } from "../context/UserContext";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useApp } from "../context/AppContext";
+import CartContext from "../context/CartContext";
 
 const Product = ({ route }) => {
-  const navigation = useNavigation();
+  const { user: currentUser } = useApp();
+  const navigation: any = useNavigation();
   const { setProductId } = useProduct();
   const { searchResults } = useSearchResults();
   const productId = route.params.productId;
@@ -49,23 +52,20 @@ const Product = ({ route }) => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const productImages = product?.images || product?.image;
-  const [currentUser, setCurrentUser] = useState({});
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userInfo = await AsyncStorage.getItem("user");
-        if (userInfo) {
-          const parsedUserInfo = JSON.parse(userInfo);
-          setCurrentUser(parsedUserInfo);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+  const { addProductToCart }: any = useContext(CartContext);
+  const handleBuyNow = () => {
+    const productDetails = {
+      _id: product._id,
+      title: product.title,
+      image: product.images[0],
+      category: product.category,
+      price: product.price,
+      quantity: 1,
+      sellerId: product.userId,
     };
-
-    fetchUser();
-  }, [user]);
+    addProductToCart(productDetails);
+    navigation.navigate("Cart");
+  };
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -213,6 +213,7 @@ const Product = ({ route }) => {
       </View>
     ));
   };
+
   return (
     <>
       <ScrollView contentContainerStyle={{ backgroundColor: COLORS.SECONDARY }}>
@@ -271,33 +272,28 @@ const Product = ({ route }) => {
                       <View style={{ flex: 4 }}>
                         <Text style={styles.titleText}>{product?.title}</Text>
                       </View>
-                      <TouchableOpacity>
-                        <Icon
-                          name="share-social"
-                          size={30}
-                          color={COLORS.COMPLIMENTARY}
-                          onPress={shareProduct}
-                        />
-                      </TouchableOpacity>
+                      <View style={styles.actionView}>
+                        <TouchableOpacity>
+                          <Icon
+                            name="share-social"
+                            size={30}
+                            color={COLORS.PRIMARY}
+                            onPress={shareProduct}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                          <Icon
+                            name="call"
+                            size={30}
+                            color={COLORS.PRIMARY}
+                            onPress={handleCallNow}
+                          />
+                        </TouchableOpacity>
+                      </View>
                       {product?.userId === currentUser?._id && (
-                        <View style={styles.iconsView}>
-                          <TouchableOpacity
-                            onPress={() =>
-                              navigation.navigate("EditProduct", {
-                                product: product,
-                              })
-                            }
-                          >
-                            <Icon
-                              name="create-outline"
-                              size={30}
-                              color={COLORS.COMPLIMENTARY}
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity onPress={showModal}>
-                            <Icon name="trash" size={30} color={"red"} />
-                          </TouchableOpacity>
-                        </View>
+                        <TouchableOpacity onPress={showModal}>
+                          <Icon name="trash" size={30} color={"red"} />
+                        </TouchableOpacity>
                       )}
                     </View>
                     <View>
@@ -331,41 +327,66 @@ const Product = ({ route }) => {
                             <Icon
                               name="checkmark-circle"
                               size={18}
-                              color={COLORS.COMPLIMENTARY}
+                              color={COLORS.PRIMARY}
                             />
                           )}
                         </View>
                       </View>
                     </View>
-                    <View style={styles.bottomContainer}>
-                      <View style={styles.priceView}>
-                        <Text style={styles.priceText}>
-                          GH₵{product?.price}
-                        </Text>
+                    {relatedProducts.length > 0 && (
+                      <View style={styles.bottomContainer}>
+                        <View style={styles.priceView}>
+                          <Text style={styles.priceText}>
+                            GH₵{product?.price}
+                          </Text>
+                        </View>
+                        <View style={styles.CTAView}>
+                          {currentUser?._id === product?.userId ? (
+                            <>
+                              <PrimaryButton
+                                value="Edit Product"
+                                icon={
+                                  <Icon
+                                    name="create"
+                                    size={24}
+                                    color={COLORS.SECONDARY}
+                                  />
+                                }
+                                onPress={() =>
+                                  navigation.navigate("EditProduct", {
+                                    product: product,
+                                  })
+                                }
+                                isIcon
+                              />
+                            </>
+                          ) : (
+                            <>
+                              <PrimaryButton
+                                value="Buy Now"
+                                icon={
+                                  <Icon
+                                    name="bag"
+                                    size={24}
+                                    color={COLORS.SECONDARY}
+                                  />
+                                }
+                                onPress={handleBuyNow}
+                                isIcon
+                              />
+                            </>
+                          )}
+                        </View>
                       </View>
-                      <View style={styles.CTAView}>
-                        <PrimaryButton
-                          value="Call Now"
-                          icon={
-                            <Icon
-                              name="call-outline"
-                              size={24}
-                              color={COLORS.SECONDARY}
-                            />
-                          }
-                          onPress={handleCallNow}
-                          isIcon
-                        />
-                      </View>
-                    </View>
+                    )}
                   </>
                 )}
                 <View>
-                  {relatedProducts && (
+                  {relatedProducts.length > 0 && (
                     <Section limited headerText="Related Products">
                       <ScrollView showsHorizontalScrollIndicator={false}>
                         {isLoading ? (
-                          <ActivityIndicator size={50} color={COLORS.PRIMARY} />
+                          <ActivityIndicator color={COLORS.PRIMARY} />
                         ) : (
                           <>
                             {relatedProducts?.map((result) => (
@@ -392,20 +413,58 @@ const Product = ({ route }) => {
           </View>
         </View>
       </ScrollView>
-      <ConfirmationModal
-        isVisible={isModalVisible}
-        onClose={hideModal}
-        onConfirm={handleDelete}
-        modalTitle="Are you sure you want to delete your product?"
-        ConfirmButtonText="Delete"
-      />
-      <Snackbar
-        visible={snackbarVisible}
-        onDismiss={() => setSnackbarVisible(false)}
-        duration={Snackbar.DURATION_SHORT}
-      >
-        {snackbarMessage}
-      </Snackbar>
+      <>
+        {relatedProducts.length === 0 && (
+          <View style={styles.bottomContainer}>
+            <View style={styles.priceView}>
+              <Text style={styles.priceText}>GH₵{product?.price}</Text>
+            </View>
+            <View style={styles.CTAView}>
+              {currentUser?._id === product?.userId ? (
+                <>
+                  <PrimaryButton
+                    value="Edit Product"
+                    icon={
+                      <Icon name="create" size={24} color={COLORS.SECONDARY} />
+                    }
+                    onPress={() =>
+                      navigation.navigate("EditProduct", {
+                        product: product,
+                      })
+                    }
+                    isIcon
+                  />
+                </>
+              ) : (
+                <>
+                  <PrimaryButton
+                    value="Buy Now"
+                    icon={
+                      <Icon name="bag" size={24} color={COLORS.SECONDARY} />
+                    }
+                    onPress={handleBuyNow}
+                    isIcon
+                  />
+                </>
+              )}
+            </View>
+          </View>
+        )}
+        <ConfirmationModal
+          isVisible={isModalVisible}
+          onClose={hideModal}
+          onConfirm={handleDelete}
+          modalTitle="Are you sure you want to delete your product?"
+          ConfirmButtonText="Delete"
+        />
+        <Snackbar
+          visible={snackbarVisible}
+          onDismiss={() => setSnackbarVisible(false)}
+          duration={Snackbar.DURATION_SHORT}
+        >
+          {snackbarMessage}
+        </Snackbar>
+      </>
     </>
   );
 };
@@ -434,22 +493,22 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   titleText: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsSemiBold",
     fontSize: 18,
     flex: 3,
   },
   descTitle: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsSemiBold",
     fontSize: 18,
   },
   desc: {
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     color: COLORS.GRAY,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 14,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsSemiBold",
   },
 
   avatarContainer: {
@@ -466,9 +525,9 @@ const styles = StyleSheet.create({
   },
 
   priceText: {
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsSemiBold",
     fontSize: 18,
-    color: COLORS.COMPLIMENTARY,
+    color: COLORS.PRIMARY,
   },
 
   priceView: {
@@ -508,6 +567,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 10, // Adjust this value as needed
     width: "100%",
+  },
+  actionView: {
+    flexDirection: "row",
+    gap: 10,
   },
 });
 

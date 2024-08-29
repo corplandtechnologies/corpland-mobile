@@ -46,12 +46,13 @@ const EditProfile = () => {
 
   const navigation = useNavigation();
 
-
   useFocusEffect(
     useCallback(() => {
       const getUserInfo = async () => {
         try {
-          const parsedUserInfo = JSON.parse(await AsyncStorage.getItem("user"));
+          const parsedUserInfo = JSON.parse(
+            (await AsyncStorage.getItem("user")) || ""
+          );
           const res = await getUserById(parsedUserInfo?._id);
           setUserInfo(res.data.user);
         } catch (error) {
@@ -114,8 +115,6 @@ const EditProfile = () => {
         region: selectedRegion ? selectedRegion : userInfo?.region,
         userId: userInfo._id,
       };
-
-      console.log("data", data);
 
       const res = await updateUser(data);
       setSnackbarVisible(true);
@@ -288,7 +287,7 @@ const styles = StyleSheet.create({
   },
   editButton: {
     marginTop: 15,
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
     borderRadius: 5,
   },
   selectedImage: {

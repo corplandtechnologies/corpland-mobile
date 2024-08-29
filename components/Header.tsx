@@ -45,10 +45,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
   button: {
-    backgroundColor: COLORS.COMPLIMENTARY, // Blue background
+    backgroundColor: COLORS.PRIMARY, // Blue background
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff", // White text
     fontSize: 16,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsBold",
   },
 });
 

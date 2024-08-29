@@ -7,6 +7,7 @@ import { useUser } from "../../context/UserContext";
 import { getUserById, toggleFavorites } from "../../api/api";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useApp } from "../../context/AppContext";
 
 interface FavoriteIconProps {
   style?: Object;
@@ -14,27 +15,11 @@ interface FavoriteIconProps {
 }
 
 const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
-  const [user, setUser] = useState();
+  const { user } = useApp();
   const [isFavorite, setIsFavorite] = useState(
     user?.favorites?.includes(productId)
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      const getUserInfo = async () => {
-        try {
-          const parsedUserInfo = JSON.parse(
-            (await AsyncStorage.getItem("user")) || "{}"
-          );
-          const res = await getUserById(parsedUserInfo?._id);
-          setUser(res?.data.user);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      getUserInfo();
-    }, [])
-  );
   useEffect(() => {
     const fetchUserById = async () => {
       try {
@@ -45,7 +30,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
       }
     };
     fetchUserById();
-  }, [user, productId]);
+  }, [user?._id, productId]);
   const handleToggleFavorites = async () => {
     try {
       const res = await toggleFavorites(user?._id, productId);

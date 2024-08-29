@@ -27,20 +27,13 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
         padding: 20,
         paddingTop: 20,
         paddingBottom: 20,
-      }}>
-      <Icon
-        name={iconName}
-        size={24}
-        color={COLORS.COMPLIMENTARY}
-      />
-      <Text style={{ marginLeft: 10, flex: 1, fontFamily: "InterRegular" }}>
+      }}
+    >
+      <Icon name={iconName} size={24} color={COLORS.PRIMARY} />
+      <Text style={{ marginLeft: 10, flex: 1, fontFamily: "PoppinsRegular" }}>
         {title}
       </Text>
-      <Icon
-        name="chevron-forward"
-        size={24}
-        color={COLORS.COMPLIMENTARY}
-      />
+      <Icon name="chevron-forward" size={24} color={COLORS.PRIMARY} />
     </TouchableOpacity>
   );
 };

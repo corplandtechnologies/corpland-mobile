@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: "center",
     marginBottom: 20,
-    fontFamily: "InterBold",
+    fontFamily: "PoppinsSemiBold",
   },
   descriptiveText: {
     fontSize: 16,

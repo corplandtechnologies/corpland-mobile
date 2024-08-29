@@ -7,13 +7,13 @@ import Icon from "react-native-vector-icons/Ionicons";
 
 interface FormInputProps {
   placeholder: string;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: any) => void;
   style?: object;
-  icon?: string;
+  icon?: string | any;
   multiline?: boolean;
-  keyboardType?: string;
+  keyboardType?: string | any;
   isButtoned?: boolean;
-  isButtonedIcon?: string;
+  isButtonedIcon?: string | any;
   loading?: boolean;
   onPress?: () => void;
   defaultValue?: string;
@@ -33,6 +33,12 @@ const FormInput: React.FC<FormInputProps> = ({
   onPress,
   defaultValue,
 }) => {
+  const handleChangeText = (text: string) => {
+    const trimmedText = text.trim();
+    if (onChangeText) {
+      onChangeText(trimmedText);
+    }
+  };
   return (
     <View style={styles.main}>
       <View style={[styles.inputContainer, style]}>
@@ -41,7 +47,7 @@ const FormInput: React.FC<FormInputProps> = ({
           placeholder={placeholder}
           style={styles.input}
           placeholderTextColor={COLORS.TERTIARY}
-          onChangeText={onChangeText}
+          onChangeText={handleChangeText}
           multiline={multiline}
           keyboardType={keyboardType}
           cursorColor={COLORS.PRIMARY}
@@ -83,7 +89,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "90%",
-    outline: "none",
+    fontFamily: "PoppinsRegular",
   },
   buttonContainer: {
     flex: 1,

@@ -58,18 +58,14 @@ const CreateRequest = () => {
       if (location) {
         // Location granted, proceed as usual
         const country = await getUserCountry(location);
-        console.log(location);
-        console.log(country);
 
         if (country && country in regionsByCountry) {
           // If it is, set locationOptions to the array of regions for that country
           setLocationOptions(
             regionsByCountry[country as keyof typeof regionsByCountry]
           );
-          console.log(locationOptions);
         } else {
           // Default to global locations if user is not in a specific region
-          console.log(regionsByCountry);
         }
       } else {
         // Location refused, set locationRefused to true
@@ -133,7 +129,6 @@ const CreateRequest = () => {
         userId: user._id,
       };
       const response = await createRequest(newRequest);
-      console.log(response.data);
       navigation.navigate("Home");
       setSnackbarMessage("Request created successfully");
       setSnackbarVisible(true);
@@ -161,27 +156,21 @@ const CreateRequest = () => {
             options={categories}
             onSelect={(selectedOption) => setSelectedCategory(selectedOption)} // Update the selected category state
           />
-          <Text style={{ fontFamily: "InterRegular" }}>Add a photo</Text>
+          <Text style={{ fontFamily: "PoppinsRegular" }}>Add a photo</Text>
           <View style={styles.imageContainer}>
             {image && (
               <View style={styles.imageWrapper}>
-                <Image
-                  source={{ uri: image }}
-                  style={styles.image}
-                />
+                <Image source={{ uri: image }} style={styles.image} />
                 <TouchableOpacity
                   style={styles.removeImageButton}
-                  onPress={removeImage}>
+                  onPress={removeImage}
+                >
                   <Text style={styles.removeImageText}>x</Text>
                 </TouchableOpacity>
               </View>
             )}
-            <TouchableOpacity
-              style={styles.addImageBox}
-              onPress={pickImage}>
-              <Text style={{ fontSize: 20, color: COLORS.COMPLIMENTARY }}>
-                +
-              </Text>
+            <TouchableOpacity style={styles.addImageBox} onPress={pickImage}>
+              <Text style={{ fontSize: 20, color: COLORS.PRIMARY }}>+</Text>
             </TouchableOpacity>
           </View>
           <Select
@@ -234,7 +223,8 @@ const CreateRequest = () => {
           <Snackbar
             visible={snackbarVisible}
             onDismiss={() => setSnackbarVisible(false)}
-            duration={Snackbar.DURATION_SHORT}>
+            duration={Snackbar.DURATION_SHORT}
+          >
             {snackbarMessage}
           </Snackbar>
         </View>
@@ -253,7 +243,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   textInput: {
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
     backgroundColor: COLORS.SECONDARY,
   },
   addImageBox: {
@@ -266,7 +256,7 @@ const styles = StyleSheet.create({
   },
   textInputDesc: {
     paddingLeft: 10,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
   createRequest: {
     backgroundColor: COLORS.PRIMARY,
@@ -300,7 +290,7 @@ const styles = StyleSheet.create({
   removeImageText: {
     fontSize: 16,
     color: COLORS.SECONDARY,
-    fontFamily: "InterRegular",
+    fontFamily: "PoppinsRegular",
   },
 });
 

@@ -171,7 +171,7 @@ const CompleteProfile = () => {
             style={styles.input}
             pickerBackgroundColor={COLORS.TERTIARY}
             onChangePhoneNumber={(text) => {
-              setPhoneNumber(text);
+              setPhoneNumber(text.trim());
             }}
             autoFormat={true}
             // You can customize the country list and other props as needed
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   editButton: {
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
     marginTop: 15,
     borderRadius: 5,
   },

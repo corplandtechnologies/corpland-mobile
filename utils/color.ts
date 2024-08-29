@@ -1,11 +1,30 @@
 export const COLORS = {
-  PRIMARY: "#242424",
-  SECONDARY: "#fff",
-  TERTIARY: "#CFCFCF",
-  COMPLIMENTARY: "#0074D9",
-  BLUE_LIGHT: "#F0F8FF",
-  GRAY: "#808080",
-  GRAY_LIGHT: "#E5E4E2",
-  TRANSPARENT: "rgba(0,0,0,0.5)",
+  PRIMARY: "#282828",
+  SECONDARY: "#FFFFFF", // White
+  TERTIARY: "#AAAAAA", // Light Gray
+  COMPLIMENTARY: "#1A1C20", // Dark Gray
+  GRAY: "#808080", // Standard Gray
+  GRAY_LIGHT: "#EDEDED", // Very Light Gray
+  WRAPPER: "rgba(229, 228, 226, 0.5)", // Light Gray Transparent Overlay
+  TRANSPARENT: "rgba(0,0,0,0.5)", // Black Transparent Overlay
+  PRIMARY_LIGHT: "#2F2F2F", // Slightly lighter than Primary
+  SECONDARY_DARK: "#EAEAEA", // Slightly darker than White
+  TERTIARY_DARK: "#B0B0B0", // Darker shade of Tertiary
+  GRAY_DARK: "#696969", // Darker shade of Gray
+  GRAY_LIGHTER: "#D3D3D3", // In-between Gray and Gray Light
+  GRAY_VERY_LIGHT: "#F2F2F2",
+  MONEY: "#01AC66", // Just off-white, very subtle gray
   DESTRUCTIVE: "#FF4136",
+  ORDERPLACEDBADGE: "#FCFFC1",
+  ORDERPLACED: "#FFDC00",
+  INPROGRESSBADGE: "#F0F8FF",
+  INPROGRESS: "#0074D9",
+  DELIVEREDBADGE: "#E6E6FA",
+  DELIVERED: "#662d91",
+  COMPLETEDBADGE: "#D0F0C0",
+  COMPLETED: "#2ECC40",
+  CANCELLEDBADGE: "#F08080",
+  CANCELLED: "#F40009",
+  REVISIONBADGE: "#FBCEB1",
+  REVISION: "#FF851B",
 };
