@@ -10,6 +10,9 @@
     "buildAndroid": "eas build -p android --profile preview"
   },
   "dependencies": {
+    "@babel/helper-function-name": "^7.24.7",
+    "@babel/helper-hoist-variables": "^7.24.7",
+    "@babel/helper-split-export-declaration": "^7.24.7",
     "@babel/plugin-transform-named-capturing-groups-regex": "^7.24.7",
     "@callstack/react-theme-provider": "^3.0.9",
     "@expo/metro-runtime": "~3.2.1",

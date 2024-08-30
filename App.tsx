@@ -148,15 +148,8 @@ function App() {
   }
 
   return (
-    <
-      // style={
-      //   Platform.OS === "web" || Platform.OS === "android"
-      //     ? { flexDirection: "column", width: "100%" }
-      //     : {}
-      // }
-    >
+    <>
       <StatusBar translucent={true} />
-      {Platform.OS === "web" && <Header />}
       <AppProvider>
         <UserProvider>
           <CartProvider>
