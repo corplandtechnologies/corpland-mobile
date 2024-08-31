@@ -62,6 +62,9 @@ const Wallet: React.FC = () => {
     try {
       const { data } = await getUserTransactions(user?._id);
       console.log(data);
+      data.sort((a: Transaction, b: Transaction) =>
+        moment(b.createdAt).diff(moment(a.createdAt))
+      );
       setTransactions(data);
 
       setLoadingState(false);
