@@ -61,9 +61,10 @@ const Wallet: React.FC = () => {
     setLoadingState(true);
     try {
       const { data } = await getUserTransactions(user?._id);
-      console.log(data);
+      data.sort((a: Transaction, b: Transaction) =>
+        moment(b.createdAt).diff(moment(a.createdAt))
+      );
       setTransactions(data);
-
       setLoadingState(false);
     } catch (error: any) {
       console.log(error);
@@ -188,7 +189,7 @@ const Wallet: React.FC = () => {
             isWallet
           />
         </View>
-        <Hr height={5} marginVertical={25} marginHorizontal={100} />
+        <Hr height={5} marginVertical={20} marginHorizontal={100} />
         <MainView style={styles.loadingView}>
           {transactionsLoading ? (
             <View style={styles.centerView}>
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
   },
   loadingView: {
     height: "100%",
-    flex: 4,
+    flex: 2,
   },
   walletView: {
     flex: 1,

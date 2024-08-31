@@ -50,7 +50,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
 
   return (
     <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 2 }}>
         <Image
           source={{ uri: product?.image || product?.images[0] }}
           style={styles.productImage}
@@ -67,7 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
           <View style={styles.userView}>
             <View style={styles.avatarContainer}>
               <Avatar.Image
-                size={20}
+                size={11}
                 source={{
                   uri:
                     userInfo.profilePicture ||
@@ -140,38 +140,44 @@ const styles = StyleSheet.create({
     gap: 2.5,
     borderWidth: 1,
     borderColor: COLORS.GRAY_LIGHT,
+    justifyContent: "space-between",
+    height: 250,
   },
   productImage: {
     // width: 100,
-    height: 150,
+    height: "100%",
     borderRadius: 10,
   },
   contentContainer: {
     flex: 1,
     // padding: 10,
     gap: 10,
+    // borderWidth: 1,
   },
   topContent: {
     gap: 5,
+    flex: 2,
   },
   bottomContent: {
     flexDirection: "row",
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "space-between",
     borderTopWidth: 1,
     borderColor: COLORS.TERTIARY,
     gap: 10,
     flex: 1,
+    marginTop: 10,
   },
   locationContainer: {
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    // alignItems: "center",
+    // justifyContent: "flex-end",
+    alignItems: "flex-end",
     flex: 1,
   },
   productTitle: {
     fontFamily: "PoppinsSemiBold",
-    // fontSize: 20,
+    // fontSize: 11,
     width: 200,
   },
   productPrice: {
@@ -181,7 +187,7 @@ const styles = StyleSheet.create({
   },
   AvatarText: {
     color: COLORS.PRIMARY,
-    fontSize: 11,
+    fontSize: 7,
     fontFamily: "PoppinsBold",
   },
   avatarContainer: {
