@@ -72,14 +72,16 @@ const Profile = () => {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              maxWidth: "90%",
-              flexWrap: "wrap",
-              gap: 5,
+              // maxWidth: "90%",
+              // flexWrap: "wrap",
+              gap: 2.5,
+              justifyContent: "center",
+              marginTop: 30,
             }}
           >
             <Text style={styles.AvatarText}>{user?.name}</Text>
             {user?.verified && (
-              <Icon name="checkmark-circle" size={18} color={COLORS.PRIMARY} />
+              <Icon name="checkmark-circle" size={14} color={COLORS.PRIMARY} />
             )}
           </View>
         </View>
@@ -167,7 +169,6 @@ const styles = StyleSheet.create({
     color: COLORS.PRIMARY,
     fontSize: 16,
     fontFamily: "PoppinsSemiBold",
-    marginTop: 30,
   },
   avatarContainer: {
     flexDirection: "column",

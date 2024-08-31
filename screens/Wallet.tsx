@@ -189,12 +189,14 @@ const Wallet: React.FC = () => {
             isWallet
           />
         </View>
-        <Hr height={5} marginVertical={20} marginHorizontal={100} />
         <MainView style={styles.loadingView}>
+          <Hr height={5} marginVertical={20} marginHorizontal={100} />
           {transactionsLoading ? (
-            <View style={styles.centerView}>
-              <ActivityIndicator color={COLORS.PRIMARY} size={30} />
-            </View>
+            <>
+              <View>
+                <ActivityIndicator color={COLORS.PRIMARY} size={30} />
+              </View>
+            </>
           ) : (
             <>
               {transactions.length <= 0 ? (
@@ -254,13 +256,14 @@ const styles = StyleSheet.create({
   },
   loadingView: {
     height: "100%",
-    flex: 2,
+    flex: 1,
   },
   walletView: {
-    flex: 1,
+    flex: 2,
   },
   centerView: {
     height: "100%",
     justifyContent: "center",
+    flex: 1,
   },
 });
