@@ -50,7 +50,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
 
   return (
     <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
-      <View style={{ flex: 2 }}>
+      <View style={{ flex: 1 }}>
         <Image
           source={{ uri: product?.image || product?.images[0] }}
           style={styles.productImage}
