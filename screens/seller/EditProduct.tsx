@@ -23,12 +23,12 @@ import { useNavigation } from "@react-navigation/native";
 import { createProduct, deleteProduct, updateProduct } from "../../api/api";
 import FormInput from "../../components/ui/FormInput";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import { useUser } from "../../context/UserContext";
 import ConfirmationModal from "../../components/ConfirmationModal";
-import { createObjectURL } from "../../utils";
+import { createObjectURL, handleError } from "../../utils";
+import { useApp } from "../../context/AppContext";
 
 const EditProduct = ({ route }) => {
-  const { user } = useUser();
+  const { user } = useApp();
   const product = route.params.product;
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -207,7 +207,7 @@ const EditProduct = ({ route }) => {
 
       const response = await updateProduct(
         Platform.OS === "web" ? newWebProduct : newProduct,
-        product._id
+        product?._id
       );
       navigation.navigate("MyProducts");
       setSnackbarMessage("Product created successfully");
@@ -219,19 +219,8 @@ const EditProduct = ({ route }) => {
       setSelectedRegion("");
       setPrice("");
     } catch (error) {
-      let errorMessage = "An unexpected error occurred.";
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        errorMessage = error.response.data.message || error.response.statusText;
-      } else if (error.request) {
-        // The request was made but no response was received
-        errorMessage = "No response received from the server.";
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        errorMessage = error.message;
-      }
-      setSnackbarMessage(errorMessage);
+      console.log(error);
+      setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
