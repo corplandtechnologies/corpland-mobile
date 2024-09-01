@@ -23,12 +23,12 @@ import { useNavigation } from "@react-navigation/native";
 import { createProduct, deleteProduct, updateProduct } from "../../api/api";
 import FormInput from "../../components/ui/FormInput";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import { useUser } from "../../context/UserContext";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { createObjectURL } from "../../utils";
+import { useApp } from "../../context/AppContext";
 
 const EditProduct = ({ route }) => {
-  const { user } = useUser();
+  const { user } = useApp();
   const product = route.params.product;
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");

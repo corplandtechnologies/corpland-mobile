@@ -3,7 +3,12 @@ import axios from "axios";
 import { Platform } from "react-native";
 
 // export const API = axios.create({
-//   baseURL: "http://192.168.176.158:3000/api/v1",
+//   baseURL: "http://localhost:3000/api/v1",
+//   withCredentials: true,
+// });
+
+// export const API = axios.create({
+//   baseURL: "http://192.168.1.106:3000/api/v1",
 //   withCredentials: true,
 // });
 
