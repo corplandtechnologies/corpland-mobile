@@ -157,7 +157,6 @@ export const createProduct = async (newProduct: any) => {
 
   const token = await AsyncStorage.getItem("token");
 
-
   const config = {
     headers: { "Content-Type": "multipart/form-data" },
     Authorization: `Bearer ${token}`,
@@ -182,11 +181,11 @@ export const updateProduct = async (newProduct: any, id: any) => {
     });
   } else {
     newProduct.images.forEach((image: any) => {
-       formData.append("images", {
-         uri: image.uri || image,
-         type: "image/jpeg",
-         name: "productImage.jpg",
-       });
+      formData.append("images", {
+        uri: image.uri || image,
+        type: "image/jpeg",
+        name: "productImage.jpg",
+      });
     });
   }
 
