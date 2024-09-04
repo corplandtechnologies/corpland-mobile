@@ -89,7 +89,9 @@ const ProductGrid: React.FC<ProductItemProps> = ({
               ) : (
                 <Avatar.Image
                   size={20}
-                  source={require("../assets/user.png")}
+                  source={{
+                    uri: "https://ik.imagekit.io/4hxqb9ldw/user.png?updatedAt=1725434780558",
+                  }}
                 />
               )}
               <View
