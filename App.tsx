@@ -53,6 +53,7 @@ import { AppProvider, useApp } from "./context/AppContext";
 import { getUserById } from "./api/api";
 import Withdraw from "./screens/Payments/Withdraw";
 import ConfirmWithdraw from "./screens/Payments/ConfirmWithdrawal";
+import Settings from "./screens/Settings";
 
 const linking = {
   prefixes: ["https://corpland.corplandtechnologies.com"],
@@ -157,11 +158,7 @@ function App() {
               <SearchResultsProvider>
                 <ProductProvider>
                   <NavigationContainer linking={linking}>
-                    <Stack.Navigator
-                      initialRouteName={
-                        loggedInUser ? "TabNavigator" : "OnBoarding"
-                      }
-                    >
+                    <Stack.Navigator initialRouteName={"TabNavigator"}>
                       <Stack.Screen
                         name="TabNavigator"
                         options={{ headerShown: false }}
@@ -443,6 +440,19 @@ function App() {
                           },
                         }}
                         component={ConfirmWithdraw}
+                      />
+                      <Stack.Screen
+                        name="Settings"
+                        options={{
+                          headerTitle: "Settings",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsBold",
+                            // borderWidth:8
+                          },
+                        }}
+                        component={Settings}
                       />
                     </Stack.Navigator>
                   </NavigationContainer>

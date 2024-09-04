@@ -1,27 +1,12 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Modal,
-  Linking,
-  ScrollView,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import ScreenContextWrapper from "../components/ScreenContextWrapper";
+import { View, Text, StyleSheet, Linking, ScrollView } from "react-native";
+import React, { useState } from "react";
 import { Avatar, Switch } from "react-native-paper";
 import { COLORS } from "../utils/color";
 import Icon from "react-native-vector-icons/Ionicons";
-import Card from "../components/ui/Card";
 import ProfileMenuItem from "../components/ProfileMenuItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { getUserById } from "../api/api";
-import noProfilePicture from "../assets/user.png";
+import { useNavigation } from "@react-navigation/native";
 import { useSellerMode } from "../context/SellerModeContext";
-import { useUser } from "../context/UserContext";
-import ProductCard from "../components/ProductCard";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { useApp } from "../context/AppContext";
 
@@ -30,7 +15,7 @@ const Profile = () => {
   const { isSellerMode, toggleSellerMode } = useSellerMode();
   const { user } = useApp();
 
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -48,6 +33,7 @@ const Profile = () => {
       setIsModalVisible(false);
     } catch (error) {
       console.log(error);
+      
     }
   };
 
@@ -84,14 +70,15 @@ const Profile = () => {
           </View>
         </View>
         {/* <View style={styles.modeView}>
-        <Text style={styles.modeText}>Seller Mode</Text>
-        <Switch
-          value={isSellerMode}
-          onValueChange={toggleSellerMode}
-          color={COLORS.GRAY_LIGHT}
-          trackColor={COLORS.PRIMARY}
-        />
-      </View> */}
+          <Text style={styles.modeText}>Seller Mode</Text>
+          <Switch
+            value={isSellerMode}
+            onValueChange={toggleSellerMode}
+            color={COLORS.PRIMARY}
+            thumbColor={COLORS.PRIMARY}
+            // trackColor={COLORS.PRIMARY}
+          />
+        </View> */}
         <View style={{ marginTop: 20 }}>
           <ProfileMenuItem
             title="Edit Profile"
@@ -113,6 +100,7 @@ const Profile = () => {
             iconName="card-outline"
             onPress={() => navigation.navigate("Withdraw")}
           />
+
           {/* <ProfileMenuItem
             title="My Coupons"
             iconName="ticket-outline"
@@ -128,7 +116,11 @@ const Profile = () => {
             iconName="mail-outline"
             onPress={() => handleEmail("Feedback", "")}
           />
-
+          <ProfileMenuItem
+            title="Settings"
+            iconName="settings-outline"
+            onPress={() => navigation.navigate("Settings")}
+          />
           {/* <ProfileMenuItem
           title="Help Center"
           iconName="help-circle-outline"
@@ -180,14 +172,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: COLORS.PRIMARY,
+    backgroundColor: COLORS.GRAY_LIGHTER,
     paddingHorizontal: 15,
     marginVertical: 10,
     borderRadius: 10,
   },
   modeText: {
-    fontFamily: "PoppinsBold",
-    color: COLORS.SECONDARY,
+    fontFamily: "PoppinsSemiBold",
+    color: COLORS.PRIMARY,
   },
   modalContainer: {
     flex: 1,

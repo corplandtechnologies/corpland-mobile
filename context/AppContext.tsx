@@ -3,7 +3,9 @@ import React, {
   useContext,
   useEffect,
   useState,
-  ReactNode, // Import ReactNode
+  ReactNode,
+  Dispatch,
+  SetStateAction, // Import ReactNode
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -12,7 +14,7 @@ interface AppContextType {
   error: any;
   snackbarVisible: boolean;
   snackbarMessage: string | any;
-  setSnackbarVisible: any;
+  setSnackbarVisible: Dispatch<SetStateAction<boolean>>;
   setSnackbarMessage: any;
   setLoading: any;
   setError: any;
@@ -23,7 +25,7 @@ interface AppContextType {
   eventLoading: boolean;
   setEventLoading: any;
   transferRecipient: string;
-  setTransferRecipient: any;
+  setTransferRecipient: Dispatch<SetStateAction<string>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);

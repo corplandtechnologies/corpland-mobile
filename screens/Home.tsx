@@ -15,7 +15,7 @@ import Banner from "../components/Banner";
 import FormInput from "../components/ui/FormInput";
 import Section from "../components/Section";
 import Category from "../components/Category";
-import { storeCatergories } from "../data/dummyData";
+import { storeCatergories } from "../data/default";
 import ProductCard from "../components/ProductCard";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
@@ -43,17 +43,17 @@ const Home = () => {
   const { user, setUser } = useApp();
   const [searchLoading, setSearchLoading] = useState(false);
 
-  useEffect(() => {
-    const getLoggedInUser = async () => {
-      const user = await getStorageItem("user");
-      if (!user) {
-        alert("Please Login to continue using Corpland. Thank you!");
-        navigation.navigate("Login");
-        return;
-      }
-    };
-    getLoggedInUser();
-  }, []);
+  // useEffect(() => {
+  //   const getLoggedInUser = async () => {
+  //     const user = await getStorageItem("user");
+  //     if (!user) {
+  //       alert("Please Login to continue using Corpland. Thank you!");
+  //       navigation.navigate("Login");
+  //       return;
+  //     }
+  //   };
+  //   getLoggedInUser();
+  // }, []);
 
   const handleSearch = async (
     setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
@@ -179,7 +179,7 @@ const Home = () => {
             routeName="ProductGrids"
           >
             {loading ? (
-              <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+              <ActivityIndicator color={COLORS.PRIMARY} />
             ) : (
               <ScrollView
                 horizontal={true}
@@ -198,7 +198,7 @@ const Home = () => {
               routeName="ProductGrids"
             >
               {loading ? (
-                <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+                <ActivityIndicator  color={COLORS.PRIMARY} />
               ) : (
                 <ScrollView
                   horizontal={true}

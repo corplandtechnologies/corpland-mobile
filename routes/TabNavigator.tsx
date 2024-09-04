@@ -16,6 +16,8 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUserById } from "../api/api";
 import { useApp } from "../context/AppContext";
+import CreateRequest from "../screens/buyer/CreateRequest";
+import AuthModal from "../components/auth/AuthModal";
 
 const Tab = createBottomTabNavigator();
 const BadgedIcon = withBadge(0)(Icon);
@@ -24,6 +26,7 @@ const TabNavigator: React.FC = () => {
   const { user, setUser } = useApp();
   const { isSellerMode } = useSellerMode();
   const [isRequest, setIsRequest] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const onToggleSwitch = () => setIsRequest(!isRequest);
 
@@ -44,9 +47,16 @@ const TabNavigator: React.FC = () => {
       getUserInfo();
     }, [])
   );
+  const handleTabPress = (routeName: string, defaultHandler: () => void) => {
+    if (!user) {
+      setModalVisible(true);
+    } else {
+      defaultHandler();
+    }
+  };
 
   const CustomHeaderLeft = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
 
     return (
       <View style={{ paddingLeft: 10 }}>
@@ -59,8 +69,16 @@ const TabNavigator: React.FC = () => {
             gap: 2,
           }}
         >
-          <Icon name="location" size={20} color={COLORS.COMPLIMENTARY} />
-          <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
+          <Icon name="location" size={20} color={COLORS.PRIMARY} />
+          <TouchableOpacity
+            onPress={() => {
+              if (!user) {
+                setModalVisible(true);
+              } else {
+                navigation.navigate("EditProfile");
+              }
+            }}
+          >
             {user ? (
               <Text
                 style={{ color: COLORS.PRIMARY, fontFamily: "PoppinsSemiBold" }}
@@ -94,101 +112,109 @@ const TabNavigator: React.FC = () => {
     </View>
   );
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName: string = "";
+    <>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName: string = "";
 
-          switch (route.name) {
-            case "Home":
-              iconName = "home";
-              break;
-            case "Favorite":
-              iconName = "heart";
-              break;
-            case "Add":
-              iconName = "add-circle";
-              break;
-            case "Orders":
-              iconName = "bag";
-              break;
-            case "Profile":
-              iconName = "person";
-              break;
-          }
+            switch (route.name) {
+              case "Home":
+                iconName = "home";
+                break;
+              case "Favorite":
+                iconName = "heart";
+                break;
+              case "Add":
+                iconName = "add-circle";
+                break;
+              case "Orders":
+                iconName = "bag";
+                break;
+              case "Profile":
+                iconName = "person";
+                break;
+            }
 
-
-          return <Icon name={iconName} color={color} size={size} />;
-        
-        },
-        
-      })}
-      tabBar={(props) => <CustomTabBar {...props} />}
-    
-    >
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarIcon: "home",
-          headerTitle: "",
-          headerLeft: () => <CustomHeaderLeft />,
-          // headerRight: () => <CustomHeaderRight />,
-        }}
-      />
-      <Tab.Screen
-        name="Favorite"
-        component={Favorite}
-        options={{
-          tabBarIcon: "heart",
-          headerTitle: "Favorites",
-          headerTitleStyle: {
-            fontFamily: "PoppinsSemiBold",
+            return <Icon name={iconName} color={color} size={size} />;
           },
-          headerLeft: () => <BackButton />,
-          headerTitleAlign: "center",
-        }}
-      />
-      <Tab.Screen
-        name="Add"
-        component={CreateProduct}
-        options={{
-          tabBarIcon: "add-circle",
-          headerTitle: "Post a Product",
-          headerTitleStyle: {
-            fontFamily: "PoppinsSemiBold",
+        })}
+        tabBar={(props) => <CustomTabBar {...props} />}
+        screenListeners={({ route, navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            handleTabPress(route.name, () => navigation.navigate(route.name));
           },
-          headerLeft: () => <BackButton />,
-          headerTitleAlign: "center",
-        }}
+        })}
+      >
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarIcon: "home",
+            headerTitle: "",
+            headerLeft: () => <CustomHeaderLeft />,
+            // headerRight: () => <CustomHeaderRight />,
+          }}
+        />
+        <Tab.Screen
+          name="Favorite"
+          component={Favorite}
+          options={{
+            tabBarIcon: "heart",
+            headerTitle: "Favorites",
+            headerTitleStyle: {
+              fontFamily: "PoppinsSemiBold",
+            },
+            headerLeft: () => <BackButton />,
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Add"
+          component={CreateProduct}
+          options={{
+            tabBarIcon: "add-circle",
+            headerTitle: "Post Product",
+            headerTitleStyle: {
+              fontFamily: "PoppinsSemiBold",
+            },
+            headerLeft: () => <BackButton />,
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Orders"
+          component={Orders}
+          options={{
+            tabBarIcon: "bag",
+            headerTitle: "My Orders",
+            headerTitleStyle: {
+              fontFamily: "PoppinsSemiBold",
+            },
+            headerLeft: () => <BackButton />,
+            headerTitleAlign: "center",
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            tabBarIcon: "person",
+            headerTitle: "Profile",
+            headerTitleStyle: {
+              fontFamily: "PoppinsSemiBold",
+            },
+            headerLeft: () => <BackButton />,
+            headerTitleAlign: "center",
+          }}
+        />
+      </Tab.Navigator>
+      <AuthModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
       />
-      <Tab.Screen
-        name="Orders"
-        component={Orders}
-        options={{
-          tabBarIcon: "bag",
-          headerTitle: "My Orders",
-          headerTitleStyle: {
-            fontFamily: "PoppinsSemiBold",
-          },
-          headerLeft: () => <BackButton />,
-          headerTitleAlign: "center",
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: "person",
-          headerTitle: "Profile",
-          headerTitleStyle: {
-            fontFamily: "PoppinsSemiBold",
-          },
-          headerLeft: () => <BackButton />,
-          headerTitleAlign: "center",
-        }}
-      />
-    </Tab.Navigator>
+    </>
   );
 };
 

@@ -71,59 +71,73 @@ export const regionsByCountry: RegionsByCountry = {
 
 export const storeCatergories = [
   {
-    iconImagePath: require("../assets/foodCatIcon.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/foodCatIcon.png?updatedAt=1725434733045",
     category: "Food",
   },
   {
-    iconImagePath: require("../assets/electronicsIcon.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/electronicsIcon.png?updatedAt=1725434714388",
     category: "Electronics",
   },
   {
-    iconImagePath: require("../assets/fashionCatIcon.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/fashionCatIcon.png?updatedAt=1725434725160",
     category: "Fashion",
   },
   {
-    iconImagePath: require("../assets/servicesCatIcon.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/servicesCatIcon.png?updatedAt=1725434761874",
     category: "Services",
   },
   {
-    iconImagePath: require("../assets/toycar.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/toycar.png?updatedAt=1725434778289",
     category: "Babies & Kids",
   },
   {
-    iconImagePath: require("../assets/tools.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/tools.png?updatedAt=1725434778838",
     category: "Commercial Equipment & Tools",
   },
   {
-    iconImagePath: require("../assets/health.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/health.png?updatedAt=1725434733084",
     category: "Health & Beauty",
   },
   {
-    iconImagePath: require("../assets/phone.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/phone.png?updatedAt=1725434761886",
     category: "Mobile Phones & Tablets",
   },
   {
-    iconImagePath: require("../assets/pet.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/pet.png?updatedAt=1725434761860",
     category: "Pets",
   },
   {
-    iconImagePath: require("../assets/lease.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/lease.png?updatedAt=1725434742751",
     category: "Property",
   },
   {
-    iconImagePath: require("../assets/construction.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/construction.png?updatedAt=1725434666454",
     category: "Repair & Construction",
   },
   {
-    iconImagePath: require("../assets/job.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/job.png?updatedAt=1725434743594",
     category: "Jobs",
   },
   {
-    iconImagePath: require("../assets/sports.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/sports.png?updatedAt=1725434778839",
     category: "Sports, Arts & Outdoors",
   },
   {
-    iconImagePath: require("../assets/vehicle.png"),
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/vehicle.png?updatedAt=1725434786221",
     category: "Vehicles",
   },
   // Add more categories as needed
@@ -135,7 +149,6 @@ export const productCards = [
   { title: "Luxury Watches" },
   // Add more products as needed
 ];
-
 
 export const predefinedPrices = [500, 1000, 1500, 2000, 2500];
 

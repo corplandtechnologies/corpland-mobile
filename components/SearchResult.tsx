@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     // elevation: 5,
     width: "100%",
     flexDirection: "row",
-    // height: 200,
+    height: 200,
     marginVertical: 5,
     marginHorizontal: 5,
     borderWidth: 1,

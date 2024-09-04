@@ -36,6 +36,7 @@ import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../context/AppContext";
 import CartContext from "../context/CartContext";
+import AuthModal from "../components/auth/AuthModal";
 
 const Product = ({ route }) => {
   const { user: currentUser } = useApp();
@@ -53,6 +54,8 @@ const Product = ({ route }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const productImages = product?.images || product?.image;
   const { addProductToCart }: any = useContext(CartContext);
+  const [modalVisible, setModalVisible] = useState(false);
+
   const handleBuyNow = () => {
     const productDetails = {
       _id: product._id,
@@ -228,7 +231,7 @@ const Product = ({ route }) => {
                   ...styles.backgroundImage,
                 }}
               >
-                <ActivityIndicator size={50} color={COLORS.PRIMARY} />
+                <ActivityIndicator size={24} color={COLORS.PRIMARY} />
               </View>
             ) : (
               <View>
@@ -371,7 +374,13 @@ const Product = ({ route }) => {
                                     color={COLORS.SECONDARY}
                                   />
                                 }
-                                onPress={handleBuyNow}
+                                onPress={() => {
+                                  if (!currentUser) {
+                                    setModalVisible(true);
+                                  } else {
+                                    handleBuyNow();
+                                  }
+                                }}
                                 isIcon
                               />
                             </>
@@ -414,42 +423,10 @@ const Product = ({ route }) => {
         </View>
       </ScrollView>
       <>
-        {relatedProducts.length === 0 && (
-          <View style={styles.bottomContainer}>
-            <View style={styles.priceView}>
-              <Text style={styles.priceText}>GH₵{product?.price}</Text>
-            </View>
-            <View style={styles.CTAView}>
-              {currentUser?._id === product?.userId ? (
-                <>
-                  <PrimaryButton
-                    value="Edit Product"
-                    icon={
-                      <Icon name="create" size={24} color={COLORS.SECONDARY} />
-                    }
-                    onPress={() =>
-                      navigation.navigate("EditProduct", {
-                        product: product,
-                      })
-                    }
-                    isIcon
-                  />
-                </>
-              ) : (
-                <>
-                  <PrimaryButton
-                    value="Buy Now"
-                    icon={
-                      <Icon name="bag" size={24} color={COLORS.SECONDARY} />
-                    }
-                    onPress={handleBuyNow}
-                    isIcon
-                  />
-                </>
-              )}
-            </View>
-          </View>
-        )}
+        <AuthModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+        />
         <ConfirmationModal
           isVisible={isModalVisible}
           onClose={hideModal}

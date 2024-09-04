@@ -20,7 +20,10 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.soluservant.corpland"
+      "bundleIdentifier": "com.corplandtechnologies.corpland",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We use your location to show nearby events relevant to you."
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -58,7 +58,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
                   ? (options.tabBarIcon as any)
                   : `${options.tabBarIcon}-outline`
               }
-              color={isFocused ? COLORS.COMPLIMENTARY : COLORS.TERTIARY}
+              color={isFocused ? COLORS.PRIMARY : COLORS.TERTIARY}
               size={25}
             />
             {/* <Text style={{ color: isFocused ? COLORS.PRIMARY : COLORS.GRAY }}>

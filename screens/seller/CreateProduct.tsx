@@ -16,7 +16,7 @@ import { COLORS } from "../../utils/color";
 import { Button, TextInput } from "react-native-paper";
 import Select from "../../components/ui/Select";
 import * as ImagePicker from "expo-image-picker";
-import { categories, regionsByCountry } from "../../data/dummyData";
+import { categories, regionsByCountry } from "../../data/default";
 import { getUserCountry, getUserLocation } from "../../utils/modules";
 import { Snackbar } from "react-native-paper";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -183,19 +183,19 @@ const CreateProduct = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-          if (
-            !title ||
-            !desc ||
-            !selectedCountry ||
-            !selectedCategory ||
-            (!images.length && !selectedFiles.length)
-          ) {
-            setSnackbarMessage(
-              "All fields are required and at least one image must be added"
-            );
-            setSnackbarVisible(true);
-            return;
-          }
+      if (
+        !title ||
+        !desc ||
+        !selectedCountry ||
+        !selectedCategory ||
+        (!images.length && !selectedFiles.length)
+      ) {
+        setSnackbarMessage(
+          "All fields are required and at least one image must be added"
+        );
+        setSnackbarVisible(true);
+        return;
+      }
       const newProduct = {
         title: title,
         description: desc,

@@ -7,15 +7,15 @@ import { Platform } from "react-native";
 //   withCredentials: true,
 // });
 
-// export const API = axios.create({
-//   baseURL: "http://192.168.1.106:3000/api/v1",
-//   withCredentials: true,
-// });
-
 export const API = axios.create({
-  baseURL: "https://corpland-backend.onrender.com/api/v1",
+  baseURL: "http://192.168.1.106:3000/api/v1",
   withCredentials: true,
 });
+
+// export const API = axios.create({
+//   baseURL: "https://corpland-backend.onrender.com/api/v1",
+//   withCredentials: true,
+// });
 
 const getToken = async () => {
   return await AsyncStorage.getItem("token");
@@ -39,14 +39,26 @@ export const createRequest = async (newRequest: any) => {
   const formData: any = new FormData();
   formData.append("title", newRequest.title);
   formData.append("description", newRequest.description);
-  formData.append("phoneNumber", newRequest.phoneNumber);
-  formData.append("location", newRequest.location);
   formData.append("category", newRequest.category);
-  formData.append("image", {
-    uri: newRequest.image,
-    type: "image/jpeg",
-    name: `requestImage.jpg`,
-  });
+  formData.append("country", newRequest.country);
+  formData.append("region", newRequest.region);
+  formData.append("minPrice", newRequest.minPrice);
+  formData.append("maxPrice", newRequest.maxPrice);
+  formData.append("userId", newRequest.userId);
+
+  if (Platform.OS === "web") {
+    newRequest.images.map((image: any) => {
+      formData.append("images", image);
+    });
+  } else {
+    newRequest.images.map((image: any) => {
+      formData.append("images", {
+        uri: image.uri,
+        type: "image/jpeg",
+        name: "productImage.jpg",
+      });
+    });
+  }
 
   const config = {
     headers: {
@@ -62,14 +74,25 @@ export const createAd = async (newAd: any) => {
   const formData: any = new FormData();
   formData.append("title", newAd.title);
   formData.append("description", newAd.description);
-  formData.append("phoneNumber", newAd.phoneNumber);
-  formData.append("location", newAd.location);
   formData.append("category", newAd.category);
-  formData.append("image", {
-    uri: newAd.image,
-    type: "image/jpeg",
-    name: `adImage.jpg`,
-  });
+  formData.append("country", newAd.country);
+  formData.append("region", newAd.region);
+  formData.append("price", newAd.price);
+  formData.append("userId", newAd.userId);
+
+  if (Platform.OS === "web") {
+    newAd.images.map((image: any) => {
+      formData.append("images", image);
+    });
+  } else {
+    newAd.images.map((image: any) => {
+      formData.append("images", {
+        uri: image.uri,
+        type: "image/jpeg",
+        name: "productImage.jpg",
+      });
+    });
+  }
 
   const config = {
     headers: { "Content-Type": "multipart/form-data" },
@@ -157,7 +180,6 @@ export const createProduct = async (newProduct: any) => {
 
   const token = await AsyncStorage.getItem("token");
 
-
   const config = {
     headers: { "Content-Type": "multipart/form-data" },
     Authorization: `Bearer ${token}`,
@@ -182,11 +204,11 @@ export const updateProduct = async (newProduct: any, id: any) => {
     });
   } else {
     newProduct.images.forEach((image: any) => {
-       formData.append("images", {
-         uri: image.uri || image,
-         type: "image/jpeg",
-         name: "productImage.jpg",
-       });
+      formData.append("images", {
+        uri: image.uri || image,
+        type: "image/jpeg",
+        name: "productImage.jpg",
+      });
     });
   }
 
@@ -289,3 +311,6 @@ export const withdrawal = (amount: number, recipient: string, userId: string) =>
 
 export const getUserTransactions = (userId: string) =>
   API.get(`/transactions/${userId}`);
+
+export const deleteAccount = (userId: string) =>
+  API.delete(`/users/delete-account/${userId}`);
