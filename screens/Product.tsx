@@ -290,7 +290,7 @@ const Product = ({ route }) => {
                             size={30}
                             color={COLORS.PRIMARY}
                             onPress={() => {
-                              if (!user) {
+                              if (!currentUser) {
                                 setModalVisible(true);
                               } else {
                                 handleCallNow();

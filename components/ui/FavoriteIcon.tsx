@@ -8,6 +8,7 @@ import { getUserById, toggleFavorites } from "../../api/api";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../../context/AppContext";
+import AuthModal from "../auth/AuthModal";
 
 interface FavoriteIconProps {
   style?: Object;
@@ -58,6 +59,10 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
           color={"red"}
         />
       </TouchableOpacity>
+      <AuthModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 };
