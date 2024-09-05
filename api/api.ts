@@ -7,15 +7,15 @@ import { Platform } from "react-native";
 //   withCredentials: true,
 // });
 
-export const API = axios.create({
-  baseURL: "http://192.168.1.106:3000/api/v1",
-  withCredentials: true,
-});
-
 // export const API = axios.create({
-//   baseURL: "https://corpland-backend.onrender.com/api/v1",
+//   baseURL: "http://192.168.1.106:3000/api/v1",
 //   withCredentials: true,
 // });
+
+export const API = axios.create({
+  baseURL: "https://corpland-backend.onrender.com/api/v1",
+  withCredentials: true,
+});
 
 const getToken = async () => {
   return await AsyncStorage.getItem("token");
