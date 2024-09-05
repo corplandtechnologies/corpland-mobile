@@ -51,7 +51,7 @@ const Register = () => {
       });
       const res = await signUp({
         name: name.trim(),
-        email: email.trim(),
+        email: email.toLowerCase().trim(),
         password: password.trim(),
         termsAccepted,
       });

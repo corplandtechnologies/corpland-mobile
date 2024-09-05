@@ -40,7 +40,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await login({
-        email: email.trim(),
+        email: email.toLowerCase().trim(),
         password: password.trim(),
       });
 
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    fontFamily: "PoppinsRegular"
+    fontFamily: "PoppinsRegular",
   },
   checkboxContainer: {
     backgroundColor: "transparent",
