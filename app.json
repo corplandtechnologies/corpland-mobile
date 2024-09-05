@@ -21,10 +21,13 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.corplandtechnologies.corpland",
+      "entitlements": {
+        "aps-environment": "production"
+      },
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "We use your location to show nearby events relevant to you."
       },
-      "buildNumber": "2"
+      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
