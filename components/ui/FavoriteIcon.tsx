@@ -19,6 +19,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
   const [isFavorite, setIsFavorite] = useState(
     user?.favorites?.includes(productId)
   );
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchUserById = async () => {
@@ -42,7 +43,15 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
 
   return (
     <View style={[{ flex: 1 }, style]}>
-      <TouchableOpacity onPress={handleToggleFavorites}>
+      <TouchableOpacity
+        onPress={() => {
+          if (!user) {
+            setModalVisible(true);
+          } else {
+            handleToggleFavorites();
+          }
+        }}
+      >
         <Icon
           name={isFavorite ? "heart" : "heart-outline"}
           size={30}

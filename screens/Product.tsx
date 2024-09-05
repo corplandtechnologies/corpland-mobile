@@ -289,7 +289,13 @@ const Product = ({ route }) => {
                             name="call"
                             size={30}
                             color={COLORS.PRIMARY}
-                            onPress={handleCallNow}
+                            onPress={() => {
+                              if (!user) {
+                                setModalVisible(true);
+                              } else {
+                                handleCallNow();
+                              }
+                            }}
                           />
                         </TouchableOpacity>
                       </View>
