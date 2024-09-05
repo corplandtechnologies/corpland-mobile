@@ -23,7 +23,8 @@
       "bundleIdentifier": "com.corplandtechnologies.corpland",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "We use your location to show nearby events relevant to you."
-      }
+      },
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
