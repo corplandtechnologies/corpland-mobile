@@ -72,11 +72,17 @@ const AuthModal = ({ visible, onClose }) => {
                 <PrimaryButton
                   secondary
                   value="Login"
-                  onPress={() => navigation.navigate("Login")}
+                  onPress={() => {
+                    navigation.navigate("Login");
+                    onClose();
+                  }}
                 />
                 <PrimaryButton
                   value="Register"
-                  onPress={() => navigation.navigate("Register")}
+                  onPress={() => {
+                    navigation.navigate("Register");
+                    onClose();
+                  }}
                 />
               </View>
             </Animated.View>
