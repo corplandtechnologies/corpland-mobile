@@ -28,42 +28,42 @@ const Login = () => {
   const [snackbarVisible, setSnackbarVisible] = useState(false); // New state for Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
-   const [appleUserToken, setAppleUserToken] = useState<any>();
-   const navigation: any = useNavigation();
+  const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
+  const [appleUserToken, setAppleUserToken] = useState<any>();
+  const navigation: any = useNavigation();
 
-   useEffect(() => {
-     const checkAvailable = async () => {
-       const isAvailable = await AppleAuthentication.isAvailableAsync();
-       setAppleAuthAvailable(isAvailable);
-     };
-     checkAvailable();
-   }, []);
+  useEffect(() => {
+    const checkAvailable = async () => {
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
+      setAppleAuthAvailable(isAvailable);
+    };
+    checkAvailable();
+  }, []);
 
-   const handleAppleSignUp = async () => {
-     try {
-       const credential = await AppleAuthentication.signInAsync({
-         requestedScopes: [
-           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-           AppleAuthentication.AppleAuthenticationScope.EMAIL,
-         ],
-       });
-       const userInfo: any = jwtDecode(appleUserToken.identityToken);
-       const res = await authWithSocial({
-         name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
-         email: userInfo.email,
-       });
-       // Assuming user object contains userInfo and token
-       await AsyncStorage.setItem("user", JSON.stringify(res.user));
-       await AsyncStorage.setItem("token", res.token);
-       setSnackbarVisible(true);
-       setSnackbarMessage("Registration Completed Successfully!");
-       navigation.navigate("TabNavigator");
-       console.log(credential);
-     } catch (e) {
-       console.log(e);
-     }
-   };
+  const handleAppleSignUp = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+      const userInfo: any = jwtDecode(appleUserToken.identityToken);
+      const res = await authWithSocial({
+        name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
+        email: userInfo.email,
+      });
+      // Assuming user object contains userInfo and token
+      await AsyncStorage.setItem("user", JSON.stringify(res.user));
+      await AsyncStorage.setItem("token", res.token);
+      setSnackbarVisible(true);
+      setSnackbarMessage("Registration Completed Successfully!");
+      navigation.navigate("TabNavigator");
+      console.log(credential);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const getAppleAuthContent = () => {
     return (
@@ -164,22 +164,10 @@ const Login = () => {
         {/* <TouchableOpacity onPress={() => console.log("Google Sign In")}>
           <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
-        {/* <TouchableOpacity onPress={handleAppleSignUp}>
+        <TouchableOpacity onPress={handleAppleSignUp}>
           <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
-        </TouchableOpacity> */}
-        {Platform.OS === "ios" && (
-          <AppleAuthentication.AppleAuthenticationButton
-            buttonType={
-              AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
-            }
-            buttonStyle={
-              AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
-            }
-            cornerRadius={5}
-            style={styles.button}
-            onPress={handleAppleSignUp}
-          />
-        )}
+        </TouchableOpacity>
+
         {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
           <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
