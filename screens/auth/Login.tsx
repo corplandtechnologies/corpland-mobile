@@ -65,18 +65,6 @@ const Login = () => {
     }
   };
 
-  const getAppleAuthContent = () => {
-    return (
-      <AppleAuthentication.AppleAuthenticationButton
-        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-        cornerRadius={5}
-        style={styles.button}
-        onPress={handleAppleLogin}
-      />
-    );
-  };
-
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -164,9 +152,11 @@ const Login = () => {
         {/* <TouchableOpacity onPress={() => console.log("Google Sign In")}>
           <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
-        <TouchableOpacity onPress={handleAppleSignUp}>
-          <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
-        </TouchableOpacity>
+        {Platform.OS === "ios" && (
+          <TouchableOpacity onPress={handleAppleSignUp}>
+            <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
+          </TouchableOpacity>
+        )}
 
         {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
           <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />

@@ -1,7 +1,7 @@
 export interface authOptionProps {
   option: string;
   screen: string;
-  isRegistered: boolean;
+  isRegistered?: boolean;
 }
 
 export interface walletModalProps {
