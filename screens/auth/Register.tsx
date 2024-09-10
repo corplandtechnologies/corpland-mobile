@@ -193,9 +193,9 @@ const Register = () => {
       )}
 
       <View style={styles.socialSignInContainer}>
-        <TouchableOpacity onPress={handleGoogleSignUp}>
+        {/* <TouchableOpacity onPress={handleGoogleSignUp}>
           <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {Platform.OS === "ios" && (
           <TouchableOpacity onPress={handleAppleSignUp}>
             <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
