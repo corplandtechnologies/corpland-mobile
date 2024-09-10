@@ -59,18 +59,17 @@ const Home = () => {
     setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     setLoadingState(true);
+    if (!search) {
+      setSnackbarMessage("All fields are required");
+      setSnackbarVisible(true);
+      return;
+    }
     try {
-      if (!search) {
-        setSnackbarMessage("All fields are required");
-        setSnackbarVisible(true);
-        return;
-      }
       const res = await searchProducts(search);
       setSearchResults(res.data);
       setLoadingState(false);
       setSnackbarVisible(true);
       setSnackbarMessage("Search Completed!");
-      setSearch("");
       navigation.navigate("Search");
     } catch (error) {
       console.log(error);
@@ -138,6 +137,7 @@ const Home = () => {
         }
       >
         {/* <UserInfo navigation={navigation} /> */}
+
         <FormInput
           icon="search"
           placeholder="What are you looking for?..."
@@ -198,7 +198,7 @@ const Home = () => {
               routeName="ProductGrids"
             >
               {loading ? (
-                <ActivityIndicator  color={COLORS.PRIMARY} />
+                <ActivityIndicator color={COLORS.PRIMARY} />
               ) : (
                 <ScrollView
                   horizontal={true}

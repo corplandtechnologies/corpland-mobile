@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Avatar, Snackbar } from "react-native-paper";
 import { COLORS } from "../utils/color";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Section from "../components/Section";
 import ProductCard from "../components/ProductCard";
@@ -55,6 +55,26 @@ const Product = ({ route }) => {
   const productImages = product?.images || product?.image;
   const { addProductToCart }: any = useContext(CartContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState({});
+
+  const getUserInfo = async () => {
+    try {
+      const parsedUserInfo: any = JSON.parse(
+        (await AsyncStorage.getItem("user")) || "{}"
+      );
+      setLoggedInUser(parsedUserInfo);
+      const res = await getUserById(parsedUserInfo?._id);
+      setUser(res?.data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      getUserInfo();
+    }, [])
+  );
 
   const handleBuyNow = () => {
     const productDetails = {
@@ -290,7 +310,7 @@ const Product = ({ route }) => {
                             size={30}
                             color={COLORS.PRIMARY}
                             onPress={() => {
-                              if (!currentUser) {
+                              if (!loggedInUser) {
                                 setModalVisible(true);
                               } else {
                                 handleCallNow();
@@ -383,7 +403,7 @@ const Product = ({ route }) => {
                                   />
                                 }
                                 onPress={() => {
-                                  if (!currentUser) {
+                                  if (!loggedInUser) {
                                     setModalVisible(true);
                                   } else {
                                     handleBuyNow();

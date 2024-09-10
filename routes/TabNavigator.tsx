@@ -27,6 +27,7 @@ const TabNavigator: React.FC = () => {
   const { isSellerMode } = useSellerMode();
   const [isRequest, setIsRequest] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState({});
 
   const onToggleSwitch = () => setIsRequest(!isRequest);
 
@@ -35,6 +36,7 @@ const TabNavigator: React.FC = () => {
       const parsedUserInfo: any = JSON.parse(
         (await AsyncStorage.getItem("user")) || "{}"
       );
+      setLoggedInUser(parsedUserInfo);
       const res = await getUserById(parsedUserInfo?._id);
       setUser(res?.data.user);
     } catch (error) {
@@ -48,7 +50,7 @@ const TabNavigator: React.FC = () => {
     }, [])
   );
   const handleTabPress = (routeName: string, defaultHandler: () => void) => {
-    if (!user) {
+    if (!loggedInUser) {
       setModalVisible(true);
     } else {
       defaultHandler();
@@ -72,7 +74,7 @@ const TabNavigator: React.FC = () => {
           <Icon name="location" size={20} color={COLORS.PRIMARY} />
           <TouchableOpacity
             onPress={() => {
-              if (!user) {
+              if (!loggedInUser) {
                 setModalVisible(true);
               } else {
                 navigation.navigate("EditProfile");

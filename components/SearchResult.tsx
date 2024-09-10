@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 10,
     objectFit: "cover",
-    borderWidth: 1,
   },
   productTitle: {
     fontFamily: "PoppinsSemiBold",

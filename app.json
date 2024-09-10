@@ -28,6 +28,7 @@
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "We use your location to show nearby events relevant to you."
       },
+      "googleServicesFile": "./GoogleService-Info.plist",
       "buildNumber": "3"
     },
     "android": {
@@ -35,6 +36,7 @@
         "foregroundImage": "./assets/CORPLAND5.png",
         "backgroundColor": "#000000"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.corplandtechnologies.corpland",
       "versionCode": 5
     },

@@ -142,11 +142,13 @@ const Login = () => {
         disabled={!password}
       />
 
-      <View style={styles.separatorContainer}>
-        <View style={styles.separatorLine} />
-        <Text style={styles.separatorText}>or</Text>
-        <View style={styles.separatorLine} />
-      </View>
+      {Platform.OS === "ios" && (
+        <View style={styles.separatorContainer}>
+          <View style={styles.separatorLine} />
+          <Text style={styles.separatorText}>or</Text>
+          <View style={styles.separatorLine} />
+        </View>
+      )}
 
       <View style={styles.socialSignInContainer}>
         {/* <TouchableOpacity onPress={() => console.log("Google Sign In")}>

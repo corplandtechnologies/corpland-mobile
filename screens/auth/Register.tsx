@@ -20,6 +20,7 @@ import * as AppleAuthentication from "expo-apple-authentication";
 import { Platform } from "react-native";
 import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -35,8 +36,12 @@ const Register = () => {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
   const [appleUserToken, setAppleUserToken] = useState<any>();
+  const [googleUserInfo, setGoogleUserInfo] = useState<any>();
   const navigation: any = useNavigation();
 
+  useEffect(() => {
+    GoogleSignin.configure();
+  }, []);
   useEffect(() => {
     const checkAvailable = async () => {
       const isAvailable = await AppleAuthentication.isAvailableAsync();
@@ -44,6 +49,28 @@ const Register = () => {
     };
     checkAvailable();
   }, []);
+  const handleGoogleSignUp = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo: any = await GoogleSignin.signIn();
+      setGoogleUserInfo(userInfo);
+      // const res = await authWithSocial({
+      //   name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
+      //   email: userInfo.email,
+      // });
+      // // Assuming user object contains userInfo and token
+      // await AsyncStorage.setItem("user", JSON.stringify(res.user));
+      // await AsyncStorage.setItem("token", res.token);
+      // setSnackbarVisible(true);
+      // setSnackbarMessage("Registration Completed Successfully!");
+      // navigation.navigate("CompleteProfile");
+      console.log(userInfo);
+    } catch (e) {
+      console.log(e);
+      setSnackbarMessage(handleError(e));
+      setSnackbarVisible(true);
+    }
+  };
 
   const handleAppleSignUp = async () => {
     try {
@@ -157,16 +184,18 @@ const Register = () => {
         loading={loading}
       />
 
-      <View style={styles.separatorContainer}>
-        <View style={styles.separatorLine} />
-        <Text style={styles.separatorText}>or</Text>
-        <View style={styles.separatorLine} />
-      </View>
+      {Platform.OS === "ios" && (
+        <View style={styles.separatorContainer}>
+          <View style={styles.separatorLine} />
+          <Text style={styles.separatorText}>or</Text>
+          <View style={styles.separatorLine} />
+        </View>
+      )}
 
       <View style={styles.socialSignInContainer}>
-        {/* <TouchableOpacity onPress={() => console.log("Google Sign In")}>
+        <TouchableOpacity onPress={handleGoogleSignUp}>
           <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         {Platform.OS === "ios" && (
           <TouchableOpacity onPress={handleAppleSignUp}>
             <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
