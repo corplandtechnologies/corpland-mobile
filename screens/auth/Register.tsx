@@ -20,7 +20,7 @@ import * as AppleAuthentication from "expo-apple-authentication";
 import { Platform } from "react-native";
 import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+// import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -39,9 +39,9 @@ const Register = () => {
   const [googleUserInfo, setGoogleUserInfo] = useState<any>();
   const navigation: any = useNavigation();
 
-  useEffect(() => {
-    GoogleSignin.configure();
-  }, []);
+  // useEffect(() => {
+  //   GoogleSignin.configure();
+  // }, []);
   useEffect(() => {
     const checkAvailable = async () => {
       const isAvailable = await AppleAuthentication.isAvailableAsync();
@@ -49,28 +49,28 @@ const Register = () => {
     };
     checkAvailable();
   }, []);
-  const handleGoogleSignUp = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo: any = await GoogleSignin.signIn();
-      setGoogleUserInfo(userInfo);
-      // const res = await authWithSocial({
-      //   name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
-      //   email: userInfo.email,
-      // });
-      // // Assuming user object contains userInfo and token
-      // await AsyncStorage.setItem("user", JSON.stringify(res.user));
-      // await AsyncStorage.setItem("token", res.token);
-      // setSnackbarVisible(true);
-      // setSnackbarMessage("Registration Completed Successfully!");
-      // navigation.navigate("CompleteProfile");
-      console.log(userInfo);
-    } catch (e) {
-      console.log(e);
-      setSnackbarMessage(handleError(e));
-      setSnackbarVisible(true);
-    }
-  };
+  // const handleGoogleSignUp = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo: any = await GoogleSignin.signIn();
+  //     setGoogleUserInfo(userInfo);
+  //     // const res = await authWithSocial({
+  //     //   name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
+  //     //   email: userInfo.email,
+  //     // });
+  //     // // Assuming user object contains userInfo and token
+  //     // await AsyncStorage.setItem("user", JSON.stringify(res.user));
+  //     // await AsyncStorage.setItem("token", res.token);
+  //     // setSnackbarVisible(true);
+  //     // setSnackbarMessage("Registration Completed Successfully!");
+  //     // navigation.navigate("CompleteProfile");
+  //     console.log(userInfo);
+  //   } catch (e) {
+  //     console.log(e);
+  //     setSnackbarMessage(handleError(e));
+  //     setSnackbarVisible(true);
+  //   }
+  // };
 
   const handleAppleSignUp = async () => {
     try {
@@ -257,7 +257,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: COLORS.SECONDARY,
-    marginBottom: 20,
     padding: 15,
     borderRadius: 10,
     gap: 10,
@@ -273,10 +272,11 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderWidth: 0,
     padding: 0,
+    marginVertical: 10,
   },
   termsText: {
     fontSize: 14,
-    color: COLORS.PRIMARY,
+    color: COLORS.GRAY,
     textDecorationLine: "underline",
   },
   separatorContainer: {
