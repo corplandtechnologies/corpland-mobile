@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginVertical: 10,
     borderRadius: 10,
-    height: 100,
+    height: 50,
   },
   modeText: {
     fontFamily: "PoppinsSemiBold",
