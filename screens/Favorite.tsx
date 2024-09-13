@@ -22,6 +22,7 @@ import { getFavoriteProducts, getProducts } from "../api/api";
 import { COLORS } from "../utils/color";
 import { useUser } from "../context/UserContext";
 import { useApp } from "../context/AppContext";
+import { formatPrice } from "../utils";
 
 const Favorite = () => {
   const navigation = useNavigation();
@@ -54,7 +55,7 @@ const Favorite = () => {
         key={item._id}
         image={item.images[0]}
         title={item.title}
-        price={item.price}
+        price={formatPrice(item.price)}
         region={item.region}
         description={item.description}
         _id={item._id}

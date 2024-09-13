@@ -26,6 +26,8 @@ interface AppContextType {
   setEventLoading: any;
   transferRecipient: string;
   setTransferRecipient: Dispatch<SetStateAction<string>>;
+  requestId: string;
+  setRequestId: Dispatch<SetStateAction<string>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -41,6 +43,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<any>(null);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [transferRecipient, setTransferRecipient] = useState<string>("");
+  const [requestId, setRequestId] = useState<string>("");
 
   return (
     <AppContext.Provider
@@ -61,6 +64,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setEventLoading,
         transferRecipient,
         setTransferRecipient,
+        requestId,
+        setRequestId,
       }}
     >
       {children}

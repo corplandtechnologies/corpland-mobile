@@ -6,10 +6,13 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { getUserById } from "../api/api";
-import ProductStats from "./ProductStats";
+import TextElement from "./elements/Texts/TextElement";
+import Card from "./ui/Card";
+import Hr from "./elements/HR/Hr";
 import { formatPrice } from "../utils";
+// import RequestStats from "./RequestStats";
 
-interface Product {
+interface RequestCard {
   title: string;
   description: string;
   price: string;
@@ -17,59 +20,66 @@ interface Product {
   location: string;
 }
 
-interface ProductCardProps {
-  product: Product;
+interface RequestCardProps {
+  request: RequestCard;
   onReset?: () => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
+const RequestCard: React.FC<RequestCardProps> = ({ request, onReset }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [userInfo, setUserInfo] = useState({});
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await getUserById(product.userId);
+        const res = await getUserById(request.userId);
         setUserInfo(res.data.user);
       } catch (error) {
         console.log(error);
       }
     };
     fetchUser();
-  }, [product?.userId]);
+  }, [request?.userId]);
   const truncatedDesc =
-    product.description?.length > 20
-      ? `${product.description.substring(0, 20)}...`
-      : product.description;
+    request.description?.length > 20
+      ? `${request.description.substring(0, 20)}...`
+      : request.description;
 
   const productNavigate = () => {
     if (onReset) {
       onReset();
     }
-    navigation.navigate("Product", { productId: product._id });
+    navigation.navigate("Request", { requestId: request._id });
   };
 
   return (
-    <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
-      <View style={{ flex: 1 }}>
-        <Image
-          source={{ uri: product?.image || product?.images[0] }}
-          style={styles.productImage}
-        />
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.topContent}>
-          <Text style={styles.productTitle}>{product.title}</Text>
-          {/* <ProductStats
-            icon={"call"}
-            value={product.dials.length}
-            name="Dials"
-          /> */}
-          <View style={styles.userView}>
+    <TouchableOpacity onPress={productNavigate}>
+      <Card
+        style={{
+          width: "100%",
+          flexDirection: "row",
+          flex: 1,
+          justifyContent: "center",
+        }}
+      >
+        <View style={styles.topView}>
+          <Image
+            source={{ uri: request?.image || request?.images[0] }}
+            // source={require("../assets/E-commerce.jpeg")}
+            style={styles.productImage}
+          />
+        </View>
+        <View style={styles.bottomView}>
+          <View style={styles.bottomTopView}>
+            <TextElement fontFamily="PoppinsSemiBold" fontSize={18}>
+              {request.title}
+            </TextElement>
+          </View>
+          <View style={styles.bottomTopView}>
             <View style={styles.avatarContainer}>
               <Avatar.Image
-                size={20}
+                size={14}
                 source={{
                   uri:
                     userInfo.profilePicture ||
@@ -81,7 +91,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
                   maxWidth: "90%",
                   gap: 5,
                 }}
@@ -97,48 +106,27 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
               </View>
             </View>
           </View>
-          {/* <Text style={styles.productDesc}>{truncatedDesc}</Text> */}
-        </View>
-
-        <View style={styles.bottomContent}>
-          <View style={styles.locationContainer}>
-            <Icon name="location" size={11} color={COLORS.GRAY} />
-            <Text
-              style={{
-                color: COLORS.GRAY,
-                fontFamily: "PoppinsRegular",
-                fontSize: 11,
-              }}
-            >
-              {product.region}
-            </Text>
-          </View>
-          <View style={styles.priceView}>
-            <Text style={styles.productPrice}>
-              GH₵{formatPrice(product?.price)}
-            </Text>
+          <View style={styles.bottomBottomView}>
+            <TextElement fontFamily="PoppinsBold">
+              GH₵{formatPrice(request.minPrice)}
+            </TextElement>
+            <TextElement fontFamily="PoppinsBold"> - </TextElement>
+            <TextElement fontFamily="PoppinsBold">
+              GH₵{formatPrice(request.maxPrice)}
+            </TextElement>
           </View>
         </View>
-      </View>
+      </Card>
     </TouchableOpacity>
   );
 };
 
-export default ProductCard;
+export default RequestCard;
 
 const styles = StyleSheet.create({
-  productMain: {
-    backgroundColor: COLORS.SECONDARY,
-    borderRadius: 10,
-    padding: 10,
-    gap: 2.5,
-    borderWidth: 1,
-    borderColor: COLORS.GRAY_LIGHT,
-    flex: 1,
-  },
   productImage: {
-    // width: "100%",
-    height: 150,
+    width: "100%",
+    height: "100%",
     borderRadius: 10,
   },
   contentContainer: {
@@ -153,7 +141,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderTopWidth: 1,
+    // borderTopWidth: 1,
     borderColor: COLORS.TERTIARY,
     gap: 10,
     flex: 1,
@@ -181,9 +169,7 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     flexDirection: "row",
-    alignItems: "center",
     gap: 5,
-    justifyContent: "center",
   },
   productDesc: {
     fontFamily: "PoppinsRegular",
@@ -195,9 +181,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  priceView: {
+
+  topView: {
     flex: 1,
-    justifyContent: "flex-end",
+    // borderWidth: 1,
+  },
+  bottomView: {
+    flex: 2,
+    // borderWidth: 1,
+    gap: 10,
+  },
+  bottomTopView: {
+    flex: 1,
+  },
+  bottomBottomView: {
+    borderTopWidth: 1,
+    borderColor: COLORS.GRAY,
+    flex: 1,
+    // width: "100%",
+    flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "flex-end",
   },
 });

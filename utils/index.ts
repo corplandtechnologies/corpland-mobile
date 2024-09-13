@@ -25,3 +25,7 @@ export const handleError = (error: any) => {
   }
   return errorMessage;
 };
+
+export const formatPrice = (price: string) => {
+  return parseFloat(price).toLocaleString();
+};

@@ -9,6 +9,7 @@ import React from "react";
 import { COLORS } from "../utils/color";
 import SearchResult from "../components/SearchResult";
 import { useSearchResults } from "../context/SearchResultsContext";
+import { formatPrice } from "../utils";
 
 const Search = () => {
   const { searchResults } = useSearchResults();
@@ -29,7 +30,7 @@ const Search = () => {
             key={result._id}
             image={result.images[0]}
             title={result.title}
-            price={result.price}
+            price={formatPrice(result.price)}
             region={result.region}
             description={result.description}
             userDetails={result?.userDetails}

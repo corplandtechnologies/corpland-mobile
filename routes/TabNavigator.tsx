@@ -172,10 +172,10 @@ const TabNavigator: React.FC = () => {
         />
         <Tab.Screen
           name="Add"
-          component={CreateProduct}
+          component={isSellerMode ? CreateProduct : CreateRequest}
           options={{
             tabBarIcon: "add-circle",
-            headerTitle: "Post Product",
+            headerTitle: isSellerMode ? "Post Product" : "Post Request",
             headerTitleStyle: {
               fontFamily: "PoppinsSemiBold",
             },

@@ -8,7 +8,7 @@ import { Platform } from "react-native";
 // });
 
 // export const API = axios.create({
-//   baseURL: "http://192.168.168.158:3000/api/v1",
+//   baseURL: "http://192.168.241.158:3000/api/v1",
 //   withCredentials: true,
 // });
 
@@ -35,6 +35,8 @@ API.interceptors.request.use(
 );
 
 export const getRequests = () => API.get("/requests");
+export const getRequestById = (id: string) => API.get(`/requests/${id}`);
+
 export const createRequest = async (newRequest: any) => {
   const formData: any = new FormData();
   formData.append("title", newRequest.title);
@@ -68,6 +70,74 @@ export const createRequest = async (newRequest: any) => {
 
   return API.post("/requests", formData, config);
 };
+
+export const updateRequest = async (newProduct: any, id: any) => {
+  const formData: any = new FormData();
+  formData.append("title", newProduct.title);
+  formData.append("description", newProduct.description);
+  formData.append("category", newProduct.category);
+  formData.append("country", newProduct.country);
+  formData.append("region", newProduct.region);
+  formData.append("price", newProduct.price);
+  formData.append("userId", newProduct.userId);
+
+  if (Platform.OS === "web") {
+    newProduct.images.forEach((image: any) => {
+      formData.append("images", image);
+    });
+  } else {
+    newProduct.images.forEach((image: any) => {
+      formData.append("images", {
+        uri: image.uri || image,
+        type: "image/jpeg",
+        name: "productImage.jpg",
+      });
+    });
+  }
+
+  const token = await AsyncStorage.getItem("token");
+
+  const config = {
+    headers: { "Content-Type": "multipart/form-data" },
+    Authorization: `Bearer ${token}`,
+  };
+  return API.put(`/requests/${id}`, formData, config);
+};
+
+export const searchRequests = (query: string) =>
+  API.post(`/requests/search?q=${query}`);
+
+export const deleteRequest = (id: string) => API.delete(`/requests/${id}`);
+
+export const toggleRequestFavorites = async (
+  userId: string,
+  requestId: string
+) => {
+  const status = await API.post(`/users/toggle-favorite/${requestId}`, {
+    userId: userId,
+  });
+  return status;
+};
+
+export const getRequestsByUserId = (userId: string) =>
+  API.get(`/requests/user/${userId}`);
+
+export const getTrendingRequests = () => API.get("/requests/trending");
+
+export const dialRequest = async (productId: string, userId: string) => {
+  try {
+    const data: object = {
+      userId: userId,
+    };
+    const response = await API.post(`/requests/dial/${productId}`, data);
+    return response.data; // Assuming the API returns the user data upon successful sign up
+  } catch (error) {
+    console.log("Error getting favorite Products:", error);
+    throw error; // Rethrow the error to be handled by the caller
+  }
+};
+export const getFavoriteRequests = (userId: string) =>
+  API.get(`/requests/favorites/${userId}`);
 
 export const getAds = () => API.get("/ads");
 export const createAd = async (newAd: any) => {
@@ -254,6 +324,8 @@ export const dialProduct = async (productId: string, userId: string) => {
 };
 export const getFavoriteProducts = (userId: string) =>
   API.get(`/products/favorites/${userId}`);
+
+//request APIs
 
 export const deposit = (
   email: string,

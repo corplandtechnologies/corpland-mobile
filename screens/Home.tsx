@@ -20,6 +20,7 @@ import ProductCard from "../components/ProductCard";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   getProducts,
+  getRequests,
   getTrendingProducts,
   getUserById,
   searchProducts,
@@ -29,6 +30,7 @@ import { useSearchResults } from "../context/SearchResultsContext";
 import { getStorageItem, handleError } from "../utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../context/AppContext";
+import RequestCard from "../components/RequestCard";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -38,6 +40,7 @@ const Home = () => {
   const { setSearchResults } = useSearchResults();
   const [products, setProducts] = useState([]);
   const [trendingProducts, setTrendingProducts] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const navigation: any = useNavigation();
   const { user, setUser } = useApp();
@@ -98,6 +101,21 @@ const Home = () => {
     fetchProducts();
   }, []);
 
+  const fetchRequests = async () => {
+    try {
+      setLoading(true);
+      const response = await getRequests();
+      setRequests(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchRequests();
+  }, []);
+
   const fetchUser = async () => {
     try {
       const userInfo: any = await AsyncStorage.getItem("user");
@@ -128,6 +146,7 @@ const Home = () => {
               try {
                 fetchProducts();
                 fetchUser();
+                fetchRequests();
                 setRefreshing(false);
               } catch (error) {
                 setRefreshing(false);
@@ -184,6 +203,7 @@ const Home = () => {
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: 10 }}
               >
                 {products?.map((product, index) => (
                   <ProductCard key={index} product={product} />
@@ -203,9 +223,31 @@ const Home = () => {
                 <ScrollView
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{ gap: 10 }}
                 >
                   {trendingProducts?.map((product, index) => (
                     <ProductCard key={index} product={product.product} />
+                  ))}
+                </ScrollView>
+              )}
+            </Section>
+          )}
+          {requests?.length > 0 && (
+            <Section
+              headerText="Requests"
+              onPress={(routeName) => handleSeeAll(routeName, "Requests")}
+              routeName="ProductGrids"
+            >
+              {loading ? (
+                <ActivityIndicator color={COLORS.PRIMARY} />
+              ) : (
+                <ScrollView
+                  // horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{ gap: 10 }}
+                >
+                  {requests?.map((request, index) => (
+                    <RequestCard key={index} request={request} />
                   ))}
                 </ScrollView>
               )}

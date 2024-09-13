@@ -24,7 +24,7 @@ const OrderSuccess = () => {
           source={require("../assets/check.png")}
           style={{ width: 100, height: 100 }}
         /> */}
-        <Icon name="checkmark-circle" color={COLORS.COMPLIMENTARY} size={150} />
+        <Icon name="checkmark-circle" color={COLORS.PRIMARY} size={150} />
         <TextElement textAlign="center" fontSize={24}>
           Your order has been made successfully!
         </TextElement>

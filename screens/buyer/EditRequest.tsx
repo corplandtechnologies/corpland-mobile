@@ -7,7 +7,7 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import ScreenContextWrapper from "../../components/ScreenContextWrapper";
 import Card from "../../components/ui/Card";
 import Input from "../../components/ui/Input";
@@ -19,25 +19,29 @@ import * as ImagePicker from "expo-image-picker";
 import { categories, regionsByCountry } from "../../data/default";
 import { getUserCountry, getUserLocation } from "../../utils/modules";
 import { Snackbar } from "react-native-paper";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { createRequest, getUserById } from "../../api/api";
+import { useNavigation } from "@react-navigation/native";
+import { createRequest, deleteRequest, updateRequest } from "../../api/api";
 import FormInput from "../../components/ui/FormInput";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import { useUser } from "../../context/UserContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createObjectURL, handleError } from "../../utils";
-import { Linking } from "react-native";
-import TextElement from "../../components/elements/Texts/TextElement";
+import ConfirmationModal from "../../components/ConfirmationModal";
+import { createObjectURL } from "../../utils";
 import { useApp } from "../../context/AppContext";
+import TextElement from "../../components/elements/Texts/TextElement";
 
-const CreateRequest = () => {
+const EditRequest = ({ route }) => {
   const { user } = useApp();
+  const request = route.params.request;
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [images, setImages] = useState([]);
-  const [selectedFiles, setSelectedFiles] = useState<any>([]);
-  const [imagePreview, setImagePreview] = useState([]);
+  const [image, setImage] = useState(request.image);
+  const [newImages, setNewImages] = useState(request.images);
+  const [images, setImages] = useState([
+    ...(request?.images || []).filter(Boolean),
+  ]);
+  const [selectedFiles, setSelectedFiles] = useState(
+    Platform.OS === "web" ? [...(request?.images || []).filter(Boolean)] : []
+  );
   const [imageObject, setImageObject] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -53,7 +57,7 @@ const CreateRequest = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   const handleMinPriceChange = (text: string) => {
     const newPrice = text.replace(/[^0-9]/g, "");
@@ -65,37 +69,13 @@ const CreateRequest = () => {
     setMaxPrice(newPrice);
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      const getUserInfo = async () => {
-        try {
-          const parsedUserInfo = JSON.parse(
-            (await AsyncStorage.getItem("user")) || "{}"
-          );
-          const res = await getUserById(parsedUserInfo?._id);
-          setUser(res?.data.user);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      getUserInfo();
-    }, [user?._id])
-  );
-
-  useEffect(() => {
-    return () => {
-      selectedFiles?.forEach((image) => {
-        URL.revokeObjectURL(createObjectURL(image));
-      });
-    };
-  }, [selectedFiles]);
-
   useEffect(() => {
     const fetchLocationOptions = async () => {
       const location = await getUserLocation();
       if (location) {
         // Location granted, proceed as usual
         const country = await getUserCountry(location);
+
         if (country && country in regionsByCountry) {
           // If it is, set locationOptions to the array of regions for that country
           setLocationOptions(
@@ -115,6 +95,30 @@ const CreateRequest = () => {
     fetchLocationOptions();
   }, []);
 
+  if (Platform.OS === "web") {
+    useEffect(() => {
+      return () => {
+        selectedFiles.forEach((image) => {
+          if (typeof image === "object") {
+            URL.revokeObjectURL(createObjectURL(image));
+          }
+        });
+      };
+    }, [selectedFiles]);
+  }
+
+  const handleCountrySelect = (selectedOption: string) => {
+    setSelectedCountry(selectedOption);
+    // Update region options based on the selected country
+    setRegionOptions(regionsByCountry[selectedOption]);
+  };
+
+  const handleRegionSelect = (selectedOption: string) => {
+    setSelectedRegion(selectedOption);
+    // Handle the selected region
+  };
+
+  // Inside EditRequest.tsx
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       let newImages: any[] = [];
@@ -131,16 +135,6 @@ const CreateRequest = () => {
       setSelectedFiles(finalImages);
     }
   };
-  const handleCountrySelect = (selectedOption: string) => {
-    setSelectedCountry(selectedOption);
-    // Update region options based on the selected country
-    setRegionOptions(regionsByCountry[selectedOption]);
-  };
-
-  const handleRegionSelect = (selectedOption: string) => {
-    setSelectedRegion(selectedOption);
-    // Handle the selected region
-  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -154,7 +148,6 @@ const CreateRequest = () => {
     if (!result.cancelled) {
       let newImages = [];
 
-      // Check if assets array is available, otherwise fallback to single URI
       if (Array.isArray(result.assets)) {
         newImages = result.assets.map((asset) => ({
           uri: asset.uri,
@@ -170,7 +163,7 @@ const CreateRequest = () => {
       }
 
       const mergedImages = [...images, ...newImages];
-      const maxImages = 5;
+      const maxImages = 20;
       const finalImages = mergedImages.slice(0, maxImages);
 
       setImages(finalImages);
@@ -179,9 +172,10 @@ const CreateRequest = () => {
 
   const removeImage = (index: number) => {
     const newImages = [...images];
-    newImages.splice(index, 1); // Remove the image at the specified index
+    newImages.splice(index, 1);
     setImages(newImages);
   };
+
   const removeFile = (index: number) => {
     const newImages = [...selectedFiles];
     newImages.splice(index, 1); // Remove the image at the specified index
@@ -189,62 +183,68 @@ const CreateRequest = () => {
   };
 
   const handleSubmit = async () => {
+    if (images.length === 0) {
+      setSnackbarMessage("You need at least one photo!");
+      setSnackbarVisible(true);
+      return;
+    }
     setLoading(true);
     try {
-      if (
-        !title ||
-        !desc ||
-        !selectedCountry ||
-        !selectedCategory ||
-        (!images.length && !selectedFiles.length) ||
-        !minPrice ||
-        !maxPrice
-      ) {
-        setSnackbarMessage(
-          "All fields are required and at least one image must be added"
-        );
-        setSnackbarVisible(true);
-        return;
-      }
-      const newProduct = {
-        title: title,
-        description: desc,
+      const newRequest = {
+        title: title || request.title,
+        description: desc || request.description,
         images: images,
-        country: selectedCountry,
-        region: selectedRegion,
-        category: selectedCategory,
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-        userId: user._id,
+        country: selectedCountry || request.country,
+        region: selectedRegion || request.region,
+        category: selectedCategory || request.category,
+        price: price || request.price,
+        userId: user._id || request.userId,
       };
-      console.log(newProduct);
 
-      const newWebProduct = {
-        title: title,
-        description: desc,
+      const newWebRequest = {
+        title: title || request.title,
+        description: desc || request.description,
         images: selectedFiles,
-        country: selectedCountry,
-        region: selectedRegion,
-        category: selectedCategory,
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-        userId: user._id,
+        country: selectedCountry || request.country,
+        region: selectedRegion || request.region,
+        category: selectedCategory || request.category,
+        price: price || request.price,
+        userId: user._id || request.userId,
       };
 
-      const response = await createRequest(
-        Platform.OS === "web" ? newWebProduct : newProduct
+      const response = await updateRequest(
+        Platform.OS === "web" ? newWebRequest : newRequest,
+        request._id
       );
       navigation.navigate("MyRequests");
-      setSnackbarMessage("Product created successfully");
+      setSnackbarMessage("Request created successfully");
       setSnackbarVisible(true);
+      setTitle("");
+      setDesc("");
+      setImage("");
+      setSelectedCountry("");
+      setSelectedRegion("");
+      setPrice("");
     } catch (error) {
-      console.log(error);
-      setSnackbarMessage(handleError(error));
+      let errorMessage = "An unexpected error occurred.";
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = error.response.data.message || error.response.statusText;
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = "No response received from the server.";
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = error.message;
+      }
+      setSnackbarMessage(errorMessage);
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -253,7 +253,8 @@ const CreateRequest = () => {
             touchableText={selectedCategory || "Category*"} // Display the selected category or the placeholder text
             title="Categories"
             options={categories}
-            onSelect={(selectedOption) => setSelectedCategory(selectedOption)} // Update the selected category state
+            onSelect={(selectedOption) => setSelectedCategory(selectedOption)}
+            initialValue={request.category}
           />
           <Text style={{ fontFamily: "PoppinsRegular" }}>Add a photo</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -264,7 +265,10 @@ const CreateRequest = () => {
                     <View key={index} style={styles.imageWrapper}>
                       <Image
                         source={{
-                          uri: createObjectURL(image) || imagePreview,
+                          uri:
+                            typeof image === "object"
+                              ? createObjectURL(image)
+                              : image,
                         }}
                         style={styles.image}
                       />
@@ -283,7 +287,7 @@ const CreateRequest = () => {
                     <View key={index} style={styles.imageWrapper}>
                       <Image
                         source={{
-                          uri: image.uri || imagePreview,
+                          uri: image?.uri || image,
                         }}
                         style={styles.image}
                       />
@@ -300,13 +304,13 @@ const CreateRequest = () => {
               {Platform.OS === "web" ? (
                 <>
                   <input
-                    id="productImageUpload"
+                    id="requestImageUpload"
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
                     style={{ display: "none" }} // Hide the default file input
                   />
-                  <label htmlFor="productImageUpload">
+                  <label htmlFor="requestImageUpload">
                     <TouchableOpacity style={styles.addImageBox}>
                       <Text style={{ fontSize: 20, color: COLORS.PRIMARY }}>
                         +
@@ -330,6 +334,7 @@ const CreateRequest = () => {
             options={Object.keys(regionsByCountry)}
             onSelect={handleCountrySelect}
             locationRefused={locationRefused}
+            initialValue={request.country}
           />
           {selectedCountry && (
             <Select
@@ -337,12 +342,14 @@ const CreateRequest = () => {
               title="Region"
               options={regionOptions}
               onSelect={handleRegionSelect}
+              initialValue={request.region}
             />
           )}
           <FormInput
             placeholder="Title*"
             onChangeText={setTitle}
             icon="header"
+            defaultValue={request.title}
           />
           <FormInput
             placeholder="Description*"
@@ -350,6 +357,7 @@ const CreateRequest = () => {
             icon="align-justify"
             style={styles.textInputDesc}
             multiline={true}
+            defaultValue={request.description}
           />
           <View style={styles.priceRangeView}>
             <View style={{ flex: 1 }}>
@@ -360,6 +368,7 @@ const CreateRequest = () => {
                 style={styles.textInputDesc}
                 multiline={true}
                 keyboardType="numeric"
+                defaultValue={request?.minPrice.toString()}
               />
             </View>
             <View
@@ -378,6 +387,7 @@ const CreateRequest = () => {
                 style={styles.textInputDesc}
                 multiline={true}
                 keyboardType="numeric"
+                value={request?.maxPrice.toString()}
               />
             </View>
           </View>
@@ -389,19 +399,9 @@ const CreateRequest = () => {
             />
           </TouchableOpacity>
           <Text style={{ textAlign: "center" }}>
-            By clicking on Post, you accept the{" "}
-            <Text
-              style={{ textDecorationLine: "underline", color: COLORS.PRIMARY }}
-              onPress={() =>
-                Linking.openURL(
-                  "https://www.termsfeed.com/live/ba293553-5fc9-4f66-be64-9613b78987e8"
-                )
-              }
-            >
-              Terms of Use
-            </Text>
-            , confirm that you will abide by the Safety Tips, and declare that
-            this posting does not include any Prohibited Products.
+            By clicking on Request, you accept the Terms of Use , confirm that
+            you will abide by the Safety Tips, and declare that this posting
+            does not include any Prohibited Requests.
           </Text>
           <Snackbar
             visible={snackbarVisible}
@@ -441,7 +441,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontFamily: "PoppinsRegular",
   },
-  CreateRequest: {
+  createRequest: {
     backgroundColor: COLORS.PRIMARY,
   },
   image: {
@@ -481,4 +481,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateRequest;
+export default EditRequest;

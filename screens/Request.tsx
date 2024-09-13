@@ -16,59 +16,53 @@ import { COLORS } from "../utils/color";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Section from "../components/Section";
-import ProductCard from "../components/ProductCard";
+import RequestCard from "../components/RequestCard";
 import { Button } from "react-native-elements";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSearchResults } from "../context/SearchResultsContext";
 import {
-  deleteProduct,
-  dialProduct,
-  getProductById,
+  deleteRequest,
+  dialRequest,
+  getRequestById,
   getUserById,
-  searchProducts,
+  searchRequests,
 } from "../api/api";
-import ProductItem from "../components/ProductItem";
-import { useProduct } from "../context/ProductContext";
-import { useUser } from "../context/UserContext";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { Platform } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../context/AppContext";
 import CartContext from "../context/CartContext";
 import AuthModal from "../components/auth/AuthModal";
 import MainView from "../components/elements/Views/MainView";
 import { formatPrice } from "../utils";
 
-const Product = ({ route }) => {
-  const { user: currentUser } = useApp();
+const Request = ({ route }) => {
+  const { user: currentUser, setRequestId } = useApp();
   const navigation: any = useNavigation();
-  const { setProductId } = useProduct();
   const { searchResults } = useSearchResults();
-  const productId = route.params.productId;
-  const [product, setProduct] = useState(null);
+  const requestId = route.params.requestId;
+  const [request, setRequest] = useState(null);
   const [user, setUser] = useState(null);
-  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [relatedRequests, setRelatedRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const productImages = product?.images || product?.image;
-  const { addProductToCart }: any = useContext(CartContext);
+  const requestImages = request?.images || request?.image;
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleBuyNow = () => {
-    const productDetails = {
-      _id: product._id,
-      title: product.title,
-      image: product.images[0],
-      category: product.category,
-      price: product.price,
+    const requestDetails = {
+      _id: request._id,
+      title: request.title,
+      image: request.images[0],
+      category: request.category,
+      price: request.price,
       quantity: 1,
-      sellerId: product.userId,
+      sellerId: request.userId,
     };
-    addProductToCart(productDetails);
+    addRequestToCart(requestDetails);
     navigation.navigate("Cart");
   };
 
@@ -81,29 +75,29 @@ const Product = ({ route }) => {
   };
 
   useEffect(() => {
-    setProductId(productId);
-  }, [productId]);
+    setRequestId(requestId);
+  }, [requestId]);
 
   useEffect(() => {
-    const getProductInfo = async () => {
+    const getRequestInfo = async () => {
       setIsLoading(true);
       try {
-        const response = await getProductById(productId);
-        setProduct(response?.data);
+        const response = await getRequestById(requestId);
+        setRequest(response?.data);
       } catch (error) {
         console.log(error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
     };
-    getProductInfo();
-  }, [productId]);
+    getRequestInfo();
+  }, [requestId]);
 
   useEffect(() => {
     const getuserInfo = async () => {
       setIsLoading(true); // Set loading to true before fetching data
       try {
-        const response = await getUserById(product?.userId);
+        const response = await getUserById(request?.userId);
         setUser(response?.data.user);
       } catch (error) {
         console.log(error);
@@ -112,36 +106,36 @@ const Product = ({ route }) => {
       }
     };
     getuserInfo();
-  }, [product?.userId]);
+  }, [request?.userId]);
 
   useEffect(() => {
-    const getRelatedProducts = async () => {
+    const getRelatedRequests = async () => {
       setIsLoading(true); // Set loading to true before fetching data
       try {
-        const response = await searchProducts(product?.category);
-        // Filter out the current product based on its ID
-        const filteredProducts = response?.data.filter(
-          (item) => item._id !== productId
+        const response = await searchRequests(request?.category);
+        // Filter out the current request based on its ID
+        const filteredRequests = response?.data.filter(
+          (item) => item._id !== requestId
         );
-        setRelatedProducts(filteredProducts);
+        setRelatedRequests(filteredRequests);
       } catch (error) {
         console.error(error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
     };
-    getRelatedProducts();
-  }, [product]);
+    getRelatedRequests();
+  }, [request]);
 
-  const resetProductState = () => {
-    setProduct(null);
+  const resetRequestState = () => {
+    setRequest(null);
     setUser(null);
-    setRelatedProducts([]);
+    setRelatedRequests([]);
   };
 
-  const shareProduct = async () => {
-    const productId = route.params.productId;
-    const productTitle = product?.title || "this product";
+  const shareRequest = async () => {
+    const requestId = route.params.requestId;
+    const requestTitle = request?.title || "this request";
     let shareMessage;
 
     // Generate a dynamic share link based on the environment
@@ -149,10 +143,10 @@ const Product = ({ route }) => {
       Platform.OS === "web"
         ? window.location.origin
         : "https://corpland.corplandtechnologies.com";
-    const fullShareLink = `${baseUrl}/product/${productId}`;
+    const fullShareLink = `${baseUrl}/request/${requestId}`;
 
     // Construct the share message including the first image URL if available
-    shareMessage = `Check out ${productTitle}: ${fullShareLink}`;
+    shareMessage = `Check out ${requestTitle}: ${fullShareLink}`;
 
     if (Platform.OS === "web") {
       // For web, just copy the link to clipboard
@@ -162,7 +156,7 @@ const Product = ({ route }) => {
       // For mobile, use the Share API
       Share.share({
         message: shareMessage,
-        title: `Check out my ${productTitle}`,
+        title: `Check out my ${requestTitle}`,
         url: fullShareLink,
       });
     }
@@ -170,8 +164,8 @@ const Product = ({ route }) => {
 
   const handleCallNow = async () => {
     const phoneNumber = user?.phoneNumber || ""; // Ensure there's a valid phone number
-    // const productTitle = product?.title || "this product";
-    // const message = `Hello, I am trying to inquire about your ${productTitle}.`;
+    // const requestTitle = request?.title || "this request";
+    // const message = `Hello, I am trying to inquire about your ${requestTitle}.`;
 
     // // Check if WhatsApp is installed
     // const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
@@ -189,7 +183,7 @@ const Product = ({ route }) => {
     Linking.openURL(`tel:${phoneNumber}`);
 
     try {
-      await dialProduct(productId, currentUser?._id);
+      await dialRequest(requestId, currentUser?._id);
       setSnackbarMessage("Contact Successful");
       setSnackbarVisible(true);
     } catch (error) {
@@ -199,9 +193,9 @@ const Product = ({ route }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteProduct(productId);
-      navigation.navigate("MyProducts");
-      setSnackbarMessage("Product deleted successfully");
+      const response = await deleteRequest(requestId);
+      navigation.navigate("MyRequests");
+      setSnackbarMessage("Request deleted successfully");
       setSnackbarVisible(true);
     } catch (error) {
       console.log(error);
@@ -210,11 +204,11 @@ const Product = ({ route }) => {
     }
   };
 
-  const renderProductImages = () => {
-    const images = product?.images || [];
+  const renderRequestImages = () => {
+    const images = request?.images || [];
     return images.map((image: string, index: number) => (
       <View key={index} style={{ width: Dimensions.get("window").width }}>
-        <Image source={{ uri: image }} style={styles.productImage} />
+        <Image source={{ uri: image }} style={styles.requestImage} />
       </View>
     ));
   };
@@ -250,10 +244,10 @@ const Product = ({ route }) => {
                   }}
                   scrollEventThrottle={16}
                 >
-                  {renderProductImages()}
+                  {renderRequestImages()}
                 </ScrollView>
                 <View style={styles.dotsContainer}>
-                  {(productImages || []).map((_, index) => (
+                  {(requestImages || []).map((_, index) => (
                     <View
                       key={index}
                       style={[
@@ -275,7 +269,7 @@ const Product = ({ route }) => {
                   <>
                     <View style={styles.titleView}>
                       <View style={{ flex: 4 }}>
-                        <Text style={styles.titleText}>{product?.title}</Text>
+                        <Text style={styles.titleText}>{request?.title}</Text>
                       </View>
                       <View style={styles.actionView}>
                         <TouchableOpacity>
@@ -283,7 +277,7 @@ const Product = ({ route }) => {
                             name="share-outline"
                             size={24}
                             color={COLORS.GRAY}
-                            onPress={shareProduct}
+                            onPress={shareRequest}
                           />
                         </TouchableOpacity>
                         <TouchableOpacity>
@@ -301,22 +295,22 @@ const Product = ({ route }) => {
                           />
                         </TouchableOpacity>
                       </View>
-                      {product?.userId === currentUser?._id && (
+                      {request?.userId === currentUser?._id && (
                         <TouchableOpacity onPress={showModal}>
                           <Icon name="trash" size={24} color={"red"} />
                         </TouchableOpacity>
                       )}
                     </View>
                     <View>
-                      <Text style={styles.descTitle}>Product Details</Text>
-                      <Text style={styles.desc}>{product?.description}</Text>
+                      <Text style={styles.descTitle}>Request Details</Text>
+                      <Text style={styles.desc}>{request?.description}</Text>
                     </View>
                     <View>
                       <View style={styles.avatarContainer}>
                         {user?.profilePicture ? (
                           <Avatar.Image
                             size={50}
-                            source={{ uri: user?.profilePicture }}
+                            source={{ uri: user.profilePicture }}
                           />
                         ) : (
                           <Avatar.Image
@@ -346,63 +340,57 @@ const Product = ({ route }) => {
                         </View>
                       </View>
                     </View>
-                    {relatedProducts.length > 0 && (
-                      <View style={styles.bottomContainer}>
-                        <View style={styles.priceView}>
-                          <Text style={styles.priceText}>
-                            GH₵{formatPrice(product?.price)}
-                          </Text>
-                        </View>
-                        <View style={styles.CTAView}>
-                          {currentUser?._id === product?.userId ? (
-                            <>
-                              <PrimaryButton
-                                value="Edit Product"
-                                icon={
-                                  <Icon
-                                    name="create-outline"
-                                    size={24}
-                                    color={COLORS.SECONDARY}
-                                  />
-                                }
-                                onPress={() =>
-                                  navigation.navigate("EditProduct", {
-                                    product: product,
-                                  })
-                                }
-                                isIcon
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <PrimaryButton
-                                value="Buy Now"
-                                icon={
-                                  <Icon
-                                    name="bag-outline"
-                                    size={24}
-                                    color={COLORS.SECONDARY}
-                                  />
-                                }
-                                onPress={() => {
-                                  if (!currentUser) {
-                                    setModalVisible(true);
-                                  } else {
-                                    handleBuyNow();
-                                  }
-                                }}
-                                isIcon
-                              />
-                            </>
-                          )}
-                        </View>
+                    <View style={styles.bottomContainer}>
+                      <View style={styles.priceView}>
+                        <Text style={styles.priceText}>
+                          GH₵{formatPrice(request?.minPrice)} - GH₵{formatPrice(request?.maxPrice)}
+                        </Text>
                       </View>
-                    )}
+                      <View style={styles.CTAView}>
+                        {currentUser?._id === request?.userId ? (
+                          <>
+                            <PrimaryButton
+                              value="Edit"
+                              icon={
+                                <Icon
+                                  name="create-outline"
+                                  size={24}
+                                  color={COLORS.SECONDARY}
+                                />
+                              }
+                              onPress={() =>
+                                navigation.navigate("EditRequest", {
+                                  request: request,
+                                })
+                              }
+                              isIcon
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <>
+                              <PrimaryButton
+                                value="Call"
+                                icon={
+                                  <Icon
+                                    name="call-outline"
+                                    size={24}
+                                    color={COLORS.SECONDARY}
+                                  />
+                                }
+                                onPress={handleCallNow}
+                                isIcon
+                              />
+                            </>
+                          </>
+                        )}
+                      </View>
+                    </View>
                   </>
                 )}
                 <View>
-                  {relatedProducts.length > 0 && (
-                    <Section limited headerText="Related Products">
+                  {relatedRequests.length > 0 && (
+                    <Section limited headerText="Related Requests">
                       <ScrollView
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={{ gap: 10 }}
@@ -411,17 +399,11 @@ const Product = ({ route }) => {
                           <ActivityIndicator color={COLORS.PRIMARY} />
                         ) : (
                           <>
-                            {relatedProducts?.map((result) => (
-                              <ProductItem
+                            {relatedRequests?.map((result) => (
+                              <RequestCard
                                 key={result._id}
-                                image={result.images[0]}
-                                title={result.title}
-                                price={formatPrice(result.price)}
-                                region={result.region}
-                                description={result.description}
-                                userDetails={result.userDetails}
-                                _id={result._id}
-                                onReset={resetProductState}
+                                request={result}
+                                onReset={resetRequestState}
                               />
                             ))}
                           </>
@@ -444,7 +426,7 @@ const Product = ({ route }) => {
           isVisible={isModalVisible}
           onClose={hideModal}
           onConfirm={handleDelete}
-          modalTitle="Are you sure you want to delete your product?"
+          modalTitle="Are you sure you want to delete your request?"
           ConfirmButtonText="Delete"
         />
         <Snackbar
@@ -512,7 +494,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: COLORS.SECONDARY,
-    gap: 5,
   },
 
   priceText: {
@@ -522,7 +503,7 @@ const styles = StyleSheet.create({
   },
 
   priceView: {
-    flex: 1,
+    flex: 2,
   },
   CTAView: {
     flex: 1,
@@ -536,7 +517,7 @@ const styles = StyleSheet.create({
     gap: 10,
     flex: 1,
   },
-  productImage: {
+  requestImage: {
     width: "100%",
     height: 350,
     borderBottomLeftRadius: 20,
@@ -565,4 +546,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Product;
+export default Request;

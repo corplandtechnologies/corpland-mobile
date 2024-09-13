@@ -13,7 +13,7 @@ const TextElement: FC<TextProps> = ({
   return (
     <Text
       style={{
-        fontFamily: fontFamily ? fontFamily : "PoppinsBold",
+        fontFamily: fontFamily ? fontFamily : "PoppinsSemiBold",
         fontSize: fontSize ? fontSize : 14,
         color: color ? color : COLORS.PRIMARY,
         textAlign: textAlign ? textAlign : "auto",

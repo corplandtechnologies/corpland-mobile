@@ -8,30 +8,31 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { COLORS } from "../../utils/color";
-import UserHeader from "../../components/UserHeader";
-import ProductItem from "../../components/ProductItem";
-import { getUserById, getUserProductsById } from "../../api/api";
-import { useUser } from "../../context/UserContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { formatPrice } from "../../utils";
+import RequestCard from "../../components/RequestCard";
+import { useApp } from "../../context/AppContext";
+import { getRequestsByUserId } from "../../api/api";
 
-const MyProducts = () => {
-  const [userProducts, setUserProducts] = useState([]);
+const MyRequests = () => {
+  const [userRequests, setUserRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
-  const navigation = useNavigation(); // Initialize navigation
+  const navigation: any = useNavigation();
+  const { user } = useApp();
+
+  console.log("userRequests", user?._id);
 
   useFocusEffect(
     useCallback(() => {
-      const getUserProducts = async () => {
+      const getUserRequests = async () => {
         setIsLoading(true); // Set loading to true before fetching data
         try {
-          const userInfo = await AsyncStorage.getItem("user");
-          const parsedUserInfo = JSON.parse(userInfo || "{}");
-          const response = await getUserProductsById(parsedUserInfo?._id);
-          setUserProducts(response?.data);
+          const response = await getRequestsByUserId(user._id);
+          console.log(response?.data);
+
+          setUserRequests(response?.data);
         } catch (error) {
           console.log(error);
         } finally {
@@ -39,7 +40,7 @@ const MyProducts = () => {
         }
       };
 
-      getUserProducts();
+      getUserRequests();
     }, [])
   );
 
@@ -47,10 +48,10 @@ const MyProducts = () => {
     <View style={styles.main}>
       {isLoading ? (
         <ActivityIndicator size={50} color={COLORS.PRIMARY} />
-      ) : userProducts.length === 0 ? (
+      ) : userRequests.length === 0 ? (
         <View style={styles.centeredContainer}>
-          <Text style={styles.noProductsText}>
-            You don't have any listed Products,
+          <Text style={styles.noRequestsText}>
+            You don't have any listed requests,
           </Text>
           <TouchableOpacity
             onPress={() =>
@@ -61,19 +62,9 @@ const MyProducts = () => {
           </TouchableOpacity>
         </View>
       ) : (
-        <ScrollView>
-          {userProducts?.map((result, index) => (
-            <ProductItem
-              key={result._id}
-              image={result?.images[0]}
-              title={result.title}
-              price={formatPrice(result.price)}
-              region={result.region}
-              description={result.description}
-              userDetails={result.userDetails}
-              images={result.images}
-              _id={result._id}
-            />
+        <ScrollView contentContainerStyle={{ gap: 10 }}>
+          {userRequests?.map((request) => (
+            <RequestCard key={request._id} request={request} />
           ))}
         </ScrollView>
       )}
@@ -81,7 +72,7 @@ const MyProducts = () => {
   );
 };
 
-export default MyProducts;
+export default MyRequests;
 
 const styles = StyleSheet.create({
   main: {
@@ -94,7 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  noProductsText: {
+  noRequestsText: {
     fontSize: 16,
     textAlign: "center",
     marginBottom: 10,

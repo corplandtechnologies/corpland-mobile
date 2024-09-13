@@ -54,6 +54,9 @@ import { getUserById } from "./api/api";
 import Withdraw from "./screens/Payments/Withdraw";
 import ConfirmWithdraw from "./screens/Payments/ConfirmWithdrawal";
 import Settings from "./screens/Settings";
+import Request from "./screens/Request";
+import MyRequests from "./screens/buyer/MyRequests";
+import EditRequest from "./screens/buyer/EditRequest";
 
 const linking = {
   prefixes: ["https://corpland.corplandtechnologies.com"],
@@ -265,6 +268,31 @@ function App() {
                       />
 
                       <Stack.Screen
+                        name="Request"
+                        options={{
+                          headerTitle: Platform.OS === "web" ? "Details" : "",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton details={true} />,
+                          // headerRight: () => {
+                          //   const { productId } = useProduct();
+
+                          //   return (
+                          //     <FavoriteIcon
+                          //       productId={productId} // Use the local state instead of the context
+                          //       style={{
+                          //         padding: 15,
+                          //         // marginRight: 10,
+                          //       }}
+                          //     />
+                          //   );
+                          // },
+                          headerTransparent:
+                            Platform.OS === "web" ? false : true,
+                        }}
+                        component={Request}
+                      />
+
+                      <Stack.Screen
                         name="Categories"
                         options={{
                           headerTitle: "Categories",
@@ -299,6 +327,18 @@ function App() {
                         component={EditProduct}
                       />
                       <Stack.Screen
+                        name="EditRequest"
+                        options={{
+                          headerTitle: "Edit Your Request",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsBold",
+                          },
+                        }}
+                        component={EditRequest}
+                      />
+                      <Stack.Screen
                         name="MyProducts"
                         options={{
                           headerTitle: "My Products",
@@ -310,6 +350,19 @@ function App() {
                           },
                         }}
                         component={MyProducts}
+                      />
+                      <Stack.Screen
+                        name="MyRequests"
+                        options={{
+                          headerTitle: "My Requests",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsBold",
+                            // borderWidth:8
+                          },
+                        }}
+                        component={MyRequests}
                       />
                       <Stack.Screen
                         name="Wallet"
