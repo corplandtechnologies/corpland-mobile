@@ -235,8 +235,9 @@ const Home = () => {
           {requests?.length > 0 && (
             <Section
               headerText="Requests"
-              onPress={(routeName) => handleSeeAll(routeName, "Requests")}
+              // onPress={(routeName) => handleSeeAll(routeName, "Requests")}
               routeName="ProductGrids"
+              limited
             >
               {loading ? (
                 <ActivityIndicator color={COLORS.PRIMARY} />
