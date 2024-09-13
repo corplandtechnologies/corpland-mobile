@@ -33,7 +33,6 @@ const Profile = () => {
       setIsModalVisible(false);
     } catch (error) {
       console.log(error);
-      
     }
   };
 
@@ -181,6 +180,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginVertical: 10,
     borderRadius: 10,
+    height: 100,
   },
   modeText: {
     fontFamily: "PoppinsSemiBold",
