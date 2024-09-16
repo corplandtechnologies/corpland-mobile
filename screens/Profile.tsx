@@ -131,11 +131,11 @@ const Profile = () => {
           onPress={() => handleEmail("Help Center", "")}
         /> */}
 
-          {/*  <ProfileMenuItem
-          title="Privacy Policy"
-          iconName="information-circle-outline"
-          onPress={() => console.log("Privacy Policy pressed")}
-        /> */}
+          {/* <ProfileMenuItem
+            title="Privacy Policy"
+            iconName="information-circle-outline"
+            onPress={() => navigation.navigate("PrivacyPolicy")}
+          /> */}
           <ProfileMenuItem
             title="Log Out"
             iconName="log-out-outline"

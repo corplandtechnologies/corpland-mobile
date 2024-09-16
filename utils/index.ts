@@ -1,3 +1,4 @@
+import { getUnreadNotificationsCount } from "../api/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const getStorageItem = async (item: string) => {
@@ -17,7 +18,10 @@ export const createObjectURL = (file: any) => {
 export const handleError = (error: any) => {
   let errorMessage = "An unexpected error occurred.";
   if (error.response) {
-    errorMessage = error.response.data.message || error.response.statusText;
+    errorMessage =
+      error.response.data.message ||
+      error.response.data ||
+      error.response.statusText;
   } else if (error.request) {
     errorMessage = "No response received from the server.";
   } else {
@@ -29,3 +33,15 @@ export const handleError = (error: any) => {
 export const formatPrice = (price: string) => {
   return parseFloat(price).toLocaleString();
 };
+
+const fetchUnreadNotificationCount = async (userId: string) => {
+  try {
+    const { data } = await getUnreadNotificationsCount(userId);
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching unread notification count:", error);
+    return 0;
+  }
+};
+
+export default fetchUnreadNotificationCount;

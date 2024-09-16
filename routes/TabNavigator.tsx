@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import Home from "../screens/Home";
@@ -14,20 +14,28 @@ import { useSellerMode } from "../context/SellerModeContext";
 import { Icon as BadgeIcon, withBadge } from "react-native-elements";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getUserById } from "../api/api";
+import { getUnreadNotificationsCount, getUserById } from "../api/api";
 import { useApp } from "../context/AppContext";
 import CreateRequest from "../screens/buyer/CreateRequest";
 import AuthModal from "../components/auth/AuthModal";
+import PrimaryButton from "../components/ui/PrimaryButton";
+import HomeHeaderRight from "./components/HomeHeaderRight";
 
 const Tab = createBottomTabNavigator();
-const BadgedIcon = withBadge(0)(Icon);
 
 const TabNavigator: React.FC = () => {
-  const { user, setUser } = useApp();
+  const {
+    user,
+    setUser,
+    notifications,
+    unreadNotifications,
+    setUnreadNotifications,
+  } = useApp();
   const { isSellerMode } = useSellerMode();
   const [isRequest, setIsRequest] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const navigation: any = useNavigation();
+  const BadgedIcon = withBadge(unreadNotifications)(Icon);
   const onToggleSwitch = () => setIsRequest(!isRequest);
 
   const getUserInfo = async () => {
@@ -41,12 +49,24 @@ const TabNavigator: React.FC = () => {
       console.log(error);
     }
   };
+  const fetchUnreadNotificationCount = async () => {
+    try {
+      const { data } = await getUnreadNotificationsCount(user?._id);
+      console.log("count", data?.data);
+
+      setUnreadNotifications(data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
       getUserInfo();
+      fetchUnreadNotificationCount();
     }, [])
   );
+
   const handleTabPress = (routeName: string, defaultHandler: () => void) => {
     if (!user) {
       setModalVisible(true);
@@ -99,18 +119,6 @@ const TabNavigator: React.FC = () => {
     );
   };
 
-  const CustomHeaderRight = () => (
-    <View
-      style={{
-        paddingRight: 10,
-        flexDirection: "row",
-        gap: 10,
-        alignItems: "center",
-      }}
-    >
-      <BadgedIcon name="notifications" type="ionicon" size={25} />
-    </View>
-  );
   return (
     <>
       <Tab.Navigator
@@ -154,7 +162,7 @@ const TabNavigator: React.FC = () => {
             tabBarIcon: "home",
             headerTitle: "",
             headerLeft: () => <CustomHeaderLeft />,
-            // headerRight: () => <CustomHeaderRight />,
+            headerRight: () => <HomeHeaderRight navigation={navigation} />,
           }}
         />
         <Tab.Screen

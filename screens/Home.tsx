@@ -19,9 +19,11 @@ import { storeCatergories } from "../data/default";
 import ProductCard from "../components/ProductCard";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
+  getNotifications,
   getProducts,
   getRequests,
   getTrendingProducts,
+  getUnreadNotificationsCount,
   getUserById,
   searchProducts,
 } from "../api/api";
@@ -31,6 +33,8 @@ import { getStorageItem, handleError } from "../utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../context/AppContext";
 import RequestCard from "../components/RequestCard";
+import moment from "moment";
+import { Notification } from "../interfaces";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -43,9 +47,50 @@ const Home = () => {
   const [requests, setRequests] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const navigation: any = useNavigation();
-  const { user, setUser } = useApp();
+  const {
+    user,
+    setUser,
+    notifications,
+    setNotifications,
+    unreadNotifications,
+    setUnreadNotifications,
+  } = useApp();
   const [searchLoading, setSearchLoading] = useState(false);
+  const [notificationsLoading, setNotificationsLoading] = useState(false);
 
+  const fetchNotifications = async () => {
+    setNotificationsLoading(true);
+    try {
+      const { data } = await getNotifications(user?._id);
+      const sortedNotifications = data?.data.sort(
+        (a: Notification, b: Notification) =>
+          moment(b.createdAt).diff(moment(a.createdAt))
+      );
+      setNotifications(sortedNotifications);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setNotificationsLoading(false);
+    }
+  };
+
+  const fetchUnreadNotificationCount = async () => {
+    try {
+      const { data } = await getUnreadNotificationsCount(user?._id);
+      console.log("count", data?.data);
+
+      setUnreadNotifications(data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchNotifications();
+      fetchUnreadNotificationCount();
+    }, [])
+  );
   // useEffect(() => {
   //   const getLoggedInUser = async () => {
   //     const user = await getStorageItem("user");
@@ -147,6 +192,7 @@ const Home = () => {
                 fetchProducts();
                 fetchUser();
                 fetchRequests();
+                fetchNotifications();
                 setRefreshing(false);
               } catch (error) {
                 setRefreshing(false);

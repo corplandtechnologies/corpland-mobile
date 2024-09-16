@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   wrapper: {
-    backgroundColor: COLORS.BLUE_LIGHT,
+    backgroundColor: COLORS.GRAY_VERY_LIGHT,
     padding: 30,
     width: 50,
     height: 50,

@@ -52,3 +52,18 @@ export interface GroupedTransactions {
   date: string;
   transactions: Transaction[];
 }
+export interface Notification {
+  _id: string;
+  userId: string;
+  type: "transaction" | "order" | "user" | "product" | "request" | "ad";
+  title: string;
+  description: string;
+  isRead: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GroupedNotifications {
+  date: string;
+  notifications: Notification[];
+}

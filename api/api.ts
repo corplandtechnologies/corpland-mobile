@@ -8,7 +8,7 @@ import { Platform } from "react-native";
 // });
 
 // export const API = axios.create({
-//   baseURL: "http://192.168.241.158:3000/api/v1",
+//   baseURL: "http://192.168.111.158:3000/api/v1",
 //   withCredentials: true,
 // });
 
@@ -386,3 +386,19 @@ export const getUserTransactions = (userId: string) =>
 
 export const deleteAccount = (userId: string) =>
   API.delete(`/users/delete-account/${userId}`);
+
+export const getNotifications = (userId: string) =>
+  API.get(`/notifications?userId=${userId}`);
+
+export const getUnreadNotificationsCount = (userId: string) =>
+  API.get(`/notifications/count?userId=${userId}`);
+
+export const markNotificationAsRead = (id: string) =>
+  API.put(`/notifications/${id}`, {
+    isRead: true,
+  });
+
+export const markAllNotificationAsRead = (userId: string) =>
+  API.put(`/notifications/user/${userId}`, {
+    isRead: true,
+  });

@@ -57,6 +57,10 @@ import Settings from "./screens/Settings";
 import Request from "./screens/Request";
 import MyRequests from "./screens/buyer/MyRequests";
 import EditRequest from "./screens/buyer/EditRequest";
+import PrivacyPolicy from "./screens/PrivacyPolicy";
+import Notifications from "./screens/Notifications";
+import PrimaryButton from "./components/ui/PrimaryButton";
+import TextElement from "./components/elements/Texts/TextElement";
 
 const linking = {
   prefixes: ["https://corpland.corplandtechnologies.com"],
@@ -178,7 +182,7 @@ function App() {
                           headerShown: false,
                           headerTitle: "Sign In",
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -213,7 +217,7 @@ function App() {
                           headerLeft: () => <BackButton />,
                           headerTitleAlign: "center",
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                           },
                         })}
                       />
@@ -224,7 +228,7 @@ function App() {
                           headerLeft: () => <BackButton />,
                           headerTitleAlign: "center",
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                           },
                         }}
                         component={ProductGrids}
@@ -236,7 +240,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -299,7 +303,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -321,7 +325,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                           },
                         }}
                         component={EditProduct}
@@ -333,7 +337,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                           },
                         }}
                         component={EditRequest}
@@ -345,7 +349,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -358,7 +362,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -371,7 +375,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -384,7 +388,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -397,7 +401,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -410,7 +414,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -423,7 +427,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -436,7 +440,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -449,7 +453,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -462,7 +466,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -475,7 +479,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -488,7 +492,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -501,11 +505,54 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
                         component={Settings}
+                      />
+                      <Stack.Screen
+                        name="PrivacyPolicy"
+                        options={{
+                          headerTitle: "Privacy Policy",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                            // borderWidth:8
+                          },
+                        }}
+                        component={PrivacyPolicy}
+                      />
+                      <Stack.Screen
+                        name="Notifications"
+                        options={{
+                          headerTitle: "Notifications",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                            // borderWidth:8
+                          },
+                          // headerRight: () => (
+                          //   <TouchableOpacity
+                          //     style={{
+                          //       backgroundColor: COLORS.PRIMARY,
+                          //       paddingHorizontal: 15,
+                          //       paddingVertical: 10,
+                          //       borderRadius: 10,
+                          //       marginRight: 5,
+                          //       alignItems: "center",
+                          //       justifyContent: "center",
+                          //     }}
+                          //   >
+                          //     <TextElement color={COLORS.SECONDARY} textAlign="center">
+                          //       2 New
+                          //     </TextElement>
+                          //   </TouchableOpacity>
+                          // ),
+                        }}
+                        component={Notifications}
                       />
                     </Stack.Navigator>
                   </NavigationContainer>

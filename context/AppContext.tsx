@@ -5,11 +5,14 @@ import React, {
   useState,
   ReactNode,
   Dispatch,
-  SetStateAction, // Import ReactNode
+  SetStateAction,
+  useCallback, // Import ReactNode
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Notification } from "../interfaces";
+import fetchUnreadNotificationCount from "../utils";
 
-interface AppContextType {
+export interface AppContextType {
   loading: any;
   error: any;
   snackbarVisible: boolean;
@@ -28,6 +31,11 @@ interface AppContextType {
   setTransferRecipient: Dispatch<SetStateAction<string>>;
   requestId: string;
   setRequestId: Dispatch<SetStateAction<string>>;
+  notifications: Notification[];
+  setNotifications: Dispatch<SetStateAction<Notification[]>>;
+  unreadNotifications: number;
+  setUnreadNotifications: Dispatch<SetStateAction<number>>;
+  updateUnreadNotificationCount: any;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -44,6 +52,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [transferRecipient, setTransferRecipient] = useState<string>("");
   const [requestId, setRequestId] = useState<string>("");
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
+  const updateUnreadNotificationCount = useCallback(async (userId: string) => {
+    const count = await fetchUnreadNotificationCount(userId);
+    setUnreadNotifications(count);
+  }, []);
 
   return (
     <AppContext.Provider
@@ -66,6 +80,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setTransferRecipient,
         requestId,
         setRequestId,
+        notifications,
+        setNotifications,
+        unreadNotifications,
+        setUnreadNotifications,
+        updateUnreadNotificationCount,
       }}
     >
       {children}
