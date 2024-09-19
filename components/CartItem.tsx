@@ -8,6 +8,9 @@ import { formatPrice } from "../utils";
 
 const CartItem = ({ product }) => {
   const { quantity, setQuantity } = useCart();
+
+  const displayPrice = formatPrice(product?.price ?? "0");
+
   return (
     <Card style={styles.wrapper}>
       <View style={{ flex: 1 }}>
@@ -17,7 +20,7 @@ const CartItem = ({ product }) => {
         <Text style={styles.title}>{product?.title}</Text>
         <Text style={styles.cat}>{product?.category}</Text>
         <View style={styles.priceQView}>
-          <Text style={styles.price}>GH₵ {formatPrice(product?.price).toFixed(2)}</Text>
+          <Text style={styles.price}>GH₵ {displayPrice}</Text>
           <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
         </View>
       </View>
