@@ -19,6 +19,7 @@ interface PopUpCardProps {
   title: string;
   actionText: string;
   onPress: () => void;
+  loading?: boolean
 }
 
 const PopUpCard: FC<PopUpCardProps> = ({
@@ -27,6 +28,7 @@ const PopUpCard: FC<PopUpCardProps> = ({
   title,
   actionText,
   onPress,
+  loading,
 }) => {
   const scaleValue = React.useRef(new Animated.Value(0)).current;
   const navigation: any = useNavigation();
@@ -77,10 +79,14 @@ const PopUpCard: FC<PopUpCardProps> = ({
                   }}
                   style={{ width: 200, height: 50 }}
                 />
-                <TextElement fontFamily="PoppinsMedium">{title}</TextElement>
+                <TextElement fontFamily="PoppinsMedium" textAlign="center">{title}</TextElement>
               </View>
               <View style={{ gap: 10 }}>
-                <PrimaryButton value={actionText} onPress={onPress} />
+                <PrimaryButton
+                  value={actionText}
+                  loading={loading}
+                  onPress={onPress}
+                />
                 <PrimaryButton
                   secondary
                   value="Cancel"

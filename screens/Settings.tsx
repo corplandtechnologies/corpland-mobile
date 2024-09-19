@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { deleteAccount } from "../api/api";
 import { handleError } from "../utils";
 import SnackBar from "../components/ui/SnackBar";
+import PopUpCard from "../components/PopUpCard";
 
 const Settings = () => {
   const navigation: any = useNavigation();
@@ -62,19 +63,21 @@ const Settings = () => {
         iconName="card-outline"
         onPress={showModal}
       />
-      <ConfirmationModal
-        isVisible={isModalVisible}
-        onClose={hideModal}
-        onConfirm={() => {
-          handleAccountDelete(setDeleteAccountLoading);
-        }}
-        modalTitle="Are you sure you want to delete your account?"
-        ConfirmButtonText={deleteAccountLoading ? "Loading..." : "Delete"}
-      />
+     
       <SnackBar
         setSnackbarVisible={setSnackbarVisible}
         snackbarVisible={snackbarVisible}
         snackbarMessage={snackbarMessage}
+      />
+      <PopUpCard
+        visible={isModalVisible}
+        title="Are you sure you want to delete your account?"
+        actionText={deleteAccountLoading ? "Loading..." : "Delete"}
+        onPress={() => {
+          handleAccountDelete(setDeleteAccountLoading);
+        }}
+        onClose={hideModal}
+        loading={deleteAccountLoading}
       />
     </MainView>
   );
