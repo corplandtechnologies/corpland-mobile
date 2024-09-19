@@ -105,11 +105,11 @@ function App() {
         );
         setTimeout(() => {
           Updates.reloadAsync();
-        }, 30000);
+        }, 10000);
       }
     });
   };
-  
+
   useEffect(() => {
     reactToUpdates();
   }, []);
