@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSellerMode } from "../context/SellerModeContext";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { useApp } from "../context/AppContext";
+import PopUpCard from "../components/PopUpCard";
 
 const Profile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -104,12 +105,11 @@ const Profile = () => {
             iconName="card-outline"
             onPress={() => navigation.navigate("Withdraw")}
           />
-
-          {/* <ProfileMenuItem
+          <ProfileMenuItem
             title="My Coupons"
             iconName="ticket-outline"
             onPress={() => navigation.navigate("MyCoupons")}
-          /> */}
+          />
           {/* <ProfileMenuItem
           title="Settings"
           iconName="settings-outline"
@@ -142,12 +142,12 @@ const Profile = () => {
             onPress={showModal}
           />
         </View>
-        <ConfirmationModal
-          isVisible={isModalVisible}
+        <PopUpCard
+          visible={isModalVisible}
+          title="Are you sure you want to log out?"
+          actionText="Log Out"
+          onPress={handleLogout}
           onClose={hideModal}
-          onConfirm={handleLogout}
-          modalTitle="Are you sure you want to log out?"
-          ConfirmButtonText="Log Out"
         />
       </ScrollView>
     </View>

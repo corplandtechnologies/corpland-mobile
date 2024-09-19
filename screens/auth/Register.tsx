@@ -37,6 +37,7 @@ const Register = () => {
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
   const [appleUserToken, setAppleUserToken] = useState<any>();
   const [googleUserInfo, setGoogleUserInfo] = useState<any>();
+  const [referralCode, setReferralCode] = useState<string>("");
   const navigation: any = useNavigation();
 
   // useEffect(() => {
@@ -119,6 +120,7 @@ const Register = () => {
         email: email.toLowerCase().trim(),
         password: password.trim(),
         termsAccepted,
+        referralCode: referralCode.trim(),
       });
       // Assuming user object contains userInfo and token
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
@@ -140,7 +142,7 @@ const Register = () => {
         title="Create Account"
         description="Fill your information below or register with your social account"
       />
-      <View style={{ gap: 10 }}>
+      <View style={{ gap: 20 }}>
         <FormInput icon="user" placeholder="Name" onChangeText={setName} />
         <FormInput
           icon="envelope"
@@ -167,6 +169,11 @@ const Register = () => {
             />
           </TouchableOpacity>
         </View>
+        <FormInput
+          icon="ticket"
+          placeholder="Referral Code (Optional)"
+          onChangeText={setReferralCode}
+        />
       </View>
 
       <CheckBox
@@ -261,7 +268,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     gap: 10,
     borderWidth: 1,
-    borderColor: COLORS.TERTIARY,
+    borderColor: COLORS.GRAY_LIGHTER,
   },
   input: {
     flex: 1,
@@ -272,7 +279,8 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderWidth: 0,
     padding: 0,
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 30,
   },
   termsText: {
     fontSize: 14,

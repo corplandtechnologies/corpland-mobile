@@ -5,6 +5,7 @@ export const signUp = async (userData: {
   email: string;
   password?: string;
   termsAccepted: boolean;
+  referralCode?: string;
 }) => {
   try {
     const response = await API.post("/users/signup", userData);
@@ -28,10 +29,7 @@ export const authWithSocial = async (userData: {
   }
 };
 
-export const login = async (userData: {
-  email: string;
-  password: string;
-}) => {
+export const login = async (userData: { email: string; password: string }) => {
   try {
     const response = await API.post("/users/login", userData);
     return response.data; // Assuming the API returns the user data upon successful sign up
@@ -40,8 +38,6 @@ export const login = async (userData: {
     throw error; // Rethrow the error to be handled by the caller
   }
 };
-
-
 
 export const verifyEmail = async (userData: {
   email: string;

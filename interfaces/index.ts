@@ -15,6 +15,7 @@ export interface walletModalProps {
   keyboardType?: string;
   onChangeText?: (text: any) => void;
   loading?: boolean;
+  isBonus?: boolean;
 }
 
 export interface BadgeProps {

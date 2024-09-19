@@ -219,7 +219,14 @@ const Notifications = () => {
               }}
             >
               <View style={styles.notificationViewLeft}>
-                <View style={styles.iconWrapper}>
+                <View
+                  style={styles.iconWrapper}
+                  style={
+                    notification.isRead
+                      ? styles.iconWrapperRead
+                      : styles.iconWrapper
+                  }
+                >
                   <Icon
                     name={getNotificationIcon(notification.type)}
                     size={26}
@@ -333,6 +340,11 @@ const styles = StyleSheet.create({
   },
   iconWrapper: {
     backgroundColor: COLORS.GRAY_VERY_LIGHT,
+    borderRadius: 9999,
+    padding: 10,
+  },
+  iconWrapperRead: {
+    backgroundColor: COLORS.SECONDARY,
     borderRadius: 9999,
     padding: 10,
   },

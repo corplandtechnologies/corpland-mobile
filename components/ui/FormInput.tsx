@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     gap: 10,
     borderWidth: 1,
-    borderColor: COLORS.TERTIARY,
+    borderColor: COLORS.GRAY_LIGHTER,
     flex: 4,
   },
   input: {

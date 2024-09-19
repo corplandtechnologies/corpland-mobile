@@ -19,6 +19,7 @@ import * as AppleAuthentication from "expo-apple-authentication";
 import { Platform } from "react-native";
 import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
+import TextElement from "../../components/elements/Texts/TextElement";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -131,8 +132,13 @@ const Login = () => {
         </TouchableOpacity>
       </View>
 
-      {/* <TouchableOpacity onPress={() => console.log("Forgot Password")}>
-        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+      {/* <TouchableOpacity
+        style={{ marginBottom: 20 }}
+        onPress={() => console.log("Forgot Password")}
+      >
+        <TextElement textAlign="right" fontFamily="PoppinsRegular">
+          Forgot Password?
+        </TextElement>
       </TouchableOpacity> */}
 
       <PrimaryButton

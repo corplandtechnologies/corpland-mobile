@@ -89,7 +89,7 @@ const Verify = () => {
     <View style={styles.container}>
       <UserHeader
         title="Verify Code"
-        description="Please enter the code we sent to your Email"
+        description="Please enter the code we sent to your Email. Check the spam folder if you still can't find it."
       />
 
       <View style={styles.inputContainer}>
@@ -105,21 +105,6 @@ const Verify = () => {
           />
         ))}
       </View>
-
-      <TouchableOpacity onPress={() => console.log("Forgot Password")}>
-        <Text style={styles.otp}>
-          Didn't receive OTP?{" "}
-          <Text
-            style={{
-              textDecorationLine: "underline",
-              color: COLORS.PRIMARY,
-            }}
-            onPress={() => navigation.navigate("CompleteProfile")}
-          >
-            Skip
-          </Text>
-        </Text>
-      </TouchableOpacity>
       <PrimaryButton
         value="Verify"
         loading={loading}
