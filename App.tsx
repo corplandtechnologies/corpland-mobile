@@ -97,10 +97,6 @@ function App() {
     loadFonts();
   }, []);
 
-  useEffect(() => {
-    reactToUpdates();
-  }, []);
-
   const reactToUpdates = () => {
     Updates.addUpdatesStateChangeListener((event: any) => {
       if (event.type === Updates.UpdateEventType?.UPDATE_AVAILABLE) {
@@ -109,10 +105,14 @@ function App() {
         );
         setTimeout(() => {
           Updates.reloadAsync();
-        }, 10000);
+        }, 30000);
       }
     });
   };
+  
+  useEffect(() => {
+    reactToUpdates();
+  }, []);
 
   useEffect(() => {
     const unsubscribe: any = NetInfo.addEventListener((state: any) => {
