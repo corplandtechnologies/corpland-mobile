@@ -31,8 +31,7 @@ export const handleError = (error: any) => {
 };
 
 export const formatPrice = (price: string) => {
-  const parsedPrice = parseFloat(price);
-  return isNaN(parsedPrice) ? "0.00" : parsedPrice.toFixed(2);
+  return parseFloat(price).toLocaleString();
 };
 
 const fetchUnreadNotificationCount = async (userId: string) => {
