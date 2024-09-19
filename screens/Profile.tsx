@@ -90,11 +90,11 @@ const Profile = () => {
             iconName="pricetags-outline"
             onPress={() => navigation.navigate("MyProducts")}
           />
-          <ProfileMenuItem
+          {/* <ProfileMenuItem
             title="My Requests"
             iconName="paper-plane-outline"
             onPress={() => navigation.navigate("MyRequests")}
-          />
+          /> */}
           <ProfileMenuItem
             title="Wallet"
             iconName="wallet-outline"
