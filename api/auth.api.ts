@@ -39,6 +39,42 @@ export const login = async (userData: { email: string; password: string }) => {
   }
 };
 
+export const forgotPassword = async (email: string) => {
+  try {
+    const response = await API.post("/users/forgot-password", { email });
+    return response.data;
+  } catch (error) {
+    console.error("Error during sign up:", error);
+    throw error;
+  }
+};
+
+export const verifyResetCode = async (email: string, resetCode: string) => {
+  try {
+    const response = await API.post("/users/verify-reset-code", {
+      email,
+      resetCode,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during sign up:", error);
+    throw error;
+  }
+};
+
+export const resetPassword = async (email: string, newPassword: string) => {
+  try {
+    const response = await API.post("/users/reset-password", {
+      email,
+      newPassword,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during sign up:", error);
+    throw error;
+  }
+};
+
 export const verifyEmail = async (userData: {
   email: string;
   code: string;

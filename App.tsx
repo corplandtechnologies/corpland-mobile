@@ -61,6 +61,9 @@ import PrivacyPolicy from "./screens/PrivacyPolicy";
 import Notifications from "./screens/Notifications";
 import PrimaryButton from "./components/ui/PrimaryButton";
 import TextElement from "./components/elements/Texts/TextElement";
+import ForgotPassword from "./screens/auth/ForgotPassword";
+import VerifyEmailPasswordReset from "./screens/auth/VerifyEmailPasswordReset";
+import ResetPassword from "./screens/auth/ResetPassword";
 
 const linking = {
   prefixes: ["https://corpland.corplandtechnologies.com"],
@@ -189,6 +192,11 @@ function App() {
                         component={Login}
                       />
                       <Stack.Screen
+                        name="ForgotPassword"
+                        options={{ headerShown: false }}
+                        component={ForgotPassword}
+                      />
+                      <Stack.Screen
                         name="OnBoarding"
                         options={{ headerShown: false }}
                         component={Onboarding}
@@ -200,6 +208,22 @@ function App() {
                           headerLeft: () => <BackButton />,
                         }}
                         component={Verify}
+                      />
+                      <Stack.Screen
+                        name="ResetPassword"
+                        options={{
+                          headerTitle: "",
+                          headerLeft: () => <BackButton />,
+                        }}
+                        component={ResetPassword}
+                      />
+                      <Stack.Screen
+                        name="VerifyEmailPasswordReset"
+                        options={{
+                          headerTitle: "",
+                          headerLeft: () => <BackButton />,
+                        }}
+                        component={VerifyEmailPasswordReset}
                       />
                       <Stack.Screen
                         name="CompleteProfile"

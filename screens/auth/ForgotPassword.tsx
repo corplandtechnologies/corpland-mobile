@@ -13,7 +13,7 @@ import UserHeader from "../../components/UserHeader";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Snackbar } from "react-native-paper";
-import { authWithSocial, login } from "../../api/auth.api";
+import { authWithSocial, forgotPassword, login } from "../../api/auth.api";
 import AuthOption from "../../components/auth/AuthOption";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Platform } from "react-native";
@@ -21,74 +21,27 @@ import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
 import TextElement from "../../components/elements/Texts/TextElement";
 
-const Login = () => {
+const ForgotPassword = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [snackbarVisible, setSnackbarVisible] = useState(false); // New state for Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
-  const [appleUserToken, setAppleUserToken] = useState<any>();
   const navigation: any = useNavigation();
 
-  useEffect(() => {
-    const checkAvailable = async () => {
-      const isAvailable = await AppleAuthentication.isAvailableAsync();
-      setAppleAuthAvailable(isAvailable);
-    };
-    checkAvailable();
-  }, []);
-
-  const handleAppleSignUp = async () => {
-    try {
-      const credential = await AppleAuthentication.signInAsync({
-        requestedScopes: [
-          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-          AppleAuthentication.AppleAuthenticationScope.EMAIL,
-        ],
-      });
-      const userInfo: any = jwtDecode(appleUserToken.identityToken);
-      const res = await authWithSocial({
-        name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
-        email: userInfo.email,
-      });
-      // Assuming user object contains userInfo and token
-      await AsyncStorage.setItem("user", JSON.stringify(res.user));
-      await AsyncStorage.setItem("token", res.token);
-      setSnackbarVisible(true);
-      setSnackbarMessage("Registration Completed Successfully!");
-      navigation.navigate("TabNavigator");
-      console.log(credential);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
-
-  const handleLogin = async () => {
-    if (!email || !password) {
+  const handleForgotPassword = async () => {
+    if (!email) {
       setSnackbarMessage("All Fields are required!");
       setSnackbarVisible(true);
       return;
     }
     setLoading(true);
     try {
-      const res = await login({
-        email: email.toLowerCase().trim(),
-        password: password.trim(),
+      await forgotPassword(email.toLowerCase().trim());
+      navigation.navigate("VerifyEmailPasswordReset", {
+        email: email,
       });
-
-      // Assuming user object contains userInfo and token
-      await AsyncStorage.setItem("user", JSON.stringify(res.user));
-      await AsyncStorage.setItem("token", res.token);
-      setSnackbarVisible(true);
-      setSnackbarMessage("Logged In Successfully!");
-      navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
       console.log(error);
       setSnackbarMessage(handleError(error));
@@ -100,8 +53,8 @@ const Login = () => {
   return (
     <View style={styles.container}>
       <UserHeader
-        title="Sign In"
-        description="Fill your information below or register with your social account"
+        title="Forgot Password"
+        description="Fill your information below to be able to reset your password"
       />
       <View style={styles.inputContainer}>
         <Icon name="envelope" type="font-awesome" color={COLORS.GRAY} />
@@ -112,64 +65,12 @@ const Login = () => {
           onChangeText={setEmail}
         />
       </View>
-      <View style={styles.inputContainer}>
-        <Icon name="lock" type="font-awesome" color={COLORS.GRAY} />
-        <TextInput
-          placeholder="Password"
-          secureTextEntry={!isPasswordVisible}
-          style={styles.input}
-          placeholderTextColor={COLORS.TERTIARY}
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity
-          onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-        >
-          <Icon
-            name={isPasswordVisible ? "eye-slash" : "eye"}
-            type="font-awesome"
-            color={COLORS.GRAY}
-          />
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity
-        style={{ marginBottom: 20 }}
-        onPress={() => navigation.navigate("ForgotPassword")}
-      >
-        <TextElement textAlign="right" fontFamily="PoppinsRegular">
-          Forgot Password?
-        </TextElement>
-      </TouchableOpacity>
-
       <PrimaryButton
-        value="Sign In"
-        onPress={handleLogin}
+        value="Submit"
+        onPress={handleForgotPassword}
         loading={loading}
-        disabled={!password}
+        disabled={!email}
       />
-
-      {Platform.OS === "ios" && (
-        <View style={styles.separatorContainer}>
-          <View style={styles.separatorLine} />
-          <Text style={styles.separatorText}>or</Text>
-          <View style={styles.separatorLine} />
-        </View>
-      )}
-
-      <View style={styles.socialSignInContainer}>
-        {/* <TouchableOpacity onPress={() => console.log("Google Sign In")}>
-          <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
-        </TouchableOpacity> */}
-        {Platform.OS === "ios" && (
-          <TouchableOpacity onPress={handleAppleSignUp}>
-            <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
-          </TouchableOpacity>
-        )}
-
-        {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
-          <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
-        </TouchableOpacity> */}
-      </View>
       <Snackbar
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
@@ -269,4 +170,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default ForgotPassword;
