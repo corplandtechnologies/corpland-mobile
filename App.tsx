@@ -42,7 +42,7 @@ import Header from "./components/Header";
 import { Platform } from "react-native";
 import Wallet from "./screens/Wallet";
 import Deposit from "./screens/Deposit";
-import MyCoupons from "./screens/MyCoupons";
+import MyCoupons from "./screens/Bonus/MyCoupons";
 import Redeem from "./screens/Redeem";
 import CompleteDeposit from "./screens/CompleteDeposit";
 import Cart from "./screens/buyer/Cart";
@@ -64,6 +64,7 @@ import TextElement from "./components/elements/Texts/TextElement";
 import ForgotPassword from "./screens/auth/ForgotPassword";
 import VerifyEmailPasswordReset from "./screens/auth/VerifyEmailPasswordReset";
 import ResetPassword from "./screens/auth/ResetPassword";
+import ConfirmBonusWithdrawal from "./screens/Bonus/ConfirmBonusWithdrawal";
 
 const linking = {
   prefixes: ["https://corpland.corplandtechnologies.com"],
@@ -521,6 +522,19 @@ function App() {
                           },
                         }}
                         component={ConfirmWithdraw}
+                      />
+                      <Stack.Screen
+                        name="ConfirmBonusWithdrawal"
+                        options={{
+                          headerTitle: "Withdraw Bonus",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                            // borderWidth:8
+                          },
+                        }}
+                        component={ConfirmBonusWithdrawal}
                       />
                       <Stack.Screen
                         name="Settings"

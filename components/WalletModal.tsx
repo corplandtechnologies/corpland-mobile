@@ -18,6 +18,11 @@ const WalletModal: React.FC<walletModalProps> = ({
   onChangeText,
   loading,
   isBonus,
+  disabled,
+  secondaryActionButtonText,
+  onSecondaryPress,
+  secondaryLoading,
+  secondarydisabled,
 }) => {
   return (
     <View style={styles.walletWrapper}>
@@ -46,13 +51,36 @@ const WalletModal: React.FC<walletModalProps> = ({
           </View>
         </View>
       )}
-      <View>
-        <PrimaryButton
-          value={actionButtonText}
-          onPress={onPress}
-          loading={loading}
-        />
-      </View>
+      {isBonus && !isDeposit ? (
+        <View style={styles.bonusWallet}>
+          <View style={{ flex: 1 }}>
+            <PrimaryButton
+              value={actionButtonText}
+              onPress={onPress}
+              loading={loading}
+              disabled={disabled}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <PrimaryButton
+              secondary
+              value={secondaryActionButtonText}
+              onPress={onSecondaryPress}
+              loading={secondaryLoading}
+              disabled={secondarydisabled}
+            />
+          </View>
+        </View>
+      ) : (
+        <View>
+          <PrimaryButton
+            value={actionButtonText}
+            onPress={onPress}
+            loading={loading}
+            disabled={disabled}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -86,5 +114,8 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: COLORS.SECONDARY,
     borderRadius: 10,
+  },
+  bonusWallet: {
+    flexDirection: "row",
   },
 });

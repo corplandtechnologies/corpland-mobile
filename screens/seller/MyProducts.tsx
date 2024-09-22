@@ -61,7 +61,7 @@ const MyProducts = () => {
           </TouchableOpacity>
         </View>
       ) : (
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ gap: 10 }}>
           {userProducts?.map((result, index) => (
             <ProductItem
               key={result._id}

@@ -6,19 +6,21 @@ import {
   View,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
-import React, { useState } from "react";
-import { COLORS } from "../utils/color";
-import WalletModal from "../components/WalletModal";
+import React, { useEffect, useState } from "react";
+import { COLORS } from "../../utils/color";
+import WalletModal from "../../components/WalletModal";
 import { useNavigation } from "@react-navigation/native";
-import { useApp } from "../context/AppContext";
-import MainView from "../components/elements/Views/MainView";
+import { useApp } from "../../context/AppContext";
+import MainView from "../../components/elements/Views/MainView";
 import { RefreshControl } from "react-native";
-import Hr from "../components/elements/HR/Hr";
-import TextElement from "../components/elements/Texts/TextElement";
-import SnackBar from "../components/ui/SnackBar";
-import Card from "../components/ui/Card";
+import Hr from "../../components/elements/HR/Hr";
+import TextElement from "../../components/elements/Texts/TextElement";
+import SnackBar from "../../components/ui/SnackBar";
+import Card from "../../components/ui/Card";
 import Icon from "react-native-vector-icons/Ionicons";
-import { handleError } from "../utils";
+import { handleError } from "../../utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUserById } from "../../api/api";
 
 const MyCoupons = () => {
   const navigation: any = useNavigation();
@@ -28,8 +30,25 @@ const MyCoupons = () => {
     snackbarVisible,
     setSnackbarVisible,
     setSnackbarMessage,
+    setUser,
+    refreshing,
+    setRefreshing,
   } = useApp();
   const [isCopied, setIsCopied] = useState<boolean>(false);
+
+  const fetchUser = async () => {
+    try {
+      const userInfo: any = await AsyncStorage.getItem("user");
+      const parsedUserInfo = JSON.parse(userInfo);
+      const res: any = await getUserById(parsedUserInfo?._id);
+      setUser(res?.data?.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const copyToClipboard = async (item: string) => {
     setIsCopied(true);
@@ -54,33 +73,37 @@ const MyCoupons = () => {
           padding: 10,
         }}
         showsVerticalScrollIndicator={false}
-        // refreshControl={
-        //   <RefreshControl
-        //     refreshing={refreshing}
-        //     onRefresh={() => {
-        //       setRefreshing(true);
-        //       try {
-        //         fetchTransactions(setTransactionsLoading);
-        //         fetchUser();
-        //         setRefreshing(false);
-        //       } catch (error) {
-        //         setRefreshing(false);
-        //       }
-        //     }}
-        //   />
-        // }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              try {
+                // fetchTransactions(setTransactionsLoading);
+                fetchUser();
+                setRefreshing(false);
+              } catch (error) {
+                setRefreshing(false);
+              }
+            }}
+          />
+        }
       >
-        {/* <View style={styles.walletView}>
+        <View style={styles.walletView}>
           <WalletModal
-            balance={user?.wallet}
+            balance={user?.bonusWallet}
             onPress={() => navigation.navigate("Redeem")}
             actionButtonText="Redeem"
+            secondaryActionButtonText="Withdraw"
+            onSecondaryPress={() =>
+              navigation.navigate("ConfirmBonusWithdrawal")
+            }
             keyboardType="numeric"
             isWallet
             isBonus
           />
         </View>
-        <Hr height={5} marginVertical={25} marginHorizontal={100} /> */}
+        <Hr height={5} marginVertical={25} marginHorizontal={100} />
         <MainView style={styles.loadingView}>
           {/* {transactionsLoading ? (
             <View style={styles.centerView}>

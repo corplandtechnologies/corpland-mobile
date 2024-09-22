@@ -16,6 +16,11 @@ export interface walletModalProps {
   onChangeText?: (text: any) => void;
   loading?: boolean;
   isBonus?: boolean;
+  disabled?: boolean;
+  secondaryActionButtonText?: string;
+  onSecondaryPress?: () => void;
+  secondaryLoading?: boolean;
+  secondarydisabled?: boolean;
 }
 
 export interface BadgeProps {

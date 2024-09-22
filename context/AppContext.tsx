@@ -18,7 +18,7 @@ export interface AppContextType {
   snackbarVisible: boolean;
   snackbarMessage: string | any;
   setSnackbarVisible: Dispatch<SetStateAction<boolean>>;
-  setSnackbarMessage: any;
+  setSnackbarMessage: Dispatch<SetStateAction<string>>;
   setLoading: any;
   setError: any;
   user: any;
