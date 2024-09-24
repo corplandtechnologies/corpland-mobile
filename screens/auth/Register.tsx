@@ -40,6 +40,18 @@ const Register = () => {
   const [referralCode, setReferralCode] = useState<string>("");
   const navigation: any = useNavigation();
 
+  useEffect(() => {
+    // Check if the user is already authenticated on component mount
+    const checkAuthStatus = async () => {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        // User is already authenticated, navigate to CompleteProfile
+        navigation.navigate("CompleteProfile");
+      }
+    };
+    checkAuthStatus();
+  }, []);
+
   // useEffect(() => {
   //   GoogleSignin.configure();
   // }, []);
@@ -81,22 +93,47 @@ const Register = () => {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-      const userInfo: any = jwtDecode(appleUserToken.identityToken);
-      const res = await authWithSocial({
-        name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
-        email: userInfo.email,
-      });
-      // Assuming user object contains userInfo and token
-      await AsyncStorage.setItem("user", JSON.stringify(res.user));
-      await AsyncStorage.setItem("token", res.token);
-      setSnackbarVisible(true);
-      setSnackbarMessage("Registration Completed Successfully!");
-      navigation.navigate("CompleteProfile");
-      console.log(credential);
+
+      // Check if the credential has the identityToken
+      if (credential && credential.identityToken) {
+        const userInfo = jwtDecode(credential.identityToken); // Decode the token
+        const name = `${userInfo.fullName?.givenName || ""} ${
+          userInfo.fullName?.familyName || ""
+        }`.trim();
+
+        // Make sure the necessary fields are present before sending the request
+        if (!name || !userInfo.email) {
+          throw new Error("Missing name or email from Apple Sign-In.");
+        }
+
+        // Send the request to the backend for social authentication
+        const res = await authWithSocial({
+          name,
+          email: userInfo.email,
+        });
+
+        // Store user information and token in AsyncStorage
+        await AsyncStorage.setItem("user", JSON.stringify(res.user));
+        await AsyncStorage.setItem("token", res.token);
+
+        // Provide feedback to the user
+        setSnackbarVisible(true);
+        setSnackbarMessage("Registration Completed Successfully!");
+
+        // Navigate to the next page (e.g., CompleteProfile)
+        navigation.navigate("CompleteProfile");
+      } else {
+        throw new Error("Apple Sign-In did not return an identity token.");
+      }
+
+      console.log(credential); // For debugging purposes
     } catch (e) {
       console.log(e);
+      setSnackbarMessage(handleError(e)); // Handle the error and display the message
+      setSnackbarVisible(true);
     }
   };
+
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
