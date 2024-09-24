@@ -5,7 +5,7 @@ import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
 interface BackButtonProps {
-  details?: any;
+  details?: boolean;
 }
 const BackButton: FC<BackButtonProps> = ({ details }) => {
   const navigation: any = useNavigation();

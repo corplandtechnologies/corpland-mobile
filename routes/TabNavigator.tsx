@@ -20,6 +20,7 @@ import CreateRequest from "../screens/buyer/CreateRequest";
 import AuthModal from "../components/auth/AuthModal";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import HomeHeaderRight from "./components/HomeHeaderRight";
+import Messages from "../screens/Chat/Messages";
 
 const Tab = createBottomTabNavigator();
 
@@ -136,8 +137,8 @@ const TabNavigator: React.FC = () => {
               case "Add":
                 iconName = "add-circle";
                 break;
-              case "Orders":
-                iconName = "bag";
+              case "Messages":
+                iconName = "chatbox-ellipses";
                 break;
               case "Profile":
                 iconName = "person";
@@ -192,6 +193,23 @@ const TabNavigator: React.FC = () => {
           }}
         />
         <Tab.Screen
+          name="Messages"
+          component={Messages}
+          options={{
+            tabBarIcon: "chatbox-ellipses",
+            headerTitle: "Chat",
+            headerTitleStyle: {
+              fontFamily: "PoppinsSemiBold",
+              color: COLORS.SECONDARY,
+            },
+            headerLeft: () => <BackButton details />,
+            headerTitleAlign: "center",
+            headerStyle: {
+              backgroundColor: COLORS.PRIMARY,
+            },
+          }}
+        />
+        {/* <Tab.Screen
           name="Orders"
           component={Orders}
           options={{
@@ -203,7 +221,7 @@ const TabNavigator: React.FC = () => {
             headerLeft: () => <BackButton />,
             headerTitleAlign: "center",
           }}
-        />
+        /> */}
         <Tab.Screen
           name="Profile"
           component={Profile}
