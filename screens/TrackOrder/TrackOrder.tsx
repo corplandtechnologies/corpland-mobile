@@ -239,7 +239,7 @@ const TrackOrder = () => {
                       {product?.category} | Qty: 0{currentOrder?.quantity} pcs
                     </Text>
                     <Text style={styles.price}>
-                      GH₵{formatPrice(product?.price).toFixed(2)}
+                      GH₵{parseFloat(formatPrice(product?.price)).toFixed(2)}
                     </Text>
                   </View>
                 </Card>
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   detailsView: {
     justifyContent: "center",
     flex: 2,
-    gap: 20,
+    // gap: 20,
   },
   priceQView: {
     flexDirection: "row",
