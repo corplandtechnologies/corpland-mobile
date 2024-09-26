@@ -34,6 +34,31 @@ const Login = () => {
   const navigation: any = useNavigation();
 
   useEffect(() => {
+    checkAuthStatus();
+    checkAppleAuthAvailability();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      navigation.navigate("CompleteProfile");
+    }
+  };
+
+  const checkAppleAuthAvailability = async () => {
+    const isAvailable = await AppleAuthentication.isAvailableAsync();
+    setAppleAuthAvailable(isAvailable);
+  };
+
+  useEffect(() => {
+    const checkAvailable = async () => {
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
+      setAppleAuthAvailable(isAvailable);
+    };
+    checkAvailable();
+  }, []);
+
+  useEffect(() => {
     // Check if the user is already authenticated on component mount
     const checkAuthStatus = async () => {
       const token = await AsyncStorage.getItem("token");
@@ -61,20 +86,32 @@ const Login = () => {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-      const userInfo: any = jwtDecode(appleUserToken.identityToken);
+
+      const { identityToken, fullName, email } = credential;
+
+      if (!identityToken) {
+        throw new Error("Failed to get identity token from Apple Sign In");
+      }
+
+      const userInfo = jwtDecode(identityToken);
+
       const res = await authWithSocial({
-        name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
-        email: userInfo.email,
+        name: fullName
+          ? `${fullName.givenName} ${fullName.familyName}`
+          : "Apple User",
+        email: email || userInfo.email,
       });
-      // Assuming user object contains userInfo and token
+
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
       await AsyncStorage.setItem("token", res.token);
+
       setSnackbarVisible(true);
       setSnackbarMessage("Registration Completed Successfully!");
       navigation.navigate("TabNavigator");
-      console.log(credential);
     } catch (e) {
-      console.log(e);
+      console.error("Apple Sign In Error:", e);
+      setSnackbarVisible(true);
+      setSnackbarMessage(handleError(e));
     }
   };
 

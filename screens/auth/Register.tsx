@@ -34,27 +34,29 @@ const Register = () => {
   const [name, setName] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
   const [appleUserToken, setAppleUserToken] = useState<any>();
   const [googleUserInfo, setGoogleUserInfo] = useState<any>();
   const [referralCode, setReferralCode] = useState<string>("");
   const navigation: any = useNavigation();
+  const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
 
   useEffect(() => {
-    // Check if the user is already authenticated on component mount
-    const checkAuthStatus = async () => {
-      const token = await AsyncStorage.getItem("token");
-      if (token) {
-        // User is already authenticated, navigate to CompleteProfile
-        navigation.navigate("CompleteProfile");
-      }
-    };
     checkAuthStatus();
+    checkAppleAuthAvailability();
   }, []);
 
-  // useEffect(() => {
-  //   GoogleSignin.configure();
-  // }, []);
+  const checkAuthStatus = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      navigation.navigate("CompleteProfile");
+    }
+  };
+
+  const checkAppleAuthAvailability = async () => {
+    const isAvailable = await AppleAuthentication.isAvailableAsync();
+    setAppleAuthAvailable(isAvailable);
+  };
+
   useEffect(() => {
     const checkAvailable = async () => {
       const isAvailable = await AppleAuthentication.isAvailableAsync();
@@ -62,6 +64,9 @@ const Register = () => {
     };
     checkAvailable();
   }, []);
+  // useEffect(() => {
+  //   GoogleSignin.configure();
+  // }, []);
   // const handleGoogleSignUp = async () => {
   //   try {
   //     await GoogleSignin.hasPlayServices();
@@ -93,22 +98,35 @@ const Register = () => {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-      const userInfo: any = jwtDecode(appleUserToken.identityToken);
+
+      const { identityToken, fullName, email } = credential;
+
+      if (!identityToken) {
+        throw new Error("Failed to get identity token from Apple Sign In");
+      }
+
+      const userInfo = jwtDecode(identityToken);
+
       const res = await authWithSocial({
-        name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
-        email: userInfo.email,
+        name: fullName
+          ? `${fullName.givenName} ${fullName.familyName}`
+          : "Apple User",
+        email: email || userInfo.email,
       });
-      // Assuming user object contains userInfo and token
+
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
       await AsyncStorage.setItem("token", res.token);
+
       setSnackbarVisible(true);
       setSnackbarMessage("Registration Completed Successfully!");
       navigation.navigate("CompleteProfile");
-      console.log(credential);
     } catch (e) {
-      console.log(e);
+      console.error("Apple Sign In Error:", e);
+      setSnackbarVisible(true);
+      setSnackbarMessage(handleError(e));
     }
   };
+
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -215,11 +233,24 @@ const Register = () => {
         {/* <TouchableOpacity onPress={handleGoogleSignUp}>
           <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
-        {Platform.OS === "ios" && (
-          <TouchableOpacity onPress={handleAppleSignUp}>
-            <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
-          </TouchableOpacity>
-        )}
+        {/* {Platform.OS === "ios" && ( */}
+        <>
+          {/*  <TouchableOpacity onPress={handleAppleSignUp}>
+           <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
+         </TouchableOpacity> */}
+          <AppleAuthentication.AppleAuthenticationButton
+            buttonType={
+              AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+            }
+            buttonStyle={
+              AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+            }
+            cornerRadius={5}
+            style={styles.button}
+            onPress={handleAppleSignUp}
+          />
+        </>
+        {/* // )} */}
         {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
           <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
