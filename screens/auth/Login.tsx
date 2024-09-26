@@ -210,11 +210,23 @@ const Login = () => {
           <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
         {Platform.OS === "ios" && (
-          <TouchableOpacity onPress={handleAppleSignUp}>
-            <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
-          </TouchableOpacity>
+          <>
+            {/*  <TouchableOpacity onPress={handleAppleSignUp}>
+           <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
+         </TouchableOpacity> */}
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={
+                AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+              }
+              buttonStyle={
+                AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+              }
+              cornerRadius={5}
+              style={styles.button}
+              onPress={handleAppleSignUp}
+            />
+          </>
         )}
-
         {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
           <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}

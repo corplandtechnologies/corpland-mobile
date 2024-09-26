@@ -233,7 +233,7 @@ const Register = () => {
         {/* <TouchableOpacity onPress={handleGoogleSignUp}>
           <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
-        {/* {Platform.OS === "ios" && ( */}
+        {Platform.OS === "ios" && (
         <>
           {/*  <TouchableOpacity onPress={handleAppleSignUp}>
            <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
@@ -250,7 +250,7 @@ const Register = () => {
             onPress={handleAppleSignUp}
           />
         </>
-        {/* // )} */}
+         )} 
         {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
           <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
