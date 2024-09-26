@@ -220,24 +220,24 @@ const Register = () => {
         disabled={!termsAccepted}
         loading={loading}
       />
-
+{/* 
       {Platform.OS === "ios" && (
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
           <Text style={styles.separatorText}>or</Text>
           <View style={styles.separatorLine} />
         </View>
-      )}
+      )} */}
 
       <View style={styles.socialSignInContainer}>
         {/* <TouchableOpacity onPress={handleGoogleSignUp}>
           <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
-        {Platform.OS === "ios" && (
+        {/* {Platform.OS === "ios" && (
         <>
-          {/*  <TouchableOpacity onPress={handleAppleSignUp}>
+           <TouchableOpacity onPress={handleAppleSignUp}>
            <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
-         </TouchableOpacity> */}
+         </TouchableOpacity>
           <AppleAuthentication.AppleAuthenticationButton
             buttonType={
               AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
@@ -250,7 +250,7 @@ const Register = () => {
             onPress={handleAppleSignUp}
           />
         </>
-         )} 
+         )}  */}
         {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
           <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
