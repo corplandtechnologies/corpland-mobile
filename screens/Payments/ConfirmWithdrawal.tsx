@@ -23,6 +23,11 @@ const ConfirmWithdraw = () => {
       setSnackbarVisible(true);
       return;
     }
+    if (amount > user?.wallet) {
+      setSnackbarMessage("Your balance is insufficient! Earn some money and try again.");
+      setSnackbarVisible(true);
+      return;
+    }
     setLoading(true);
     try {
       await withdrawal(amount, transferRecipient, user?._id);

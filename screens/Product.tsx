@@ -300,6 +300,20 @@ const Product = ({ route }) => {
                             }}
                           />
                         </TouchableOpacity>
+                        <TouchableOpacity>
+                          <Icon
+                            name="chatbox-ellipses-outline"
+                            size={24}
+                            color={COLORS.GRAY}
+                            onPress={() => {
+                              if (!currentUser) {
+                                setModalVisible(true);
+                              } else {
+                                navigation.navigate("Chat");
+                              }
+                            }}
+                          />
+                        </TouchableOpacity>
                       </View>
                       {product?.userId === currentUser?._id && (
                         <TouchableOpacity onPress={showModal}>

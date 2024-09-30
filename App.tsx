@@ -65,6 +65,8 @@ import ForgotPassword from "./screens/auth/ForgotPassword";
 import VerifyEmailPasswordReset from "./screens/auth/VerifyEmailPasswordReset";
 import ResetPassword from "./screens/auth/ResetPassword";
 import ConfirmBonusWithdrawal from "./screens/Bonus/ConfirmBonusWithdrawal";
+import Chat from "./screens/Chat/Chat";
+import OptionsButton from "./components/ui/OptionsButton";
 
 const linking = {
   prefixes: ["https://corpland.corplandtechnologies.com"],
@@ -591,6 +593,36 @@ function App() {
                           // ),
                         }}
                         component={Notifications}
+                      />
+                      
+                      {/* //   component={Chat}
+                      //   options={{
+                      //     headerTitle: "Chat",
+                      //     headerTitleStyle: {
+                      //       fontFamily: "PoppinsSemiBold",
+                      //       // color: COLORS.SECONDARY,
+                      //     },
+                      //     headerLeft: () => <BackButton details />,
+                      //     headerTitleAlign: "center",
+                      //     headerStyle: {
+                      //       backgroundColor: COLORS.PRIMARY,
+                      //     },
+                      //     header: () => <View></View>,
+                      //     headerRight: () => <OptionsButton />,
+                      //   }}
+                      // /> */}
+                      <Stack.Screen
+                        name="Chat"
+                        options={{
+                          headerTitle: "Chat",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                            // borderWidth:8
+                          },
+                        }}
+                        component={Chat}
                       />
                     </Stack.Navigator>
                   </NavigationContainer>
