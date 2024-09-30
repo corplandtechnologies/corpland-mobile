@@ -39,6 +39,7 @@ import CartContext from "../context/CartContext";
 import AuthModal from "../components/auth/AuthModal";
 import MainView from "../components/elements/Views/MainView";
 import { formatPrice } from "../utils";
+import PopUpCard from "../components/PopUpCard";
 
 const Product = ({ route }) => {
   const { user: currentUser } = useApp();
@@ -51,6 +52,7 @@ const Product = ({ route }) => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isProceedModalVisible, setIsProceedModalVisible] = useState(false);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -376,10 +378,10 @@ const Product = ({ route }) => {
                           ) : (
                             <>
                               <PrimaryButton
-                                value="Buy Now"
+                                value="Proceed"
                                 icon={
                                   <Icon
-                                    name="bag-outline"
+                                    name="chevron-down-circle-outline"
                                     size={24}
                                     color={COLORS.SECONDARY}
                                   />
@@ -388,7 +390,7 @@ const Product = ({ route }) => {
                                   if (!currentUser) {
                                     setModalVisible(true);
                                   } else {
-                                    handleBuyNow();
+                                    setIsProceedModalVisible(true);
                                   }
                                 }}
                                 isIcon
@@ -440,12 +442,21 @@ const Product = ({ route }) => {
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
         />
-        <ConfirmationModal
-          isVisible={isModalVisible}
+        <PopUpCard
+          visible={isModalVisible}
+          title="Are you sure you want to delete your product?"
+          actionText="Delete"
+          onPress={handleDelete}
           onClose={hideModal}
-          onConfirm={handleDelete}
-          modalTitle="Are you sure you want to delete your product?"
-          ConfirmButtonText="Delete"
+        />
+        <PopUpCard
+          visible={isProceedModalVisible}
+          title="Do you want make an offer or make a purchase?"
+          actionText="Buy Now"
+          secondaryActionText="Make Offer"
+          onPress={handleBuyNow}
+          onClose={hideModal}
+          secondaryOnPress={()=>{}}
         />
         <Snackbar
           visible={snackbarVisible}
