@@ -69,7 +69,7 @@ const Profile = () => {
             )}
           </View>
         </View>
-        <View style={styles.modeView}>
+        {/* <View style={styles.modeView}>
           <Text style={styles.modeText}>Seller Mode</Text>
           <Switch
             value={isSellerMode}
@@ -78,7 +78,7 @@ const Profile = () => {
             thumbColor={COLORS.PRIMARY}
             // trackColor={COLORS.PRIMARY}
           />
-        </View>
+        </View> */}
         <View style={{ marginTop: 20 }}>
           <ProfileMenuItem
             title="Edit Profile"
