@@ -5,7 +5,7 @@ import Register from "./screens/auth/Register";
 import Login from "./screens/auth/Login";
 import Onboarding from "./screens/Onboarding";
 import * as Font from "expo-font";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Verify from "./screens/auth/Verify";
 import BackButton from "./components/ui/BackButton";
 import CompleteProfile from "./screens/auth/CompleteProfile";
@@ -50,7 +50,7 @@ import { CartProvider } from "./context/CartContext";
 import OrderSuccess from "./screens/OrderSuccess";
 import TrackOrder from "./screens/TrackOrder/TrackOrder";
 import { AppProvider, useApp } from "./context/AppContext";
-import { getUserById } from "./api/api";
+import { getUserById, storeExpoNotificationsPushToken } from "./api/api";
 import Withdraw from "./screens/Payments/Withdraw";
 import ConfirmWithdraw from "./screens/Payments/ConfirmWithdrawal";
 import Settings from "./screens/Settings";
@@ -58,13 +58,14 @@ import Request from "./screens/Request";
 import MyRequests from "./screens/buyer/MyRequests";
 import EditRequest from "./screens/buyer/EditRequest";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
-import Notifications from "./screens/Notifications";
+import NotificationScreen from "./screens/NotificationScreen";
 import PrimaryButton from "./components/ui/PrimaryButton";
 import TextElement from "./components/elements/Texts/TextElement";
 import ForgotPassword from "./screens/auth/ForgotPassword";
 import VerifyEmailPasswordReset from "./screens/auth/VerifyEmailPasswordReset";
 import ResetPassword from "./screens/auth/ResetPassword";
 import ConfirmBonusWithdrawal from "./screens/Bonus/ConfirmBonusWithdrawal";
+import * as Notifications from "expo-notifications";
 
 const linking = {
   prefixes: ["https://corpland.corplandtechnologies.com"],
@@ -83,6 +84,52 @@ function App() {
   const [isFontLoaded, setFontLoaded] = useState<boolean>(false);
   const { user, setUser } = useApp();
   const [loggedInUser, setLoggedInUser] = useState<object>({});
+
+  const notificationListener: any = useRef();
+  const responseListener: any = useRef();
+
+  const fetchUser = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user");
+      const parsedUserInfo = JSON.parse(userInfo);
+      setLoggedInUser(parsedUserInfo);
+      const res: any = await getUserById(parsedUserInfo?._id);
+      setUser(res.data?.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, [user?._id]);
+
+  useEffect(() => {
+    // Register for push notifications once loggedInUser is available
+    if (loggedInUser && loggedInUser._id) {
+      registerForPushNotificationsAsync(loggedInUser._id);
+    }
+  }, [loggedInUser]); // This effect will run only when loggedInUser is updated
+
+  useEffect(() => {
+    // Listen for incoming notifications
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log(notification);
+      });
+
+    // Handle notification interaction
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   useEffect(() => {
     async function loadFonts() {
@@ -127,21 +174,6 @@ function App() {
       unsubscribe();
     };
   }, []);
-
-  const fetchUser = async () => {
-    try {
-      const userInfo = await AsyncStorage.getItem("user");
-      const parsedUserInfo = JSON.parse(userInfo);
-      setLoggedInUser(parsedUserInfo);
-      const res: any = await getUserById(parsedUserInfo?._id);
-      setUser(res.data?.user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchUser();
-  }, [user?._id]);
 
   if (!isFontLoaded) {
     return null; // or a loading indicator
@@ -590,7 +622,7 @@ function App() {
                           //   </TouchableOpacity>
                           // ),
                         }}
-                        component={Notifications}
+                        component={NotificationScreen}
                       />
                     </Stack.Navigator>
                   </NavigationContainer>
@@ -602,6 +634,38 @@ function App() {
       </AppProvider>
     </>
   );
+}
+
+async function registerForPushNotificationsAsync(userId: string) {
+  console.log("userId", userId);
+
+  let token: string;
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+    });
+  }
+
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+
+  if (finalStatus !== "granted") {
+    alert("Failed to get push token!");
+    return;
+  }
+
+  // Get Expo push token
+  token = (await Notifications.getExpoPushTokenAsync()).data;
+  console.log(token);
+
+  // Send token to backend
+  await storeExpoNotificationsPushToken(userId, token);
 }
 
 const styles = StyleSheet.create({

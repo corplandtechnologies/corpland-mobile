@@ -47,6 +47,7 @@
     "expo-image-picker": "~15.0.5",
     "expo-location": "~17.0.1",
     "expo-modules-core": "~1.12.24",
+    "expo-notifications": "~0.28.18",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.6",
     "expo-updates": "~0.25.17",

@@ -25,7 +25,7 @@ import SnackBar from "../components/ui/SnackBar";
 import { Notification } from "../interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Notifications = () => {
+const NotificationScreen = () => {
   const navigation: any = useNavigation();
   const {
     snackbarVisible,
@@ -312,7 +312,7 @@ const Notifications = () => {
   );
 };
 
-export default Notifications;
+export default NotificationScreen;
 
 const styles = StyleSheet.create({
   main: {},

@@ -7,15 +7,15 @@ import { Platform } from "react-native";
 //   withCredentials: true,
 // });
 
-// export const API = axios.create({
-//   baseURL: "http://192.168.225.158:3000/api/v1",
-//   withCredentials: true,
-// });
-
 export const API = axios.create({
-  baseURL: "https://corplandbackend.onrender.com/api/v1",
+  baseURL: "http://192.168.132.158:3000/api/v1",
   withCredentials: true,
 });
+
+// export const API = axios.create({
+//   baseURL: "https://corplandbackend.onrender.com/api/v1",
+//   withCredentials: true,
+// });
 
 const getToken = async () => {
   return await AsyncStorage.getItem("token");
@@ -408,3 +408,15 @@ export const markAllNotificationAsRead = (userId: string) =>
   API.put(`/notifications/user/${userId}`, {
     isRead: true,
   });
+
+export const storeExpoNotificationsPushToken = (
+  userId: string,
+  expoPushToken: string
+) => {
+  console.log("userId in Aipi", userId);
+
+  API.put(`/users/register-token`, {
+    userId: userId,
+    expoPushToken: expoPushToken,
+  });
+};
