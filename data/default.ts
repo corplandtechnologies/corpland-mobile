@@ -1,21 +1,21 @@
 import { RegionsByCountry } from "../utils/interfaces";
 
 export const categories = [
-  "Food & Groceries",
+  "Agriculture & Food",
   "Babies & Kids",
   "Commercial Equipment & Tools",
   "Electronics",
   "Fashion",
   "Health & Beauty",
   "Home, Furniture & Appliances",
-  // "Jobs",
+  "Jobs",
   "Services",
   "Mobile Phones & Tablets",
   "Pets",
-  // "Property",
+  "Property",
   "Repair & Construction",
   "Sports, Arts & Outdoors",
-  "Automobile",
+  "Vehicles",
 ];
 export const regionsByCountry: RegionsByCountry = {
   Ghana: [
@@ -115,21 +115,21 @@ export const storeCatergories = [
       "https://ik.imagekit.io/4hxqb9ldw/pet.png?updatedAt=1725434761860",
     category: "Pets",
   },
-  // {
-  //   iconImagePath:
-  //     "https://ik.imagekit.io/4hxqb9ldw/lease.png?updatedAt=1725434742751",
-  //   category: "Property",
-  // },
+  {
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/lease.png?updatedAt=1725434742751",
+    category: "Property",
+  },
   {
     iconImagePath:
       "https://ik.imagekit.io/4hxqb9ldw/construction.png?updatedAt=1725434666454",
     category: "Repair & Construction",
   },
-  // {
-  //   iconImagePath:
-  //     "https://ik.imagekit.io/4hxqb9ldw/job.png?updatedAt=1725434743594",
-  //   category: "Jobs",
-  // },
+  {
+    iconImagePath:
+      "https://ik.imagekit.io/4hxqb9ldw/job.png?updatedAt=1725434743594",
+    category: "Jobs",
+  },
   {
     iconImagePath:
       "https://ik.imagekit.io/4hxqb9ldw/sports.png?updatedAt=1725434778839",
@@ -138,7 +138,7 @@ export const storeCatergories = [
   {
     iconImagePath:
       "https://ik.imagekit.io/4hxqb9ldw/vehicle.png?updatedAt=1725434786221",
-    category: "Automobile",
+    category: "Vehicles",
   },
   // Add more categories as needed
 ];
