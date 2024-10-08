@@ -164,7 +164,7 @@ const Product = ({ route }) => {
       // For mobile, use the Share API
       Share.share({
         message: shareMessage,
-        title: `Check out my ${productTitle}`,
+        title: `Don't get scammed. Use Corpland to securely get our ${productTitle} for GH₵${formatPrice(product?.price)} today! `,
         url: fullShareLink,
       });
     }
