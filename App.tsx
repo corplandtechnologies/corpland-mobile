@@ -68,9 +68,16 @@ import ConfirmBonusWithdrawal from "./screens/Bonus/ConfirmBonusWithdrawal";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
+import * as Linking from "expo-linking";
+
+const prefix = Linking.createURL("/");
 
 const linking = {
-  prefixes: ["https://corpland.corplandtechnologies.com"],
+  prefixes: [
+    prefix,
+    "https://corpland.corplandtechnologies.com",
+    "corpland://",
+  ],
   config: {
     screens: {
       Product: "product/:productId",

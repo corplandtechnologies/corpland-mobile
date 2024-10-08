@@ -39,6 +39,7 @@ import CartContext from "../context/CartContext";
 import AuthModal from "../components/auth/AuthModal";
 import MainView from "../components/elements/Views/MainView";
 import { formatPrice } from "../utils";
+import PopUpCard from "../components/PopUpCard";
 
 const Product = ({ route }) => {
   const { user: currentUser } = useApp();
@@ -51,6 +52,7 @@ const Product = ({ route }) => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isProceedModalVisible, setIsProceedModalVisible] = useState(false);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -148,8 +150,8 @@ const Product = ({ route }) => {
     const baseUrl =
       Platform.OS === "web"
         ? window.location.origin
-        : "https://corpland.corplandtechnologies.com";
-    const fullShareLink = `${baseUrl}/product/${productId}`;
+        : "https://corpland-backend.onrender.com/api/v1";
+    const fullShareLink = `${baseUrl}/products/product/${productId}`;
 
     // Construct the share message including the first image URL if available
     shareMessage = `Check out ${productTitle}: ${fullShareLink}`;
