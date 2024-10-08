@@ -187,7 +187,9 @@ const Banner = () => {
         </View>
         <View style={styles.imageView}>
           <Image
-            source={require("../assets/discoverImage.png")}
+            source={{
+              uri: "https://res.cloudinary.com/ddhdyuktu/image/upload/v1725436652/discoverImage_wdf56m.png",
+            }}
             style={styles.imageStyle}
           />
         </View>
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     fontFamily: "PoppinsMedium",
   },
   buttonStyle: {
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 5,
     alignItems: "center",

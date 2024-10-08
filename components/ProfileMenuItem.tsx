@@ -23,14 +23,14 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
         alignItems: "center",
         paddingVertical: 10,
         borderBottomWidth: 1,
-        borderBottomColor: COLORS.TERTIARY,
+        borderBottomColor: COLORS.GRAY_LIGHT,
         padding: 20,
         paddingTop: 20,
         paddingBottom: 20,
       }}
     >
       <Icon name={iconName} size={24} color={COLORS.PRIMARY} />
-      <Text style={{ marginLeft: 10, flex: 1, fontFamily: "PoppinsRegular" }}>
+      <Text style={{ marginLeft: 10, flex: 1, fontFamily: "PoppinsMedium" }}>
         {title}
       </Text>
       <Icon name="chevron-forward" size={24} color={COLORS.PRIMARY} />

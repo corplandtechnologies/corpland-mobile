@@ -77,7 +77,7 @@ const CompleteProfile = () => {
     }
   };
   const handleProfileUpdate = async () => {
-    if (!phoneNumber) {
+    if (phoneNumber.trim().length < 10) {
       setSnackbarMessage("All Fields are required!");
       setSnackbarVisible(true);
       return;
@@ -106,7 +106,7 @@ const CompleteProfile = () => {
     }
   };
   return (
-    <ScrollView>
+    <>
       <View style={styles.container}>
         <UserHeader
           title="Complete Your Profile"
@@ -184,28 +184,25 @@ const CompleteProfile = () => {
           loading={loading}
           disabled={loading}
         />
-
-        <Snackbar
-          visible={snackbarVisible}
-          onDismiss={() => setSnackbarVisible(false)}
-          action={{
-            label: "Close",
-            onPress: () => {
-              setSnackbarVisible(false);
-            },
-          }}
-        >
-          {snackbarMessage}
-        </Snackbar>
       </View>
-    </ScrollView>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        action={{
+          label: "Close",
+          onPress: () => {
+            setSnackbarVisible(false);
+          },
+        }}
+      >
+        {snackbarMessage}
+      </Snackbar>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
     paddingHorizontal: 20,
     backgroundColor: COLORS.SECONDARY,
   },

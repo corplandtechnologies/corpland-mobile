@@ -14,9 +14,21 @@
     },
     "production": {
       "channel": "production"
+    },
+    "simulator": {
+      "ios": {
+        "simulator": true,
+        "channel": "development"
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "soluservant@gmail.com",
+        "ascAppId": "6670435009",
+        "appleTeamId": "53C6A5RA8W"
+      }
+    }
   }
 }

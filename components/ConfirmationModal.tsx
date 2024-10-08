@@ -6,7 +6,7 @@ import { COLORS } from "../utils/color";
 interface ConfirmationModalProps {
   isVisible: boolean;
   onClose: () => void;
-  onConfirm: () => Promise<void>;
+  onConfirm: any;
   modalTitle: string;
   ConfirmButtonText: string;
 }
@@ -51,13 +51,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
-    height: "50%",
+    borderWidth: 1,
   },
   modalText: {
     fontSize: 20,
     textAlign: "center",
     margin: 24,
-    fontFamily: "PoppinsBold",
+    fontFamily: "PoppinsSemiBold",
     color: COLORS.SECONDARY,
   },
   modalSubText: {

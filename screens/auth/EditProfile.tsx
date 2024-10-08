@@ -23,7 +23,7 @@ import { completeProfile, getUserById, updateUser } from "../../api/api";
 import FormInput from "../../components/ui/FormInput";
 import { useUser } from "../../context/UserContext";
 import Select from "../../components/ui/Select";
-import { regionsByCountry } from "../../data/dummyData";
+import { regionsByCountry } from "../../data/default";
 import { Platform } from "react-native";
 
 const EditProfile = () => {

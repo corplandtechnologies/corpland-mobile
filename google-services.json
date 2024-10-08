@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "840107202767",
+    "project_id": "corpland-app",
+    "storage_bucket": "corpland-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840107202767:android:6f9accf357052447947fba",
+        "android_client_info": {
+          "package_name": "com.corplandtechnologies.corpland"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840107202767-b807g4r9dlbaoc3muulodrk4irefeb84.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.corplandtechnologies.corpland",
+            "certificate_hash": "08a9cc165d90514b2fced47e24e2eeebf3028fdf"
+          }
+        },
+        {
+          "client_id": "840107202767-064ol7irps0bjjiacek1anajn0j52l8i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtGESOyZdGHfqF4LhIVT6atYeU5IYWzOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840107202767-064ol7irps0bjjiacek1anajn0j52l8i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "840107202767-hdee3scn9hgah6i4klmhv3nompkj5vfi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.corplandtechnologies.corpland"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -39,7 +39,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
       ? `${description.substring(0, 20)}...`
       : description;
 
-  const navigation : any= useNavigation();
+  const navigation: any = useNavigation();
   const productNavigate = () => {
     navigation.navigate("Product", { productId: _id });
   };
@@ -69,7 +69,9 @@ const SearchResult: React.FC<SearchResultProps> = ({
                 ) : (
                   <Avatar.Image
                     size={20}
-                    source={require("../assets/user.png")}
+                    source={{
+                      uri: "https://ik.imagekit.io/4hxqb9ldw/user.png?updatedAt=1725434780558",
+                    }}
                   />
                 )}
                 <View>
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     // elevation: 5,
     width: "100%",
     flexDirection: "row",
-    // height: 200,
+    height: 200,
     marginVertical: 5,
     marginHorizontal: 5,
     borderWidth: 1,
@@ -146,7 +148,6 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 10,
     objectFit: "cover",
-    borderWidth: 1,
   },
   productTitle: {
     fontFamily: "PoppinsSemiBold",

@@ -12,6 +12,7 @@ import ProductGrid from "../components/ProductGrid";
 import { getProducts } from "../api/api";
 import { COLORS } from "../utils/color";
 import { ScrollView } from "react-native-gesture-handler";
+import { formatPrice } from "../utils";
 
 const ProductGrids = () => {
   const navigation = useNavigation();
@@ -60,10 +61,7 @@ const ProductGrids = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator
-          size="large"
-          color={COLORS.PRIMARY}
-        />
+        <ActivityIndicator size="large" color={COLORS.PRIMARY} />
       </View>
     );
   }
@@ -84,11 +82,12 @@ const ProductGrids = () => {
         {products.map((product) => (
           <TouchableOpacity
             key={product._id}
-            style={{ width: "50%", alignSelf: "center" }}>
+            style={{ width: "50%", alignSelf: "center" }}
+          >
             <ProductGrid
               image={product.images[0]}
               title={product.title}
-              price={product.price}
+              price={formatPrice(product?.price)}
               region={product.region}
               description={product.description}
               _id={product._id}

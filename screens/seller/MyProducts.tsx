@@ -15,6 +15,7 @@ import { useUser } from "../../context/UserContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { formatPrice } from "../../utils";
 
 const MyProducts = () => {
   const [userProducts, setUserProducts] = useState([]);
@@ -45,10 +46,7 @@ const MyProducts = () => {
   return (
     <View style={styles.main}>
       {isLoading ? (
-        <ActivityIndicator
-          size={50}
-          color={COLORS.PRIMARY}
-        />
+        <ActivityIndicator size={50} color={COLORS.PRIMARY} />
       ) : userProducts.length === 0 ? (
         <View style={styles.centeredContainer}>
           <Text style={styles.noProductsText}>
@@ -57,18 +55,19 @@ const MyProducts = () => {
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("TabNavigator", { screen: "Add" })
-            }>
+            }
+          >
             <Text style={styles.tapHereText}>Tap Here to Make one</Text>
           </TouchableOpacity>
         </View>
       ) : (
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ gap: 10 }}>
           {userProducts?.map((result, index) => (
             <ProductItem
               key={result._id}
               image={result?.images[0]}
               title={result.title}
-              price={result.price}
+              price={formatPrice(result.price)}
               region={result.region}
               description={result.description}
               userDetails={result.userDetails}

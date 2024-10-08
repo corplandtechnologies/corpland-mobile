@@ -16,7 +16,7 @@ import Card from "../../components/ui/Card";
 import BottomActionCard from "../../components/BottomActionCard";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { handleError } from "../../utils";
+import { formatPrice, handleError } from "../../utils";
 import { useApp } from "../../context/AppContext";
 import { getProductById, updateOrderStatus } from "../../api/api";
 import { ActivityIndicator } from "react-native";
@@ -239,7 +239,7 @@ const TrackOrder = () => {
                       {product?.category} | Qty: 0{currentOrder?.quantity} pcs
                     </Text>
                     <Text style={styles.price}>
-                      GH₵{product?.price?.toFixed(2)}
+                      GH₵{parseFloat(formatPrice(product?.price)).toFixed(2)}
                     </Text>
                   </View>
                 </Card>
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   detailsView: {
     justifyContent: "center",
     flex: 2,
-    gap: 20,
+    // gap: 20,
   },
   priceQView: {
     flexDirection: "row",

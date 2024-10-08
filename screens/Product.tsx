@@ -36,6 +36,9 @@ import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../context/AppContext";
 import CartContext from "../context/CartContext";
+import AuthModal from "../components/auth/AuthModal";
+import MainView from "../components/elements/Views/MainView";
+import { formatPrice } from "../utils";
 
 const Product = ({ route }) => {
   const { user: currentUser } = useApp();
@@ -53,6 +56,8 @@ const Product = ({ route }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const productImages = product?.images || product?.image;
   const { addProductToCart }: any = useContext(CartContext);
+  const [modalVisible, setModalVisible] = useState(false);
+
   const handleBuyNow = () => {
     const productDetails = {
       _id: product._id,
@@ -215,7 +220,7 @@ const Product = ({ route }) => {
   };
 
   return (
-    <>
+    <MainView>
       <ScrollView contentContainerStyle={{ backgroundColor: COLORS.SECONDARY }}>
         <View style={{ height: "100%" }}>
           <View style={{ height: "100%" }}>
@@ -228,7 +233,7 @@ const Product = ({ route }) => {
                   ...styles.backgroundImage,
                 }}
               >
-                <ActivityIndicator size={50} color={COLORS.PRIMARY} />
+                <ActivityIndicator size={24} color={COLORS.PRIMARY} />
               </View>
             ) : (
               <View>
@@ -275,24 +280,30 @@ const Product = ({ route }) => {
                       <View style={styles.actionView}>
                         <TouchableOpacity>
                           <Icon
-                            name="share-social"
-                            size={30}
-                            color={COLORS.PRIMARY}
+                            name="share-outline"
+                            size={24}
+                            color={COLORS.GRAY}
                             onPress={shareProduct}
                           />
                         </TouchableOpacity>
                         <TouchableOpacity>
                           <Icon
-                            name="call"
-                            size={30}
-                            color={COLORS.PRIMARY}
-                            onPress={handleCallNow}
+                            name="call-outline"
+                            size={24}
+                            color={COLORS.GRAY}
+                            onPress={() => {
+                              if (!currentUser) {
+                                setModalVisible(true);
+                              } else {
+                                handleCallNow();
+                              }
+                            }}
                           />
                         </TouchableOpacity>
                       </View>
                       {product?.userId === currentUser?._id && (
                         <TouchableOpacity onPress={showModal}>
-                          <Icon name="trash" size={30} color={"red"} />
+                          <Icon name="trash" size={24} color={"red"} />
                         </TouchableOpacity>
                       )}
                     </View>
@@ -305,12 +316,14 @@ const Product = ({ route }) => {
                         {user?.profilePicture ? (
                           <Avatar.Image
                             size={50}
-                            source={{ uri: user.profilePicture }}
+                            source={{ uri: user?.profilePicture }}
                           />
                         ) : (
                           <Avatar.Image
                             size={50}
-                            source={require("../assets/user.png")}
+                            source={{
+                              uri: "https://ik.imagekit.io/4hxqb9ldw/user.png?updatedAt=1725434780558",
+                            }}
                           />
                         )}
                         <View
@@ -337,7 +350,7 @@ const Product = ({ route }) => {
                       <View style={styles.bottomContainer}>
                         <View style={styles.priceView}>
                           <Text style={styles.priceText}>
-                            GH₵{product?.price}
+                            GH₵{formatPrice(product?.price)}
                           </Text>
                         </View>
                         <View style={styles.CTAView}>
@@ -347,7 +360,7 @@ const Product = ({ route }) => {
                                 value="Edit Product"
                                 icon={
                                   <Icon
-                                    name="create"
+                                    name="create-outline"
                                     size={24}
                                     color={COLORS.SECONDARY}
                                   />
@@ -366,12 +379,18 @@ const Product = ({ route }) => {
                                 value="Buy Now"
                                 icon={
                                   <Icon
-                                    name="bag"
+                                    name="bag-outline"
                                     size={24}
                                     color={COLORS.SECONDARY}
                                   />
                                 }
-                                onPress={handleBuyNow}
+                                onPress={() => {
+                                  if (!currentUser) {
+                                    setModalVisible(true);
+                                  } else {
+                                    handleBuyNow();
+                                  }
+                                }}
                                 isIcon
                               />
                             </>
@@ -384,7 +403,10 @@ const Product = ({ route }) => {
                 <View>
                   {relatedProducts.length > 0 && (
                     <Section limited headerText="Related Products">
-                      <ScrollView showsHorizontalScrollIndicator={false}>
+                      <ScrollView
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ gap: 10 }}
+                      >
                         {isLoading ? (
                           <ActivityIndicator color={COLORS.PRIMARY} />
                         ) : (
@@ -394,7 +416,7 @@ const Product = ({ route }) => {
                                 key={result._id}
                                 image={result.images[0]}
                                 title={result.title}
-                                price={result.price}
+                                price={formatPrice(result.price)}
                                 region={result.region}
                                 description={result.description}
                                 userDetails={result.userDetails}
@@ -414,42 +436,10 @@ const Product = ({ route }) => {
         </View>
       </ScrollView>
       <>
-        {relatedProducts.length === 0 && (
-          <View style={styles.bottomContainer}>
-            <View style={styles.priceView}>
-              <Text style={styles.priceText}>GH₵{product?.price}</Text>
-            </View>
-            <View style={styles.CTAView}>
-              {currentUser?._id === product?.userId ? (
-                <>
-                  <PrimaryButton
-                    value="Edit Product"
-                    icon={
-                      <Icon name="create" size={24} color={COLORS.SECONDARY} />
-                    }
-                    onPress={() =>
-                      navigation.navigate("EditProduct", {
-                        product: product,
-                      })
-                    }
-                    isIcon
-                  />
-                </>
-              ) : (
-                <>
-                  <PrimaryButton
-                    value="Buy Now"
-                    icon={
-                      <Icon name="bag" size={24} color={COLORS.SECONDARY} />
-                    }
-                    onPress={handleBuyNow}
-                    isIcon
-                  />
-                </>
-              )}
-            </View>
-          </View>
-        )}
+        <AuthModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+        />
         <ConfirmationModal
           isVisible={isModalVisible}
           onClose={hideModal}
@@ -465,7 +455,7 @@ const Product = ({ route }) => {
           {snackbarMessage}
         </Snackbar>
       </>
-    </>
+    </MainView>
   );
 };
 
@@ -522,6 +512,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: COLORS.SECONDARY,
+    gap: 5,
   },
 
   priceText: {
@@ -534,7 +525,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   CTAView: {
-    flex: 2,
+    flex: 1,
   },
   titleView: {
     flexDirection: "row",

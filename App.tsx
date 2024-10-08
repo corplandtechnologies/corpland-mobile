@@ -5,7 +5,7 @@ import Register from "./screens/auth/Register";
 import Login from "./screens/auth/Login";
 import Onboarding from "./screens/Onboarding";
 import * as Font from "expo-font";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Verify from "./screens/auth/Verify";
 import BackButton from "./components/ui/BackButton";
 import CompleteProfile from "./screens/auth/CompleteProfile";
@@ -42,7 +42,7 @@ import Header from "./components/Header";
 import { Platform } from "react-native";
 import Wallet from "./screens/Wallet";
 import Deposit from "./screens/Deposit";
-import MyCoupons from "./screens/MyCoupons";
+import MyCoupons from "./screens/Bonus/MyCoupons";
 import Redeem from "./screens/Redeem";
 import CompleteDeposit from "./screens/CompleteDeposit";
 import Cart from "./screens/buyer/Cart";
@@ -50,9 +50,24 @@ import { CartProvider } from "./context/CartContext";
 import OrderSuccess from "./screens/OrderSuccess";
 import TrackOrder from "./screens/TrackOrder/TrackOrder";
 import { AppProvider, useApp } from "./context/AppContext";
-import { getUserById } from "./api/api";
+import { getUserById, storeExpoNotificationsPushToken } from "./api/api";
 import Withdraw from "./screens/Payments/Withdraw";
 import ConfirmWithdraw from "./screens/Payments/ConfirmWithdrawal";
+import Settings from "./screens/Settings";
+import Request from "./screens/Request";
+import MyRequests from "./screens/buyer/MyRequests";
+import EditRequest from "./screens/buyer/EditRequest";
+import PrivacyPolicy from "./screens/PrivacyPolicy";
+import NotificationScreen from "./screens/NotificationScreen";
+import PrimaryButton from "./components/ui/PrimaryButton";
+import TextElement from "./components/elements/Texts/TextElement";
+import ForgotPassword from "./screens/auth/ForgotPassword";
+import VerifyEmailPasswordReset from "./screens/auth/VerifyEmailPasswordReset";
+import ResetPassword from "./screens/auth/ResetPassword";
+import ConfirmBonusWithdrawal from "./screens/Bonus/ConfirmBonusWithdrawal";
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
+import Constants from "expo-constants";
 
 const linking = {
   prefixes: ["https://corpland.corplandtechnologies.com"],
@@ -64,6 +79,14 @@ const linking = {
   },
 };
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -71,6 +94,66 @@ function App() {
   const [isFontLoaded, setFontLoaded] = useState<boolean>(false);
   const { user, setUser } = useApp();
   const [loggedInUser, setLoggedInUser] = useState<object>({});
+
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [channels, setChannels] = useState<Notifications.NotificationChannel[]>(
+    []
+  );
+  const [notification, setNotification] = useState<
+    Notifications.Notification | undefined
+  >(undefined);
+  const notificationListener = useRef<Notifications.Subscription>();
+  const responseListener = useRef<Notifications.Subscription>();
+
+  const fetchUser = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user");
+      const parsedUserInfo = JSON.parse(userInfo);
+      setLoggedInUser(parsedUserInfo);
+      const res: any = await getUserById(parsedUserInfo?._id);
+      setUser(res.data?.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, [user?._id]);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        if (loggedInUser && loggedInUser._id) {
+          registerForPushNotificationsAsync(loggedInUser._id);
+        }
+        token && setExpoPushToken(token);
+      })
+      .catch((err) => console.log(err));
+
+    if (Platform.OS === "android") {
+      Notifications.getNotificationChannelsAsync().then((value) =>
+        setChannels(value ?? [])
+      );
+    }
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, [loggedInUser?._id]);
 
   useEffect(() => {
     async function loadFonts() {
@@ -89,10 +172,6 @@ function App() {
     loadFonts();
   }, []);
 
-  useEffect(() => {
-    reactToUpdates();
-  }, []);
-
   const reactToUpdates = () => {
     Updates.addUpdatesStateChangeListener((event: any) => {
       if (event.type === Updates.UpdateEventType?.UPDATE_AVAILABLE) {
@@ -107,6 +186,10 @@ function App() {
   };
 
   useEffect(() => {
+    reactToUpdates();
+  }, []);
+
+  useEffect(() => {
     const unsubscribe: any = NetInfo.addEventListener((state: any) => {
       setIsConnected(state.isConnected && state.isInternetReachable);
     });
@@ -115,21 +198,6 @@ function App() {
       unsubscribe();
     };
   }, []);
-
-  const fetchUser = async () => {
-    try {
-      const userInfo = await AsyncStorage.getItem("user");
-      const parsedUserInfo = JSON.parse(userInfo);
-      setLoggedInUser(parsedUserInfo);
-      const res: any = await getUserById(parsedUserInfo?._id);
-      setUser(res.data?.user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchUser();
-  }, [user?._id]);
 
   if (!isFontLoaded) {
     return null; // or a loading indicator
@@ -157,11 +225,7 @@ function App() {
               <SearchResultsProvider>
                 <ProductProvider>
                   <NavigationContainer linking={linking}>
-                    <Stack.Navigator
-                      initialRouteName={
-                        loggedInUser ? "TabNavigator" : "OnBoarding"
-                      }
-                    >
+                    <Stack.Navigator initialRouteName={"TabNavigator"}>
                       <Stack.Screen
                         name="TabNavigator"
                         options={{ headerShown: false }}
@@ -178,11 +242,16 @@ function App() {
                           headerShown: false,
                           headerTitle: "Sign In",
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
                         component={Login}
+                      />
+                      <Stack.Screen
+                        name="ForgotPassword"
+                        options={{ headerShown: false }}
+                        component={ForgotPassword}
                       />
                       <Stack.Screen
                         name="OnBoarding"
@@ -196,6 +265,22 @@ function App() {
                           headerLeft: () => <BackButton />,
                         }}
                         component={Verify}
+                      />
+                      <Stack.Screen
+                        name="ResetPassword"
+                        options={{
+                          headerTitle: "",
+                          headerLeft: () => <BackButton />,
+                        }}
+                        component={ResetPassword}
+                      />
+                      <Stack.Screen
+                        name="VerifyEmailPasswordReset"
+                        options={{
+                          headerTitle: "",
+                          headerLeft: () => <BackButton />,
+                        }}
+                        component={VerifyEmailPasswordReset}
                       />
                       <Stack.Screen
                         name="CompleteProfile"
@@ -213,7 +298,7 @@ function App() {
                           headerLeft: () => <BackButton />,
                           headerTitleAlign: "center",
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                           },
                         })}
                       />
@@ -224,7 +309,7 @@ function App() {
                           headerLeft: () => <BackButton />,
                           headerTitleAlign: "center",
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                           },
                         }}
                         component={ProductGrids}
@@ -236,7 +321,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -268,13 +353,38 @@ function App() {
                       />
 
                       <Stack.Screen
+                        name="Request"
+                        options={{
+                          headerTitle: Platform.OS === "web" ? "Details" : "",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton details={true} />,
+                          // headerRight: () => {
+                          //   const { productId } = useProduct();
+
+                          //   return (
+                          //     <FavoriteIcon
+                          //       productId={productId} // Use the local state instead of the context
+                          //       style={{
+                          //         padding: 15,
+                          //         // marginRight: 10,
+                          //       }}
+                          //     />
+                          //   );
+                          // },
+                          headerTransparent:
+                            Platform.OS === "web" ? false : true,
+                        }}
+                        component={Request}
+                      />
+
+                      <Stack.Screen
                         name="Categories"
                         options={{
                           headerTitle: "Categories",
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -296,10 +406,22 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                           },
                         }}
                         component={EditProduct}
+                      />
+                      <Stack.Screen
+                        name="EditRequest"
+                        options={{
+                          headerTitle: "Edit Your Request",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                          },
+                        }}
+                        component={EditRequest}
                       />
                       <Stack.Screen
                         name="MyProducts"
@@ -308,11 +430,24 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
                         component={MyProducts}
+                      />
+                      <Stack.Screen
+                        name="MyRequests"
+                        options={{
+                          headerTitle: "My Requests",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                            // borderWidth:8
+                          },
+                        }}
+                        component={MyRequests}
                       />
                       <Stack.Screen
                         name="Wallet"
@@ -321,7 +456,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -334,7 +469,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -347,7 +482,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -360,7 +495,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -373,7 +508,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -386,7 +521,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -399,7 +534,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -412,7 +547,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -425,7 +560,7 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
@@ -438,11 +573,80 @@ function App() {
                           headerTitleAlign: "center",
                           headerLeft: () => <BackButton />,
                           headerTitleStyle: {
-                            fontFamily: "PoppinsBold",
+                            fontFamily: "PoppinsSemiBold",
                             // borderWidth:8
                           },
                         }}
                         component={ConfirmWithdraw}
+                      />
+                      <Stack.Screen
+                        name="ConfirmBonusWithdrawal"
+                        options={{
+                          headerTitle: "Withdraw Bonus",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                            // borderWidth:8
+                          },
+                        }}
+                        component={ConfirmBonusWithdrawal}
+                      />
+                      <Stack.Screen
+                        name="Settings"
+                        options={{
+                          headerTitle: "Settings",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                            // borderWidth:8
+                          },
+                        }}
+                        component={Settings}
+                      />
+                      <Stack.Screen
+                        name="PrivacyPolicy"
+                        options={{
+                          headerTitle: "Privacy Policy",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                            // borderWidth:8
+                          },
+                        }}
+                        component={PrivacyPolicy}
+                      />
+                      <Stack.Screen
+                        name="Notifications"
+                        options={{
+                          headerTitle: "Notifications",
+                          headerTitleAlign: "center",
+                          headerLeft: () => <BackButton />,
+                          headerTitleStyle: {
+                            fontFamily: "PoppinsSemiBold",
+                            // borderWidth:8
+                          },
+                          // headerRight: () => (
+                          //   <TouchableOpacity
+                          //     style={{
+                          //       backgroundColor: COLORS.PRIMARY,
+                          //       paddingHorizontal: 15,
+                          //       paddingVertical: 10,
+                          //       borderRadius: 10,
+                          //       marginRight: 5,
+                          //       alignItems: "center",
+                          //       justifyContent: "center",
+                          //     }}
+                          //   >
+                          //     <TextElement color={COLORS.SECONDARY} textAlign="center">
+                          //       2 New
+                          //     </TextElement>
+                          //   </TouchableOpacity>
+                          // ),
+                        }}
+                        component={NotificationScreen}
                       />
                     </Stack.Navigator>
                   </NavigationContainer>
@@ -456,6 +660,98 @@ function App() {
   );
 }
 
+// async function registerForPushNotificationsAsync(userId: string) {
+//   console.log("userId", userId);
+
+//   let token: string;
+//   if (Platform.OS === "android") {
+//     await Notifications.setNotificationChannelAsync("default", {
+//       name: "default",
+//       importance: Notifications.AndroidImportance.MAX,
+//     });
+//   }
+
+//   const { status: existingStatus } = await Notifications.getPermissionsAsync();
+//   let finalStatus = existingStatus;
+
+//   if (existingStatus !== "granted") {
+//     const { status } = await Notifications.requestPermissionsAsync();
+//     finalStatus = status;
+//   }
+
+//   if (finalStatus !== "granted") {
+//     alert("Failed to get push token!");
+//     return;
+//   }
+
+//   // Get Expo push token
+//   token = (await Notifications.getExpoPushTokenAsync()).data;
+//   console.log(token);
+
+//   // Send token to backend
+//   await storeExpoNotificationsPushToken(userId, token);
+// }
+
+async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "You've got mail! 📬",
+      body: "Here is the notification body",
+      data: { data: "goes here", test: { test1: "more data" } },
+    },
+    trigger: { seconds: 2 },
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    // Learn more about projectId:
+    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+    // EAS projectId is used here.
+    try {
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ??
+        Constants?.easConfig?.projectId;
+      if (!projectId) {
+        throw new Error("Project ID not found");
+      }
+      token = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId,
+        })
+      ).data;
+      console.log(token);
+    } catch (e) {
+      token = `${e}`;
+    }
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  return token;
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

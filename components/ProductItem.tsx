@@ -29,6 +29,8 @@ const ProductItem: React.FC<ProductItemProps> = ({
 }) => {
   const [isLiked, setIsLiked] = useState(false);
 
+  console.log("userDetails", userDetails);
+
   const navigation = useNavigation();
   const toggleIsLiked = () => {
     setIsLiked(!isLiked);
@@ -48,8 +50,14 @@ const ProductItem: React.FC<ProductItemProps> = ({
 
   return (
     <TouchableOpacity onPress={productNavigate}>
-      <Card style={styles.productMain}>
-        <View style={{ flex: 1, height: 150 }}>
+      <Card
+        style={{
+          width: "100%",
+          flexDirection: "row",
+          flex: 1,
+        }}
+      >
+        <View style={{ flex: 1 }}>
           <Image source={{ uri: image }} style={styles.productImage} />
         </View>
         <View style={{ flex: 2, padding: 10, justifyContent: "space-between" }}>
@@ -59,23 +67,15 @@ const ProductItem: React.FC<ProductItemProps> = ({
             </View>
             <View style={styles.userView}>
               <View style={styles.avatarContainer}>
-                {userDetails &&
-                userDetails.length > 0 &&
-                userDetails[0]?.profilePicture ? (
-                  <Avatar.Image
-                    size={20}
-                    source={{
-                      uri:
-                        userDetails[0].profilePicture ||
-                        userDetails.profilePicture,
-                    }}
-                  />
-                ) : (
-                  <Avatar.Image
-                    size={20}
-                    source={require("../assets/user.png")}
-                  />
-                )}
+                <Avatar.Image
+                  size={20}
+                  source={{
+                    uri:
+                      userDetails?.profilePicture ||
+                      "https://ik.imagekit.io/4hxqb9ldw/user.png?updatedAt=1725434780558",
+                  }}
+                />
+
                 <View
                   style={{
                     flexDirection: "row",
@@ -162,9 +162,9 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     // height: 200,
-    marginVertical: 5,
     borderWidth: 1,
     borderColor: COLORS.GRAY_LIGHT,
+    flex: 1,
   },
   productImage: {
     width: "100%",

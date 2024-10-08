@@ -1,27 +1,63 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { COLORS } from "../utils/color";
 import WalletModal from "../components/WalletModal";
 import { useNavigation } from "@react-navigation/native";
+import SnackBar from "../components/ui/SnackBar";
+import { useApp } from "../context/AppContext";
+import { handleError } from "../utils";
 
 const Redeem = () => {
   const navigation = useNavigation();
+  const [couponCode, setCouponCode] = useState<string>("");
+  const [redeemLoading, setRedeemLoading] = useState<boolean>(false);
+  const {
+    snackbarMessage,
+    snackbarVisible,
+    setSnackbarMessage,
+    setSnackbarVisible,
+  } = useApp();
+  const handleRedeem = async (
+    setLoadingState: Dispatch<SetStateAction<boolean>>
+  ) => {
+    if (couponCode.length === 0) {
+      setSnackbarMessage("Enter a coupon code to continue.");
+      setSnackbarVisible(true);
+      return;
+    }
+    setLoadingState(true);
+    try {
+      setSnackbarMessage("Invalid Coupon Code");
+      setSnackbarVisible(true);
+      setLoadingState(false);
+    } catch (error) {
+      console.log(error);
+      setSnackbarMessage(handleError(error));
+      setSnackbarVisible(true);
+      setLoadingState(true);
+    } finally {
+      setLoadingState(false);
+    }
+  };
   return (
     <View style={styles.main}>
-      <View style={styles.walletView}>
+      <View>
         <WalletModal
           balance={"3,458"}
-          onPress={() =>
-            alert(
-              "Depositing is coming soon but if you were invited by a friend, don't hesitate to use your coupon code to claim your bonus!"
-            )
-          }
+          onPress={() => handleRedeem(setRedeemLoading)}
           isDeposit
           actionButtonText="Redeem"
           placeholder="Enter your coupon code"
           icon="ticket"
+          onChangeText={setCouponCode}
+          disabled={!couponCode}
         />
       </View>
+      <SnackBar
+        snackbarMessage={snackbarMessage}
+        snackbarVisible={snackbarVisible}
+        setSnackbarVisible={setSnackbarVisible}
+      />
     </View>
   );
 };

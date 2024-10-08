@@ -9,7 +9,7 @@ const AuthOption: React.FC<authOptionProps> = ({
   screen,
   isRegistered,
 }) => {
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
   return (
     <TouchableOpacity onPress={() => navigation.navigate(screen)}>
       <Text style={styles.signInText}>

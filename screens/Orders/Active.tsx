@@ -14,7 +14,7 @@ import { handleError } from "../../utils";
 import { useApp } from "../../context/AppContext";
 import SnackBar from "../../components/ui/SnackBar";
 import { getUserOrders } from "../../api/api";
-import { orders } from "../../data/dummyData";
+import { orders } from "../../data/default";
 import TextElement from "../../components/elements/Texts/TextElement";
 import { useFocusEffect } from "@react-navigation/native";
 

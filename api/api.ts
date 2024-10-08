@@ -8,7 +8,7 @@ import { Platform } from "react-native";
 // });
 
 // export const API = axios.create({
-//   baseURL: "http://192.168.1.106:3000/api/v1",
+//   baseURL: "http://192.168.132.158:3000/api/v1",
 //   withCredentials: true,
 // });
 
@@ -35,18 +35,32 @@ API.interceptors.request.use(
 );
 
 export const getRequests = () => API.get("/requests");
+export const getRequestById = (id: string) => API.get(`/requests/${id}`);
+
 export const createRequest = async (newRequest: any) => {
   const formData: any = new FormData();
   formData.append("title", newRequest.title);
   formData.append("description", newRequest.description);
-  formData.append("phoneNumber", newRequest.phoneNumber);
-  formData.append("location", newRequest.location);
   formData.append("category", newRequest.category);
-  formData.append("image", {
-    uri: newRequest.image,
-    type: "image/jpeg",
-    name: `requestImage.jpg`,
-  });
+  formData.append("country", newRequest.country);
+  formData.append("region", newRequest.region);
+  formData.append("minPrice", newRequest.minPrice);
+  formData.append("maxPrice", newRequest.maxPrice);
+  formData.append("userId", newRequest.userId);
+
+  if (Platform.OS === "web") {
+    newRequest.images.map((image: any) => {
+      formData.append("images", image);
+    });
+  } else {
+    newRequest.images.map((image: any) => {
+      formData.append("images", {
+        uri: image.uri,
+        type: "image/jpeg",
+        name: "productImage.jpg",
+      });
+    });
+  }
 
   const config = {
     headers: {
@@ -57,19 +71,98 @@ export const createRequest = async (newRequest: any) => {
   return API.post("/requests", formData, config);
 };
 
+export const updateRequest = async (newProduct: any, id: any) => {
+  const formData: any = new FormData();
+  formData.append("title", newProduct.title);
+  formData.append("description", newProduct.description);
+  formData.append("category", newProduct.category);
+  formData.append("country", newProduct.country);
+  formData.append("region", newProduct.region);
+  formData.append("price", newProduct.price);
+  formData.append("userId", newProduct.userId);
+
+  if (Platform.OS === "web") {
+    newProduct.images.forEach((image: any) => {
+      formData.append("images", image);
+    });
+  } else {
+    newProduct.images.forEach((image: any) => {
+      formData.append("images", {
+        uri: image.uri || image,
+        type: "image/jpeg",
+        name: "productImage.jpg",
+      });
+    });
+  }
+
+  const token = await AsyncStorage.getItem("token");
+
+  const config = {
+    headers: { "Content-Type": "multipart/form-data" },
+    Authorization: `Bearer ${token}`,
+  };
+  return API.put(`/requests/${id}`, formData, config);
+};
+
+export const searchRequests = (query: string) =>
+  API.post(`/requests/search?q=${query}`);
+
+export const deleteRequest = (id: string) => API.delete(`/requests/${id}`);
+
+export const toggleRequestFavorites = async (
+  userId: string,
+  requestId: string
+) => {
+  const status = await API.post(`/users/toggle-favorite/${requestId}`, {
+    userId: userId,
+  });
+  return status;
+};
+
+export const getRequestsByUserId = (userId: string) =>
+  API.get(`/requests/user/${userId}`);
+
+export const getTrendingRequests = () => API.get("/requests/trending");
+
+export const dialRequest = async (productId: string, userId: string) => {
+  try {
+    const data: object = {
+      userId: userId,
+    };
+    const response = await API.post(`/requests/dial/${productId}`, data);
+    return response.data; // Assuming the API returns the user data upon successful sign up
+  } catch (error) {
+    console.log("Error getting favorite Products:", error);
+    throw error; // Rethrow the error to be handled by the caller
+  }
+};
+export const getFavoriteRequests = (userId: string) =>
+  API.get(`/requests/favorites/${userId}`);
+
 export const getAds = () => API.get("/ads");
 export const createAd = async (newAd: any) => {
   const formData: any = new FormData();
   formData.append("title", newAd.title);
   formData.append("description", newAd.description);
-  formData.append("phoneNumber", newAd.phoneNumber);
-  formData.append("location", newAd.location);
   formData.append("category", newAd.category);
-  formData.append("image", {
-    uri: newAd.image,
-    type: "image/jpeg",
-    name: `adImage.jpg`,
-  });
+  formData.append("country", newAd.country);
+  formData.append("region", newAd.region);
+  formData.append("price", newAd.price);
+  formData.append("userId", newAd.userId);
+
+  if (Platform.OS === "web") {
+    newAd.images.map((image: any) => {
+      formData.append("images", image);
+    });
+  } else {
+    newAd.images.map((image: any) => {
+      formData.append("images", {
+        uri: image.uri,
+        type: "image/jpeg",
+        name: "productImage.jpg",
+      });
+    });
+  }
 
   const config = {
     headers: { "Content-Type": "multipart/form-data" },
@@ -232,6 +325,8 @@ export const dialProduct = async (productId: string, userId: string) => {
 export const getFavoriteProducts = (userId: string) =>
   API.get(`/products/favorites/${userId}`);
 
+//request APIs
+
 export const deposit = (
   email: string,
   amount: number | string,
@@ -286,5 +381,42 @@ export const withdrawal = (amount: number, recipient: string, userId: string) =>
     userId,
   });
 
+export const bonusWithdrawal = (amount: number, userId: string) =>
+  API.post("/users/withdraw-bonus", {
+    amount,
+    userId,
+  });
+
 export const getUserTransactions = (userId: string) =>
   API.get(`/transactions/${userId}`);
+
+export const deleteAccount = (userId: string) =>
+  API.delete(`/users/delete-account/${userId}`);
+
+export const getNotifications = (userId: string) =>
+  API.get(`/notifications?userId=${userId}`);
+
+export const getUnreadNotificationsCount = (userId: string) =>
+  API.get(`/notifications/count?userId=${userId}`);
+
+export const markNotificationAsRead = (id: string) =>
+  API.put(`/notifications/${id}`, {
+    isRead: true,
+  });
+
+export const markAllNotificationAsRead = (userId: string) =>
+  API.put(`/notifications/user/${userId}`, {
+    isRead: true,
+  });
+
+export const storeExpoNotificationsPushToken = (
+  userId: string,
+  expoPushToken: string
+) => {
+  console.log("userId in Aipi", userId);
+
+  API.put(`/users/register-token`, {
+    userId: userId,
+    expoPushToken: expoPushToken,
+  });
+};

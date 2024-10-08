@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -13,9 +13,13 @@ import UserHeader from "../../components/UserHeader";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Snackbar } from "react-native-paper";
-import { login } from "../../api/auth.api";
+import { authWithSocial, login } from "../../api/auth.api";
 import AuthOption from "../../components/auth/AuthOption";
+import * as AppleAuthentication from "expo-apple-authentication";
+import { Platform } from "react-native";
+import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
+import TextElement from "../../components/elements/Texts/TextElement";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -25,7 +29,91 @@ const Login = () => {
   const [snackbarVisible, setSnackbarVisible] = useState(false); // New state for Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
+  const [appleUserToken, setAppleUserToken] = useState<any>();
   const navigation: any = useNavigation();
+
+  useEffect(() => {
+    checkAuthStatus();
+    checkAppleAuthAvailability();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      navigation.navigate("CompleteProfile");
+    }
+  };
+
+  const checkAppleAuthAvailability = async () => {
+    const isAvailable = await AppleAuthentication.isAvailableAsync();
+    setAppleAuthAvailable(isAvailable);
+  };
+
+  useEffect(() => {
+    const checkAvailable = async () => {
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
+      setAppleAuthAvailable(isAvailable);
+    };
+    checkAvailable();
+  }, []);
+
+  useEffect(() => {
+    // Check if the user is already authenticated on component mount
+    const checkAuthStatus = async () => {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        // User is already authenticated, navigate to CompleteProfile
+        navigation.navigate("TabNavigator");
+      }
+    };
+    checkAuthStatus();
+  }, []);
+
+  useEffect(() => {
+    const checkAvailable = async () => {
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
+      setAppleAuthAvailable(isAvailable);
+    };
+    checkAvailable();
+  }, []);
+
+  const handleAppleSignUp = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      const { identityToken, fullName, email } = credential;
+
+      if (!identityToken) {
+        throw new Error("Failed to get identity token from Apple Sign In");
+      }
+
+      const userInfo = jwtDecode(identityToken);
+
+      const res = await authWithSocial({
+        name: fullName
+          ? `${fullName.givenName} ${fullName.familyName}`
+          : "Apple User",
+        email: email || userInfo.email,
+      });
+
+      await AsyncStorage.setItem("user", JSON.stringify(res.user));
+      await AsyncStorage.setItem("token", res.token);
+
+      setSnackbarVisible(true);
+      setSnackbarMessage("Registration Completed Successfully!");
+      navigation.navigate("TabNavigator");
+    } catch (e) {
+      console.error("Apple Sign In Error:", e);
+      setSnackbarVisible(true);
+      setSnackbarMessage(handleError(e));
+    }
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -40,7 +128,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await login({
-        email: email.trim(),
+        email: email.toLowerCase().trim(),
         password: password.trim(),
       });
 
@@ -93,9 +181,14 @@ const Login = () => {
         </TouchableOpacity>
       </View>
 
-      {/* <TouchableOpacity onPress={() => console.log("Forgot Password")}>
-        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-      </TouchableOpacity> */}
+      <TouchableOpacity
+        style={{ marginBottom: 20 }}
+        onPress={() => navigation.navigate("ForgotPassword")}
+      >
+        <TextElement textAlign="right" fontFamily="PoppinsRegular">
+          Forgot Password?
+        </TextElement>
+      </TouchableOpacity>
 
       <PrimaryButton
         value="Sign In"
@@ -104,35 +197,40 @@ const Login = () => {
         disabled={!password}
       />
 
-      {/* <View style={styles.separatorContainer}>
-        <View style={styles.separatorLine} />
-        <Text style={styles.separatorText}>or</Text>
-        <View style={styles.separatorLine} />
-      </View> */}
+      {/* {Platform.OS === "ios" && (
+        <View style={styles.separatorContainer}>
+          <View style={styles.separatorLine} />
+          <Text style={styles.separatorText}>or</Text>
+          <View style={styles.separatorLine} />
+        </View>
+      )} */}
 
-      {/* <View style={styles.socialSignInContainer}>
-        <TouchableOpacity onPress={() => console.log("Google Sign In")}>
-          <Icon
-            name="google"
-            type="font-awesome"
-            color={COLORS.GRAY}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("Apple Sign In")}>
-          <Icon
-            name="apple"
-            type="font-awesome"
-            color={COLORS.GRAY}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
-          <Icon
-            name="facebook"
-            type="font-awesome"
-            color={COLORS.GRAY}
-          />
-        </TouchableOpacity>
-      </View> */}
+      <View style={styles.socialSignInContainer}>
+        {/* <TouchableOpacity onPress={() => console.log("Google Sign In")}>
+          <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
+        </TouchableOpacity> */}
+        {/* {Platform.OS === "ios" && (
+          <>
+             <TouchableOpacity onPress={handleAppleSignUp}>
+           <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
+         </TouchableOpacity>
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={
+                AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+              }
+              buttonStyle={
+                AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+              }
+              cornerRadius={5}
+              style={styles.button}
+              onPress={handleAppleSignUp}
+            />
+          </>
+        )} */}
+        {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
+          <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
+        </TouchableOpacity> */}
+      </View>
       <Snackbar
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
@@ -183,7 +281,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    fontFamily: "PoppinsRegular"
+    fontFamily: "PoppinsRegular",
   },
   checkboxContainer: {
     backgroundColor: "transparent",
@@ -225,6 +323,10 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: COLORS.GRAY,
     fontSize: 16,
+  },
+  button: {
+    width: 200,
+    height: 64,
   },
 });
 

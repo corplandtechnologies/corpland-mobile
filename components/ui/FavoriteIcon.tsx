@@ -8,6 +8,7 @@ import { getUserById, toggleFavorites } from "../../api/api";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../../context/AppContext";
+import AuthModal from "../auth/AuthModal";
 
 interface FavoriteIconProps {
   style?: Object;
@@ -19,6 +20,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
   const [isFavorite, setIsFavorite] = useState(
     user?.favorites?.includes(productId)
   );
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchUserById = async () => {
@@ -42,13 +44,25 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
 
   return (
     <View style={[{ flex: 1 }, style]}>
-      <TouchableOpacity onPress={handleToggleFavorites}>
+      <TouchableOpacity
+        onPress={() => {
+          if (!user) {
+            setModalVisible(true);
+          } else {
+            handleToggleFavorites();
+          }
+        }}
+      >
         <Icon
           name={isFavorite ? "heart" : "heart-outline"}
           size={30}
           color={"red"}
         />
       </TouchableOpacity>
+      <AuthModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 };

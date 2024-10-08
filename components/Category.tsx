@@ -10,7 +10,7 @@ const Category: FC<CategoryProps> = ({ category, iconImagePath }) => {
   return (
     <View style={styles.main}>
       <View style={styles.wrapper}>
-        <Image source={iconImagePath} style={styles.catImage} />
+        <Image source={{ uri: iconImagePath }} style={styles.catImage} />
       </View>
       <Text style={{ fontFamily: "PoppinsMedium", textAlign: "center" }}>
         {category}
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   wrapper: {
-    backgroundColor: COLORS.BLUE_LIGHT,
+    backgroundColor: COLORS.GRAY_VERY_LIGHT,
     padding: 30,
     width: 50,
     height: 50,

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { COLORS } from "../utils/color";
 import Category from "../components/Category"; // Assuming you have a Category component
-import { storeCatergories } from "../data/dummyData"; // Assuming you have dummy data
+import { storeCatergories } from "../data/default"; // Assuming you have dummy data
 import { useNavigation } from "@react-navigation/native";
 
 const Categories = () => {
@@ -22,11 +22,9 @@ const Categories = () => {
       style={{ width: size, height: size, marginTop: 30 }}
       onPress={() =>
         navigation.navigate("ProductDisplay", { category: item.category })
-      }>
-      <Category
-        category={item.category}
-        iconImagePath={item.iconImagePath}
-      />
+      }
+    >
+      <Category category={item.category} iconImagePath={item.iconImagePath} />
     </TouchableOpacity>
   );
 
@@ -37,7 +35,7 @@ const Categories = () => {
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
-        contentContainerStyle={{ }}
+        contentContainerStyle={{}}
       />
     </View>
   );

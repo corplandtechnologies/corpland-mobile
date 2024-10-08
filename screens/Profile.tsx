@@ -1,36 +1,22 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Modal,
-  Linking,
-  ScrollView,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import ScreenContextWrapper from "../components/ScreenContextWrapper";
+import { View, Text, StyleSheet, Linking, ScrollView } from "react-native";
+import React, { useState } from "react";
 import { Avatar, Switch } from "react-native-paper";
 import { COLORS } from "../utils/color";
 import Icon from "react-native-vector-icons/Ionicons";
-import Card from "../components/ui/Card";
 import ProfileMenuItem from "../components/ProfileMenuItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { getUserById } from "../api/api";
-import noProfilePicture from "../assets/user.png";
+import { useNavigation } from "@react-navigation/native";
 import { useSellerMode } from "../context/SellerModeContext";
-import { useUser } from "../context/UserContext";
-import ProductCard from "../components/ProductCard";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { useApp } from "../context/AppContext";
+import PopUpCard from "../components/PopUpCard";
 
 const Profile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { isSellerMode, toggleSellerMode } = useSellerMode();
   const { user } = useApp();
 
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -52,7 +38,7 @@ const Profile = () => {
   };
 
   const handleEmail = (subject: string, body: string) => {
-    const emailUrl = `mailto:corplandtechnologies@gmail.com?subject=${encodeURIComponent(
+    const emailUrl = `mailto:corpland.gh@gmail.com?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;
     Linking.openURL(emailUrl);
@@ -86,14 +72,15 @@ const Profile = () => {
           </View>
         </View>
         {/* <View style={styles.modeView}>
-        <Text style={styles.modeText}>Seller Mode</Text>
-        <Switch
-          value={isSellerMode}
-          onValueChange={toggleSellerMode}
-          color={COLORS.GRAY_LIGHT}
-          trackColor={COLORS.PRIMARY}
-        />
-      </View> */}
+          <Text style={styles.modeText}>Seller Mode</Text>
+          <Switch
+            value={isSellerMode}
+            onValueChange={toggleSellerMode}
+            color={COLORS.PRIMARY}
+            thumbColor={COLORS.PRIMARY}
+            // trackColor={COLORS.PRIMARY}
+          />
+        </View> */}
         <View style={{ marginTop: 20 }}>
           <ProfileMenuItem
             title="Edit Profile"
@@ -106,6 +93,11 @@ const Profile = () => {
             onPress={() => navigation.navigate("MyProducts")}
           />
           <ProfileMenuItem
+            title="My Requests"
+            iconName="paper-plane-outline"
+            onPress={() => navigation.navigate("MyRequests")}
+          />
+          <ProfileMenuItem
             title="Wallet"
             iconName="wallet-outline"
             onPress={() => navigation.navigate("Wallet")}
@@ -115,11 +107,11 @@ const Profile = () => {
             iconName="card-outline"
             onPress={() => navigation.navigate("Withdraw")}
           />
-          {/* <ProfileMenuItem
+          <ProfileMenuItem
             title="My Coupons"
             iconName="ticket-outline"
             onPress={() => navigation.navigate("MyCoupons")}
-          /> */}
+          />
           {/* <ProfileMenuItem
           title="Settings"
           iconName="settings-outline"
@@ -130,30 +122,34 @@ const Profile = () => {
             iconName="mail-outline"
             onPress={() => handleEmail("Feedback", "")}
           />
-
+          <ProfileMenuItem
+            title="Settings"
+            iconName="settings-outline"
+            onPress={() => navigation.navigate("Settings")}
+          />
           {/* <ProfileMenuItem
           title="Help Center"
           iconName="help-circle-outline"
           onPress={() => handleEmail("Help Center", "")}
         /> */}
 
-          {/*  <ProfileMenuItem
-          title="Privacy Policy"
-          iconName="information-circle-outline"
-          onPress={() => console.log("Privacy Policy pressed")}
-        /> */}
+          {/* <ProfileMenuItem
+            title="Privacy Policy"
+            iconName="information-circle-outline"
+            onPress={() => navigation.navigate("PrivacyPolicy")}
+          /> */}
           <ProfileMenuItem
             title="Log Out"
             iconName="log-out-outline"
             onPress={showModal}
           />
         </View>
-        <ConfirmationModal
-          isVisible={isModalVisible}
+        <PopUpCard
+          visible={isModalVisible}
+          title="Are you sure you want to log out?"
+          actionText="Log Out"
+          onPress={handleLogout}
           onClose={hideModal}
-          onConfirm={handleLogout}
-          modalTitle="Are you sure you want to log out?"
-          ConfirmButtonText="Log Out"
         />
       </ScrollView>
     </View>
@@ -181,14 +177,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: COLORS.PRIMARY,
+    backgroundColor: COLORS.GRAY_LIGHTER,
     paddingHorizontal: 15,
     marginVertical: 10,
     borderRadius: 10,
+    height: 50,
   },
   modeText: {
-    fontFamily: "PoppinsBold",
-    color: COLORS.SECONDARY,
+    fontFamily: "PoppinsSemiBold",
+    color: COLORS.PRIMARY,
   },
   modalContainer: {
     flex: 1,

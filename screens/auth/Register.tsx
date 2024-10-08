@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,13 +9,18 @@ import {
 import { Input, Button, Icon, CheckBox } from "react-native-elements";
 import { COLORS } from "../../utils/color";
 import { useNavigation } from "@react-navigation/native";
-import { signUp } from "../../api/auth.api";
+import { authWithSocial, signUp } from "../../api/auth.api";
 import { Snackbar } from "react-native-paper"; // Ensure this is imported
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import UserHeader from "../../components/UserHeader";
 import FormInput from "../../components/ui/FormInput";
 import AuthOption from "../../components/auth/AuthOption";
+import * as AppleAuthentication from "expo-apple-authentication";
+import { Platform } from "react-native";
+import { jwtDecode } from "jwt-decode";
+import { handleError } from "../../utils";
+// import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -28,8 +33,99 @@ const Register = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [name, setName] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [snackbarVisible, setSnackbarVisible] = useState(false); // New state for Snackbar visibility
-  const navigation = useNavigation();
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [appleUserToken, setAppleUserToken] = useState<any>();
+  const [googleUserInfo, setGoogleUserInfo] = useState<any>();
+  const [referralCode, setReferralCode] = useState<string>("");
+  const navigation: any = useNavigation();
+  const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
+
+  useEffect(() => {
+    checkAuthStatus();
+    checkAppleAuthAvailability();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      navigation.navigate("CompleteProfile");
+    }
+  };
+
+  const checkAppleAuthAvailability = async () => {
+    const isAvailable = await AppleAuthentication.isAvailableAsync();
+    setAppleAuthAvailable(isAvailable);
+  };
+
+  useEffect(() => {
+    const checkAvailable = async () => {
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
+      setAppleAuthAvailable(isAvailable);
+    };
+    checkAvailable();
+  }, []);
+  // useEffect(() => {
+  //   GoogleSignin.configure();
+  // }, []);
+  // const handleGoogleSignUp = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo: any = await GoogleSignin.signIn();
+  //     setGoogleUserInfo(userInfo);
+  //     // const res = await authWithSocial({
+  //     //   name: `${userInfo.fullName.givenName}" "${userInfo.fullName.familyName}`,
+  //     //   email: userInfo.email,
+  //     // });
+  //     // // Assuming user object contains userInfo and token
+  //     // await AsyncStorage.setItem("user", JSON.stringify(res.user));
+  //     // await AsyncStorage.setItem("token", res.token);
+  //     // setSnackbarVisible(true);
+  //     // setSnackbarMessage("Registration Completed Successfully!");
+  //     // navigation.navigate("CompleteProfile");
+  //     console.log(userInfo);
+  //   } catch (e) {
+  //     console.log(e);
+  //     setSnackbarMessage(handleError(e));
+  //     setSnackbarVisible(true);
+  //   }
+  // };
+
+  const handleAppleSignUp = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      const { identityToken, fullName, email } = credential;
+
+      if (!identityToken) {
+        throw new Error("Failed to get identity token from Apple Sign In");
+      }
+
+      const userInfo = jwtDecode(identityToken);
+
+      const res = await authWithSocial({
+        name: fullName
+          ? `${fullName.givenName} ${fullName.familyName}`
+          : "Apple User",
+        email: email || userInfo.email,
+      });
+
+      await AsyncStorage.setItem("user", JSON.stringify(res.user));
+      await AsyncStorage.setItem("token", res.token);
+
+      setSnackbarVisible(true);
+      setSnackbarMessage("Registration Completed Successfully!");
+      navigation.navigate("CompleteProfile");
+    } catch (e) {
+      console.error("Apple Sign In Error:", e);
+      setSnackbarVisible(true);
+      setSnackbarMessage(handleError(e));
+    }
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -51,9 +147,10 @@ const Register = () => {
       });
       const res = await signUp({
         name: name.trim(),
-        email: email.trim(),
+        email: email.toLowerCase().trim(),
         password: password.trim(),
         termsAccepted,
+        referralCode: referralCode.trim(),
       });
       // Assuming user object contains userInfo and token
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
@@ -63,19 +160,7 @@ const Register = () => {
       navigation.navigate("Verify");
     } catch (error) {
       console.log(error);
-      let errorMessage = "An unexpected error occurred.";
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        errorMessage = error.response.data.message || error.response.statusText;
-      } else if (error.request) {
-        // The request was made but no response was received
-        errorMessage = "No response received from the server.";
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        errorMessage = error.message;
-      }
-      setSnackbarMessage(errorMessage);
+      setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -87,7 +172,7 @@ const Register = () => {
         title="Create Account"
         description="Fill your information below or register with your social account"
       />
-      <View style={{ gap: 10 }}>
+      <View style={{ gap: 20 }}>
         <FormInput icon="user" placeholder="Name" onChangeText={setName} />
         <FormInput
           icon="envelope"
@@ -114,6 +199,11 @@ const Register = () => {
             />
           </TouchableOpacity>
         </View>
+        <FormInput
+          icon="ticket"
+          placeholder="Referral Code (Optional)"
+          onChangeText={setReferralCode}
+        />
       </View>
 
       <CheckBox
@@ -130,36 +220,41 @@ const Register = () => {
         disabled={!termsAccepted}
         loading={loading}
       />
-
-      {/* <View style={styles.separatorContainer}>
-        <View style={styles.separatorLine} />
-        <Text style={styles.separatorText}>or</Text>
-        <View style={styles.separatorLine} />
-      </View>
+{/* 
+      {Platform.OS === "ios" && (
+        <View style={styles.separatorContainer}>
+          <View style={styles.separatorLine} />
+          <Text style={styles.separatorText}>or</Text>
+          <View style={styles.separatorLine} />
+        </View>
+      )} */}
 
       <View style={styles.socialSignInContainer}>
-        <TouchableOpacity onPress={() => console.log("Google Sign In")}>
-          <Icon
-            name="google"
-            type="font-awesome"
-            color={COLORS.GRAY}
+        {/* <TouchableOpacity onPress={handleGoogleSignUp}>
+          <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
+        </TouchableOpacity> */}
+        {/* {Platform.OS === "ios" && (
+        <>
+           <TouchableOpacity onPress={handleAppleSignUp}>
+           <Icon name="apple" type="font-awesome" color={COLORS.GRAY} />
+         </TouchableOpacity>
+          <AppleAuthentication.AppleAuthenticationButton
+            buttonType={
+              AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+            }
+            buttonStyle={
+              AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+            }
+            cornerRadius={5}
+            style={styles.button}
+            onPress={handleAppleSignUp}
           />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("Apple Sign In")}>
-          <Icon
-            name="apple"
-            type="font-awesome"
-            color={COLORS.GRAY}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
-          <Icon
-            name="facebook"
-            type="font-awesome"
-            color={COLORS.GRAY}
-          />
-        </TouchableOpacity>
-      </View> */}
+        </>
+         )}  */}
+        {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
+          <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
+        </TouchableOpacity> */}
+      </View>
 
       <AuthOption isRegistered option="Sign In" screen="Login" />
       <Snackbar
@@ -212,26 +307,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: COLORS.SECONDARY,
-    marginBottom: 20,
     padding: 15,
     borderRadius: 10,
     gap: 10,
     borderWidth: 1,
-    borderColor: COLORS.TERTIARY,
+    borderColor: COLORS.GRAY_LIGHTER,
   },
   input: {
     flex: 1,
     marginLeft: 10,
-    outline: "none",
+    // outline: "none",
   },
   checkboxContainer: {
     backgroundColor: "transparent",
     borderWidth: 0,
     padding: 0,
+    marginTop: 10,
+    marginBottom: 30,
   },
   termsText: {
     fontSize: 14,
-    color: COLORS.PRIMARY,
+    color: COLORS.GRAY,
     textDecorationLine: "underline",
   },
   separatorContainer: {
@@ -253,6 +349,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginVertical: 20,
+  },
+  button: {
+    width: 200,
+    height: 64,
   },
 });
 

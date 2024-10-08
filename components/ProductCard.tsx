@@ -7,6 +7,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { getUserById } from "../api/api";
 import ProductStats from "./ProductStats";
+import { formatPrice } from "../utils";
 
 interface Product {
   title: string;
@@ -25,6 +26,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const navigation = useNavigation();
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -112,7 +114,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
             </Text>
           </View>
           <View style={styles.priceView}>
-            <Text style={styles.productPrice}>GH₵{product.price}</Text>
+            <Text style={styles.productPrice}>
+              GH₵{formatPrice(product?.price)}
+            </Text>
           </View>
         </View>
       </View>
@@ -127,16 +131,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.SECONDARY,
     borderRadius: 10,
     padding: 10,
-    // shadowColor: COLORS.GRAY,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 5,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
-    // elevation: 10,
-    marginBottom: 20,
-    marginRight: 10,
     gap: 2.5,
     borderWidth: 1,
     borderColor: COLORS.GRAY_LIGHT,

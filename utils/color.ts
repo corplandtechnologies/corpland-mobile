@@ -2,7 +2,7 @@ export const COLORS = {
   PRIMARY: "#282828",
   SECONDARY: "#FFFFFF", // White
   TERTIARY: "#AAAAAA", // Light Gray
-  COMPLIMENTARY: "#1A1C20", // Dark Gray
+  COMPLIMENTARY: "#0074D9", // Dark Gray
   GRAY: "#808080", // Standard Gray
   GRAY_LIGHT: "#EDEDED", // Very Light Gray
   WRAPPER: "rgba(229, 228, 226, 0.5)", // Light Gray Transparent Overlay

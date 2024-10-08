@@ -1,7 +1,7 @@
 export interface authOptionProps {
   option: string;
   screen: string;
-  isRegistered: boolean;
+  isRegistered?: boolean;
 }
 
 export interface walletModalProps {
@@ -15,6 +15,12 @@ export interface walletModalProps {
   keyboardType?: string;
   onChangeText?: (text: any) => void;
   loading?: boolean;
+  isBonus?: boolean;
+  disabled?: boolean;
+  secondaryActionButtonText?: string;
+  onSecondaryPress?: () => void;
+  secondaryLoading?: boolean;
+  secondarydisabled?: boolean;
 }
 
 export interface BadgeProps {
@@ -51,4 +57,19 @@ export interface Transaction {
 export interface GroupedTransactions {
   date: string;
   transactions: Transaction[];
+}
+export interface Notification {
+  _id: string;
+  userId: string;
+  type: "transaction" | "order" | "user" | "product" | "request" | "ad";
+  title: string;
+  description: string;
+  isRead: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GroupedNotifications {
+  date: string;
+  notifications: Notification[];
 }

@@ -4,7 +4,7 @@ import { Button } from "react-native-elements";
 import { COLORS } from "../../utils/color";
 
 interface primaryButtonProps {
-  value: string;
+  value: string | undefined;
   onPress?: any;
   disabled?: boolean;
   loading?: boolean;

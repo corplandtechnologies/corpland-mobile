@@ -15,12 +15,15 @@ import Banner from "../components/Banner";
 import FormInput from "../components/ui/FormInput";
 import Section from "../components/Section";
 import Category from "../components/Category";
-import { storeCatergories } from "../data/dummyData";
+import { storeCatergories } from "../data/default";
 import ProductCard from "../components/ProductCard";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
+  getNotifications,
   getProducts,
+  getRequests,
   getTrendingProducts,
+  getUnreadNotificationsCount,
   getUserById,
   searchProducts,
 } from "../api/api";
@@ -29,6 +32,9 @@ import { useSearchResults } from "../context/SearchResultsContext";
 import { getStorageItem, handleError } from "../utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../context/AppContext";
+import RequestCard from "../components/RequestCard";
+import moment from "moment";
+import { Notification } from "../interfaces";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -38,39 +44,80 @@ const Home = () => {
   const { setSearchResults } = useSearchResults();
   const [products, setProducts] = useState([]);
   const [trendingProducts, setTrendingProducts] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const navigation: any = useNavigation();
-  const { user, setUser } = useApp();
+  const {
+    user,
+    setUser,
+    notifications,
+    setNotifications,
+    unreadNotifications,
+    setUnreadNotifications,
+  } = useApp();
   const [searchLoading, setSearchLoading] = useState(false);
+  const [notificationsLoading, setNotificationsLoading] = useState(false);
 
-  useEffect(() => {
-    const getLoggedInUser = async () => {
-      const user = await getStorageItem("user");
-      if (!user) {
-        alert("Please Login to continue using Corpland. Thank you!");
-        navigation.navigate("Login");
-        return;
-      }
-    };
-    getLoggedInUser();
-  }, []);
+  const fetchNotifications = async () => {
+    setNotificationsLoading(true);
+    try {
+      const { data } = await getNotifications(user?._id);
+      const sortedNotifications = data?.data.sort(
+        (a: Notification, b: Notification) =>
+          moment(b.createdAt).diff(moment(a.createdAt))
+      );
+      setNotifications(sortedNotifications);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setNotificationsLoading(false);
+    }
+  };
+
+  const fetchUnreadNotificationCount = async () => {
+    try {
+      const { data } = await getUnreadNotificationsCount(user?._id);
+      console.log("count", data?.data);
+
+      setUnreadNotifications(data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchNotifications();
+      fetchUnreadNotificationCount();
+    }, [])
+  );
+  // useEffect(() => {
+  //   const getLoggedInUser = async () => {
+  //     const user = await getStorageItem("user");
+  //     if (!user) {
+  //       alert("Please Login to continue using Corpland. Thank you!");
+  //       navigation.navigate("Login");
+  //       return;
+  //     }
+  //   };
+  //   getLoggedInUser();
+  // }, []);
 
   const handleSearch = async (
     setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     setLoadingState(true);
+    if (!search) {
+      setSnackbarMessage("All fields are required");
+      setSnackbarVisible(true);
+      return;
+    }
     try {
-      if (!search) {
-        setSnackbarMessage("All fields are required");
-        setSnackbarVisible(true);
-        return;
-      }
       const res = await searchProducts(search);
       setSearchResults(res.data);
       setLoadingState(false);
       setSnackbarVisible(true);
       setSnackbarMessage("Search Completed!");
-      setSearch("");
       navigation.navigate("Search");
     } catch (error) {
       console.log(error);
@@ -97,6 +144,21 @@ const Home = () => {
   };
   useEffect(() => {
     fetchProducts();
+  }, []);
+
+  const fetchRequests = async () => {
+    try {
+      setLoading(true);
+      const response = await getRequests();
+      setRequests(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchRequests();
   }, []);
 
   const fetchUser = async () => {
@@ -129,6 +191,8 @@ const Home = () => {
               try {
                 fetchProducts();
                 fetchUser();
+                fetchRequests();
+                fetchNotifications();
                 setRefreshing(false);
               } catch (error) {
                 setRefreshing(false);
@@ -138,6 +202,7 @@ const Home = () => {
         }
       >
         {/* <UserInfo navigation={navigation} /> */}
+
         <FormInput
           icon="search"
           placeholder="What are you looking for?..."
@@ -179,11 +244,12 @@ const Home = () => {
             routeName="ProductGrids"
           >
             {loading ? (
-              <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+              <ActivityIndicator color={COLORS.PRIMARY} />
             ) : (
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: 10 }}
               >
                 {products?.map((product, index) => (
                   <ProductCard key={index} product={product} />
@@ -198,14 +264,37 @@ const Home = () => {
               routeName="ProductGrids"
             >
               {loading ? (
-                <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+                <ActivityIndicator color={COLORS.PRIMARY} />
               ) : (
                 <ScrollView
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{ gap: 10 }}
                 >
                   {trendingProducts?.map((product, index) => (
                     <ProductCard key={index} product={product.product} />
+                  ))}
+                </ScrollView>
+              )}
+            </Section>
+          )}
+          {requests?.length > 0 && (
+            <Section
+              headerText="Requests"
+              // onPress={(routeName) => handleSeeAll(routeName, "Requests")}
+              routeName="ProductGrids"
+              limited
+            >
+              {loading ? (
+                <ActivityIndicator color={COLORS.PRIMARY} />
+              ) : (
+                <ScrollView
+                  // horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{ gap: 10 }}
+                >
+                  {requests?.map((request, index) => (
+                    <RequestCard key={index} request={request} />
                   ))}
                 </ScrollView>
               )}

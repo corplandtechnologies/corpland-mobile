@@ -16,7 +16,7 @@ import { COLORS } from "../../utils/color";
 import { Button, TextInput } from "react-native-paper";
 import Select from "../../components/ui/Select";
 import * as ImagePicker from "expo-image-picker";
-import { categories, regionsByCountry } from "../../data/dummyData";
+import { categories, regionsByCountry } from "../../data/default";
 import { getUserCountry, getUserLocation } from "../../utils/modules";
 import { Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
