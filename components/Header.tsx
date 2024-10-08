@@ -28,10 +28,8 @@ const Header = () => {
   const appleAppURL = "https://apps.apple.com/gh/app/corpland/id6670435009";
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>
-        For a better experience, download the Corpland App now!
-      </Text>
-      <View>
+      <Text style={styles.title}>For a better experience...</Text>
+      <View style={{ flexDirection: "row" }}>
         <GooglePlayButton
           url={APKUrl}
           theme={"light"}
@@ -49,9 +47,9 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row",
+    // flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    // alignItems: "center",
     backgroundColor: "#f8f8f8", // Light grey background
     padding: 10,
     borderBottomWidth: 1,
