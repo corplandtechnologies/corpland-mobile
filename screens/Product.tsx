@@ -154,7 +154,9 @@ const Product = ({ route }) => {
     const fullShareLink = `${baseUrl}/products/product/${productId}`;
 
     // Construct the share message including the first image URL if available
-    shareMessage = `Check out ${productTitle}: ${fullShareLink}`;
+    shareMessage = `Don't get scammed. Use Corpland to securely get our ${productTitle} for just GH₵${formatPrice(
+      product?.price
+    )} today! : ${fullShareLink}`;
 
     if (Platform.OS === "web") {
       // For web, just copy the link to clipboard
@@ -163,6 +165,7 @@ const Product = ({ route }) => {
     } else {
       // For mobile, use the Share API
       Share.share({
+        
         message: shareMessage,
         title: `Don't get scammed. Use Corpland to securely get our ${productTitle} for just GH₵${formatPrice(product?.price)} today! `,
         url: fullShareLink,
