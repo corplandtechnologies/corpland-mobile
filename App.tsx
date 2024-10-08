@@ -216,8 +216,15 @@ function App() {
   }
 
   return (
-    <>
+    <View
+      style={
+        Platform.OS === "web" || Platform.OS === "android"
+          ? { flexDirection: "column", width: "100%" }
+          : {}
+      }
+    >
       <StatusBar translucent={true} />
+      {Platform.OS === "web" && <Header />}
       <AppProvider>
         <UserProvider>
           <CartProvider>
@@ -656,7 +663,7 @@ function App() {
           </CartProvider>
         </UserProvider>
       </AppProvider>
-    </>
+    </View>
   );
 }
 

@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { COLORS } from "../utils/color";
+import { AppStoreButton, GooglePlayButton } from "react-mobile-app-button";
 
 const Header = () => {
   const handlePress = () => {
@@ -21,14 +22,27 @@ const Header = () => {
     }
   };
 
+  const APKUrl =
+    "https://play.google.com/store/apps/details?id=com.corplandtechnologies.corpland&pcampaignid=web_share";
+
+  const appleAppURL = "https://apps.apple.com/gh/app/corpland/id6670435009";
   return (
     <View style={styles.header}>
       <Text style={styles.title}>
         For a better experience, download the Corpland App now!
       </Text>
-      <TouchableOpacity onPress={handlePress} style={styles.button}>
-        <Text style={styles.buttonText}>Download</Text>
-      </TouchableOpacity>
+      <View>
+        <GooglePlayButton
+          url={APKUrl}
+          theme={"light"}
+          className={"custom-style"}
+        />
+        <AppStoreButton
+          url={appleAppURL}
+          theme={"light"}
+          className={"custom-style"}
+        />
+      </View>
     </View>
   );
 };
