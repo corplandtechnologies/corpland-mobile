@@ -29,8 +29,11 @@ const OrderSummary = () => {
 
   const handleOrder = async () => {
     if (total > currentUser?.wallet) {
-      setSnackbarVisible(true);
-      setSnackbarMessage("Sorry, Your balance is not enough.");
+      setTimeout(() => {
+        setSnackbarVisible(true);
+        setSnackbarMessage("Sorry, Your balance is not enough.");
+      }, 2000);
+      navigation.navigate("Wallet");
       return;
     }
     setLoading(true);

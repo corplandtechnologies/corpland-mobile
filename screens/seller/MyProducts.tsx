@@ -72,6 +72,7 @@ const MyProducts = () => {
               description={result.description}
               userDetails={result.userDetails}
               images={result.images}
+              status={result.status}
               _id={result._id}
             />
           ))}

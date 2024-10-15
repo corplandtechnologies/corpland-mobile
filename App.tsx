@@ -69,6 +69,8 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import * as Linking from "expo-linking";
+import WalkthroughTour from "./screens/Intro/WalkthroughTour";
+import React from "react";
 
 const prefix = Linking.createURL("/");
 
@@ -89,8 +91,8 @@ const linking = {
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
   }),
 });
 
@@ -111,6 +113,7 @@ function App() {
   >(undefined);
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
+  const [showTour, setShowTour] = useState(false);
 
   const fetchUser = async () => {
     try {
@@ -206,6 +209,17 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const checkFirstTimeUser = async () => {
+      const isFirstTime = await AsyncStorage.getItem("isFirstTimeUser");
+      if (isFirstTime === null) {
+        setShowTour(true);
+        await AsyncStorage.setItem("isFirstTimeUser", "false");
+      }
+    };
+    checkFirstTimeUser();
+  }, []);
+
   if (!isFontLoaded) {
     return null; // or a loading indicator
   }
@@ -221,6 +235,10 @@ function App() {
       </View>
     );
   }
+
+  if (showTour) {
+    return <WalkthroughTour />;
+  } 
 
   return (
     <>

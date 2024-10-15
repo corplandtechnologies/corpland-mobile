@@ -1,10 +1,12 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
+import { Image } from "expo-image";
 import { COLORS } from "../utils/color";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import Card from "./ui/Card";
+import { blurhash } from "../utils";
 
 interface ProductItemProps {
   image: any[];
@@ -15,6 +17,7 @@ interface ProductItemProps {
   userDetails: any;
   _id: string | number;
   onReset?: () => void;
+  status?: string;
 }
 
 const ProductItem: React.FC<ProductItemProps> = ({
@@ -26,6 +29,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
   userDetails,
   _id,
   onReset,
+  status,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
 
@@ -58,7 +62,12 @@ const ProductItem: React.FC<ProductItemProps> = ({
         }}
       >
         <View style={{ flex: 1 }}>
-          <Image source={{ uri: image }} style={styles.productImage} />
+          <Image
+            source={image}
+            placeholder={{ blurhash }}
+            transition={1000}
+            style={styles.productImage}
+          />
         </View>
         <View style={{ flex: 2, padding: 10, justifyContent: "space-between" }}>
           <View>
@@ -120,6 +129,8 @@ const ProductItem: React.FC<ProductItemProps> = ({
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
+              flex: 1,
+              gap: 10,
             }}
           >
             <View
@@ -142,6 +153,11 @@ const ProductItem: React.FC<ProductItemProps> = ({
             </View>
           </View>
         </View>
+        {status === "In Review" && (
+          <View style={{ flex: 0.25, alignItems: "center" }}>
+            <Icon name="time" size={20} color={"#FF851B"} />
+          </View>
+        )}
       </Card>
     </TouchableOpacity>
   );

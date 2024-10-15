@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Notification } from "../interfaces";
-import fetchUnreadNotificationCount from "../utils";
+import { fetchUnreadNotificationCount } from "../utils";
 
 export interface AppContextType {
   loading: any;

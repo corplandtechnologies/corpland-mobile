@@ -318,7 +318,7 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
                             secondary
                             value={"Cancel"}
                             onPress={() =>
-                              handleOrderStatus(4, setCancelLoading)
+                              handleOrderStatus(6, setCancelLoading)
                             }
                             loading={cancelLoading}
                             disabled={

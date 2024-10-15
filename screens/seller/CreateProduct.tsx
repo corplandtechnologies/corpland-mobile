@@ -216,6 +216,7 @@ const CreateProduct = () => {
         price: price,
         userId: user._id,
       };
+      console.log(newProduct);
 
       const response = await createProduct(
         Platform.OS === "web" ? newWebProduct : newProduct

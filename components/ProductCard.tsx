@@ -1,5 +1,6 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
+import { Image } from "expo-image";
 import { COLORS } from "../utils/color";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -7,7 +8,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { getUserById } from "../api/api";
 import ProductStats from "./ProductStats";
-import { formatPrice } from "../utils";
+import { blurhash, formatPrice } from "../utils";
 
 interface Product {
   title: string;
@@ -54,7 +55,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
     <TouchableOpacity style={styles.productMain} onPress={productNavigate}>
       <View style={{ flex: 1 }}>
         <Image
-          source={{ uri: product?.image || product?.images[0] }}
+          source={product?.image || product?.images[0]}
+          placeholder={{ blurhash }}
+          transition={1000}
           style={styles.productImage}
         />
       </View>
