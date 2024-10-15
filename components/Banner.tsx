@@ -160,13 +160,11 @@
 //   },
 // });
 
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { COLORS } from "../utils/color";
 import AnimatedView from "./animated/AnimatedView";
 import { useNavigation } from "@react-navigation/native";
-import { Image } from "expo-image";
-import { blurhash } from "../utils";
 
 const Banner = () => {
   const navigation: any = useNavigation();
@@ -189,9 +187,9 @@ const Banner = () => {
         </View>
         <View style={styles.imageView}>
           <Image
-            source="https://res.cloudinary.com/drwzb6vqn/image/upload/v1728993809/discoverImage_dxeuc1.png"
-            placeholder={{ blurhash }}
-            transition={1000}
+            source={{
+              uri: "https://res.cloudinary.com/drwzb6vqn/image/upload/v1728993809/discoverImage_dxeuc1.png",
+            }}
             style={styles.imageStyle}
           />
         </View>
