@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import {
   Dimensions,
   ScrollView,
-  Image,
   StyleSheet,
   View,
   Text,
@@ -11,6 +10,7 @@ import {
   Linking,
   Share,
 } from "react-native";
+import { Image } from "expo-image";
 import { Avatar, Snackbar } from "react-native-paper";
 import { COLORS } from "../utils/color";
 import { useNavigation } from "@react-navigation/native";
@@ -38,7 +38,7 @@ import { useApp } from "../context/AppContext";
 import CartContext from "../context/CartContext";
 import AuthModal from "../components/auth/AuthModal";
 import MainView from "../components/elements/Views/MainView";
-import { formatPrice } from "../utils";
+import { blurhash, formatPrice } from "../utils";
 import PopUpCard from "../components/PopUpCard";
 
 const Product = ({ route }) => {
@@ -166,7 +166,9 @@ const Product = ({ route }) => {
       // For mobile, use the Share API
       Share.share({
         message: shareMessage,
-        title: `Don't get scammed. Use Corpland to securely get our ${productTitle} for just GH₵${formatPrice(product?.price)} today! `,
+        title: `Don't get scammed. Use Corpland to securely get our ${productTitle} for just GH₵${formatPrice(
+          product?.price
+        )} today! `,
         url: fullShareLink,
       });
     }
@@ -218,7 +220,12 @@ const Product = ({ route }) => {
     const images = product?.images || [];
     return images.map((image: string, index: number) => (
       <View key={index} style={{ width: Dimensions.get("window").width }}>
-        <Image source={{ uri: image }} style={styles.productImage} />
+        <Image
+          source={image}
+          placeholder={{ blurhash }}
+          transition={1000}
+          style={styles.productImage}
+        />
       </View>
     ));
   };
