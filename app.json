@@ -38,7 +38,13 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.corplandtechnologies.corpland",
-      "versionCode": 8
+      "versionCode": 8,
+      "notification": {
+        "icon": "./assets/CORPLAND-NOTIFICATION-ICON.png",
+        "color": "#ffffff",
+        "androidMode": "default",
+        "androidCollapsedTitle": "%s new notifications"
+      }
     },
     "web": {
       "favicon": "./assets/CORPLAND5.png"
@@ -59,7 +65,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/CORPLAND5.png"
+          "icon": "./assets/CORPLAND-NOTIFICATION-ICON.png"
         }
       ]
     ],
