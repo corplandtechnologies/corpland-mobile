@@ -29,7 +29,7 @@
         "NSLocationWhenInUseUsageDescription": "We use your location to show nearby events relevant to you."
       },
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "7"
+      "buildNumber": "8"
     },
     "android": {
       "adaptiveIcon": {
@@ -38,7 +38,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.corplandtechnologies.corpland",
-      "versionCode": 8,
+      "versionCode": 9,
       "notification": {
         "icon": "./assets/CORPLAND-NOTIFICATION-ICON.png",
         "color": "#ffffff",
