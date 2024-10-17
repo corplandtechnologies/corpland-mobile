@@ -304,6 +304,7 @@ const Home = () => {
                     color={
                       activeTab === tab ? COLORS.SECONDARY : COLORS.PRIMARY
                     }
+                    fontFamily="PoppinsMedium"
                   >
                     {tab}
                   </TextElement>
@@ -320,50 +321,9 @@ const Home = () => {
                 <ProductCard key={index} product={product} />
               ))
             ) : (
-              <TextElement>No products found in this category</TextElement>
+              <TextElement>Something Went Wrong!</TextElement>
             )}
           </View>
-          {/* <Section
-            headerText="Discover"
-            onPress={(routeName) => handleSeeAll(routeName, "Discover")}
-            routeName="ProductGrids"
-          >
-            {loading ? (
-              <ActivityIndicator color={COLORS.PRIMARY} />
-            ) : (
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ gap: 10 }}
-              >
-                {products?.map((product, index) => (
-                  <ProductCard key={index} product={product} />
-                ))}
-              </ScrollView>
-            )}
-          </Section> */}
-          {/*           
-          {trendingProducts?.length > 0 && (
-            <Section
-              headerText="Trending"
-              onPress={(routeName) => handleSeeAll(routeName, "Trending")}
-              routeName="ProductGrids"
-            >
-              {loading ? (
-                <ActivityIndicator color={COLORS.PRIMARY} />
-              ) : (
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{ gap: 10 }}
-                >
-                  {trendingProducts?.map((product, index) => (
-                    <ProductCard key={index} product={product.product} />
-                  ))}
-                </ScrollView>
-              )}
-            </Section>
-          )} */}
           {requests?.length > 0 && (
             <Section
               headerText="Requests"
