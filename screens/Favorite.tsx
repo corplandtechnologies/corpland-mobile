@@ -23,6 +23,8 @@ import { COLORS } from "../utils/color";
 import { useUser } from "../context/UserContext";
 import { useApp } from "../context/AppContext";
 import { formatPrice } from "../utils";
+import ProductCard from "../components/ProductCard/ProductCard";
+import { ScrollView } from "react-native";
 
 const Favorite = () => {
   const navigation = useNavigation();
@@ -85,13 +87,11 @@ const Favorite = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={products}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-        numColumns={2}
-        contentContainerStyle={{  }}
-      />
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {products.map((product) => (
+          <ProductCard product={product} />
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -102,6 +102,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  scrollViewContent: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    width: "100%",
+    justifyContent: "center",
   },
   emptyContainer: {
     flex: 1,

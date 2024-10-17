@@ -14,6 +14,8 @@ import ProductGrid from "../components/ProductGrid";
 import { searchProducts } from "../api/api";
 import { COLORS } from "../utils/color";
 import UserHeader from "../components/UserHeader";
+import ProductCard from "../components/ProductCard/ProductCard";
+import { ScrollView } from "react-native";
 
 const ProductDisplay = ({ route }) => {
   const category = route.params.category;
@@ -36,21 +38,7 @@ const ProductDisplay = ({ route }) => {
     fetchProducts();
   }, [category]);
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity style={{ width: "50%", alignSelf: "center" }}>
-      <ProductGrid
-        key={item._id}
-        image={item.images[0]}
-        title={item.title}
-        price={item.price}
-        region={item.region}
-        description={item.description}
-        _id={item._id}
-        userId={item.userId}
-        dials={item.dials}
-      />
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => <ProductCard product={item} />;
 
   if (isLoading) {
     return (
@@ -72,13 +60,11 @@ const ProductDisplay = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={products}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-        numColumns={2}
-        contentContainerStyle={{}}
-      />
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {products.map((product) => (
+          <ProductCard product={product} />
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -86,7 +72,15 @@ const ProductDisplay = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.SECONDARY,
+    height: "100%",
+  },
+  scrollViewContent: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    width: "100%",
+    justifyContent: "center",
   },
   emptyContainer: {
     flex: 1,

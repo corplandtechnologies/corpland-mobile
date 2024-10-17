@@ -16,7 +16,6 @@ import FormInput from "../components/ui/FormInput";
 import Section from "../components/Section";
 import Category from "../components/Category";
 import { storeCatergories } from "../data/default";
-import ProductCard from "../components/ProductCard";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   getNotifications,
@@ -35,6 +34,8 @@ import { useApp } from "../context/AppContext";
 import RequestCard from "../components/RequestCard";
 import moment from "moment";
 import { Notification } from "../interfaces";
+import ProductCard from "../components/ProductCard/ProductCard";
+import TextElement from "../components/elements/Texts/TextElement";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -57,6 +58,49 @@ const Home = () => {
   } = useApp();
   const [searchLoading, setSearchLoading] = useState(false);
   const [notificationsLoading, setNotificationsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("All");
+  const [selectedTab, setSelectedTab] = useState([]);
+  console.log(selectedTab);
+
+  useEffect(() => {
+    switch (activeTab) {
+      case "All":
+        setSelectedTab(products);
+        break;
+      case "Popular":
+        setSelectedTab(trendingProducts.map((item) => item.product)); // Assuming trending products have a different structure
+        break;
+      case "Newest":
+        // Sort products by date and show newest first
+        const sortedProducts = [...products].sort((a, b) =>
+          moment(b.createdAt).diff(moment(a.createdAt))
+        );
+        setSelectedTab(sortedProducts);
+        break;
+      case "Fashion":
+        const fashionProducts = products.filter(
+          (product) => product.category.toLowerCase() === "fashion"
+        );
+        setSelectedTab(fashionProducts);
+        break;
+      case "Electronics":
+        const electronicsProducts = products.filter(
+          (product) => product.category.toLowerCase() === "electronics"
+        );
+        setSelectedTab(electronicsProducts);
+        break;
+      default:
+        setSelectedTab(products);
+    }
+  }, [activeTab, products, trendingProducts]); // Add dependencies here
+
+  // Update your handleTabPress function to ensure it triggers the useEffect
+  const handleTabPress = (tabName: string) => {
+    setActiveTab(tabName);
+    // Optionally show loading state while filtering
+    setLoading(true);
+    setTimeout(() => setLoading(false), 500); // Remove loading after filter completes
+  };
 
   const fetchNotifications = async () => {
     setNotificationsLoading(true);
@@ -238,7 +282,48 @@ const Home = () => {
               ))}
             </View>
           </Section>
-          <Section
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.tabsView}
+          >
+            {["All", "Newest", "Popular", "Fashion", "Electronics"].map(
+              (tab) => (
+                <TouchableOpacity
+                  key={tab}
+                  onPress={() => handleTabPress(tab)}
+                  style={[
+                    styles.tabView,
+                    {
+                      backgroundColor:
+                        activeTab === tab ? COLORS.PRIMARY : COLORS.SECONDARY,
+                    },
+                  ]}
+                >
+                  <TextElement
+                    color={
+                      activeTab === tab ? COLORS.SECONDARY : COLORS.PRIMARY
+                    }
+                  >
+                    {tab}
+                  </TextElement>
+                </TouchableOpacity>
+              )
+            )}
+          </ScrollView>
+
+          <View style={styles.productCardsView}>
+            {loading ? (
+              <ActivityIndicator color={COLORS.PRIMARY} />
+            ) : selectedTab?.length > 0 ? (
+              selectedTab?.map((product, index) => (
+                <ProductCard key={index} product={product} />
+              ))
+            ) : (
+              <TextElement>No products found in this category</TextElement>
+            )}
+          </View>
+          {/* <Section
             headerText="Discover"
             onPress={(routeName) => handleSeeAll(routeName, "Discover")}
             routeName="ProductGrids"
@@ -256,7 +341,8 @@ const Home = () => {
                 ))}
               </ScrollView>
             )}
-          </Section>
+          </Section> */}
+          {/*           
           {trendingProducts?.length > 0 && (
             <Section
               headerText="Trending"
@@ -277,7 +363,7 @@ const Home = () => {
                 </ScrollView>
               )}
             </Section>
-          )}
+          )} */}
           {requests?.length > 0 && (
             <Section
               headerText="Requests"
@@ -353,6 +439,25 @@ const styles = StyleSheet.create({
   },
   productView: {
     gap: 20,
+  },
+  productCardsView: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    width: "100%",
+    justifyContent: "center",
+  },
+  tabsView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+  tabView: {
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 2.5,
+    borderColor: COLORS.GRAY_LIGHT,
   },
 });
 

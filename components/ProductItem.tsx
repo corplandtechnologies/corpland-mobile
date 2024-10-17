@@ -120,9 +120,9 @@ const ProductItem: React.FC<ProductItemProps> = ({
             </View> */}
               </View>
             </View>
-            {/* <View>
+            <View>
               <Text style={styles.productDesc}>{truncatedTitle}</Text>
-            </View> */}
+            </View>
           </View>
           <View
             style={{

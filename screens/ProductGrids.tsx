@@ -61,7 +61,7 @@ const ProductGrids = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+        <ActivityIndicator  color={COLORS.PRIMARY} />
       </View>
     );
   }
