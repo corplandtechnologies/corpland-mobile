@@ -5,7 +5,7 @@ import testImage from "../../assets/nike.png";
 import TextElement from "../elements/Texts/TextElement";
 import { Icon } from "react-native-elements";
 import { COLORS } from "../../utils/color";
-import { formatPrice, textTruncate } from "../../utils";
+import { blurhash, formatPrice, textTruncate } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
 
 interface productCardProps {
@@ -48,6 +48,7 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
                   width: "100%",
                   height: "100%",
                 }}
+                placeholder={blurhash}
               />
             </View>
           </>
