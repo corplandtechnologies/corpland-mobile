@@ -287,7 +287,7 @@ const Home = () => {
             handleLoadMore();
           }
         }}
-        // scrollEventThrottle={400}
+        scrollEventThrottle={50}
       >
         {/* <UserInfo navigation={navigation} /> */}
 

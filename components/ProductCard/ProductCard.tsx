@@ -48,7 +48,6 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
                 style={{
                   width: "100%",
                   height: "100%",
-                  padding: 50,
                 }}
                 placeholder={blurhash}
               />
@@ -98,10 +97,10 @@ const styles = StyleSheet.create({
   productPreviewImageView: {
     flex: 3,
     width: "100%",
-    height: 100,
+    height: 150,
     justifyContent: "center",
     alignItems: "center",
-    padding: 10,
+    // padding: 10,
   },
   productImageView: {
     flex: 3,
