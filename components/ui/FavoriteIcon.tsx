@@ -13,9 +13,14 @@ import AuthModal from "../auth/AuthModal";
 interface FavoriteIconProps {
   style?: Object;
   productId: any;
+  size?: number;
 }
 
-const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
+const FavoriteIcon: React.FC<FavoriteIconProps> = ({
+  style,
+  productId,
+  size,
+}) => {
   const { user } = useApp();
   const [isFavorite, setIsFavorite] = useState(
     user?.favorites?.includes(productId)
@@ -34,9 +39,9 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
     fetchUserById();
   }, [user?._id, productId]);
   const handleToggleFavorites = async () => {
+    setIsFavorite(!isFavorite);
     try {
-      const res = await toggleFavorites(user?._id, productId);
-      setIsFavorite(!isFavorite);
+      await toggleFavorites(user?._id, productId);
     } catch (error) {
       console.log(error);
     }
@@ -55,7 +60,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({ style, productId }) => {
       >
         <Icon
           name={isFavorite ? "heart" : "heart-outline"}
-          size={30}
+          size={size ? size : 30}
           color={"red"}
         />
       </TouchableOpacity>

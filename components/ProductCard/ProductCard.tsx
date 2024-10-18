@@ -7,11 +7,12 @@ import { Icon } from "react-native-elements";
 import { COLORS } from "../../utils/color";
 import { blurhash, formatPrice, textTruncate } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
+import FavoriteIcon from "../ui/FavoriteIcon";
 
 interface productCardProps {
   product: {
     _id: string;
-    previewImage?: string;
+    thumbnail?: string;
     images: string;
     title: string;
     price: string;
@@ -31,22 +32,23 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
       <View
         style={{
           flex: 2,
-          padding: product.previewImage ? 10 : 0,
+          padding: product.thumbnail ? 10 : 0,
           backgroundColor: COLORS.GRAY_LIGHT,
           borderRadius: 10,
         }}
       >
-        {product.previewImage ? (
+        {product.thumbnail ? (
           <>
             <View style={styles.heartView}>
-              <Icon name={"heart"} type="ionicon" color={"red"} />
+              <FavoriteIcon productId={product._id} size={25} />
             </View>
             <View style={styles.productPreviewImageView}>
               <Image
-                source={testImage}
+                source={product.thumbnail}
                 style={{
                   width: "100%",
                   height: "100%",
+                  padding: 50,
                 }}
                 placeholder={blurhash}
               />
@@ -61,6 +63,7 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
                 height: "100%",
                 borderRadius: 10,
               }}
+              placeholder={blurhash}
             />
           </View>
         )}
@@ -69,7 +72,7 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
         <TextElement fontFamily="PoppinsMedium">
           {textTruncate(product.title)}
         </TextElement>
-        <TextElement>GHC {formatPrice(product.price)}.00</TextElement>
+        <TextElement>GH₵ {formatPrice(product.price)}.00</TextElement>
       </View>
     </TouchableOpacity>
   );
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
   productImageView: {
     flex: 3,
     width: "100%",
-    height: 100,
+    height: 150,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,

@@ -60,46 +60,82 @@ const Home = () => {
   const [notificationsLoading, setNotificationsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("All");
   const [selectedTab, setSelectedTab] = useState([]);
-  console.log(selectedTab);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const ITEMS_PER_PAGE = 6; // Number of items to show per page
+
+  // Modify the selectedTab state to handle pagination
+  const [paginatedProducts, setPaginatedProducts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
+    // Update paginated products whenever activeTab or products change
+    updatePaginatedProducts();
+  }, [activeTab, products, trendingProducts, currentPage]);
+
+  const updatePaginatedProducts = () => {
+    let filteredProducts = [];
     switch (activeTab) {
       case "All":
-        setSelectedTab(products);
+        filteredProducts = products;
         break;
       case "Popular":
-        setSelectedTab(trendingProducts.map((item) => item.product)); // Assuming trending products have a different structure
+        filteredProducts = trendingProducts.map((item) => item.product);
         break;
       case "Newest":
-        // Sort products by date and show newest first
-        const sortedProducts = [...products].sort((a, b) =>
+        filteredProducts = [...products].sort((a, b) =>
           moment(b.createdAt).diff(moment(a.createdAt))
         );
-        setSelectedTab(sortedProducts);
         break;
       case "Fashion":
-        const fashionProducts = products.filter(
+        filteredProducts = products.filter(
           (product) => product.category.toLowerCase() === "fashion"
         );
-        setSelectedTab(fashionProducts);
         break;
       case "Electronics":
-        const electronicsProducts = products.filter(
+        filteredProducts = products.filter(
           (product) => product.category.toLowerCase() === "electronics"
         );
-        setSelectedTab(electronicsProducts);
         break;
       default:
-        setSelectedTab(products);
+        filteredProducts = products;
     }
-  }, [activeTab, products, trendingProducts]); // Add dependencies here
 
-  // Update your handleTabPress function to ensure it triggers the useEffect
+    const endIndex = currentPage * ITEMS_PER_PAGE;
+    const paginatedItems = filteredProducts.slice(0, endIndex);
+
+    setPaginatedProducts(paginatedItems);
+    setHasMore(endIndex < filteredProducts.length);
+  };
+
+  const handleLoadMore = () => {
+    if (!hasMore || isLoadingMore) return;
+
+    setIsLoadingMore(true);
+    setTimeout(() => {
+      // Add a small delay to ensure state updates properly
+      setCurrentPage((prev) => prev + 1);
+      setIsLoadingMore(false);
+    }, 500);
+  };
+
+  const isCloseToBottom = ({
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  }) => {
+    const paddingToBottom = 50; // Increased padding to trigger earlier
+    return (
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom
+    );
+  };
+
   const handleTabPress = (tabName: string) => {
     setActiveTab(tabName);
-    // Optionally show loading state while filtering
-    setLoading(true);
-    setTimeout(() => setLoading(false), 500); // Remove loading after filter completes
+    setCurrentPage(1); // Reset to first page when changing tabs
+    setPaginatedProducts([]); // Clear current products
+    fetchProducts();
   };
 
   const fetchNotifications = async () => {
@@ -233,6 +269,8 @@ const Home = () => {
             onRefresh={() => {
               setRefreshing(true);
               try {
+                setCurrentPage(1); // Reset to first page on refresh
+                setPaginatedProducts([]); // Clear current products
                 fetchProducts();
                 fetchUser();
                 fetchRequests();
@@ -244,6 +282,12 @@ const Home = () => {
             }}
           />
         }
+        onScroll={({ nativeEvent }) => {
+          if (isCloseToBottom(nativeEvent)) {
+            handleLoadMore();
+          }
+        }}
+        // scrollEventThrottle={400}
       >
         {/* <UserInfo navigation={navigation} /> */}
 
@@ -316,12 +360,23 @@ const Home = () => {
           <View style={styles.productCardsView}>
             {loading ? (
               <ActivityIndicator color={COLORS.PRIMARY} />
-            ) : selectedTab?.length > 0 ? (
-              selectedTab?.map((product, index) => (
-                <ProductCard key={index} product={product} />
-              ))
             ) : (
-              <TextElement>Something Went Wrong!</TextElement>
+              <>
+                {paginatedProducts?.map((product, index) => (
+                  <ProductCard key={index} product={product} />
+                ))}
+                {isLoadingMore && (
+                  <ActivityIndicator
+                    color={COLORS.PRIMARY}
+                    style={styles.loadingMore}
+                  />
+                )}
+                {/* {!hasMore && (
+                  <TextElement style={styles.noMoreProducts}>
+                    No more products to load
+                  </TextElement>
+                )} */}
+              </>
             )}
           </View>
           {requests?.length > 0 && (
@@ -418,6 +473,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 2.5,
     borderColor: COLORS.GRAY_LIGHT,
+  },
+  loadingMore: {
+    marginVertical: 10,
+    width: "100%",
+  },
+  noMoreProducts: {
+    textAlign: "center",
+    width: "100%",
+    marginVertical: 10,
+    color: COLORS.GRAY_LIGHT,
   },
 });
 

@@ -26,6 +26,8 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { createObjectURL } from "../../utils";
 import { useApp } from "../../context/AppContext";
+import SnackBar from "../../components/ui/SnackBar";
+import { Icon } from "react-native-elements";
 
 const EditProduct = ({ route }) => {
   const { user } = useApp();
@@ -54,6 +56,9 @@ const EditProduct = ({ route }) => {
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [thumbnail, setThumbnail] = useState(product.thumbnail);
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  console.log("Thumbnail", thumbnail);
 
   const navigation = useNavigation();
 
@@ -175,6 +180,50 @@ const EditProduct = ({ route }) => {
     setSelectedFiles(newImages);
   };
 
+  const pickThumbnailImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+      base64: true,
+    });
+    console.log("result", result.assets[0].uri);
+
+    if (!result.cancelled) {
+      // Check if the file is a PNG
+      const isPng = result?.assets[0].uri.endsWith(".png");
+      if (!isPng) {
+        setSnackbarMessage("Please upload a PNG image.");
+        setSnackbarVisible(true);
+        return;
+      }
+
+      // Check if the image is transparent
+      // const fileInfo = await FileSystem.getInfoAsync(result?.assets[0].uri);
+      // if (fileInfo && fileInfo.size > 0) {
+      //   const base64Data = result.base64 || "";
+      //   // Logic to check transparency in the image using base64 data
+      //   if (!base64Data.includes("A==")) {
+      //     setSnackbarMessage("Please upload a transparent PNG image.");
+      //     setSnackbarVisible(true);
+      //     return;
+      //   }
+      // }
+
+      setThumbnail({
+        uri: result?.assets[0].uri,
+        type: "image/png",
+        name: `thumbnail-${Date.now()}.png`,
+      });
+      setThumbnailPreview(result?.assets[0].uri);
+    }
+  };
+
+  const removeThumbnail = () => {
+    setThumbnail(null);
+    setThumbnailPreview(null);
+  };
+
   const handleSubmit = async () => {
     if (images.length === 0) {
       setSnackbarMessage("You need at least one photo!");
@@ -187,6 +236,7 @@ const EditProduct = ({ route }) => {
         title: title || product.title,
         description: desc || product.description,
         images: images,
+        thumbnail: thumbnail.uri || product.thumbnail,
         country: selectedCountry || product.country,
         region: selectedRegion || product.region,
         category: selectedCategory || product.category,
@@ -321,6 +371,44 @@ const EditProduct = ({ route }) => {
               )}
             </View>
           </ScrollView>
+          <Text style={{ fontFamily: "PoppinsRegular" }}>
+            Add Thumbnail (PNG)
+          </Text>
+          {product.thumbnail ? (
+            <View style={styles.thumbnailView}>
+              <View style={styles.imageWrapper}>
+                <Image
+                  source={{
+                    uri: thumbnailPreview
+                      ? thumbnailPreview
+                      : product.thumbnail,
+                  }}
+                  style={styles.image}
+                />
+                <TouchableOpacity
+                  style={styles.removeImageButton}
+                  onPress={removeThumbnail}
+                >
+                  <Text style={styles.removeImageText}>x</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                style={styles.addImageBox}
+                onPress={pickThumbnailImage}
+              >
+                <Text style={{ fontSize: 20, color: COLORS.PRIMARY }}>
+                  <Icon name="swap-horizontal-outline" type="ionicon" />
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={styles.addImageBox}
+              onPress={pickThumbnailImage}
+            >
+              <Text style={{ fontSize: 20, color: COLORS.PRIMARY }}>+</Text>
+            </TouchableOpacity>
+          )}
           <Select
             touchableText={selectedCountry || "Country*"} // Display the selected category or the placeholder text
             title="Country"
@@ -373,13 +461,11 @@ const EditProduct = ({ route }) => {
             you will abide by the Safety Tips, and declare that this posting
             does not include any Prohibited Products.
           </Text>
-          <Snackbar
-            visible={snackbarVisible}
-            onDismiss={() => setSnackbarVisible(false)}
-            duration={Snackbar.DURATION_SHORT}
-          >
-            {snackbarMessage}
-          </Snackbar>
+          <SnackBar
+            setSnackbarVisible={setSnackbarVisible}
+            snackbarMessage={snackbarMessage}
+            snackbarVisible={snackbarVisible}
+          />
         </View>
       </ScrollView>
     </View>
@@ -444,6 +530,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.SECONDARY,
     fontFamily: "PoppinsRegular",
+  },
+  thumbnailView: {
+    flexDirection: "row",
+    gap: 10,
   },
 });
 

@@ -27,6 +27,8 @@ import { useUser } from "../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createObjectURL } from "../../utils";
 import { Linking } from "react-native";
+import * as FileSystem from "expo-file-system";
+import SnackBar from "../../components/ui/SnackBar";
 
 const CreateProduct = () => {
   const [title, setTitle] = useState("");
@@ -49,6 +51,9 @@ const CreateProduct = () => {
   const [price, setPrice] = useState("");
   const [user, setUser] = useState<object>({});
   const [loading, setLoading] = useState(false);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  console.log("thumbnail", thumbnail);
 
   const navigation = useNavigation();
 
@@ -138,7 +143,7 @@ const CreateProduct = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      // aspect: [4, 3],
       quality: 1,
       multiple: true,
     });
@@ -153,9 +158,9 @@ const CreateProduct = () => {
           type: "image/jpeg",
           name: `${Date.now()}.jpg`,
         }));
-      } else if (result.uri) {
+      } else if (result?.assets[0].uri) {
         newImages.push({
-          uri: result.uri,
+          uri: result?.assets[0].uri,
           type: "image/jpeg",
           name: `${Date.now()}.jpg`,
         });
@@ -179,6 +184,49 @@ const CreateProduct = () => {
     newImages.splice(index, 1); // Remove the image at the specified index
     setSelectedFiles(newImages);
   };
+  const pickThumbnailImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+      base64: true,
+    });
+    console.log("result", result.assets[0].uri);
+
+    if (!result.cancelled) {
+      // Check if the file is a PNG
+      const isPng = result?.assets[0].uri.endsWith(".png");
+      if (!isPng) {
+        setSnackbarMessage("Please upload a PNG image.");
+        setSnackbarVisible(true);
+        return;
+      }
+
+      // // Check if the image is transparent
+      // const fileInfo = await FileSystem.getInfoAsync(result?.assets[0].uri);
+      // if (fileInfo && fileInfo.size > 0) {
+      //   const base64Data = result.base64 || "";
+      //   // Logic to check transparency in the image using base64 data
+      //   if (!base64Data.includes("A==")) {
+      //     setSnackbarMessage("Please upload a transparent PNG image.");
+      //     setSnackbarVisible(true);
+      //     return;
+      //   }
+      // }
+
+      setThumbnail({
+        uri: result?.assets[0].uri,
+        type: "image/png",
+        name: `thumbnail-${Date.now()}.png`,
+      });
+      setThumbnailPreview(result?.assets[0].uri);
+    }
+  };
+
+  const removeThumbnail = () => {
+    setThumbnail(null);
+    setThumbnailPreview(null);
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -188,39 +236,39 @@ const CreateProduct = () => {
         !desc ||
         !selectedCountry ||
         !selectedCategory ||
-        (!images.length && !selectedFiles.length)
+        (!images.length && !selectedFiles.length)||
+        !thumbnail
       ) {
         setSnackbarMessage(
-          "All fields are required and at least one image must be added"
+          "All fields are required, including at least one image and a transparent PNG thumbnail."
         );
         setSnackbarVisible(true);
         return;
       }
+
       const newProduct = {
         title: title,
         description: desc,
         images: images,
+        thumbnail: thumbnail.uri,
         country: selectedCountry,
         region: selectedRegion,
         category: selectedCategory,
         price: price,
         userId: user._id,
       };
-      const newWebProduct = {
-        title: title,
-        description: desc,
-        images: selectedFiles,
-        country: selectedCountry,
-        region: selectedRegion,
-        category: selectedCategory,
-        price: price,
-        userId: user._id,
-      };
-      console.log(newProduct);
 
+      const newWebProduct = {
+        ...newProduct,
+        images: selectedFiles,
+      };
+
+      // Send the product to the API
       const response = await createProduct(
         Platform.OS === "web" ? newWebProduct : newProduct
       );
+
+      // Reset fields and navigate
       navigation.navigate("MyProducts");
       setSnackbarMessage("Product created successfully");
       setSnackbarVisible(true);
@@ -230,15 +278,17 @@ const CreateProduct = () => {
       setSelectedCountry("");
       setSelectedRegion("");
       setPrice("");
+      setThumbnail(null);
+      setThumbnailPreview(null);
     } catch (error) {
       console.log(error);
-      setSnackbarMessage(error);
-      setSnackbarMessage(error.response.data);
+      setSnackbarMessage(error?.response?.data || "An error occurred.");
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -318,6 +368,40 @@ const CreateProduct = () => {
               )}
             </View>
           </ScrollView>
+
+          <Text
+            style={{ fontFamily: "PoppinsRegular" }}
+            onPress={() => Linking.openURL("https://remove.bg")}
+          >
+            Add Thumbnail (PNG Image with No Background)
+            <Text
+              style={{ fontFamily: "PoppinsSemiBold", borderBottomWidth: 1 }}
+              onPress={() => Linking.openURL("https://remove.bg")}
+            >
+              *Get your no background Image here*
+            </Text>
+          </Text>
+          {thumbnailPreview ? (
+            <View style={styles.imageWrapper}>
+              <Image
+                source={{ uri: thumbnail?.uri || thumbnailPreview }}
+                style={styles.image}
+              />
+              <TouchableOpacity
+                style={styles.removeImageButton}
+                onPress={removeThumbnail}
+              >
+                <Text style={styles.removeImageText}>x</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={styles.addImageBox}
+              onPress={pickThumbnailImage}
+            >
+              <Text style={{ fontSize: 20, color: COLORS.PRIMARY }}>+</Text>
+            </TouchableOpacity>
+          )}
           <Select
             touchableText={selectedCountry || "Country*"} // Display the selected category or the placeholder text
             title="Country"
@@ -334,12 +418,12 @@ const CreateProduct = () => {
             />
           )}
           <FormInput
-            placeholder="Title*"
+            placeholder="Product Name*"
             onChangeText={setTitle}
             icon="header"
           />
           <FormInput
-            placeholder="Description*"
+            placeholder="Product Description*"
             onChangeText={setDesc}
             icon="align-justify"
             style={styles.textInputDesc}
@@ -375,13 +459,11 @@ const CreateProduct = () => {
             , confirm that you will abide by the Safety Tips, and declare that
             this posting does not include any Prohibited Products.
           </Text>
-          <Snackbar
-            visible={snackbarVisible}
-            onDismiss={() => setSnackbarVisible(false)}
-            duration={Snackbar.DURATION_SHORT}
-          >
-            {snackbarMessage}
-          </Snackbar>
+          <SnackBar
+            snackbarVisible={snackbarVisible}
+            snackbarMessage={snackbarMessage}
+            setSnackbarVisible={snackbarVisible}
+          />
         </View>
       </ScrollView>
     </View>

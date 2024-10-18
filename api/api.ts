@@ -8,7 +8,7 @@ import { Platform } from "react-native";
 // });
 
 // export const API = axios.create({
-//   baseURL: "http://192.168.60.158:3000/api/v1",
+//   baseURL: "http://192.168.39.158:3000/api/v1",
 //   withCredentials: true,
 // });
 
@@ -233,7 +233,11 @@ export const createProduct = async (newProduct: any) => {
   formData.append("region", newProduct.region);
   formData.append("price", newProduct.price);
   formData.append("userId", newProduct.userId);
-
+  formData.append("thumbnail", {
+    uri: newProduct.thumbnail,
+    type: "image/jpeg",
+    name: `thumbnail.jpg`,
+  });
   if (Platform.OS === "web") {
     newProduct.images.map((image: any) => {
       formData.append("images", image);
@@ -247,7 +251,6 @@ export const createProduct = async (newProduct: any) => {
       });
     });
   }
-
   const token = await AsyncStorage.getItem("token");
 
   const config = {
@@ -267,6 +270,12 @@ export const updateProduct = async (newProduct: any, id: any) => {
   formData.append("region", newProduct.region);
   formData.append("price", newProduct.price);
   formData.append("userId", newProduct.userId);
+
+  formData.append("thumbnail", {
+    uri: newProduct.thumbnail,
+    type: "image/jpeg",
+    name: `thumbnail.jpg`,
+  });
 
   if (Platform.OS === "web") {
     newProduct.images.forEach((image: any) => {
