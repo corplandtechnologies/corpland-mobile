@@ -374,7 +374,7 @@ const EditProduct = ({ route }) => {
           <Text style={{ fontFamily: "PoppinsRegular" }}>
             Add Thumbnail (PNG)
           </Text>
-          {product.thumbnail ? (
+          {thumbnailPreview ? (
             <View style={styles.thumbnailView}>
               <View style={styles.imageWrapper}>
                 <Image
