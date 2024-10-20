@@ -14,8 +14,9 @@ import SnackBar from "./ui/SnackBar";
 
 const OrderSummary = () => {
   const { cartItem, quantity }: any = useCart();
-  const total = cartItem.price * quantity;
   const subTotal = cartItem.price * cartItem.quantity;
+  const transactionFee = subTotal * 0.01;
+  const total = subTotal + transactionFee;
   const navigation: any = useNavigation();
   const { user: currentUser }: any = useApp();
   const {
@@ -71,6 +72,10 @@ const OrderSummary = () => {
         <View style={styles.summaryView}>
           <Text style={styles.descText}>Sub-Total</Text>
           <Text style={styles.priceText}>GH₵ {subTotal.toFixed(2)}</Text>
+        </View>
+        <View style={styles.summaryView}>
+          <Text style={styles.descText}>Transaction Fee (1%)</Text>
+          <Text style={styles.priceText}>GH₵ {transactionFee.toFixed(2)}</Text>
         </View>
         <View
           style={{
