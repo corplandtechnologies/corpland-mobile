@@ -14,7 +14,7 @@ import SnackBar from "./ui/SnackBar";
 
 const OrderSummary = () => {
   const { cartItem, quantity }: any = useCart();
-  const subTotal = cartItem.price * cartItem.quantity;
+  const subTotal = cartItem.price * quantity;
   const transactionFee = cartItem.price * 0.01;
   const total = subTotal + transactionFee;
   const navigation: any = useNavigation();
@@ -27,6 +27,8 @@ const OrderSummary = () => {
     loading,
     setLoading,
   }: any = useApp();
+
+  console.log(total);
 
   const handleOrder = async () => {
     if (total > currentUser?.wallet) {

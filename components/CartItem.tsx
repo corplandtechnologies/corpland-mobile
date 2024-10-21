@@ -17,9 +17,7 @@ const CartItem = ({ product }) => {
         <Text style={styles.title}>{product?.title}</Text>
         <Text style={styles.cat}>{product?.category}</Text>
         <View style={styles.priceQView}>
-          <Text style={styles.price}>
-            GH₵ {parseFloat(formatPrice(product?.price)).toFixed(2)}
-          </Text>
+          <Text style={styles.price}>GH₵ {product?.price.toFixed(2)}</Text>
           <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
         </View>
       </View>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   FlatList,
   ScrollView,
   Image,
+  Linking,
 } from "react-native";
 import MainView from "../../components/elements/Views/MainView";
 import TextElement from "../../components/elements/Texts/TextElement";
@@ -15,10 +16,14 @@ import Icon from "react-native-vector-icons/Ionicons";
 import Card from "../../components/ui/Card";
 import BottomActionCard from "../../components/BottomActionCard";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { formatPrice, handleError } from "../../utils";
 import { useApp } from "../../context/AppContext";
-import { getProductById, updateOrderStatus } from "../../api/api";
+import { getProductById, getUserById, updateOrderStatus } from "../../api/api";
 import { ActivityIndicator } from "react-native";
 import AnimatedView from "../../components/animated/AnimatedView";
 import moment from "moment";
@@ -65,6 +70,17 @@ const TrackOrder = () => {
   const [product, setProduct] = useState<any>({});
   const [productLoading, setProductLoading] = useState<boolean>(false);
   const [deliveredLoading, setDeliveredLoading] = useState<boolean>(false);
+  const [buyer, setBuyer] = useState<any>({});
+  const [seller, setSeller] = useState<any>({});
+
+  const handleContactUser = () => {
+    const phoneNumber =
+      user?._id === currentOrder?.sellerId
+        ? buyer?.phoneNumber
+        : seller?.phoneNumber;
+
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
 
   const formatTimestamp = (timestamp: any) => {
     return moment(timestamp).format("DD MMM, YYYY, h:mm A");
@@ -111,6 +127,23 @@ const TrackOrder = () => {
     }
   };
 
+  const fetchBuyersAndSellers = async () => {
+    try {
+      const buyerRes = await getUserById(currentOrder?.buyerId);
+      const sellerRes = await getUserById(currentOrder?.sellerId);
+      setBuyer(buyerRes?.data.user);
+      setSeller(sellerRes?.data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchBuyersAndSellers();
+    }, [])
+  );
+
   useEffect(() => {
     fetchProduct(setProductLoading);
   }, [currentOrder?.productId]);
@@ -154,7 +187,7 @@ const TrackOrder = () => {
 
   return (
     <MainView padding={10} style={{ justifyContent: "space-between" }}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.orderInfo}>
           <TextElement fontSize={16}>
             Order #{currentOrder?.transactionId}
@@ -221,29 +254,41 @@ const TrackOrder = () => {
             {productLoading ? (
               <ActivityIndicator color={COLORS.PRIMARY} size={30} />
             ) : (
-              <AnimatedView>
-                <Card style={styles.wrapper}>
-                  <View style={{ flex: 1 }}>
-                    <Image
-                      source={{
-                        uri:
-                          product?.images?.[0] ??
-                          "https://img.icons8.com/?size=100&id=12405&format=png&color=000000",
-                      }}
-                      style={styles.productImage}
-                    />
-                  </View>
-                  <View style={styles.detailsView}>
-                    <Text style={styles.title}>{product?.title}</Text>
-                    <Text style={styles.cat}>
-                      {product?.category} | Qty: 0{currentOrder?.quantity} pcs
-                    </Text>
-                    <Text style={styles.price}>
-                      GH₵{parseFloat(formatPrice(product?.price)).toFixed(2)}
-                    </Text>
-                  </View>
-                </Card>
-              </AnimatedView>
+              <View style={{ gap: 10 }}>
+                <AnimatedView>
+                  <Card style={styles.wrapper}>
+                    <View style={{ flex: 1 }}>
+                      <Image
+                        source={{
+                          uri:
+                            product?.images?.[0] ??
+                            "https://img.icons8.com/?size=100&id=12405&format=png&color=000000",
+                        }}
+                        style={styles.productImage}
+                      />
+                    </View>
+                    <View style={styles.detailsView}>
+                      <Text style={styles.title}>{product?.title}</Text>
+                      <Text style={styles.cat}>
+                        {product?.category} | Qty: 0{currentOrder?.quantity} pcs
+                      </Text>
+                      <Text style={styles.price}>
+                        GH₵ {product?.price.toFixed(2)}
+                      </Text>
+                    </View>
+                  </Card>
+                </AnimatedView>
+                <PrimaryButton
+                  value={
+                    user?._id === currentOrder?.sellerId
+                      ? "Contact Buyer"
+                      : "Contact Seller"
+                  }
+                  onPress={handleContactUser}
+                  loading={deliveredLoading}
+                  disabled={currentOrder?.status === 2}
+                />
+              </View>
             )}
           </View>
         </View>
