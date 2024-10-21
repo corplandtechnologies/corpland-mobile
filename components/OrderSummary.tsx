@@ -15,7 +15,7 @@ import SnackBar from "./ui/SnackBar";
 const OrderSummary = () => {
   const { cartItem, quantity }: any = useCart();
   const subTotal = cartItem.price * cartItem.quantity;
-  const transactionFee = subTotal * 0.01;
+  const transactionFee = cartItem.price * 0.01;
   const total = subTotal + transactionFee;
   const navigation: any = useNavigation();
   const { user: currentUser }: any = useApp();
