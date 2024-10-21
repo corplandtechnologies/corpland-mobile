@@ -357,58 +357,56 @@ const Product = ({ route }) => {
                         </View>
                       </View>
                     </View>
-                    {relatedProducts.length > 0 && (
-                      <View style={styles.bottomContainer}>
-                        <View style={styles.priceView}>
-                          <Text style={styles.priceText}>
-                            GH₵{formatPrice(product?.price)}
-                          </Text>
-                        </View>
-                        <View style={styles.CTAView}>
-                          {currentUser?._id === product?.userId ? (
-                            <>
-                              <PrimaryButton
-                                value="Edit Product"
-                                icon={
-                                  <Icon
-                                    name="create-outline"
-                                    size={24}
-                                    color={COLORS.SECONDARY}
-                                  />
-                                }
-                                onPress={() =>
-                                  navigation.navigate("EditProduct", {
-                                    product: product,
-                                  })
-                                }
-                                isIcon
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <PrimaryButton
-                                value="Buy Now"
-                                icon={
-                                  <Icon
-                                    name="bag-outline"
-                                    size={24}
-                                    color={COLORS.SECONDARY}
-                                  />
-                                }
-                                onPress={() => {
-                                  if (!currentUser) {
-                                    setModalVisible(true);
-                                  } else {
-                                    handleBuyNow();
-                                  }
-                                }}
-                                isIcon
-                              />
-                            </>
-                          )}
-                        </View>
+                    <View style={styles.bottomContainer}>
+                      <View style={styles.priceView}>
+                        <Text style={styles.priceText}>
+                          GH₵{formatPrice(product?.price)}
+                        </Text>
                       </View>
-                    )}
+                      <View style={styles.CTAView}>
+                        {currentUser?._id === product?.userId ? (
+                          <>
+                            <PrimaryButton
+                              value="Edit Product"
+                              icon={
+                                <Icon
+                                  name="create-outline"
+                                  size={24}
+                                  color={COLORS.SECONDARY}
+                                />
+                              }
+                              onPress={() =>
+                                navigation.navigate("EditProduct", {
+                                  product: product,
+                                })
+                              }
+                              isIcon
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <PrimaryButton
+                              value="Buy Now"
+                              icon={
+                                <Icon
+                                  name="bag-outline"
+                                  size={24}
+                                  color={COLORS.SECONDARY}
+                                />
+                              }
+                              onPress={() => {
+                                if (!currentUser) {
+                                  setModalVisible(true);
+                                } else {
+                                  handleBuyNow();
+                                }
+                              }}
+                              isIcon
+                            />
+                          </>
+                        )}
+                      </View>
+                    </View>
                   </>
                 )}
                 <View>
