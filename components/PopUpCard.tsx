@@ -19,7 +19,11 @@ interface PopUpCardProps {
   title: string;
   actionText: string;
   onPress: () => void;
-  loading?: boolean
+  loading?: boolean;
+  secondaryAction?: () => void;
+  secondaryActionText?: string;
+  isDoubleAction?: boolean;
+  secondaryActionLoading?: boolean;
 }
 
 const PopUpCard: FC<PopUpCardProps> = ({
@@ -29,6 +33,10 @@ const PopUpCard: FC<PopUpCardProps> = ({
   actionText,
   onPress,
   loading,
+  secondaryAction,
+  secondaryActionText,
+  isDoubleAction,
+  secondaryActionLoading,
 }) => {
   const scaleValue = React.useRef(new Animated.Value(0)).current;
   const navigation: any = useNavigation();
@@ -79,7 +87,9 @@ const PopUpCard: FC<PopUpCardProps> = ({
                   }}
                   style={{ width: 200, height: 50 }}
                 />
-                <TextElement fontFamily="PoppinsMedium" textAlign="center">{title}</TextElement>
+                <TextElement fontFamily="PoppinsMedium" textAlign="center">
+                  {title}
+                </TextElement>
               </View>
               <View style={{ gap: 10 }}>
                 <PrimaryButton
@@ -87,13 +97,22 @@ const PopUpCard: FC<PopUpCardProps> = ({
                   loading={loading}
                   onPress={onPress}
                 />
-                <PrimaryButton
-                  secondary
-                  value="Cancel"
-                  onPress={() => {
-                    onClose();
-                  }}
-                />
+                {isDoubleAction ? (
+                  <PrimaryButton
+                    secondary
+                    value={secondaryActionText}
+                    onPress={secondaryAction}
+                    loading={secondaryActionLoading}
+                  />
+                ) : (
+                  <PrimaryButton
+                    secondary
+                    value="Cancel"
+                    onPress={() => {
+                      onClose();
+                    }}
+                  />
+                )}
               </View>
             </Animated.View>
           </TouchableWithoutFeedback>

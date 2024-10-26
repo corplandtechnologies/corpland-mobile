@@ -61,7 +61,7 @@ const WalletModal: React.FC<walletModalProps> = ({
               disabled={disabled}
             />
           </View>
-          <View style={{ flex: 1 }}>
+          {/* <View style={{ flex: 1 }}>
             <PrimaryButton
               secondary
               value={secondaryActionButtonText}
@@ -69,7 +69,7 @@ const WalletModal: React.FC<walletModalProps> = ({
               loading={secondaryLoading}
               disabled={secondarydisabled}
             />
-          </View>
+          </View> */}
         </View>
       ) : (
         <View>

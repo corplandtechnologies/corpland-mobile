@@ -8,7 +8,7 @@ import { Platform } from "react-native";
 // });
 
 // export const API = axios.create({
-//   baseURL: "http://192.168.39.158:3000/api/v1",
+//   baseURL: "http://192.168.250.158:3000/api/v1",
 //   withCredentials: true,
 // });
 
@@ -354,6 +354,15 @@ export const createOrder = (
   quantity: number,
   total: number
 ) => API.post("/orders", { sellerId, buyerId, productId, quantity, total });
+
+export const createBonusOrder = (
+  sellerId: string,
+  buyerId: string,
+  productId: string,
+  quantity: number,
+  total: number
+) => API.post("/orders/bonus", { sellerId, buyerId, productId, quantity, total });
+
 
 export const getUserOrders = (userId: string) =>
   API.get(`/orders/user/${userId}`);

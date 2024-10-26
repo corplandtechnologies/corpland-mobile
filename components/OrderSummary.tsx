@@ -1,16 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { COLORS } from "../utils/color";
 import PrimaryButton from "./ui/PrimaryButton";
 import AnimatedView from "./animated/AnimatedView";
 import { useCart } from "../context/CartContext";
 import { useNavigation } from "@react-navigation/native";
-import { createOrder } from "../api/api";
+import { createBonusOrder, createOrder } from "../api/api";
 import { useUser } from "../context/UserContext";
 import { Snackbar } from "react-native-paper";
 import { useApp } from "../context/AppContext";
 import { handleError } from "../utils";
 import SnackBar from "./ui/SnackBar";
+import PopUpCard from "./PopUpCard";
 
 const OrderSummary = () => {
   const { cartItem, quantity }: any = useCart();
@@ -24,13 +25,16 @@ const OrderSummary = () => {
     setSnackbarVisible,
     setSnackbarMessage,
     snackbarMessage,
-    loading,
-    setLoading,
   }: any = useApp();
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [mainAccountPurchaseLoading, setMainAccountPurchaseLoading] =
+    useState<boolean>(false);
+  const [bonusWalletPurchaseLoading, setBonusWalletPurchaseLoading] =
+    useState<boolean>(false);
 
-  console.log(total);
-
-  const handleOrder = async () => {
+  const handleOrder = async (
+    setIsLoading: Dispatch<SetStateAction<boolean>>
+  ) => {
     if (total > currentUser?.wallet) {
       setTimeout(() => {
         setSnackbarVisible(true);
@@ -39,7 +43,7 @@ const OrderSummary = () => {
       navigation.navigate("Wallet");
       return;
     }
-    setLoading(true);
+    setIsLoading(true);
     try {
       const res = await createOrder(
         cartItem.sellerId,
@@ -49,14 +53,48 @@ const OrderSummary = () => {
         total
       );
       navigation.navigate("OrderSuccess");
-      setLoading(false);
+      setIsLoading(false);
     } catch (error: any) {
       console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
-      setLoading(false);
+      setIsLoading(false);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
+      setIsModalVisible(false);
+    }
+  };
+
+  const handleBonusOrder = async (
+    setIsLoading: Dispatch<SetStateAction<boolean>>
+  ) => {
+    if (total > currentUser?.bonusWallet) {
+      setTimeout(() => {
+        setSnackbarVisible(true);
+        setSnackbarMessage("Sorry, Your balance is not enough.");
+      }, 2000);
+      navigation.navigate("Wallet");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const res = await createBonusOrder(
+        cartItem.sellerId,
+        currentUser?._id,
+        cartItem?._id,
+        quantity,
+        total
+      );
+      navigation.navigate("OrderSuccess");
+      setIsLoading(false);
+    } catch (error: any) {
+      console.log(error);
+      setSnackbarMessage(handleError(error));
+      setSnackbarVisible(true);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+      setIsModalVisible(false);
     }
   };
 
@@ -92,14 +130,24 @@ const OrderSummary = () => {
 
         <PrimaryButton
           value="Confirm Payment"
-          onPress={handleOrder}
-          loading={loading}
+          onPress={() => setIsModalVisible(true)}
         />
       </View>
       <SnackBar
         setSnackbarVisible={setSnackbarVisible}
         snackbarVisible={snackbarVisible}
         snackbarMessage={snackbarMessage}
+      />
+      <PopUpCard
+        visible={isModalVisible}
+        title="Select Your Payment Channel"
+        actionText="Main Account"
+        onPress={() => handleOrder(setMainAccountPurchaseLoading)}
+        onClose={() => setIsModalVisible(false)}
+        isDoubleAction={true}
+        secondaryActionText="Bonus Wallet"
+        secondaryAction={() => handleBonusOrder(setBonusWalletPurchaseLoading)}
+        secondaryActionLoading={bonusWalletPurchaseLoading}
       />
     </AnimatedView>
   );
