@@ -2,6 +2,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
+import { COLORS } from "../../utils/color";
 
 const slides = [
   {
@@ -62,14 +63,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
+    fontFamily: "PoppinsBold",
+    color: COLORS.SECONDARY,
   },
   text: {
     fontSize: 16,
     color: "#fff",
     textAlign: "center",
     marginHorizontal: 20,
+    fontFamily: "PoppinsRegular",
   },
 });
 
