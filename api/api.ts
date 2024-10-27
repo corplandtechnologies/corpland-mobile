@@ -8,7 +8,7 @@ import { Platform } from "react-native";
 // });
 
 // export const API = axios.create({
-//   baseURL: "http://192.168.64.158:3000/api/v1",
+//   baseURL: "http://192.168.177.158:3000/api/v1",
 //   withCredentials: true,
 // });
 
@@ -460,7 +460,7 @@ export const storeExpoNotificationsPushToken = (
 ) => {
   console.log("userId in Aipi", userId);
 
-  API.put(`/users/register-token`, {
+  API.post(`/users/register-token`, {
     userId: userId,
     expoPushToken: expoPushToken,
   });

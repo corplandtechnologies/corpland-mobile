@@ -1,7 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { FC } from "react";
 import { Image } from "expo-image";
-import testImage from "../../assets/nike.png";
 import TextElement from "../elements/Texts/TextElement";
 import { Icon } from "react-native-elements";
 import { COLORS } from "../../utils/color";

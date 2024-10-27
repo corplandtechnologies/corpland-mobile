@@ -131,10 +131,10 @@ function App() {
   }, [user?._id]);
 
   useEffect(() => {
-    registerForPushNotificationsAsync()
+    registerForPushNotificationsAsync(loggedInUser?._id)
       .then((token) => {
         if (loggedInUser && loggedInUser._id) {
-          registerForPushNotificationsAsync(loggedInUser._id);
+          registerForPushNotificationsAsync(loggedInUser?._id);
         }
         token && setExpoPushToken(token);
       })
@@ -786,7 +786,7 @@ async function schedulePushNotification() {
   });
 }
 
-async function registerForPushNotificationsAsync() {
+async function registerForPushNotificationsAsync(userId: string) {
   let token;
 
   if (Platform.OS === "android") {
@@ -826,6 +826,7 @@ async function registerForPushNotificationsAsync() {
         })
       ).data;
       console.log(token);
+      await storeExpoNotificationsPushToken(userId, token);
     } catch (e) {
       token = `${e}`;
     }

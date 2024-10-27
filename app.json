@@ -58,6 +58,9 @@
           "android": {
             "enableProguardInReleaseBuilds": true,
             "extraProguardRules": "-keep public class com.horcrux.svg.** {*;} -dontwarn com.google.android.gms.**"
+          },
+          "ios": {
+            "useFrameworks": "static"
           }
         }
       ],

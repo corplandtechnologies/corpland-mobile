@@ -188,7 +188,7 @@ const Home = () => {
   ) => {
     setLoadingState(true);
     if (!search) {
-      setSnackbarMessage("All fields are required");
+      setSnackbarMessage("Field cannot be empty!");
       setSnackbarVisible(true);
       return;
     }
