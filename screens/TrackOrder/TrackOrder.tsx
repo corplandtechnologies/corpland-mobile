@@ -272,9 +272,7 @@ const TrackOrder = () => {
                       <Text style={styles.cat}>
                         {product?.category} | Qty: 0{currentOrder?.quantity} pcs
                       </Text>
-                      <Text style={styles.price}>
-                        GH₵ {product?.price.toFixed(2)}
-                      </Text>
+                      <Text style={styles.price}>GH₵ {product?.price}</Text>
                     </View>
                   </Card>
                 </AnimatedView>

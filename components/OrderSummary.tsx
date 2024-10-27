@@ -5,7 +5,11 @@ import PrimaryButton from "./ui/PrimaryButton";
 import AnimatedView from "./animated/AnimatedView";
 import { useCart } from "../context/CartContext";
 import { useNavigation } from "@react-navigation/native";
-import { createBonusOrder, createOrder } from "../api/api";
+import {
+  createBonusOrder,
+  createCashOnDeliveryOrder,
+  createOrder,
+} from "../api/api";
 import { useUser } from "../context/UserContext";
 import { Snackbar } from "react-native-paper";
 import { useApp } from "../context/AppContext";
@@ -31,7 +35,8 @@ const OrderSummary = () => {
     useState<boolean>(false);
   const [bonusWalletPurchaseLoading, setBonusWalletPurchaseLoading] =
     useState<boolean>(false);
-
+  const [cashOnDeliveryLoading, setCashOnDeliveryLoading] =
+    useState<boolean>(false);
   const handleOrder = async (
     setIsLoading: Dispatch<SetStateAction<boolean>>
   ) => {
@@ -50,7 +55,8 @@ const OrderSummary = () => {
         currentUser?._id,
         cartItem?._id,
         quantity,
-        total
+        total,
+        "regular"
       );
       navigation.navigate("OrderSuccess");
       setIsLoading(false);
@@ -83,7 +89,33 @@ const OrderSummary = () => {
         currentUser?._id,
         cartItem?._id,
         quantity,
-        total
+        total,
+        "regular"
+      );
+      navigation.navigate("OrderSuccess");
+      setIsLoading(false);
+    } catch (error: any) {
+      console.log(error);
+      setSnackbarMessage(handleError(error));
+      setSnackbarVisible(true);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+      setIsModalVisible(false);
+    }
+  };
+  const handleCashOnDeliveryOrder = async (
+    setIsLoading: Dispatch<SetStateAction<boolean>>
+  ) => {
+    setIsLoading(true);
+    try {
+      const res = await createCashOnDeliveryOrder(
+        cartItem.sellerId,
+        currentUser?._id,
+        cartItem?._id,
+        quantity,
+        total,
+        "cod"
       );
       navigation.navigate("OrderSuccess");
       setIsLoading(false);
@@ -129,7 +161,7 @@ const OrderSummary = () => {
         </View>
 
         <PrimaryButton
-          value="Confirm Payment"
+          value="Select Channel"
           onPress={() => setIsModalVisible(true)}
         />
       </View>
@@ -140,7 +172,7 @@ const OrderSummary = () => {
       />
       <PopUpCard
         visible={isModalVisible}
-        title="Select Your Payment Channel"
+        title="Select Your Payment Method"
         actionText="Main Account"
         onPress={() => handleOrder(setMainAccountPurchaseLoading)}
         onClose={() => setIsModalVisible(false)}
@@ -148,7 +180,16 @@ const OrderSummary = () => {
         secondaryActionText="Bonus Wallet"
         secondaryAction={() => handleBonusOrder(setBonusWalletPurchaseLoading)}
         secondaryActionLoading={bonusWalletPurchaseLoading}
-      />
+        isMultipleActions
+        warning="You won't be charged for Cash on Delivery."
+      >
+        <PrimaryButton
+          value="Cash On Delivery"
+          onPress={() => handleCashOnDeliveryOrder(setCashOnDeliveryLoading)}
+          tertiary
+        loading={cashOnDeliveryLoading}
+        />
+      </PopUpCard>
     </AnimatedView>
   );
 };

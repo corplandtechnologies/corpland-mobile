@@ -386,11 +386,11 @@ const Product = ({ route }) => {
                         ) : (
                           <>
                             <PrimaryButton
-                              value="Buy Now"
+                              value="Proceed"
                               icon={
                                 <Icon
-                                  name="bag-outline"
-                                  size={24}
+                                  name="chevron-down-circle-outline"
+                                  size={20}
                                   color={COLORS.SECONDARY}
                                 />
                               }

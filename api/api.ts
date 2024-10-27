@@ -8,7 +8,7 @@ import { Platform } from "react-native";
 // });
 
 // export const API = axios.create({
-//   baseURL: "http://192.168.250.158:3000/api/v1",
+//   baseURL: "http://192.168.64.158:3000/api/v1",
 //   withCredentials: true,
 // });
 
@@ -352,17 +352,44 @@ export const createOrder = (
   buyerId: string,
   productId: string,
   quantity: number,
-  total: number
-) => API.post("/orders", { sellerId, buyerId, productId, quantity, total });
+  total: number,
+  type: string
+) =>
+  API.post("/orders", { sellerId, buyerId, productId, quantity, total, type });
 
 export const createBonusOrder = (
   sellerId: string,
   buyerId: string,
   productId: string,
   quantity: number,
-  total: number
-) => API.post("/orders/bonus", { sellerId, buyerId, productId, quantity, total });
+  total: number,
+  type: string
+) =>
+  API.post("/orders/bonus", {
+    sellerId,
+    buyerId,
+    productId,
+    quantity,
+    total,
+    type,
+  });
 
+export const createCashOnDeliveryOrder = (
+  sellerId: string,
+  buyerId: string,
+  productId: string,
+  quantity: number,
+  total: number,
+  type: string
+) =>
+  API.post("/orders/cash-on-delivery", {
+    sellerId,
+    buyerId,
+    productId,
+    quantity,
+    total,
+    type,
+  });
 
 export const getUserOrders = (userId: string) =>
   API.get(`/orders/user/${userId}`);

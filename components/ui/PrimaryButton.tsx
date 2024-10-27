@@ -11,6 +11,7 @@ interface primaryButtonProps {
   icon?: string | JSX.Element | any;
   isIcon?: boolean;
   secondary?: boolean;
+  tertiary?: boolean; // Added tertiary prop
   fontFamily?: string;
   style?: any;
   width?: number | string;
@@ -24,6 +25,7 @@ const PrimaryButton: FC<primaryButtonProps> = ({
   icon,
   isIcon,
   secondary,
+  tertiary, // Destructure tertiary
   fontFamily,
   style,
   width,
@@ -32,13 +34,21 @@ const PrimaryButton: FC<primaryButtonProps> = ({
     <Button
       title={value}
       buttonStyle={{
-        backgroundColor: secondary ? COLORS.GRAY_LIGHT : COLORS.PRIMARY,
+        backgroundColor: tertiary
+          ? COLORS.MONEY
+          : secondary
+          ? COLORS.GRAY_LIGHT
+          : COLORS.PRIMARY,
         padding: 20,
         width: width ? width : "auto",
       }}
       containerStyle={[
         {
-          backgroundColor: secondary ? COLORS.GRAY_LIGHT : COLORS.PRIMARY,
+          backgroundColor: tertiary
+            ? COLORS.GRAY_VERY_LIGHT
+            : secondary
+            ? COLORS.GRAY_LIGHT
+            : COLORS.PRIMARY,
           borderRadius: 10,
         },
         style,
@@ -51,7 +61,11 @@ const PrimaryButton: FC<primaryButtonProps> = ({
         isIcon
           ? { marginLeft: 10 }
           : {
-              color: secondary ? COLORS.PRIMARY : COLORS.SECONDARY,
+              color: tertiary
+                ? COLORS.SECONDARY
+                : secondary
+                ? COLORS.PRIMARY
+                : COLORS.SECONDARY,
               fontFamily: fontFamily ? fontFamily : "PoppinsSemiBold",
             }
       }

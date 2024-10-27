@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import {
   Modal,
   View,
@@ -13,6 +13,7 @@ import TextElement from "./elements/Texts/TextElement";
 import PrimaryButton from "./ui/PrimaryButton";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Icon } from "react-native-elements";
 interface PopUpCardProps {
   visible: boolean;
   onClose: () => void;
@@ -24,6 +25,9 @@ interface PopUpCardProps {
   secondaryActionText?: string;
   isDoubleAction?: boolean;
   secondaryActionLoading?: boolean;
+  isMultipleActions?: boolean;
+  children?: ReactNode;
+  warning?: string;
 }
 
 const PopUpCard: FC<PopUpCardProps> = ({
@@ -37,6 +41,9 @@ const PopUpCard: FC<PopUpCardProps> = ({
   secondaryActionText,
   isDoubleAction,
   secondaryActionLoading,
+  isMultipleActions,
+  children,
+  warning,
 }) => {
   const scaleValue = React.useRef(new Animated.Value(0)).current;
   const navigation: any = useNavigation();
@@ -90,6 +97,22 @@ const PopUpCard: FC<PopUpCardProps> = ({
                 <TextElement fontFamily="PoppinsMedium" textAlign="center">
                   {title}
                 </TextElement>
+                {warning && (
+                  <View style={styles.warningView}>
+                    <Icon
+                      name="information-circle-outline"
+                      type="ionicon"
+                      size={16}
+                    />
+                    <TextElement
+                      fontFamily="PoppinsRegular"
+                      fontSize={11}
+                      textAlign="center"
+                    >
+                      {warning}
+                    </TextElement>
+                  </View>
+                )}
               </View>
               <View style={{ gap: 10 }}>
                 <PrimaryButton
@@ -113,6 +136,7 @@ const PopUpCard: FC<PopUpCardProps> = ({
                     }}
                   />
                 )}
+                {isMultipleActions && <>{children}</>}
               </View>
             </Animated.View>
           </TouchableWithoutFeedback>
@@ -134,6 +158,12 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: COLORS.SECONDARY,
     borderRadius: 10,
+  },
+  warningView: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+    justifyContent: "center",
   },
 });
 
