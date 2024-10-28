@@ -445,12 +445,12 @@ export const markAllNotificationAsRead = (userId: string) =>
 
 export const storeExpoNotificationsPushToken = (
   userId: string,
-  expoPushToken: string
+  deviceToken: string
 ) => {
   console.log("userId in Aipi", userId);
 
   API.post(`/users/register-token`, {
     userId: userId,
-    expoPushToken: expoPushToken,
+    deviceToken: deviceToken,
   });
 };

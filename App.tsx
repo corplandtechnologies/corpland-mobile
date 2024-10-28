@@ -71,6 +71,7 @@ import Constants from "expo-constants";
 import * as Linking from "expo-linking";
 import WalkthroughTour from "./screens/Intro/WalkthroughTour";
 import React from "react";
+import messaging from "@react-native-firebase/messaging";
 
 const prefix = Linking.createURL("/");
 
@@ -130,40 +131,87 @@ function App() {
     fetchUser();
   }, [user?._id]);
 
-  useEffect(() => {
-    registerForPushNotificationsAsync(loggedInUser?._id)
-      .then((token) => {
-        if (loggedInUser && loggedInUser._id) {
-          token && registerForPushNotificationsAsync(loggedInUser?._id);
-        }
-        token && setExpoPushToken(token);
-      })
-      .catch((err) => console.log(err));
+  const requestUserPermissions = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (Platform.OS === "android") {
-      Notifications.getNotificationChannelsAsync().then((value) =>
-        setChannels(value ?? [])
-      );
+    if (enabled) {
+      console.log("Authorization status:", authStatus);
     }
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
+  };
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
-
-    return () => {
-      notificationListener.current &&
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
+  useEffect(() => {
+    if (requestUserPermissions()) {
+      messaging()
+        .getToken()
+        .then((token) => {
+          console.log(token);
+          token && storeExpoNotificationsPushToken(loggedInUser?._id, token);
+        });
+    } else {
+      console.log("Permission not granted");
+    }
+    messaging()
+      .getInitialNotification()
+      .then(async (remoteMessage) => {
+        console.log(
+          "Notification caused app to open from quit state:",
+          remoteMessage?.notification
         );
-      responseListener.current &&
-        Notifications.removeNotificationSubscription(responseListener.current);
-    };
+      });
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        "Notification caused the app to open from the background state.",
+        remoteMessage.notification
+      );
+    });
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log("Message handled in the background", remoteMessage);
+    });
+
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      console.log("A FCM message has arrived!", remoteMessage);
+    });
+
+    return unsubscribe;
   }, [loggedInUser?._id]);
+
+  // useEffect(() => {
+  //   registerForPushNotificationsAsync(loggedInUser?._id)
+  //     .then((token) => {
+  //       if (loggedInUser && loggedInUser._id) {
+  //         registerForPushNotificationsAsync(loggedInUser?._id);
+  //       }
+  //       token && setExpoPushToken(token);
+  //     })
+  //     .catch((err) => console.log(err));
+
+  //   if (Platform.OS === "android") {
+  //     Notifications.getNotificationChannelsAsync().then((value) =>
+  //       setChannels(value ?? [])
+  //     );
+  //   }
+  //   notificationListener.current =
+  //     Notifications.addNotificationReceivedListener((notification) => {
+  //       setNotification(notification);
+  //     });
+
+  //   responseListener.current =
+  //     Notifications.addNotificationResponseReceivedListener((response) => {
+  //       console.log(response);
+  //     });
+
+  //   return () => {
+  //     notificationListener.current &&
+  //       Notifications.removeNotificationSubscription(
+  //         notificationListener.current
+  //       );
+  //     responseListener.current &&
+  //       Notifications.removeNotificationSubscription(responseListener.current);
+  //   };
+  // }, [loggedInUser?._id]);
 
   useEffect(() => {
     async function loadFonts() {
