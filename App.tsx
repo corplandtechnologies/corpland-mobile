@@ -75,8 +75,6 @@ import messaging from "@react-native-firebase/messaging";
 
 const prefix = Linking.createURL("/");
 
-const isDevelopment = Constants.appOwnership === "expo";
-
 const linking = {
   prefixes: [
     prefix,
@@ -156,10 +154,6 @@ function App() {
   };
 
   useEffect(() => {
-    // if (isDevelopment) {
-    //   // You're in development mode, do not initialize Firebase
-    //   console.log("Running in development mode. Firebase is not initialized.");
-    // } else {
     if (requestUserPermissions()) {
       messaging()
         .getToken()
@@ -186,7 +180,6 @@ function App() {
     });
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
       console.log("Message handled in the background", remoteMessage);
-      await showLocalNotification(remoteMessage);
     });
 
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
@@ -195,7 +188,6 @@ function App() {
     });
 
     return unsubscribe;
-    // }
   }, [loggedInUser?._id]);
 
   // useEffect(() => {
