@@ -4,9 +4,11 @@ import { Image } from "expo-image";
 import TextElement from "../elements/Texts/TextElement";
 import { Icon } from "react-native-elements";
 import { COLORS } from "../../utils/color";
-import { blurhash, formatPrice, textTruncate } from "../../utils";
+import { formatPrice, textTruncate } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
 import FavoriteIcon from "../ui/FavoriteIcon";
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 interface productCardProps {
   product: {
@@ -61,7 +63,7 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
                 height: "100%",
                 borderRadius: 10,
               }}
-              placeholder={blurhash}
+              placeholder={{ blurhash }}
             />
           </View>
         )}
