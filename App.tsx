@@ -97,6 +97,17 @@ Notifications.setNotificationHandler({
   }),
 });
 
+const showLocalNotification = async (remoteMessage: any) => {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: remoteMessage.notification.title,
+      body: remoteMessage.notification.body,
+      data: remoteMessage.data,
+    },
+    trigger: null, // Show immediately
+  });
+};
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -173,6 +184,7 @@ function App() {
 
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       console.log("A FCM message has arrived!", remoteMessage);
+      await showLocalNotification(remoteMessage);
     });
 
     return unsubscribe;
