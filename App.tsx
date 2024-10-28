@@ -134,7 +134,7 @@ function App() {
     registerForPushNotificationsAsync(loggedInUser?._id)
       .then((token) => {
         if (loggedInUser && loggedInUser._id) {
-          registerForPushNotificationsAsync(loggedInUser?._id);
+          token && registerForPushNotificationsAsync(loggedInUser?._id);
         }
         token && setExpoPushToken(token);
       })
@@ -817,6 +817,8 @@ async function registerForPushNotificationsAsync(userId: string) {
       const projectId =
         Constants?.expoConfig?.extra?.eas?.projectId ??
         Constants?.easConfig?.projectId;
+      console.log(projectId);
+
       if (!projectId) {
         throw new Error("Project ID not found");
       }
