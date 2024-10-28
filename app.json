@@ -2,7 +2,7 @@
   "expo": {
     "name": "Corpland",
     "slug": "Corpland",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/CORPLAND5.png",
     "userInterfaceStyle": "light",
@@ -29,7 +29,7 @@
         "NSLocationWhenInUseUsageDescription": "We use your location to show nearby events relevant to you."
       },
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "10"
+      "buildNumber": "11"
     },
     "android": {
       "adaptiveIcon": {
@@ -38,7 +38,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.corplandtechnologies.corpland",
-      "versionCode": 10,
+      "versionCode": 11,
       "notification": {
         "icon": "./assets/CORPLAND-NOTIFICATION-ICON.png",
         "color": "#ffffff",
