@@ -156,46 +156,46 @@ function App() {
   };
 
   useEffect(() => {
-    if (isDevelopment) {
-      // You're in development mode, do not initialize Firebase
-      console.log("Running in development mode. Firebase is not initialized.");
-    } else {
-      if (requestUserPermissions()) {
-        messaging()
-          .getToken()
-          .then((token) => {
-            console.log(token);
-            token && storeExpoNotificationsPushToken(loggedInUser?._id, token);
-          });
-      } else {
-        console.log("Permission not granted");
-      }
+    // if (isDevelopment) {
+    //   // You're in development mode, do not initialize Firebase
+    //   console.log("Running in development mode. Firebase is not initialized.");
+    // } else {
+    if (requestUserPermissions()) {
       messaging()
-        .getInitialNotification()
-        .then(async (remoteMessage) => {
-          console.log(
-            "Notification caused app to open from quit state:",
-            remoteMessage?.notification
-          );
+        .getToken()
+        .then((token) => {
+          console.log(token);
+          token && storeExpoNotificationsPushToken(loggedInUser?._id, token);
         });
-      messaging().onNotificationOpenedApp((remoteMessage) => {
+    } else {
+      console.log("Permission not granted");
+    }
+    messaging()
+      .getInitialNotification()
+      .then(async (remoteMessage) => {
         console.log(
-          "Notification caused the app to open from the background state.",
-          remoteMessage.notification
+          "Notification caused app to open from quit state:",
+          remoteMessage?.notification
         );
       });
-      messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-        console.log("Message handled in the background", remoteMessage);
-        await showLocalNotification(remoteMessage);
-      });
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        "Notification caused the app to open from the background state.",
+        remoteMessage.notification
+      );
+    });
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log("Message handled in the background", remoteMessage);
+      await showLocalNotification(remoteMessage);
+    });
 
-      const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-        console.log("A FCM message has arrived!", remoteMessage);
-        await showLocalNotification(remoteMessage);
-      });
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      console.log("A FCM message has arrived!", remoteMessage);
+      await showLocalNotification(remoteMessage);
+    });
 
-      return unsubscribe;
-    }
+    return unsubscribe;
+    // }
   }, [loggedInUser?._id]);
 
   // useEffect(() => {
