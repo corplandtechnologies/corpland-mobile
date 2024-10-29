@@ -9,13 +9,12 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../utils/color";
 import Banner from "../components/Banner";
 import FormInput from "../components/ui/FormInput";
 import Section from "../components/Section";
 import Category from "../components/Category";
-import { storeCatergories } from "../data/default";
+import { storeCategories } from "../data/default";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   getNotifications,
@@ -309,7 +308,7 @@ const Home = () => {
             }}
           >
             <View style={styles.catView}>
-              {storeCatergories.slice(0, 4).map((category, index) => (
+              {storeCategories.slice(0, 4).map((category, index) => (
                 <TouchableOpacity
                   key={index}
                   onPress={() =>
@@ -318,10 +317,7 @@ const Home = () => {
                     })
                   }
                 >
-                  <Category
-                    iconImagePath={category.iconImagePath}
-                    category={category.category}
-                  />
+                  <Category icon={category.icon} category={category.category} />
                 </TouchableOpacity>
               ))}
             </View>

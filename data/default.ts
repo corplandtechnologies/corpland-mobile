@@ -69,79 +69,70 @@ export const regionsByCountry: RegionsByCountry = {
   // USA: ["California", "New York", "Texas"],
 };
 
-export const storeCatergories = [
+export const storeCategories = [
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/foodCatIcon.png?updatedAt=1725434733045",
+    icon: "fast-food", // Ionicon for food
     category: "Food",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/electronicsIcon.png?updatedAt=1725434714388",
+    icon: "laptop", // Suggested Ionicon for electronics
     category: "Electronics",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/fashionCatIcon.png?updatedAt=1725434725160",
+    icon: "shirt", // Suggested Ionicon for fashion
     category: "Fashion",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/servicesCatIcon.png?updatedAt=1725434761874",
+    icon: "hammer", // Suggested Ionicon for services
     category: "Services",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/toycar.png?updatedAt=1725434778289",
+    icon: "car-sport", // Suggested Ionicon for babies & kids
     category: "Babies & Kids",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/tools.png?updatedAt=1725434778838",
+    icon: "home", // Suggested Ionicon for home, furniture & appliances
+    category: "Home, Furniture & Appliances",
+  },
+  {
+    icon: "construct", // Suggested Ionicon for commercial equipment & tools
     category: "Commercial Equipment & Tools",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/health.png?updatedAt=1725434733084",
+    icon: "medkit", // Suggested Ionicon for health & beauty
     category: "Health & Beauty",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/phone.png?updatedAt=1725434761886",
+    icon: "phone-portrait", // Suggested Ionicon for mobile phones & tablets
     category: "Mobile Phones & Tablets",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/pet.png?updatedAt=1725434761860",
+    icon: "paw", // Suggested Ionicon for pets
     category: "Pets",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/lease.png?updatedAt=1725434742751",
+    icon: "business", // Suggested Ionicon for property
     category: "Property",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/construction.png?updatedAt=1725434666454",
+    icon: "hammer", // Suggested Ionicon for repair & construction
     category: "Repair & Construction",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/job.png?updatedAt=1725434743594",
+    icon: "briefcase", // Suggested Ionicon for jobs
     category: "Jobs",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/sports.png?updatedAt=1725434778839",
+    icon: "basketball", // Suggested Ionicon for sports, arts & outdoors
     category: "Sports, Arts & Outdoors",
   },
   {
-    iconImagePath:
-      "https://ik.imagekit.io/4hxqb9ldw/vehicle.png?updatedAt=1725434786221",
+    icon: "car", // Suggested Ionicon for vehicles
     category: "Vehicles",
   },
   // Add more categories as needed
 ];
+
 
 export const productCards = [
   { title: "High Quality T shirts" },

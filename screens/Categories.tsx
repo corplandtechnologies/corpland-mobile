@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { COLORS } from "../utils/color";
 import Category from "../components/Category"; // Assuming you have a Category component
-import { storeCatergories } from "../data/default"; // Assuming you have dummy data
+import { storeCategories } from "../data/default"; // Assuming you have dummy data
 import { useNavigation } from "@react-navigation/native";
 
 const Categories = () => {
@@ -17,21 +17,23 @@ const Categories = () => {
   const size = Dimensions.get("window").width / numColumns;
   const navigation = useNavigation();
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={{ width: size, height: size, marginTop: 30 }}
-      onPress={() =>
-        navigation.navigate("ProductDisplay", { category: item.category })
-      }
-    >
-      <Category category={item.category} iconImagePath={item.iconImagePath} />
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        style={{ width: size, height: size, marginTop: 30 }}
+        onPress={() =>
+          navigation.navigate("ProductDisplay", { category: item.category })
+        }
+      >
+        <Category category={item.category} icon={item.icon} />
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.main}>
       <FlatList
-        data={storeCatergories}
+        data={storeCategories}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}

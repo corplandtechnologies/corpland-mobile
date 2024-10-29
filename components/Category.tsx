@@ -1,16 +1,17 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { FC } from "react";
 import { COLORS } from "../utils/color";
+import { Icon } from "react-native-elements";
 
 interface CategoryProps {
   category: string;
-  iconImagePath: string;
+  icon: string;
 }
-const Category: FC<CategoryProps> = ({ category, iconImagePath }) => {
+const Category: FC<CategoryProps> = ({ category, icon }) => {
   return (
     <View style={styles.main}>
       <View style={styles.wrapper}>
-        <Image source={{ uri: iconImagePath }} style={styles.catImage} />
+        <Icon name={icon} color={COLORS.PRIMARY} size={24} type="ionicon" />
       </View>
       <Text style={{ fontFamily: "PoppinsMedium", textAlign: "center" }}>
         {category}
@@ -29,7 +30,6 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     backgroundColor: COLORS.GRAY_VERY_LIGHT,
-    padding: 30,
     width: 50,
     height: 50,
     justifyContent: "center",
