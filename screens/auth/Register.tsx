@@ -21,10 +21,12 @@ import { Platform } from "react-native";
 import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
 // import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import PhoneInput from "react-native-phone-input";
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -142,11 +144,13 @@ const Register = () => {
       console.log({
         name,
         email,
+        phoneNumber,
         password,
         termsAccepted,
       });
       const res = await signUp({
         name: name.trim(),
+        phoneNumber: phoneNumber,
         email: email.toLowerCase().trim(),
         password: password.trim(),
         termsAccepted,
@@ -174,6 +178,23 @@ const Register = () => {
       />
       <View style={{ gap: 20 }}>
         <FormInput icon="user" placeholder="Name" onChangeText={setName} />
+        <View style={styles.inputContainer}>
+          <Icon name="phone" type="font-awesome" color={COLORS.GRAY} />
+          <PhoneInput
+            initialCountry={"gh"}
+            textProps={{
+              placeholder: "Enter a phone number...",
+              cursorColor: COLORS.PRIMARY,
+            }}
+            style={styles.input}
+            pickerBackgroundColor={COLORS.TERTIARY}
+            onChangePhoneNumber={(text) => {
+              setPhoneNumber(text.trim());
+            }}
+            autoFormat={true}
+            // You can customize the country list and other props as needed
+          />
+        </View>
         <FormInput
           icon="envelope"
           placeholder="Email"
@@ -220,7 +241,7 @@ const Register = () => {
         disabled={!termsAccepted}
         loading={loading}
       />
-{/* 
+      {/* 
       {Platform.OS === "ios" && (
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />

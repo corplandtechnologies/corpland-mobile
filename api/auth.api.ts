@@ -2,6 +2,7 @@ import { API } from "./api";
 
 export const signUp = async (userData: {
   name: string;
+  phoneNumber: string;
   email: string;
   password?: string;
   termsAccepted: boolean;

@@ -22,6 +22,7 @@ const OrderSummary = () => {
   const subTotal = cartItem.price * quantity;
   const transactionFee = cartItem.price * 0.01;
   const total = subTotal + transactionFee;
+  const codTotal = subTotal;
   const navigation: any = useNavigation();
   const { user: currentUser }: any = useApp();
   const {
@@ -114,7 +115,7 @@ const OrderSummary = () => {
         currentUser?._id,
         cartItem?._id,
         quantity,
-        total,
+        codTotal,
         "cod"
       );
       navigation.navigate("OrderSuccess");
@@ -187,7 +188,7 @@ const OrderSummary = () => {
           value="Cash On Delivery"
           onPress={() => handleCashOnDeliveryOrder(setCashOnDeliveryLoading)}
           tertiary
-        loading={cashOnDeliveryLoading}
+          loading={cashOnDeliveryLoading}
         />
       </PopUpCard>
     </AnimatedView>
