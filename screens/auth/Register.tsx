@@ -134,7 +134,7 @@ const Register = () => {
   };
 
   const handleSignUp = async () => {
-    if (!email || !password || !name) {
+    if (!email || !password || !name || !phoneNumber) {
       setSnackbarMessage("All Fields are required!");
       setSnackbarVisible(true);
       return;
