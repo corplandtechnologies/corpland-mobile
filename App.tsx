@@ -72,6 +72,17 @@ import * as Linking from "expo-linking";
 import WalkthroughTour from "./screens/Intro/WalkthroughTour";
 import React from "react";
 import messaging from "@react-native-firebase/messaging";
+import firebase from "@react-native-firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAQAZsd74WSYymehytX8oGpZabbERSBNoU",
+  authDomain: "corpland-app.firebaseapp.com",
+  projectId: "corpland-app",
+  storageBucket: "corpland-app.firebasestorage.app",
+  messagingSenderId: "840107202767",
+  appId: "1:840107202767:web:17e7fa44a19e1f65947fba",
+  measurementId: "G-3H9MXLW133",
+};
 
 const prefix = Linking.createURL("/");
 
@@ -160,6 +171,9 @@ function App() {
       // You're in development mode, do not initialize Firebase
       console.log("Running in development mode. Firebase is not initialized.");
     } else {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
       if (requestUserPermissions()) {
         messaging()
           .getToken()
