@@ -26,7 +26,9 @@
         "aps-environment": "production"
       },
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "We use your location to show nearby events relevant to you."
+        "NSLocationWhenInUseUsageDescription": "We use your location to show nearby events relevant to you.",
+        "UIBackgroundModes": ["fetch", "remote-notification"],
+        "NSUserTrackingUsageDescription": "This app needs permission to track your activity for a better user experience."
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "buildNumber": "11"

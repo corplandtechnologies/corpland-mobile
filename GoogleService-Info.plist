@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>840107202767-hdee3scn9hgah6i4klmhv3nompkj5vfi.apps.googleusercontent.com</string>
+	<string>840107202767-ealv3edekmfv8htihbnfe7s377ggavoj.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.840107202767-hdee3scn9hgah6i4klmhv3nompkj5vfi</string>
+	<string>com.googleusercontent.apps.840107202767-ealv3edekmfv8htihbnfe7s377ggavoj</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>840107202767-b807g4r9dlbaoc3muulodrk4irefeb84.apps.googleusercontent.com</string>
+	<string>840107202767-9cvnhn11rvrik857des20hvplitps4mp.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBv7BP2423-hIurvaCkN69yfT1TsW14w3Q</string>
 	<key>GCM_SENDER_ID</key>
@@ -19,7 +19,7 @@
 	<key>PROJECT_ID</key>
 	<string>corpland-app</string>
 	<key>STORAGE_BUCKET</key>
-	<string>corpland-app.appspot.com</string>
+	<string>corpland-app.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
