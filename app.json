@@ -2,7 +2,7 @@
   "expo": {
     "name": "Corpland",
     "slug": "Corpland",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "orientation": "portrait",
     "icon": "./assets/CORPLAND5.png",
     "userInterfaceStyle": "light",
@@ -31,7 +31,7 @@
         "NSUserTrackingUsageDescription": "This app needs permission to track your activity for a better user experience."
       },
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "11"
+      "buildNumber": "12"
     },
     "android": {
       "adaptiveIcon": {
@@ -40,7 +40,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.corplandtechnologies.corpland",
-      "versionCode": 11,
+      "versionCode": 12,
       "notification": {
         "icon": "./assets/CORPLAND-NOTIFICATION-ICON.png",
         "color": "#ffffff",
