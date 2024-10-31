@@ -1,7 +1,8 @@
 import { RegionsByCountry } from "../utils/interfaces";
 
 export const categories = [
-  "Agriculture & Food",
+  "Food",
+  "Agriculture",
   "Babies & Kids",
   "Commercial Equipment & Tools",
   "Electronics",
@@ -83,7 +84,7 @@ export const storeCategories = [
     category: "Fashion",
   },
   {
-    icon: "hammer", // Suggested Ionicon for services
+    icon: "settings", // Suggested Ionicon for services
     category: "Services",
   },
   {
@@ -93,6 +94,10 @@ export const storeCategories = [
   {
     icon: "home", // Suggested Ionicon for home, furniture & appliances
     category: "Home, Furniture & Appliances",
+  },
+  {
+    icon: "leaf", // Ionicon for Agric
+    category: "Agriculture",
   },
   {
     icon: "construct", // Suggested Ionicon for commercial equipment & tools
@@ -132,7 +137,6 @@ export const storeCategories = [
   },
   // Add more categories as needed
 ];
-
 
 export const productCards = [
   { title: "High Quality T shirts" },
