@@ -30,7 +30,7 @@
         "UIBackgroundModes": ["fetch", "remote-notification"]
       },
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "12"
+      "buildNumber": "13"
     },
     "android": {
       "adaptiveIcon": {
