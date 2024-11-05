@@ -265,6 +265,7 @@ export const updateProduct = async (newProduct: any, id: any) => {
   formData.append("region", newProduct.region);
   formData.append("price", newProduct.price);
   formData.append("userId", newProduct.userId);
+  formData.append("status", newProduct.status);
 
   if (Platform.OS === "web") {
     newProduct.images.forEach((image: any) => {

@@ -158,6 +158,11 @@ const ProductItem: React.FC<ProductItemProps> = ({
             <Icon name="time" size={20} color={"#FF851B"} />
           </View>
         )}
+        {status === "Rejected" && (
+          <View style={{ flex: 0.25, alignItems: "center" }}>
+            <Icon name="close-circle" size={20} color={"red"} />
+          </View>
+        )}
       </Card>
     </TouchableOpacity>
   );

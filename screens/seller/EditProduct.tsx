@@ -192,6 +192,7 @@ const EditProduct = ({ route }) => {
         category: selectedCategory || product.category,
         price: price || product.price,
         userId: user._id || product.userId,
+        status: "In Review",
       };
 
       const newWebProduct = {
@@ -203,6 +204,7 @@ const EditProduct = ({ route }) => {
         category: selectedCategory || product.category,
         price: price || product.price,
         userId: user._id || product.userId,
+        status: "In Review",
       };
 
       const response = await updateProduct(
