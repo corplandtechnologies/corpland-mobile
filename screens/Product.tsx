@@ -150,7 +150,7 @@ const Product = ({ route }) => {
     const baseUrl =
       Platform.OS === "web"
         ? window.location.origin
-        : "https://corpland-backend.onrender.com/api/v1";
+        : "https://corplandbackend.onrender.com/api/v1";
     const fullShareLink = `${baseUrl}/products/product/${productId}`;
 
     // Construct the share message including the first image URL if available
