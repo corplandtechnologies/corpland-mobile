@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -41,7 +41,6 @@ const Register = () => {
   const [referralCode, setReferralCode] = useState<string>("");
   const navigation: any = useNavigation();
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
-
   useEffect(() => {
     checkAuthStatus();
     checkAppleAuthAvailability();
@@ -132,22 +131,23 @@ const Register = () => {
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
-
   const handleSignUp = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email validation regex
+
     if (!email || !password || !name || !phoneNumber) {
-      setSnackbarMessage("All Fields are required!");
+      setSnackbarMessage("All fields are required!");
       setSnackbarVisible(true);
       return;
     }
+
+    if (!emailRegex.test(email)) {
+      setSnackbarMessage("Please enter a valid email address.");
+      setSnackbarVisible(true);
+      return;
+    }
+
     setLoading(true);
     try {
-      console.log({
-        name,
-        email,
-        phoneNumber,
-        password,
-        termsAccepted,
-      });
       const res = await signUp({
         name: name.trim(),
         phoneNumber: phoneNumber,
@@ -156,7 +156,7 @@ const Register = () => {
         termsAccepted,
         referralCode: referralCode.trim(),
       });
-      // Assuming user object contains userInfo and token
+
       await AsyncStorage.setItem("user", JSON.stringify(res.user));
       await AsyncStorage.setItem("token", res.token);
       setSnackbarVisible(true);
@@ -170,6 +170,7 @@ const Register = () => {
       setLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
       <UserHeader
@@ -192,6 +193,7 @@ const Register = () => {
               setPhoneNumber(text.trim());
             }}
             autoFormat={true}
+
             // You can customize the country list and other props as needed
           />
         </View>
