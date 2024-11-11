@@ -1,5 +1,5 @@
 export const COLORS = {
-  PRIMARY: "#000000",
+  PRIMARY: "#282828",
   SECONDARY: "#FFFFFF", // White
   TERTIARY: "#AAAAAA", // Light Gray
   COMPLIMENTARY: "#0074D9", // Dark Gray
