@@ -56,7 +56,7 @@ const Active = () => {
   useFocusEffect(
     useCallback(() => {
       getOrders();
-    }, [])
+    }, [user?._id, orders?.status])
   );
 
   return (

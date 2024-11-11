@@ -18,6 +18,7 @@ interface FormInputProps {
   onPress?: () => void;
   defaultValue?: string;
   value?: string;
+  isSecondaryButton?: boolean;
 }
 
 const FormInput: React.FC<FormInputProps> = ({
@@ -32,6 +33,7 @@ const FormInput: React.FC<FormInputProps> = ({
   loading,
   onPress,
   defaultValue,
+  isSecondaryButton,
 }) => {
   const handleChangeText = (text: string) => {
     const trimmedText = text.trim();
@@ -58,9 +60,20 @@ const FormInput: React.FC<FormInputProps> = ({
       {isButtoned && (
         <View style={styles.buttonContainer}>
           <Button
-            icon={<Icon name={isButtonedIcon} size={20} color="white" />}
+            icon={
+              <Icon
+                name={isButtonedIcon}
+                size={20}
+                color={isSecondaryButton ? COLORS.PRIMARY : COLORS.SECONDARY}
+              />
+            }
             onPress={onPress}
-            buttonStyle={styles.searchButton}
+            buttonStyle={{
+              ...styles.searchButton,
+              backgroundColor: isSecondaryButton
+                ? COLORS.SECONDARY
+                : COLORS.PRIMARY,
+            }}
             loading={loading}
             disabled={loading}
           />
@@ -95,7 +108,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchButton: {
-    backgroundColor: COLORS.PRIMARY,
     borderRadius: 10,
     padding: 18,
   },

@@ -35,6 +35,7 @@ import moment from "moment";
 import { Notification } from "../interfaces";
 import ProductCard from "../components/ProductCard/ProductCard";
 import TextElement from "../components/elements/Texts/TextElement";
+import { StatusBar } from "expo-status-bar";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -288,115 +289,123 @@ const Home = () => {
         }}
         scrollEventThrottle={50}
       >
+        <StatusBar style="light" />
         {/* <UserInfo navigation={navigation} /> */}
-
-        <FormInput
-          icon="search"
-          placeholder="What are you looking for?..."
-          isButtoned={true}
-          isButtonedIcon="options"
-          onChangeText={setSearch}
-          loading={searchLoading}
-          onPress={() => handleSearch(setSearchLoading)}
-        />
-        <Banner />
-        <View style={styles.sectionView}>
-          <Section
-            headerText="Categories"
-            onPress={() => {
-              navigation.navigate("Categories");
-            }}
-          >
-            <View style={styles.catView}>
-              {storeCategories.slice(0, 4).map((category, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() =>
-                    navigation.navigate("ProductDisplay", {
-                      category: category.category,
-                    })
-                  }
-                >
-                  <Category icon={category.icon} category={category.category} />
-                </TouchableOpacity>
-              ))}
-            </View>
-          </Section>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.tabsView}
-          >
-            {["All", "Newest", "Popular", "Fashion", "Electronics"].map(
-              (tab) => (
-                <TouchableOpacity
-                  key={tab}
-                  onPress={() => handleTabPress(tab)}
-                  style={[
-                    styles.tabView,
-                    {
-                      backgroundColor:
-                        activeTab === tab ? COLORS.PRIMARY : COLORS.SECONDARY,
-                    },
-                  ]}
-                >
-                  <TextElement
-                    color={
-                      activeTab === tab ? COLORS.SECONDARY : COLORS.PRIMARY
+        <View style={styles.searchView}>
+          <FormInput
+            icon="search"
+            placeholder="What are you looking for?..."
+            isButtoned={true}
+            isButtonedIcon="options-outline"
+            onChangeText={setSearch}
+            loading={searchLoading}
+            onPress={() => handleSearch(setSearchLoading)}
+            isSecondaryButton
+          />
+        </View>
+        <View style={styles.mainView}>
+          <Banner />
+          <View style={styles.sectionView}>
+            <Section
+              headerText="Categories"
+              onPress={() => {
+                navigation.navigate("Categories");
+              }}
+            >
+              <View style={styles.catView}>
+                {storeCategories.slice(0, 4).map((category, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() =>
+                      navigation.navigate("ProductDisplay", {
+                        category: category.category,
+                      })
                     }
-                    fontFamily="PoppinsMedium"
                   >
-                    {tab}
-                  </TextElement>
-                </TouchableOpacity>
-              )
-            )}
-          </ScrollView>
-
-          <View style={styles.productCardsView}>
-            {loading ? (
-              <ActivityIndicator color={COLORS.PRIMARY} />
-            ) : (
-              <>
-                {paginatedProducts?.map((product, index) => (
-                  <ProductCard key={index} product={product} />
+                    <Category
+                      icon={category.icon}
+                      category={category.category}
+                    />
+                  </TouchableOpacity>
                 ))}
-                {isLoadingMore && (
-                  <ActivityIndicator
-                    color={COLORS.PRIMARY}
-                    style={styles.loadingMore}
-                  />
-                )}
-                {/* {!hasMore && (
+              </View>
+            </Section>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.tabsView}
+            >
+              {["All", "Newest", "Popular", "Fashion", "Electronics"].map(
+                (tab) => (
+                  <TouchableOpacity
+                    key={tab}
+                    onPress={() => handleTabPress(tab)}
+                    style={[
+                      styles.tabView,
+                      {
+                        backgroundColor:
+                          activeTab === tab ? COLORS.PRIMARY : COLORS.SECONDARY,
+                      },
+                    ]}
+                  >
+                    <TextElement
+                      color={
+                        activeTab === tab ? COLORS.SECONDARY : COLORS.PRIMARY
+                      }
+                      fontFamily="PoppinsMedium"
+                    >
+                      {tab}
+                    </TextElement>
+                  </TouchableOpacity>
+                )
+              )}
+            </ScrollView>
+
+            <View style={styles.productCardsView}>
+              {loading ? (
+                <ActivityIndicator color={COLORS.PRIMARY} />
+              ) : (
+                <>
+                  {paginatedProducts?.map((product, index) => (
+                    <ProductCard key={index} product={product} />
+                  ))}
+                  {isLoadingMore && (
+                    <ActivityIndicator
+                      color={COLORS.PRIMARY}
+                      style={styles.loadingMore}
+                    />
+                  )}
+                  {/* {!hasMore && (
                   <TextElement style={styles.noMoreProducts}>
                     No more products to load
                   </TextElement>
                 )} */}
-              </>
+                </>
+              )}
+            </View>
+            {requests?.length > 0 && (
+              <Section
+                headerText="Requests"
+                // onPress={(routeName) => handleSeeAll(routeName, "Requests")}
+                routeName="ProductGrids"
+                limited
+              >
+                {loading ? (
+                  <ActivityIndicator color={COLORS.PRIMARY} />
+                ) : (
+                  <ScrollView
+                    // horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ gap: 10 }}
+                  >
+                    {requests?.map((request, index) => (
+                      <RequestCard key={index} request={request} />
+                    ))}
+                  </ScrollView>
+                )}
+              </Section>
             )}
           </View>
-          {requests?.length > 0 && (
-            <Section
-              headerText="Requests"
-              // onPress={(routeName) => handleSeeAll(routeName, "Requests")}
-              routeName="ProductGrids"
-              limited
-            >
-              {loading ? (
-                <ActivityIndicator color={COLORS.PRIMARY} />
-              ) : (
-                <ScrollView
-                  // horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{ gap: 10 }}
-                >
-                  {requests?.map((request, index) => (
-                    <RequestCard key={index} request={request} />
-                  ))}
-                </ScrollView>
-              )}
-            </Section>
-          )}
         </View>
       </ScrollView>
       <Snackbar
@@ -417,7 +426,7 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     backgroundColor: COLORS.SECONDARY,
     height: "100%",
   },
@@ -479,6 +488,16 @@ const styles = StyleSheet.create({
     width: "100%",
     marginVertical: 10,
     color: COLORS.GRAY_LIGHT,
+  },
+  searchView: {
+    backgroundColor: COLORS.PRIMARY,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    borderBottomEndRadius: 10,
+    borderBottomStartRadius: 10,
+  },
+  mainView: {
+    padding: 10,
   },
 });
 

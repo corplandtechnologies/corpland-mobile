@@ -79,17 +79,24 @@ const TabNavigator: React.FC = () => {
     const navigation: any = useNavigation();
 
     return (
-      <View style={{ paddingLeft: 10 }}>
-        <Text style={{ color: COLORS.TERTIARY }}>Location</Text>
+      <View style={{ paddingLeft: 10, gap: 3 }}>
+        <Text
+          style={{
+            color: COLORS.SECONDARY,
+            fontFamily: "PoppinsMedium",
+          }}
+        >
+          Location
+        </Text>
         <View
           style={{
             flexDirection: "row",
-            alignItems: "center",
+            // alignItems: "center",
             justifyContent: "center",
             gap: 2,
           }}
         >
-          <Icon name="location" size={20} color={COLORS.PRIMARY} />
+          <Icon name="location" size={18} color={COLORS.SECONDARY} />
           <TouchableOpacity
             onPress={() => {
               if (!user) {
@@ -101,19 +108,25 @@ const TabNavigator: React.FC = () => {
           >
             {user ? (
               <Text
-                style={{ color: COLORS.PRIMARY, fontFamily: "PoppinsSemiBold" }}
+                style={{
+                  color: COLORS.SECONDARY,
+                  fontFamily: "PoppinsMedium",
+                }}
               >
                 {user?.region}, {user?.country}
               </Text>
             ) : (
               <Text
-                style={{ color: COLORS.PRIMARY, fontFamily: "PoppinsSemiBold" }}
+                style={{
+                  color: COLORS.SECONDARY,
+                  fontFamily: "PoppinsMedium",
+                }}
               >
                 Select Location
               </Text>
             )}
           </TouchableOpacity>
-          <Icon name="chevron-down" size={18} color={COLORS.PRIMARY} />
+          <Icon name="chevron-down" size={14} color={COLORS.SECONDARY} />
         </View>
       </View>
     );
@@ -163,6 +176,9 @@ const TabNavigator: React.FC = () => {
             headerTitle: "",
             headerLeft: () => <CustomHeaderLeft />,
             headerRight: () => <HomeHeaderRight navigation={navigation} />,
+            headerStyle: {
+              backgroundColor: COLORS.PRIMARY,
+            },
           }}
         />
         <Tab.Screen

@@ -32,7 +32,7 @@ const WalletModal: React.FC<walletModalProps> = ({
             <Text style={styles.walletTitle}>
               {isBonus ? "Bonus Wallet Balance" : "Wallet Balance"}
             </Text>
-            <Text style={styles.walletFunds}>GH₵ {balance}.00</Text>
+            <Text style={styles.walletFunds}>GH₵ {balance.toFixed(2)}</Text>
           </View>
           <View style={styles.walletIcon}>
             <Icon name="wallet" color={COLORS.PRIMARY} size={36} />

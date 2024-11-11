@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { TouchableOpacity } from "react-native";
 import { Icon, withBadge } from "react-native-elements";
 import { useApp } from "../../context/AppContext";
+import { COLORS } from "../../utils/color";
 
 const HomeHeaderRight = ({ navigation }: { navigation: any }) => {
   const { user, unreadNotifications, updateUnreadNotificationCount } = useApp();
@@ -21,10 +22,22 @@ const HomeHeaderRight = ({ navigation }: { navigation: any }) => {
         flexDirection: "row",
         gap: 10,
         alignItems: "center",
+        marginRight: 5,
       }}
       onPress={() => navigation.navigate("Notifications")}
     >
-      <BadgedIcon name="notifications" type="ionicon" size={25} />
+      <BadgedIcon
+        style={{
+          backgroundColor: COLORS.GRAY_DARK,
+          padding: 5,
+          borderRadius: 5,
+        }}
+        name="notifications"
+        type="ionicon"
+        size={25}
+        color={COLORS.SECONDARY}
+        status="primary"
+      />
     </TouchableOpacity>
   );
 };

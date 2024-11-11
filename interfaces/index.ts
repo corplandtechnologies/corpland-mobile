@@ -6,7 +6,7 @@ export interface authOptionProps {
 
 export interface walletModalProps {
   isDeposit: boolean;
-  balance: number | string;
+  balance: number;
   onPress: () => void;
   actionButtonText: string;
   isWallet?: boolean;
