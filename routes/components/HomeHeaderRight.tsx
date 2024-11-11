@@ -22,20 +22,19 @@ const HomeHeaderRight = ({ navigation }: { navigation: any }) => {
         flexDirection: "row",
         gap: 10,
         alignItems: "center",
-        marginRight: 5,
       }}
       onPress={() => navigation.navigate("Notifications")}
     >
       <BadgedIcon
         style={{
-          backgroundColor: COLORS.GRAY_DARK,
+          backgroundColor: COLORS.GRAY_LIGHT,
           padding: 5,
           borderRadius: 5,
         }}
         name="notifications"
         type="ionicon"
         size={25}
-        color={COLORS.SECONDARY}
+        color={COLORS.PRIMARY}
         status="primary"
       />
     </TouchableOpacity>

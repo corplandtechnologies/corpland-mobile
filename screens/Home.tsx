@@ -289,7 +289,6 @@ const Home = () => {
         }}
         scrollEventThrottle={50}
       >
-        <StatusBar style="light" />
         {/* <UserInfo navigation={navigation} /> */}
         <View style={styles.searchView}>
           <FormInput
@@ -300,7 +299,6 @@ const Home = () => {
             onChangeText={setSearch}
             loading={searchLoading}
             onPress={() => handleSearch(setSearchLoading)}
-            isSecondaryButton
           />
         </View>
         <View style={styles.mainView}>
@@ -490,9 +488,8 @@ const styles = StyleSheet.create({
     color: COLORS.GRAY_LIGHT,
   },
   searchView: {
-    backgroundColor: COLORS.PRIMARY,
     paddingHorizontal: 10,
-    paddingVertical: 20,
+    paddingVertical: 10,
     borderBottomEndRadius: 10,
     borderBottomStartRadius: 10,
   },
