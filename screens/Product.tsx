@@ -38,8 +38,9 @@ import { useApp } from "../context/AppContext";
 import CartContext from "../context/CartContext";
 import AuthModal from "../components/auth/AuthModal";
 import MainView from "../components/elements/Views/MainView";
-import { blurhash, formatPrice } from "../utils";
+import { blurhash, formatPrice, textTruncate } from "../utils";
 import PopUpCard from "../components/PopUpCard";
+import TextElement from "../components/elements/Texts/TextElement";
 
 const Product = ({ route }) => {
   const { user: currentUser } = useApp();
@@ -59,6 +60,11 @@ const Product = ({ route }) => {
   const productImages = product?.images || product?.image;
   const { addProductToCart }: any = useContext(CartContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const toggleDescription = () => {
+    setShowFullDescription((prev) => !prev);
+  };
 
   const handleBuyNow = () => {
     const productDetails = {
@@ -277,8 +283,8 @@ const Product = ({ route }) => {
               </View>
             )}
             <View style={styles.slideUp}>
-              <View style={{ padding: 10, gap: 10 }}>
-                <View style={styles.bar}></View>
+              <View style={{ gap: 10 }}>
+                {/* <View style={styles.bar}></View> */}
 
                 {isLoading ? (
                   <ActivityIndicator size={20} color={COLORS.PRIMARY} />
@@ -288,6 +294,7 @@ const Product = ({ route }) => {
                       <View style={{ flex: 4 }}>
                         <Text style={styles.titleText}>{product?.title}</Text>
                       </View>
+
                       <View style={styles.actionView}>
                         <TouchableOpacity>
                           <Icon
@@ -312,51 +319,113 @@ const Product = ({ route }) => {
                           />
                         </TouchableOpacity>
                       </View>
+
                       {product?.userId === currentUser?._id && (
                         <TouchableOpacity onPress={showModal}>
                           <Icon name="trash" size={24} color={"red"} />
                         </TouchableOpacity>
                       )}
                     </View>
-                    <View>
-                      <Text style={styles.descTitle}>Product Details</Text>
-                      <Text style={styles.desc}>{product?.description}</Text>
-                    </View>
-                    <View>
-                      <View style={styles.avatarContainer}>
-                        {user?.profilePicture ? (
-                          <Avatar.Image
-                            size={50}
-                            source={{ uri: user?.profilePicture }}
-                          />
-                        ) : (
-                          <Avatar.Image
-                            size={50}
-                            source={{
-                              uri: "https://ik.imagekit.io/4hxqb9ldw/user.png?updatedAt=1725434780558",
-                            }}
-                          />
-                        )}
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            maxWidth: "90%",
-                            gap: 5,
-                          }}
-                        >
-                          <Text style={styles.AvatarText}>{user?.name}</Text>
-                          {user?.verified && (
-                            <Icon
-                              name="checkmark-circle"
-                              size={18}
-                              color={COLORS.PRIMARY}
+                    <View style={{ flexDirection: "row" }}>
+                      <View>
+                        <View style={{ marginBottom: -10 }}>
+                          <TextElement fontSize={14}>Seller</TextElement>
+                        </View>
+                        <View>
+                          <View style={styles.avatarContainer}>
+                            <Avatar.Image
+                              size={50}
+                              source={{
+                                uri:
+                                  user?.profilePicture ||
+                                  "https://ik.imagekit.io/4hxqb9ldw/user.png?updatedAt=1725434780558",
+                              }}
                             />
-                          )}
+
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                maxWidth: "90%",
+                                gap: 5,
+                              }}
+                            >
+                              <View>
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    justifyContent: "center",
+                                    gap: 10,
+                                  }}
+                                >
+                                  <Text style={styles.AvatarText}>
+                                    {user?.name}
+                                  </Text>
+                                  {user?.verified && (
+                                    <Icon
+                                      name="checkmark-circle"
+                                      size={18}
+                                      color={COLORS.PRIMARY}
+                                    />
+                                  )}
+                                </View>
+                                <TextElement
+                                  fontFamily="PoppinsMedium"
+                                  color={COLORS.GRAY}
+                                  fontSize={14}
+                                >
+                                  Manager
+                                </TextElement>
+                              </View>
+                            </View>
+                          </View>
                         </View>
                       </View>
+                      <View
+                        style={{
+                          flex: 1,
+
+                          alignItems: "flex-end",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <TouchableOpacity style={styles.actionButtonView}>
+                          <Icon
+                            name="call"
+                            size={20}
+                            color={COLORS.PRIMARY}
+                            onPress={() => {
+                              if (!currentUser) {
+                                setModalVisible(true);
+                              } else {
+                                handleCallNow();
+                              }
+                            }}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     </View>
+                    <View style={{ gap: 10 }}>
+                      <Text style={styles.descTitle}>Product Details</Text>
+                      <Text style={styles.desc}>
+                        {showFullDescription
+                          ? product?.description
+                          : product?.description.slice(0, 100)}
+                        {/* Display first 100 characters */}
+                        {product?.description.length > 100 && (
+                          <Text
+                            onPress={toggleDescription}
+                            style={styles.readMoreText}
+                          >
+                            {showFullDescription
+                              ? " Show less"
+                              : " ...Read more"}
+                          </Text>
+                        )}
+                      </Text>
+                    </View>
+
                     <View style={styles.bottomContainer}>
                       <View style={styles.priceView}>
                         <Text style={styles.priceText}>
@@ -424,7 +493,7 @@ const Product = ({ route }) => {
                               <ProductItem
                                 key={result._id}
                                 image={result.images[0]}
-                                title={result.title}
+                                title={textTruncate(result.title)}
                                 price={formatPrice(result.price)}
                                 region={result.region}
                                 description={result.description}
@@ -483,6 +552,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.SECONDARY,
     borderTopLeftRadius: 30,
     height: "100%",
+    paddingHorizontal: 20,
+    paddingVertical: 40,
   },
   bar: {
     height: 5,
@@ -516,6 +587,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     gap: 10,
     width: "100%",
+    flex: 3,
   },
   bottomContainer: {
     flexDirection: "row",
@@ -571,6 +643,16 @@ const styles = StyleSheet.create({
   actionView: {
     flexDirection: "row",
     gap: 10,
+  },
+  readMoreText: {
+    textDecorationLine: "underline",
+    color: COLORS.PRIMARY,
+    fontFamily: "PoppinsSemiBold",
+  },
+  actionButtonView: {
+    backgroundColor: COLORS.GRAY_LIGHT,
+    padding: 10,
+    borderRadius: 999,
   },
 });
 
