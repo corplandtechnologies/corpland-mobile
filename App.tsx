@@ -73,6 +73,7 @@ import WalkthroughTour from "./screens/Intro/WalkthroughTour";
 import React from "react";
 import messaging from "@react-native-firebase/messaging";
 import firebase from "@react-native-firebase/app";
+import { saveDevice } from "./api";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQAZsd74WSYymehytX8oGpZabbERSBNoU",
@@ -178,8 +179,8 @@ function App() {
         messaging()
           .getToken()
           .then((token) => {
-            console.log(token);
             token && storeExpoNotificationsPushToken(loggedInUser?._id, token);
+            token && saveDevice(token, Platform.OS);
           });
       } else {
         console.log("Permission not granted");

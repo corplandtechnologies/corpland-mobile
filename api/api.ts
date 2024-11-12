@@ -17,6 +17,13 @@ export const API = axios.create({
   withCredentials: true,
 });
 
+
+export const APIv2 = axios.create({
+  baseURL: "https://corpland-backend-v2.onrender.com/api/v1",
+  withCredentials: true,
+});
+
+
 const getToken = async () => {
   return await AsyncStorage.getItem("token");
 };

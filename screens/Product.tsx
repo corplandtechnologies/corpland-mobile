@@ -304,20 +304,6 @@ const Product = ({ route }) => {
                             onPress={shareProduct}
                           />
                         </TouchableOpacity>
-                        <TouchableOpacity>
-                          <Icon
-                            name="call-outline"
-                            size={24}
-                            color={COLORS.GRAY}
-                            onPress={() => {
-                              if (!currentUser) {
-                                setModalVisible(true);
-                              } else {
-                                handleCallNow();
-                              }
-                            }}
-                          />
-                        </TouchableOpacity>
                       </View>
 
                       {product?.userId === currentUser?._id && (
@@ -553,7 +539,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     height: "100%",
     paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingVertical: 20,
   },
   bar: {
     height: 5,
