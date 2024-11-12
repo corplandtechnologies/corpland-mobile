@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     height: "100%",
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingVertical: 40,
   },
   bar: {
     height: 5,
