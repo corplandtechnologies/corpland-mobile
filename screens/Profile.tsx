@@ -49,6 +49,7 @@ const Profile = () => {
       <ScrollView
         contentContainerStyle={{
           backgroundColor: COLORS.SECONDARY,
+          paddingBottom: 120 
         }}
         showsVerticalScrollIndicator={false}
       >

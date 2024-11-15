@@ -1,21 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { FC } from "react";
-import { COLORS } from "../utils/color";
+import { useTheme } from "../context/ThemeContext";
 
 interface UserHeaderProps {
   title: string;
   description: string;
 }
 const UserHeader: FC<UserHeaderProps> = ({ title, description }) => {
+  const { theme } = useTheme();
   return (
     <View>
-      <Text style={styles.pageTitle}>{title}</Text>
-      <Text style={styles.descriptiveText}>{description}</Text>
+      <Text style={[styles.pageTitle, { color: theme.TEXT }]}>{title}</Text>
+      <Text style={[styles.descriptiveText, { color: theme.GRAY }]}>{description}</Text>
     </View>
   );
 };
-
-export default UserHeader;
 
 const styles = StyleSheet.create({
   pageTitle: {
@@ -28,6 +27,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginBottom: 20,
-    color: COLORS.GRAY,
   },
 });
+
+export default UserHeader;

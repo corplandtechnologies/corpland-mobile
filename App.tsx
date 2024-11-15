@@ -74,6 +74,7 @@ import React from "react";
 import messaging from "@react-native-firebase/messaging";
 import firebase from "@react-native-firebase/app";
 import { saveDevice } from "./api";
+import { ThemeProvider } from "./context/ThemeContext";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQAZsd74WSYymehytX8oGpZabbERSBNoU",
@@ -325,502 +326,506 @@ function App() {
 
   return (
     <>
-      <StatusBar translucent={true} />
+      <StatusBar translucent={true} style="light" />
       <AppProvider>
-        <UserProvider>
-          <CartProvider>
-            <SellerModeProvider>
-              <SearchResultsProvider>
-                <ProductProvider>
-                  <NavigationContainer
-                    linking={{
-                      prefixes: [
-                        prefix,
-                        "https://corpland.corplandtechnologies.com",
-                        "corpland://",
-                      ],
-                      config: {
-                        screens: {
-                          Product: "product/:productId",
-                          // other screens...
+        <ThemeProvider>
+          <UserProvider>
+            <CartProvider>
+              <SellerModeProvider>
+                <SearchResultsProvider>
+                  <ProductProvider>
+                    <NavigationContainer
+                      linking={{
+                        prefixes: [
+                          prefix,
+                          "https://corpland.corplandtechnologies.com",
+                          "corpland://",
+                        ],
+                        config: {
+                          screens: {
+                            Product: "product/:productId",
+                            // other screens...
+                          },
                         },
-                      },
-                      async getInitialURL() {
-                        // First, you may want to do the default deep link handling
-                        // Check if app was opened from a deep link
-                        const url = await Linking.getInitialURL();
+                        async getInitialURL() {
+                          // First, you may want to do the default deep link handling
+                          // Check if app was opened from a deep link
+                          const url = await Linking.getInitialURL();
 
-                        if (url != null) {
-                          return url;
-                        }
+                          if (url != null) {
+                            return url;
+                          }
 
-                        // Handle URL from expo push notifications
-                        const response =
-                          await Notifications.getLastNotificationResponseAsync();
+                          // Handle URL from expo push notifications
+                          const response =
+                            await Notifications.getLastNotificationResponseAsync();
 
-                        return response?.notification.request.content.data.url;
-                      },
-                      subscribe(listener) {
-                        const onReceiveURL = ({ url }: { url: string }) =>
-                          listener(url);
+                          return response?.notification.request.content.data
+                            .url;
+                        },
+                        subscribe(listener) {
+                          const onReceiveURL = ({ url }: { url: string }) =>
+                            listener(url);
 
-                        // Listen to incoming links from deep linking
-                        const eventListenerSubscription =
-                          Linking.addEventListener("url", onReceiveURL);
+                          // Listen to incoming links from deep linking
+                          const eventListenerSubscription =
+                            Linking.addEventListener("url", onReceiveURL);
 
-                        // Listen to expo push notifications
-                        const subscription =
-                          Notifications.addNotificationResponseReceivedListener(
-                            (response) => {
-                              const url =
-                                response.notification.request.content.data.url;
+                          // Listen to expo push notifications
+                          const subscription =
+                            Notifications.addNotificationResponseReceivedListener(
+                              (response) => {
+                                const url =
+                                  response.notification.request.content.data
+                                    .url;
 
-                              // Any custom logic to see whether the URL needs to be handled
-                              //...
+                                // Any custom logic to see whether the URL needs to be handled
+                                //...
 
-                              // Let React Navigation handle the URL
-                              listener(url);
-                            }
-                          );
-
-                        return () => {
-                          // Clean up the event listeners
-                          eventListenerSubscription.remove();
-                          subscription.remove();
-                        };
-                      },
-                    }}
-                  >
-                    <Stack.Navigator initialRouteName={"TabNavigator"}>
-                      <Stack.Screen
-                        name="TabNavigator"
-                        options={{ headerShown: false }}
-                        component={TabNavigator}
-                      />
-                      <Stack.Screen
-                        name="Register"
-                        options={{ headerShown: false }}
-                        component={Register}
-                      />
-                      <Stack.Screen
-                        name="Login"
-                        options={{
-                          headerShown: false,
-                          headerTitle: "Sign In",
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={Login}
-                      />
-                      <Stack.Screen
-                        name="ForgotPassword"
-                        options={{ headerShown: false }}
-                        component={ForgotPassword}
-                      />
-                      <Stack.Screen
-                        name="OnBoarding"
-                        options={{ headerShown: false }}
-                        component={Onboarding}
-                      />
-                      <Stack.Screen
-                        name="Verify"
-                        options={{
-                          headerTitle: "",
-                          headerLeft: () => <BackButton />,
-                        }}
-                        component={Verify}
-                      />
-                      <Stack.Screen
-                        name="ResetPassword"
-                        options={{
-                          headerTitle: "",
-                          headerLeft: () => <BackButton />,
-                        }}
-                        component={ResetPassword}
-                      />
-                      <Stack.Screen
-                        name="VerifyEmailPasswordReset"
-                        options={{
-                          headerTitle: "",
-                          headerLeft: () => <BackButton />,
-                        }}
-                        component={VerifyEmailPasswordReset}
-                      />
-                      <Stack.Screen
-                        name="CompleteProfile"
-                        options={{
-                          headerTitle: "",
-                          headerLeft: () => <BackButton />,
-                        }}
-                        component={CompleteProfile}
-                      />
-                      <Stack.Screen
-                        name="ProductDisplay"
-                        component={ProductDisplay}
-                        options={({ route }: { route: any }) => ({
-                          headerTitle: route.params?.category || "Products",
-                          headerLeft: () => <BackButton />,
-                          headerTitleAlign: "center",
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                          },
-                        })}
-                      />
-                      <Stack.Screen
-                        name="ProductGrids"
-                        options={{
-                          headerTitle: "Products",
-                          headerLeft: () => <BackButton />,
-                          headerTitleAlign: "center",
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                          },
-                        }}
-                        component={ProductGrids}
-                      />
-                      <Stack.Screen
-                        name="Search"
-                        options={{
-                          headerTitle: "Results",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={Search}
-                      />
-                      <Stack.Screen
-                        name="Product"
-                        options={{
-                          headerTitle: Platform.OS === "web" ? "Details" : "",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton details={true} />,
-                          headerRight: () => {
-                            const { productId } = useProduct();
-
-                            return (
-                              <FavoriteIcon
-                                productId={productId} // Use the local state instead of the context
-                                style={{
-                                  padding: 15,
-                                  // marginRight: 10,
-                                }}
-                              />
+                                // Let React Navigation handle the URL
+                                listener(url);
+                              }
                             );
-                          },
-                          headerTransparent:
-                            Platform.OS === "web" ? false : true,
-                        }}
-                        component={Product}
-                      />
 
-                      <Stack.Screen
-                        name="Request"
-                        options={{
-                          headerTitle: Platform.OS === "web" ? "Details" : "",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton details={true} />,
-                          // headerRight: () => {
-                          //   const { productId } = useProduct();
+                          return () => {
+                            // Clean up the event listeners
+                            eventListenerSubscription.remove();
+                            subscription.remove();
+                          };
+                        },
+                      }}
+                    >
+                      <Stack.Navigator initialRouteName={"TabNavigator"}>
+                        <Stack.Screen
+                          name="TabNavigator"
+                          options={{ headerShown: false }}
+                          component={TabNavigator}
+                        />
+                        <Stack.Screen
+                          name="Register"
+                          options={{ headerShown: false }}
+                          component={Register}
+                        />
+                        <Stack.Screen
+                          name="Login"
+                          options={{
+                            headerShown: false,
+                            headerTitle: "Sign In",
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={Login}
+                        />
+                        <Stack.Screen
+                          name="ForgotPassword"
+                          options={{ headerShown: false }}
+                          component={ForgotPassword}
+                        />
+                        <Stack.Screen
+                          name="OnBoarding"
+                          options={{ headerShown: false }}
+                          component={Onboarding}
+                        />
+                        <Stack.Screen
+                          name="Verify"
+                          options={{
+                            headerTitle: "",
+                            headerLeft: () => <BackButton />,
+                          }}
+                          component={Verify}
+                        />
+                        <Stack.Screen
+                          name="ResetPassword"
+                          options={{
+                            headerTitle: "",
+                            headerLeft: () => <BackButton />,
+                          }}
+                          component={ResetPassword}
+                        />
+                        <Stack.Screen
+                          name="VerifyEmailPasswordReset"
+                          options={{
+                            headerTitle: "",
+                            headerLeft: () => <BackButton />,
+                          }}
+                          component={VerifyEmailPasswordReset}
+                        />
+                        <Stack.Screen
+                          name="CompleteProfile"
+                          options={{
+                            headerTitle: "",
+                            headerLeft: () => <BackButton />,
+                          }}
+                          component={CompleteProfile}
+                        />
+                        <Stack.Screen
+                          name="ProductDisplay"
+                          component={ProductDisplay}
+                          options={({ route }: { route: any }) => ({
+                            headerTitle: route.params?.category || "Products",
+                            headerLeft: () => <BackButton />,
+                            headerTitleAlign: "center",
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                            },
+                          })}
+                        />
+                        <Stack.Screen
+                          name="ProductGrids"
+                          options={{
+                            headerTitle: "Products",
+                            headerLeft: () => <BackButton />,
+                            headerTitleAlign: "center",
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                            },
+                          }}
+                          component={ProductGrids}
+                        />
+                        <Stack.Screen
+                          name="Search"
+                          options={{
+                            headerTitle: "Results",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={Search}
+                        />
+                        <Stack.Screen
+                          name="Product"
+                          options={{
+                            headerTitle: Platform.OS === "web" ? "Details" : "",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton details={true} />,
+                            headerRight: () => {
+                              const { productId } = useProduct();
 
-                          //   return (
-                          //     <FavoriteIcon
-                          //       productId={productId} // Use the local state instead of the context
-                          //       style={{
-                          //         padding: 15,
-                          //         // marginRight: 10,
-                          //       }}
-                          //     />
-                          //   );
-                          // },
-                          headerTransparent:
-                            Platform.OS === "web" ? false : true,
-                        }}
-                        component={Request}
-                      />
+                              return (
+                                <FavoriteIcon
+                                  productId={productId} // Use the local state instead of the context
+                                  style={{
+                                    padding: 15,
+                                    // marginRight: 10,
+                                  }}
+                                />
+                              );
+                            },
+                            headerTransparent:
+                              Platform.OS === "web" ? false : true,
+                          }}
+                          component={Product}
+                        />
 
-                      <Stack.Screen
-                        name="Categories"
-                        options={{
-                          headerTitle: "Categories",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={Categories}
-                      />
-                      <Stack.Screen
-                        name="EditProfile"
-                        options={{
-                          headerTitle: "",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                        }}
-                        component={EditProfile}
-                      />
-                      <Stack.Screen
-                        name="EditProduct"
-                        options={{
-                          headerTitle: "Edit Your Product",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                          },
-                        }}
-                        component={EditProduct}
-                      />
-                      <Stack.Screen
-                        name="EditRequest"
-                        options={{
-                          headerTitle: "Edit Your Request",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                          },
-                        }}
-                        component={EditRequest}
-                      />
-                      <Stack.Screen
-                        name="MyProducts"
-                        options={{
-                          headerTitle: "My Products",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={MyProducts}
-                      />
-                      <Stack.Screen
-                        name="MyRequests"
-                        options={{
-                          headerTitle: "My Requests",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={MyRequests}
-                      />
-                      <Stack.Screen
-                        name="Wallet"
-                        options={{
-                          headerTitle: "Wallet",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={Wallet}
-                      />
-                      <Stack.Screen
-                        name="Deposit"
-                        options={{
-                          headerTitle: "Deposit",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={Deposit}
-                      />
-                      <Stack.Screen
-                        name="CompleteDeposit"
-                        options={{
-                          headerTitle: "Complete Deposit",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={CompleteDeposit}
-                      />
-                      <Stack.Screen
-                        name="MyCoupons"
-                        options={{
-                          headerTitle: "My Coupons",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={MyCoupons}
-                      />
-                      <Stack.Screen
-                        name="Redeem"
-                        options={{
-                          headerTitle: "Redeem",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={Redeem}
-                      />
-                      <Stack.Screen
-                        name="Cart"
-                        options={{
-                          headerTitle: "Confirm Order",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={Cart}
-                      />
-                      <Stack.Screen
-                        name="OrderSuccess"
-                        options={{
-                          headerTitle: "",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={OrderSuccess}
-                      />
-                      <Stack.Screen
-                        name="TrackOrder"
-                        options={{
-                          headerTitle: "Track Order",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={TrackOrder}
-                      />
-                      <Stack.Screen
-                        name="Withdraw"
-                        options={{
-                          headerTitle: "Withdraw",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={Withdraw}
-                      />
-                      <Stack.Screen
-                        name="ConfirmWithdraw"
-                        options={{
-                          headerTitle: "Confirm Withdraw",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={ConfirmWithdraw}
-                      />
-                      <Stack.Screen
-                        name="ConfirmBonusWithdrawal"
-                        options={{
-                          headerTitle: "Withdraw Bonus",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={ConfirmBonusWithdrawal}
-                      />
-                      <Stack.Screen
-                        name="Settings"
-                        options={{
-                          headerTitle: "Settings",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={Settings}
-                      />
-                      <Stack.Screen
-                        name="PrivacyPolicy"
-                        options={{
-                          headerTitle: "Privacy Policy",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                        }}
-                        component={PrivacyPolicy}
-                      />
-                      <Stack.Screen
-                        name="Notifications"
-                        options={{
-                          headerTitle: "Notifications",
-                          headerTitleAlign: "center",
-                          headerLeft: () => <BackButton />,
-                          headerTitleStyle: {
-                            fontFamily: "PoppinsSemiBold",
-                            // borderWidth:8
-                          },
-                          // headerRight: () => (
-                          //   <TouchableOpacity
-                          //     style={{
-                          //       backgroundColor: COLORS.PRIMARY,
-                          //       paddingHorizontal: 15,
-                          //       paddingVertical: 10,
-                          //       borderRadius: 10,
-                          //       marginRight: 5,
-                          //       alignItems: "center",
-                          //       justifyContent: "center",
-                          //     }}
-                          //   >
-                          //     <TextElement color={COLORS.SECONDARY} textAlign="center">
-                          //       2 New
-                          //     </TextElement>
-                          //   </TouchableOpacity>
-                          // ),
-                        }}
-                        component={NotificationScreen}
-                      />
-                    </Stack.Navigator>
-                  </NavigationContainer>
-                </ProductProvider>
-              </SearchResultsProvider>
-            </SellerModeProvider>
-          </CartProvider>
-        </UserProvider>
+                        <Stack.Screen
+                          name="Request"
+                          options={{
+                            headerTitle: Platform.OS === "web" ? "Details" : "",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton details={true} />,
+                            // headerRight: () => {
+                            //   const { productId } = useProduct();
+
+                            //   return (
+                            //     <FavoriteIcon
+                            //       productId={productId} // Use the local state instead of the context
+                            //       style={{
+                            //         padding: 15,
+                            //         // marginRight: 10,
+                            //       }}
+                            //     />
+                            //   );
+                            // },
+                            headerTransparent:
+                              Platform.OS === "web" ? false : true,
+                          }}
+                          component={Request}
+                        />
+
+                        <Stack.Screen
+                          name="Categories"
+                          options={{
+                            headerTitle: "Categories",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={Categories}
+                        />
+                        <Stack.Screen
+                          name="EditProfile"
+                          options={{
+                            headerTitle: "",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                          }}
+                          component={EditProfile}
+                        />
+                        <Stack.Screen
+                          name="EditProduct"
+                          options={{
+                            headerTitle: "Edit Your Product",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                            },
+                          }}
+                          component={EditProduct}
+                        />
+                        <Stack.Screen
+                          name="EditRequest"
+                          options={{
+                            headerTitle: "Edit Your Request",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                            },
+                          }}
+                          component={EditRequest}
+                        />
+                        <Stack.Screen
+                          name="MyProducts"
+                          options={{
+                            headerTitle: "My Products",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={MyProducts}
+                        />
+                        <Stack.Screen
+                          name="MyRequests"
+                          options={{
+                            headerTitle: "My Requests",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={MyRequests}
+                        />
+                        <Stack.Screen
+                          name="Wallet"
+                          options={{
+                            headerTitle: "Wallet",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={Wallet}
+                        />
+                        <Stack.Screen
+                          name="Deposit"
+                          options={{
+                            headerTitle: "Deposit",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={Deposit}
+                        />
+                        <Stack.Screen
+                          name="CompleteDeposit"
+                          options={{
+                            headerTitle: "Complete Deposit",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={CompleteDeposit}
+                        />
+                        <Stack.Screen
+                          name="MyCoupons"
+                          options={{
+                            headerTitle: "My Coupons",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={MyCoupons}
+                        />
+                        <Stack.Screen
+                          name="Redeem"
+                          options={{
+                            headerTitle: "Redeem",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={Redeem}
+                        />
+                        <Stack.Screen
+                          name="Cart"
+                          options={{
+                            headerTitle: "Confirm Order",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={Cart}
+                        />
+                        <Stack.Screen
+                          name="OrderSuccess"
+                          options={{
+                            headerTitle: "",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={OrderSuccess}
+                        />
+                        <Stack.Screen
+                          name="TrackOrder"
+                          options={{
+                            headerTitle: "Track Order",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={TrackOrder}
+                        />
+                        <Stack.Screen
+                          name="Withdraw"
+                          options={{
+                            headerTitle: "Withdraw",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={Withdraw}
+                        />
+                        <Stack.Screen
+                          name="ConfirmWithdraw"
+                          options={{
+                            headerTitle: "Confirm Withdraw",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={ConfirmWithdraw}
+                        />
+                        <Stack.Screen
+                          name="ConfirmBonusWithdrawal"
+                          options={{
+                            headerTitle: "Withdraw Bonus",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={ConfirmBonusWithdrawal}
+                        />
+                        <Stack.Screen
+                          name="Settings"
+                          options={{
+                            headerTitle: "Settings",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={Settings}
+                        />
+                        <Stack.Screen
+                          name="PrivacyPolicy"
+                          options={{
+                            headerTitle: "Privacy Policy",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={PrivacyPolicy}
+                        />
+                        <Stack.Screen
+                          name="Notifications"
+                          options={{
+                            headerTitle: "Notifications",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                            // headerRight: () => (
+                            //   <TouchableOpacity
+                            //     style={{
+                            //       backgroundColor: COLORS.PRIMARY,
+                            //       paddingHorizontal: 15,
+                            //       paddingVertical: 10,
+                            //       borderRadius: 10,
+                            //       marginRight: 5,
+                            //       alignItems: "center",
+                            //       justifyContent: "center",
+                            //     }}
+                            //   >
+                            //     <TextElement color={COLORS.SECONDARY} textAlign="center">
+                            //       2 New
+                            //     </TextElement>
+                            //   </TouchableOpacity>
+                            // ),
+                          }}
+                          component={NotificationScreen}
+                        />
+                      </Stack.Navigator>
+                    </NavigationContainer>
+                  </ProductProvider>
+                </SearchResultsProvider>
+              </SellerModeProvider>
+            </CartProvider>
+          </UserProvider>
+        </ThemeProvider>
       </AppProvider>
     </>
   );

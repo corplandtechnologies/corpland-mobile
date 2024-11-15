@@ -159,6 +159,7 @@ const TabNavigator: React.FC = () => {
           name="Home"
           component={Home}
           options={{
+            tabBarShowLabel: false,
             tabBarIcon: "home",
             headerTitle: "",
             headerLeft: () => <CustomHeaderLeft />,

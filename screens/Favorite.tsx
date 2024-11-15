@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     gap: 10,
     width: "100%",
     justifyContent: "center",
+    marginBottom: 120,
   },
   emptyContainer: {
     flex: 1,

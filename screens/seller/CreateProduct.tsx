@@ -239,7 +239,12 @@ const CreateProduct = () => {
   };
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 120,
+        }}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.wrapper}>
           <Select
             touchableText={selectedCategory || "Category*"} // Display the selected category or the placeholder text

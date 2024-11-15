@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { FC } from "react";
-import { COLORS } from "../../../utils/color";
 import { ViewProps } from "../../../interfaces";
+import { useTheme } from "../../../context/ThemeContext";
 
 const MainView: FC<ViewProps> = ({ children, style, padding }) => {
+  const { theme } = useTheme();
   return (
     <View
       style={[
         {
-          backgroundColor: COLORS.SECONDARY,
+          backgroundColor: theme.BACKGROUND,
           height: "100%",
           padding: padding,
         },

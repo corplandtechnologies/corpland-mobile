@@ -262,6 +262,9 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 120,
+        }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

@@ -61,6 +61,10 @@ const Active = () => {
 
   return (
     <ScrollView
+      contentContainerStyle={{
+        marginBottom: 120,
+        height: "100%",
+      }}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
@@ -75,7 +79,6 @@ const Active = () => {
           }}
         />
       }
-      contentContainerStyle={{ height: "100%" }}
     >
       <MainView style={{}}>
         {loading ? (

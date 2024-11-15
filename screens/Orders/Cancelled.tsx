@@ -69,7 +69,10 @@ const Cancelled = () => {
           }}
         />
       }
-      contentContainerStyle={{ height: "100%" }}
+      contentContainerStyle={{
+        marginBottom: 120,
+        height: "100%",
+      }}
     >
       <MainView>
         {loading ? (
