@@ -326,7 +326,7 @@ function App() {
 
   return (
     <>
-      <StatusBar translucent={true} style="light" />
+      <StatusBar translucent={true} />
       <AppProvider>
         <ThemeProvider>
           <UserProvider>
