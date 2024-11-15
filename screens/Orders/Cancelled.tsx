@@ -70,7 +70,7 @@ const Cancelled = () => {
         />
       }
       contentContainerStyle={{
-        marginBottom: 120,
+        marginBottom: 100,
         height: "100%",
       }}
     >

@@ -241,7 +241,7 @@ const CreateProduct = () => {
     <View style={styles.container}>
       <ScrollView
         contentContainerStyle={{
-          paddingBottom: 120,
+          paddingBottom: 100,
         }}
         showsVerticalScrollIndicator={false}
       >
