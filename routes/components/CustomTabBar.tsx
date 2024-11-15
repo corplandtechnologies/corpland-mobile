@@ -14,13 +14,14 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
+import AnimatedView from "../../components/animated/AnimatedView";
 
 const { width } = Dimensions.get("window");
 const tabsLength = 5;
 const MARGIN = 16;
 const TAB_BAR_WIDTH = width - MARGIN * 2;
 const PADDING = 10;
-const TAB_WIDTH = (TAB_BAR_WIDTH - (PADDING * 2)) / tabsLength;
+const TAB_WIDTH = (TAB_BAR_WIDTH - PADDING * 2) / tabsLength;
 const CustomTabBar: React.FC<BottomTabBarProps> = ({
   state,
   descriptors,
@@ -29,8 +30,8 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
   const [translateX] = useState(new RNAnimated.Value(0));
 
   const translateTab = (index: number) => {
-    const targetTranslation = PADDING + (index * TAB_WIDTH);
-    
+    const targetTranslation = PADDING + index * TAB_WIDTH;
+
     RNAnimated.spring(translateX, {
       toValue: targetTranslation,
       useNativeDriver: true,
@@ -42,78 +43,83 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
   }, [state.index]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.tabBar}>
-        <RNAnimated.View
-          style={[styles.slidingBarContainer, { transform: [{ translateX }] }]}
-        />
-        {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? (options.tabBarLabel as string)
-              : options.title !== undefined
-              ? options.title
-              : route.name;
+    <AnimatedView>
+      <View style={styles.container}>
+        <View style={styles.tabBar}>
+          <RNAnimated.View
+            style={[
+              styles.slidingBarContainer,
+              { transform: [{ translateX }] },
+            ]}
+          />
+          {state.routes.map((route, index) => {
+            const { options } = descriptors[route.key];
+            const label =
+              options.tabBarLabel !== undefined
+                ? (options.tabBarLabel as string)
+                : options.title !== undefined
+                ? options.title
+                : route.name;
 
-          const isFocused = state.index === index;
+            const isFocused = state.index === index;
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: "tabPress",
-              target: route.key,
-              canPreventDefault: true,
-            });
+            const onPress = () => {
+              const event = navigation.emit({
+                type: "tabPress",
+                target: route.key,
+                canPreventDefault: true,
+              });
 
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
-            }
-          };
-
-          const onLongPress = () => {
-            navigation.emit({
-              type: "tabLongPress",
-              target: route.key,
-            });
-          };
-
-          const animatedStyle = useAnimatedStyle(() => {
-            return {
-              transform: [
-                {
-                  scale: withSpring(isFocused ? 1.2 : 1),
-                },
-              ],
+              if (!isFocused && !event.defaultPrevented) {
+                navigation.navigate(route.name);
+              }
             };
-          });
 
-          return (
-            <TouchableOpacity
-              accessibilityRole="button"
-              accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
-              onPress={onPress}
-              onLongPress={onLongPress}
-              style={styles.tab}
-              key={index}
-            >
-              <Animated.View style={animatedStyle}>
-                <Icon
-                  name={
-                    isFocused
-                      ? (options.tabBarIcon as any)
-                      : `${options.tabBarIcon}-outline`
-                  }
-                  color={isFocused ? COLORS.PRIMARY : COLORS.TERTIARY}
-                  size={25}
-                />
-              </Animated.View>
-            </TouchableOpacity>
-          );
-        })}
+            const onLongPress = () => {
+              navigation.emit({
+                type: "tabLongPress",
+                target: route.key,
+              });
+            };
+
+            const animatedStyle = useAnimatedStyle(() => {
+              return {
+                transform: [
+                  {
+                    scale: withSpring(isFocused ? 1.2 : 1),
+                  },
+                ],
+              };
+            });
+
+            return (
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityState={isFocused ? { selected: true } : {}}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={onPress}
+                onLongPress={onLongPress}
+                style={styles.tab}
+                key={index}
+              >
+                <Animated.View style={animatedStyle}>
+                  <Icon
+                    name={
+                      isFocused
+                        ? (options.tabBarIcon as any)
+                        : `${options.tabBarIcon}-outline`
+                    }
+                    color={isFocused ? COLORS.PRIMARY : COLORS.TERTIARY}
+                    size={25}
+                  />
+                </Animated.View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
-    </View>
+    </AnimatedView>
   );
 };
 
