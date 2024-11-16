@@ -26,6 +26,7 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { createObjectURL } from "../../utils";
 import { useApp } from "../../context/AppContext";
+import { Checkbox } from "react-native-paper";
 
 const EditProduct = ({ route }) => {
   const { user } = useApp();
@@ -54,6 +55,11 @@ const EditProduct = ({ route }) => {
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [includeDiscount, setIncludeDiscount] = useState(!!product.originalPrice);
+  const [originalPrice, setOriginalPrice] = useState(
+    product.originalPrice?.toString() || product.price.toString()
+  );
+  const [discountedPrice, setDiscountedPrice] = useState(product.price.toString());
 
   const navigation = useNavigation();
 
@@ -175,6 +181,16 @@ const EditProduct = ({ route }) => {
     setSelectedFiles(newImages);
   };
 
+  const handleOriginalPriceChange = (text) => {
+    const newPrice = text.replace(/[^0-9]/g, "");
+    setOriginalPrice(newPrice);
+  };
+
+  const handleDiscountedPriceChange = (text) => {
+    const newPrice = text.replace(/[^0-9]/g, "");
+    setDiscountedPrice(newPrice);
+  };
+
   const handleSubmit = async () => {
     if (images.length === 0) {
       setSnackbarMessage("You need at least one photo!");
@@ -190,7 +206,8 @@ const EditProduct = ({ route }) => {
         country: selectedCountry || product.country,
         region: selectedRegion || product.region,
         category: selectedCategory || product.category,
-        price: price || product.price,
+        price: includeDiscount ? discountedPrice : originalPrice,
+        originalPrice: includeDiscount ? originalPrice : null,
         userId: user._id || product.userId,
         status: "In Review",
       };
@@ -202,7 +219,8 @@ const EditProduct = ({ route }) => {
         country: selectedCountry || product.country,
         region: selectedRegion || product.region,
         category: selectedCategory || product.category,
-        price: price || product.price,
+        price: includeDiscount ? discountedPrice : originalPrice,
+        originalPrice: includeDiscount ? originalPrice : null,
         userId: user._id || product.userId,
         status: "In Review",
       };
@@ -354,15 +372,46 @@ const EditProduct = ({ route }) => {
             multiline={true}
             defaultValue={product.description}
           />
-          <FormInput
-            placeholder="Price(GH₵)*"
-            onChangeText={handlePriceChange}
-            icon="money"
-            style={styles.textInputDesc}
-            multiline={true}
-            keyboardType="numeric"
-            defaultValue={product.price.toString()}
-          />
+          <View style={styles.checkboxContainer}>
+            <Checkbox
+              status={includeDiscount ? 'checked' : 'unchecked'}
+              onPress={() => setIncludeDiscount(!includeDiscount)}
+              color={COLORS.PRIMARY}
+            />
+            <Text style={styles.checkboxLabel}>Include discount</Text>
+          </View>
+          {includeDiscount ? (
+            <>
+              <FormInput
+                placeholder="Original Price (GH₵)*"
+                onChangeText={handleOriginalPriceChange}
+                icon="money"
+                style={styles.textInputDesc}
+                multiline={true}
+                keyboardType="numeric"
+                defaultValue={originalPrice}
+              />
+              <FormInput
+                placeholder="Discounted Price (GH₵)*"
+                onChangeText={handleDiscountedPriceChange}
+                icon="money"
+                style={styles.textInputDesc}
+                multiline={true}
+                keyboardType="numeric"
+                defaultValue={discountedPrice}
+              />
+            </>
+          ) : (
+            <FormInput
+              placeholder="Price (GH₵)*"
+              onChangeText={handleOriginalPriceChange}
+              icon="money"
+              style={styles.textInputDesc}
+              multiline={true}
+              keyboardType="numeric"
+              defaultValue={originalPrice}
+            />
+          )}
           <TouchableOpacity>
             <PrimaryButton
               value="Post"
@@ -445,6 +494,15 @@ const styles = StyleSheet.create({
   removeImageText: {
     fontSize: 16,
     color: COLORS.SECONDARY,
+    fontFamily: "PoppinsRegular",
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  checkboxLabel: {
+    marginLeft: 8,
     fontFamily: "PoppinsRegular",
   },
 });

@@ -239,6 +239,7 @@ export const createProduct = async (newProduct: any) => {
   formData.append("country", newProduct.country);
   formData.append("region", newProduct.region);
   formData.append("price", newProduct.price);
+  formData.append("originalPrice", newProduct.originalPrice);
   formData.append("userId", newProduct.userId);
   if (Platform.OS === "web") {
     newProduct.images.map((image: any) => {
@@ -271,6 +272,7 @@ export const updateProduct = async (newProduct: any, id: any) => {
   formData.append("country", newProduct.country);
   formData.append("region", newProduct.region);
   formData.append("price", newProduct.price);
+  formData.append("originalPrice", newProduct.originalPrice);
   formData.append("userId", newProduct.userId);
   formData.append("status", newProduct.status);
 

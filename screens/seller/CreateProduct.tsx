@@ -13,7 +13,7 @@ import Card from "../../components/ui/Card";
 import Input from "../../components/ui/Input";
 import { StyleSheet } from "react-native";
 import { COLORS } from "../../utils/color";
-import { Button, TextInput } from "react-native-paper";
+import { Button, Checkbox, TextInput } from "react-native-paper";
 import Select from "../../components/ui/Select";
 import * as ImagePicker from "expo-image-picker";
 import { categories, regionsByCountry } from "../../data/default";
@@ -46,15 +46,22 @@ const CreateProduct = () => {
   const [selectedRegion, setSelectedRegion] = useState("");
   const [countryOptions, setCountryOptions] = useState<string[]>([]);
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
-  const [price, setPrice] = useState("");
+  const [includeDiscount, setIncludeDiscount] = useState(false);
+  const [originalPrice, setOriginalPrice] = useState("");
+  const [discountedPrice, setDiscountedPrice] = useState("");
   const [user, setUser] = useState<object>({});
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
-  const handlePriceChange = (text) => {
+  const handleOriginalPriceChange = (text: string) => {
     const newPrice = text.replace(/[^0-9]/g, "");
-    setPrice(newPrice);
+    setOriginalPrice(newPrice);
+  };
+
+  const handleDiscountedPriceChange = (text: string) => {
+    const newPrice = text.replace(/[^0-9]/g, "");
+    setDiscountedPrice(newPrice);
   };
 
   useFocusEffect(
@@ -76,7 +83,7 @@ const CreateProduct = () => {
 
   useEffect(() => {
     return () => {
-      selectedFiles?.forEach((image) => {
+      selectedFiles?.forEach((image: any) => {
         URL.revokeObjectURL(createObjectURL(image));
       });
     };
@@ -202,7 +209,8 @@ const CreateProduct = () => {
         country: selectedCountry,
         region: selectedRegion,
         category: selectedCategory,
-        price: price,
+        price: includeDiscount ? discountedPrice : originalPrice,
+        originalPrice: includeDiscount ? originalPrice : null,
         userId: user._id,
       };
       const newWebProduct = {
@@ -212,7 +220,8 @@ const CreateProduct = () => {
         country: selectedCountry,
         region: selectedRegion,
         category: selectedCategory,
-        price: price,
+        price: includeDiscount ? discountedPrice : originalPrice,
+        originalPrice: includeDiscount ? originalPrice : null,
         userId: user._id,
       };
 
@@ -227,7 +236,8 @@ const CreateProduct = () => {
       setImages([]);
       setSelectedCountry("");
       setSelectedRegion("");
-      setPrice("");
+      setOriginalPrice("");
+      setDiscountedPrice("");
     } catch (error) {
       console.log(error);
       setSnackbarMessage(error);
@@ -348,14 +358,47 @@ const CreateProduct = () => {
             style={styles.textInputDesc}
             multiline={true}
           />
-          <FormInput
-            placeholder="Price(GH₵)*"
-            onChangeText={handlePriceChange}
-            icon="money"
-            style={styles.textInputDesc}
-            multiline={true}
-            keyboardType="numeric"
-          />
+          <View style={styles.checkboxContainer}>
+            <Checkbox
+              status={includeDiscount ? "checked" : "unchecked"}
+              onPress={() => setIncludeDiscount(!includeDiscount)}
+              color={COLORS.PRIMARY}
+            />
+            <Text style={styles.checkboxLabel}>Include discount</Text>
+          </View>
+
+          {includeDiscount ? (
+            <>
+              <FormInput
+                placeholder="Original Price (GH₵)*"
+                onChangeText={handleOriginalPriceChange}
+                icon="money"
+                style={styles.textInputDesc}
+                multiline={true}
+                keyboardType="numeric"
+                value={originalPrice}
+              />
+              <FormInput
+                placeholder="Discounted Price (GH₵)*"
+                onChangeText={handleDiscountedPriceChange}
+                icon="money"
+                style={styles.textInputDesc}
+                multiline={true}
+                keyboardType="numeric"
+                value={discountedPrice}
+              />
+            </>
+          ) : (
+            <FormInput
+              placeholder="Price (GH₵)*"
+              onChangeText={handleOriginalPriceChange}
+              icon="money"
+              style={styles.textInputDesc}
+              multiline={true}
+              keyboardType="numeric"
+              value={originalPrice}
+            />
+          )}
           <TouchableOpacity>
             <PrimaryButton
               value="Post"
@@ -448,6 +491,15 @@ const styles = StyleSheet.create({
   removeImageText: {
     fontSize: 16,
     color: COLORS.SECONDARY,
+    fontFamily: "PoppinsRegular",
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  checkboxLabel: {
+    marginLeft: 8,
     fontFamily: "PoppinsRegular",
   },
 });
