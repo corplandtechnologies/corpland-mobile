@@ -91,31 +91,26 @@ const Profile = () => {
             iconName="pricetags-outline"
             onPress={() => navigation.navigate("MyProducts")}
           />
-          <ProfileMenuItem
+          {/* <ProfileMenuItem
             title="My Requests"
             iconName="paper-plane-outline"
             onPress={() => navigation.navigate("MyRequests")}
-          />
-          <ProfileMenuItem
+          /> */}
+          {/* <ProfileMenuItem
             title="Wallet"
             iconName="wallet-outline"
             onPress={() => navigation.navigate("Wallet")}
-          />
-          <ProfileMenuItem
+          /> */}
+          {/* <ProfileMenuItem
             title="Withdraw"
             iconName="card-outline"
             onPress={() => navigation.navigate("Withdraw")}
-          />
-          <ProfileMenuItem
+          /> */}
+          {/* <ProfileMenuItem
             title="My Coupons"
             iconName="ticket-outline"
             onPress={() => navigation.navigate("MyCoupons")}
-          />
-          {/* <ProfileMenuItem
-          title="Settings"
-          iconName="settings-outline"
-          onPress={() => console.log("Settings pressed")}
-        /> */}
+          /> */}
           <ProfileMenuItem
             title="Send Feedback"
             iconName="mail-outline"

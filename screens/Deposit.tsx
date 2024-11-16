@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Linking, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import { COLORS } from "../utils/color";
 import WalletModal from "../components/WalletModal";
@@ -25,10 +25,10 @@ const Deposit = () => {
     }
     setLoading(true);
     try {
-      await deposit(user?.email, amount, user?._id);
+      const res = await deposit(user?.email, amount, user?._id);
       setSnackbarVisible(true);
       setSnackbarMessage("Authorization URL sent successfully!");
-      navigation.navigate("CompleteDeposit");
+      Linking.openURL(res.data?.authorizationUrl);
     } catch (error) {
       console.log(error);
       setSnackbarMessage(handleError(error));

@@ -174,10 +174,10 @@ const OrderSummary = () => {
       <PopUpCard
         visible={isModalVisible}
         title="Select Your Payment Method"
-        actionText="Main Account"
+        // actionText="Main Account"
         onPress={() => handleOrder(setMainAccountPurchaseLoading)}
         onClose={() => setIsModalVisible(false)}
-        isDoubleAction={true}
+        // isDoubleAction={true}
         secondaryActionText="Bonus Wallet"
         secondaryAction={() => handleBonusOrder(setBonusWalletPurchaseLoading)}
         secondaryActionLoading={bonusWalletPurchaseLoading}

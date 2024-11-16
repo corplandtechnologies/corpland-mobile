@@ -18,8 +18,8 @@ interface PopUpCardProps {
   visible: boolean;
   onClose: () => void;
   title: string;
-  actionText: string;
-  onPress: () => void;
+  actionText?: string;
+  onPress?: () => void;
   loading?: boolean;
   secondaryAction?: () => void;
   secondaryActionText?: string;
@@ -115,11 +115,13 @@ const PopUpCard: FC<PopUpCardProps> = ({
                 )}
               </View>
               <View style={{ gap: 10 }}>
-                <PrimaryButton
-                  value={actionText}
-                  loading={loading}
-                  onPress={onPress}
-                />
+                {actionText && (
+                  <PrimaryButton
+                    value={actionText}
+                    loading={loading}
+                    onPress={onPress}
+                  />
+                )}
                 {isDoubleAction ? (
                   <PrimaryButton
                     secondary
