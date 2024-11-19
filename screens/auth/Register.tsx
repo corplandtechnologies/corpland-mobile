@@ -299,7 +299,7 @@ const Register = () => {
           />
         </>
          )}  */}
-        {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
+        {/* <TouchableOpacity onPress={() => }>
           <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
       </View>

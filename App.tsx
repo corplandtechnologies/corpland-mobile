@@ -220,7 +220,7 @@ function App() {
   //       }
   //       token && setExpoPushToken(token);
   //     })
-  //     .catch((err) => console.log(err));
+  //     .catch((err) => );
 
   //   if (Platform.OS === "android") {
   //     Notifications.getNotificationChannelsAsync().then((value) =>
@@ -310,7 +310,6 @@ function App() {
       setUser(currentUser);
       setInitialRoute("TabNavigator");
     } catch (error) {
-      console.error("Error checking auth status:", error);
       setInitialRoute("Login");
     }
   };
@@ -328,7 +327,6 @@ function App() {
           }
         }
       } catch (error) {
-        console.error("App initialization failed:", error);
       } finally {
         setIsLoading(false);
       }

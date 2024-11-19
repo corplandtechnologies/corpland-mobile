@@ -53,7 +53,7 @@
 //           return Linking.openURL(dialUrl);
 //         }
 //       })
-//       .catch((err) => console.error("An error occurred", err));
+//       .catch((err) => );
 //   };
 
 //   useEffect(() => {

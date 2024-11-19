@@ -452,8 +452,6 @@ export const storeExpoNotificationsPushToken = (
   userId: string,
   deviceToken: string
 ) => {
-  console.log("userId in Aipi", userId);
-
   API.post(`/users/register-token`, {
     userId: userId,
     deviceToken: deviceToken,

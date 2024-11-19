@@ -26,7 +26,6 @@ const VerifyEmailPasswordReset = ({ route }: { route: Route }) => {
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const userEmail = route.params.email;
-  console.log("email", userEmail);
 
   const navigation: any = useNavigation();
 

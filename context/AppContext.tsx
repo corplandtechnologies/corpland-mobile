@@ -91,9 +91,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         await authService.setUser(updatedUserData);
         setUserState(updatedUserData);
       }
-    } catch (error) {
-      console.error('Error refreshing user data:', error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

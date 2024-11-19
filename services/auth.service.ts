@@ -74,7 +74,7 @@ class AuthService {
     try {
       const token = await this.getToken();
       const user = await this.getUser();
-      
+
       if (!token || !user?._id) {
         return false;
       }
@@ -85,10 +85,9 @@ class AuthService {
         await this.setUser(userProfile.data.data);
         return true;
       }
-      
+
       return false;
     } catch (error) {
-      console.error('Auth check failed:', error);
       return false;
     }
   }

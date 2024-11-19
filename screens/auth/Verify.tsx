@@ -16,7 +16,6 @@ const Verify = () => {
   const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
   const inputRefs = useRef([null, null, null, null]);
   const navigation = useNavigation();
-  console.log(verificationCode);
 
   useEffect(() => {
     const fetchUser = async () => {

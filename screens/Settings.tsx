@@ -21,7 +21,6 @@ const Settings = () => {
     snackbarMessage,
     user,
   }: any = useApp();
-  console.log(user);
 
   const [deleteAccountLoading, setDeleteAccountLoading] =
     useState<boolean>(false);

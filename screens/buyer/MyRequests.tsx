@@ -22,8 +22,6 @@ const MyRequests = () => {
   const navigation: any = useNavigation();
   const { user } = useApp();
 
-  console.log("userRequests", user?._id);
-
   useFocusEffect(
     useCallback(() => {
       const getUserRequests = async () => {

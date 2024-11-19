@@ -161,7 +161,11 @@ const Login = () => {
       setSnackbarMessage("Logged In Successfully!");
 
       // 5. Check profile completion
-      if (!completeUserData.profilePicture || !completeUserData.phoneNumber || !completeUserData.name) {
+      if (
+        !completeUserData.profilePicture ||
+        !completeUserData.phoneNumber ||
+        !completeUserData.name
+      ) {
         navigation.navigate("CompleteProfile");
         return;
       }
@@ -234,7 +238,7 @@ const Login = () => {
       )} */}
 
       <View style={styles.socialSignInContainer}>
-        {/* <TouchableOpacity onPress={() => console.log("Google Sign In")}>
+        {/* <TouchableOpacity onPress={() => }>
           <Icon name="google" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
         {/* {Platform.OS === "ios" && (
@@ -255,7 +259,7 @@ const Login = () => {
             />
           </>
         )} */}
-        {/* <TouchableOpacity onPress={() => console.log("Facebook Sign In")}>
+        {/* <TouchableOpacity onPress={() => }>
           <Icon name="facebook" type="font-awesome" color={COLORS.GRAY} />
         </TouchableOpacity> */}
       </View>

@@ -33,8 +33,6 @@ const ProductItem: React.FC<ProductItemProps> = ({
 }) => {
   const [isLiked, setIsLiked] = useState(false);
 
-  console.log("userDetails", userDetails);
-
   const navigation = useNavigation();
   const toggleIsLiked = () => {
     setIsLiked(!isLiked);
