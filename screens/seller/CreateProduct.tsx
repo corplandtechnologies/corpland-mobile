@@ -27,6 +27,7 @@ import { useUser } from "../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createObjectURL } from "../../utils";
 import { Linking } from "react-native";
+import { useApp } from "../../context/AppContext";
 
 const CreateProduct = () => {
   const [title, setTitle] = useState("");
@@ -47,36 +48,23 @@ const CreateProduct = () => {
   const [countryOptions, setCountryOptions] = useState<string[]>([]);
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [price, setPrice] = useState("");
-  const [user, setUser] = useState<object>({});
   const [loading, setLoading] = useState(false);
+  const { refreshUserData, user } = useApp();
 
   const navigation = useNavigation();
 
-  const handlePriceChange = (text) => {
+  const handlePriceChange = (text: string) => {
     const newPrice = text.replace(/[^0-9]/g, "");
     setPrice(newPrice);
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      const getUserInfo = async () => {
-        try {
-          const parsedUserInfo = JSON.parse(
-            (await AsyncStorage.getItem("user")) || "{}"
-          );
-          const res = await getUserById(parsedUserInfo?._id);
-          setUser(res?.data.user);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      getUserInfo();
-    }, [user?._id])
-  );
+  useEffect(() => {
+    refreshUserData();
+  }, []);
 
   useEffect(() => {
     return () => {
-      selectedFiles?.forEach((image) => {
+      selectedFiles?.forEach((image: any  ) => {
         URL.revokeObjectURL(createObjectURL(image));
       });
     };
@@ -203,7 +191,7 @@ const CreateProduct = () => {
         region: selectedRegion,
         category: selectedCategory,
         price: price,
-        userId: user._id,
+        userId: user?._id,
       };
       const newWebProduct = {
         title: title,
@@ -213,7 +201,7 @@ const CreateProduct = () => {
         region: selectedRegion,
         category: selectedCategory,
         price: price,
-        userId: user._id,
+        userId: user?._id,
       };
 
       const response = await createProduct(
@@ -229,7 +217,6 @@ const CreateProduct = () => {
       setSelectedRegion("");
       setPrice("");
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(error);
       setSnackbarMessage(error.response.data);
       setSnackbarVisible(true);

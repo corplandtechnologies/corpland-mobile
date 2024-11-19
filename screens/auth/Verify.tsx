@@ -5,8 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import UserHeader from "../../components/UserHeader";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import { verifyEmail } from "../../api/auth.api";
 import { COLORS } from "../../utils/color";
+import { verifyEmail } from "../../api/index.auth";
 
 const Verify = () => {
   const [loading, setLoading] = useState(false);
@@ -26,9 +26,7 @@ const Verify = () => {
           const parsedUserInfo = JSON.parse(userInfo);
           setEmail(parsedUserInfo.email);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchUser();
@@ -38,7 +36,6 @@ const Verify = () => {
     // Update the verificationCode array at the given index
     const newCode = [...verificationCode];
     newCode[index] = text;
-    console.log(newCode);
 
     setVerificationCode(newCode);
 
@@ -58,16 +55,14 @@ const Verify = () => {
     try {
       const data = {
         email,
-        verificationCode: verificationCode.join(""), // Combine the array into a string
+        otp: verificationCode.join(""),
       };
-      console.log(data);
 
-      const res = await verifyEmail(data);
-      setSnackbarVisible(true);
-      setSnackbarMessage("Verification Successful!");
+      await verifyEmail(data);
+
+      // After verification, navigate to complete profile
       navigation.navigate("CompleteProfile");
     } catch (error) {
-      console.log(error);
       setSnackbarMessage("Invalid Code. Check and Try again!");
       setSnackbarVisible(true);
     } finally {

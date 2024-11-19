@@ -47,9 +47,7 @@ const Wallet: React.FC = () => {
       const parsedUserInfo = JSON.parse(userInfo);
       const res: any = await getUserById(parsedUserInfo?._id);
       setUser(res?.data?.user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchUser();
@@ -61,7 +59,7 @@ const Wallet: React.FC = () => {
     setLoadingState(true);
     try {
       const { data } = await getUserTransactions(user?._id);
-      console.log(data);
+
       data.sort((a: Transaction, b: Transaction) =>
         moment(b.createdAt).diff(moment(a.createdAt))
       );
@@ -69,7 +67,6 @@ const Wallet: React.FC = () => {
 
       setLoadingState(false);
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(false);

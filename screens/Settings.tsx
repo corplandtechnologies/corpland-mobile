@@ -47,7 +47,6 @@ const Settings = () => {
       setIsModalVisible(false);
       setLoadingState(false);
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(false);
@@ -63,7 +62,7 @@ const Settings = () => {
         iconName="card-outline"
         onPress={showModal}
       />
-     
+
       <SnackBar
         setSnackbarVisible={setSnackbarVisible}
         snackbarVisible={snackbarVisible}

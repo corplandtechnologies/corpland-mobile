@@ -85,7 +85,6 @@ const Request = ({ route }) => {
         const response = await getRequestById(requestId);
         setRequest(response?.data);
       } catch (error) {
-        console.log(error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
@@ -100,7 +99,6 @@ const Request = ({ route }) => {
         const response = await getUserById(request?.userId);
         setUser(response?.data.user);
       } catch (error) {
-        console.log(error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
@@ -119,7 +117,6 @@ const Request = ({ route }) => {
         );
         setRelatedRequests(filteredRequests);
       } catch (error) {
-        console.error(error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
@@ -186,9 +183,7 @@ const Request = ({ route }) => {
       await dialRequest(requestId, currentUser?._id);
       setSnackbarMessage("Contact Successful");
       setSnackbarVisible(true);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleDelete = async () => {
@@ -198,7 +193,6 @@ const Request = ({ route }) => {
       setSnackbarMessage("Request deleted successfully");
       setSnackbarVisible(true);
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(error.response.data);
       setSnackbarVisible(true);
     }
@@ -343,7 +337,8 @@ const Request = ({ route }) => {
                     <View style={styles.bottomContainer}>
                       <View style={styles.priceView}>
                         <Text style={styles.priceText}>
-                          GH₵{formatPrice(request?.minPrice)} - GH₵{formatPrice(request?.maxPrice)}
+                          GH₵{formatPrice(request?.minPrice)} - GH₵
+                          {formatPrice(request?.maxPrice)}
                         </Text>
                       </View>
                       <View style={styles.CTAView}>

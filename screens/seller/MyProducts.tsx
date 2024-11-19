@@ -16,12 +16,14 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { formatPrice } from "../../utils";
+import { useApp } from "../../context/AppContext";
 
 const MyProducts = () => {
   const [userProducts, setUserProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
   const navigation = useNavigation(); // Initialize navigation
+  const { user } = useApp();
 
   useFocusEffect(
     useCallback(() => {
@@ -30,10 +32,9 @@ const MyProducts = () => {
         try {
           const userInfo = await AsyncStorage.getItem("user");
           const parsedUserInfo = JSON.parse(userInfo || "{}");
-          const response = await getUserProductsById(parsedUserInfo?._id);
+          const response = await getUserProductsById(user?._id);
           setUserProducts(response?.data);
         } catch (error) {
-          console.log(error);
         } finally {
           setIsLoading(false); // Set loading to false after fetching data
         }

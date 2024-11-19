@@ -30,7 +30,6 @@ const Deposit = () => {
       setSnackbarMessage("Authorization URL sent successfully!");
       Linking.openURL(res.data?.authorizationUrl);
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {

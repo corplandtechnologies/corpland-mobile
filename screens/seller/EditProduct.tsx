@@ -136,7 +136,7 @@ const EditProduct = ({ route }) => {
       aspect: [4, 3],
       quality: 1,
       multiple: true,
-    });
+  });
 
     if (!result.cancelled) {
       let newImages = [];

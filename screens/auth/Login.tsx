@@ -13,13 +13,17 @@ import UserHeader from "../../components/UserHeader";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Snackbar } from "react-native-paper";
-import { authWithSocial, login } from "../../api/auth.api";
+import { authWithSocial } from "../../api/auth.api";
 import AuthOption from "../../components/auth/AuthOption";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Platform } from "react-native";
 import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
 import TextElement from "../../components/elements/Texts/TextElement";
+import { login } from "../../api/index.auth";
+import { authService } from "../../services/auth.service";
+import { useApp } from "../../context/AppContext";
+import { getUserById, getUserByUserId } from "../../api";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -32,14 +36,15 @@ const Login = () => {
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
   const [appleUserToken, setAppleUserToken] = useState<any>();
   const navigation: any = useNavigation();
+  const { setUser } = useApp();
 
   useEffect(() => {
-    checkAuthStatus();
+    // checkAuthStatus();
     checkAppleAuthAvailability();
   }, []);
 
   const checkAuthStatus = async () => {
-    const token = await AsyncStorage.getItem("token");
+    const token = await authService.getToken();
     if (token) {
       navigation.navigate("CompleteProfile");
     }
@@ -51,20 +56,26 @@ const Login = () => {
   };
 
   useEffect(() => {
-    const checkAvailable = async () => {
-      const isAvailable = await AppleAuthentication.isAvailableAsync();
-      setAppleAuthAvailable(isAvailable);
-    };
-    checkAvailable();
-  }, []);
-
-  useEffect(() => {
-    // Check if the user is already authenticated on component mount
     const checkAuthStatus = async () => {
-      const token = await AsyncStorage.getItem("token");
-      if (token) {
-        // User is already authenticated, navigate to CompleteProfile
-        navigation.navigate("TabNavigator");
+      try {
+        const token = await authService.getToken();
+        if (token) {
+          const currentUser = await authService.getCurrentUser();
+
+          // Check if profile is incomplete
+          if (
+            !currentUser.profilePicture ||
+            !currentUser.phoneNumber ||
+            !currentUser.name
+          ) {
+            navigation.navigate("CompleteProfile");
+            return;
+          }
+
+          navigation.navigate("TabNavigator");
+        }
+      } catch (error) {
+        // Handle error if needed
       }
     };
     checkAuthStatus();
@@ -102,14 +113,13 @@ const Login = () => {
         email: email || userInfo.email,
       });
 
-      await AsyncStorage.setItem("user", JSON.stringify(res.user));
-      await AsyncStorage.setItem("token", res.token);
+      await authService.setUser(res.user);
+      await authService.setToken(res.token);
 
       setSnackbarVisible(true);
       setSnackbarMessage("Registration Completed Successfully!");
       navigation.navigate("TabNavigator");
     } catch (e) {
-      console.error("Apple Sign In Error:", e);
       setSnackbarVisible(true);
       setSnackbarMessage(handleError(e));
     }
@@ -127,19 +137,37 @@ const Login = () => {
     }
     setLoading(true);
     try {
+      // 1. Perform login
       const res = await login({
-        email: email.toLowerCase().trim(),
-        password: password.trim(),
+        email: email,
+        password: password,
       });
 
-      // Assuming user object contains userInfo and token
-      await AsyncStorage.setItem("user", JSON.stringify(res.user));
-      await AsyncStorage.setItem("token", res.token);
+      const initialUserData = res.data?.data;
+      const token = res.data?.data.token;
+
+      // 2. Store token first
+      await authService.setToken(token);
+
+      // 3. Fetch complete user data
+      const userResponse = await getUserById(initialUserData.user._id);
+      const completeUserData = userResponse.data?.data;
+
+      // 4. Store complete user data
+      await authService.setUser(completeUserData);
+      setUser(completeUserData); // Update AppContext
+
       setSnackbarVisible(true);
       setSnackbarMessage("Logged In Successfully!");
+
+      // 5. Check profile completion
+      if (!completeUserData.profilePicture || !completeUserData.phoneNumber || !completeUserData.name) {
+        navigation.navigate("CompleteProfile");
+        return;
+      }
+
       navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {

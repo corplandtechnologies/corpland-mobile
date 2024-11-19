@@ -31,7 +31,6 @@ const Redeem = () => {
       setSnackbarVisible(true);
       setLoadingState(false);
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(true);

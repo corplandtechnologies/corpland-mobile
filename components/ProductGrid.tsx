@@ -54,9 +54,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
       try {
         const res = await getUserById(userId);
         setUserInfo(res.data.user);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     fetchUser();
   }, [userId]);

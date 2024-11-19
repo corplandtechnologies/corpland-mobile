@@ -12,7 +12,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import UserHeader from "../../components/UserHeader";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import BackButton from "../../components/ui/BackButton";
-import { verifyEmail, verifyResetCode } from "../../api/auth.api";
+import { verifyResetCode } from "../../api/index.auth";
 import { Snackbar } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { handleError } from "../../utils";
@@ -40,9 +40,7 @@ const VerifyEmailPasswordReset = ({ route }: { route: Route }) => {
           const parsedUserInfo = JSON.parse(userInfo);
           setEmail(parsedUserInfo.email);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchUser();
@@ -77,7 +75,6 @@ const VerifyEmailPasswordReset = ({ route }: { route: Route }) => {
         email: userEmail,
       });
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {

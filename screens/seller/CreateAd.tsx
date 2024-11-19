@@ -118,7 +118,6 @@ const CreateAd = () => {
       setSnackbarMessage("Ad created successfully");
       setSnackbarVisible(true);
     } catch (error) {
-      console.error(error);
       setSnackbarMessage("An error occurred");
       setSnackbarVisible(true);
     } finally {

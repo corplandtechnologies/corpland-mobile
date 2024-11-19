@@ -13,7 +13,7 @@ import UserHeader from "../../components/UserHeader";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Snackbar } from "react-native-paper";
-import { authWithSocial, forgotPassword, login } from "../../api/auth.api";
+import { forgotPassword } from "../../api/index.auth";
 import AuthOption from "../../components/auth/AuthOption";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Platform } from "react-native";
@@ -43,7 +43,6 @@ const ForgotPassword = () => {
         email: email,
       });
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {

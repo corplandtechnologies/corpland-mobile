@@ -34,7 +34,6 @@ const ProductGrids = () => {
         const fetchedProducts = await getProducts();
         setProducts(fetchedProducts.data);
       } catch (error) {
-        console.log(error);
       } finally {
         setIsLoading(false); // End loading regardless of success or failure
       }
@@ -61,7 +60,7 @@ const ProductGrids = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator  color={COLORS.PRIMARY} />
+        <ActivityIndicator color={COLORS.PRIMARY} />
       </View>
     );
   }

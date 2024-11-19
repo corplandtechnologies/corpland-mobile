@@ -29,7 +29,6 @@ const ProductDisplay = ({ route }) => {
         const fetchedProducts = await searchProducts(category);
         setProducts(fetchedProducts.data);
       } catch (error) {
-        console.log(error);
       } finally {
         setIsLoading(false); // End loading regardless of success or failure
       }

@@ -13,7 +13,6 @@ import { COLORS } from "../utils/color";
 import Icon from "react-native-vector-icons/Ionicons";
 import {
   getNotifications,
-  getUserById,
   markAllNotificationAsRead,
   markNotificationAsRead,
 } from "../api/api";
@@ -24,6 +23,7 @@ import { handleError } from "../utils";
 import SnackBar from "../components/ui/SnackBar";
 import { Notification } from "../interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUserById } from "../api";
 
 const NotificationScreen = () => {
   const navigation: any = useNavigation();
@@ -40,22 +40,12 @@ const NotificationScreen = () => {
     setRefreshing,
     setUnreadNotifications,
     updateUnreadNotificationCount,
+    refreshUserData,
   } = useApp();
   const [notificationsLoading, setNotificationsLoading] = useState(false);
-
-  const fetchUser = async () => {
-    try {
-      const userInfo: any = await AsyncStorage.getItem("user");
-      const parsedUserInfo = JSON.parse(userInfo);
-      const res: any = await getUserById(parsedUserInfo?._id);
-      setUser(res?.data?.user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  
   useEffect(() => {
-    fetchUser();
+    refreshUserData();
   }, []);
 
   const fetchNotifications = async () => {
@@ -69,7 +59,6 @@ const NotificationScreen = () => {
 
       setNotifications(sortedNotifications);
     } catch (error) {
-      console.log(error);
       // setSnackbarMessage(handleError(error));
       // setSnackbarVisible(true);
     } finally {
@@ -102,11 +91,9 @@ const NotificationScreen = () => {
 
   const handleNotificationNavigation = async (id: string) => {
     setNotificationsLoading(true);
-    console.log(id);
 
     try {
       const { data } = await markNotificationAsRead(id);
-      console.log(data);
 
       switch (data.data.type) {
         case "transaction":
@@ -125,7 +112,6 @@ const NotificationScreen = () => {
           return navigation.navigate("Profile");
       }
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
@@ -139,7 +125,6 @@ const NotificationScreen = () => {
       await markAllNotificationAsRead(user?._id);
       fetchNotifications();
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
@@ -291,9 +276,8 @@ const NotificationScreen = () => {
               setRefreshing(true);
               try {
                 fetchNotifications();
-                fetchUser();
+                refreshUserData();
               } catch (error) {
-                console.error(error);
               } finally {
                 setRefreshing(false);
               }

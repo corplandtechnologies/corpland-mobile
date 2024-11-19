@@ -50,7 +50,7 @@ import { CartProvider } from "./context/CartContext";
 import OrderSuccess from "./screens/OrderSuccess";
 import TrackOrder from "./screens/TrackOrder/TrackOrder";
 import { AppProvider, useApp } from "./context/AppContext";
-import { getUserById, storeExpoNotificationsPushToken } from "./api/api";
+import { storeExpoNotificationsPushToken } from "./api/api";
 import Withdraw from "./screens/Payments/Withdraw";
 import ConfirmWithdraw from "./screens/Payments/ConfirmWithdrawal";
 import Settings from "./screens/Settings";
@@ -73,8 +73,10 @@ import WalkthroughTour from "./screens/Intro/WalkthroughTour";
 import React from "react";
 import messaging from "@react-native-firebase/messaging";
 import firebase from "@react-native-firebase/app";
-import { saveDevice } from "./api";
+import { getUserById, saveDevice } from "./api";
 import { ThemeProvider } from "./context/ThemeContext";
+import { authService } from "./services/auth.service";
+import LoadingScreen from "./screens/LoadingScreen";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQAZsd74WSYymehytX8oGpZabbERSBNoU",
@@ -129,6 +131,8 @@ function App() {
   const [isConnected, setIsConnected] = useState<boolean>(true);
   const [isFontLoaded, setFontLoaded] = useState<boolean>(false);
   const { user, setUser } = useApp();
+  const [initialRoute, setInitialRoute] = useState<string>("TabNavigator");
+
   const [loggedInUser, setLoggedInUser] = useState<object>({});
 
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -141,6 +145,7 @@ function App() {
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
   const [showTour, setShowTour] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchUser = async () => {
     try {
@@ -148,10 +153,8 @@ function App() {
       const parsedUserInfo = JSON.parse(userInfo);
       setLoggedInUser(parsedUserInfo);
       const res: any = await getUserById(parsedUserInfo?._id);
-      setUser(res.data?.user);
-    } catch (error) {
-      console.log(error);
-    }
+      setUser(res.data?.data);
+    } catch (error) {}
   };
   useEffect(() => {
     fetchUser();
@@ -164,14 +167,12 @@ function App() {
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-      console.log("Authorization status:", authStatus);
     }
   };
 
   useEffect(() => {
     if (isDevelopment) {
       // You're in development mode, do not initialize Firebase
-      console.log("Running in development mode. Firebase is not initialized.");
     } else {
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
@@ -184,7 +185,6 @@ function App() {
             token && saveDevice(token, Platform.OS);
           });
       } else {
-        console.log("Permission not granted");
       }
       messaging()
         .getInitialNotification()
@@ -201,12 +201,10 @@ function App() {
         );
       });
       messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-        console.log("Message handled in the background", remoteMessage);
         await showLocalNotification(remoteMessage);
       });
 
       const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-        console.log("A FCM message has arrived!", remoteMessage);
         await showLocalNotification(remoteMessage);
       });
 
@@ -236,7 +234,7 @@ function App() {
 
   //   responseListener.current =
   //     Notifications.addNotificationResponseReceivedListener((response) => {
-  //       console.log(response);
+  //
   //     });
 
   //   return () => {
@@ -304,16 +302,54 @@ function App() {
     checkFirstTimeUser();
   }, []);
 
+  const checkAuthStatus = async () => {
+    try {
+      const isAuthenticated = await authService.isAuthenticated();
+      const currentUser = await authService.getCurrentUser();
+
+      setUser(currentUser);
+      setInitialRoute("TabNavigator");
+    } catch (error) {
+      console.error("Error checking auth status:", error);
+      setInitialRoute("Login");
+    }
+  };
+
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        setIsLoading(true);
+        const isAuthenticated = await authService.isAuthenticated();
+
+        if (isAuthenticated) {
+          const currentUser = await authService.getCurrentUser();
+          if (currentUser) {
+            await setUser(currentUser);
+          }
+        }
+      } catch (error) {
+        console.error("App initialization failed:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeApp();
+  }, []);
   if (!isFontLoaded) {
-    return null; // or a loading indicator
+    return null;
+  }
+
+  if (isLoading) {
+    return <LoadingScreen />;
   }
 
   if (!isConnected) {
     return (
       <View style={styles.container}>
+        <StatusBar translucent={true} />
         <Image source={require("./assets/no-wifi.png")} />
         <Text style={styles.mainError}>Ooops...</Text>
-
         <Text style={styles.message}>No Internet Connection Found.</Text>
         <Text style={styles.message}>Check your connection.</Text>
       </View>
@@ -334,68 +370,8 @@ function App() {
               <SellerModeProvider>
                 <SearchResultsProvider>
                   <ProductProvider>
-                    <NavigationContainer
-                      linking={{
-                        prefixes: [
-                          prefix,
-                          "https://corpland.corplandtechnologies.com",
-                          "corpland://",
-                        ],
-                        config: {
-                          screens: {
-                            Product: "product/:productId",
-                            // other screens...
-                          },
-                        },
-                        async getInitialURL() {
-                          // First, you may want to do the default deep link handling
-                          // Check if app was opened from a deep link
-                          const url = await Linking.getInitialURL();
-
-                          if (url != null) {
-                            return url;
-                          }
-
-                          // Handle URL from expo push notifications
-                          const response =
-                            await Notifications.getLastNotificationResponseAsync();
-
-                          return response?.notification.request.content.data
-                            .url;
-                        },
-                        subscribe(listener) {
-                          const onReceiveURL = ({ url }: { url: string }) =>
-                            listener(url);
-
-                          // Listen to incoming links from deep linking
-                          const eventListenerSubscription =
-                            Linking.addEventListener("url", onReceiveURL);
-
-                          // Listen to expo push notifications
-                          const subscription =
-                            Notifications.addNotificationResponseReceivedListener(
-                              (response) => {
-                                const url =
-                                  response.notification.request.content.data
-                                    .url;
-
-                                // Any custom logic to see whether the URL needs to be handled
-                                //...
-
-                                // Let React Navigation handle the URL
-                                listener(url);
-                              }
-                            );
-
-                          return () => {
-                            // Clean up the event listeners
-                            eventListenerSubscription.remove();
-                            subscription.remove();
-                          };
-                        },
-                      }}
-                    >
-                      <Stack.Navigator initialRouteName={"TabNavigator"}>
+                    <NavigationContainer linking={linking}>
+                      <Stack.Navigator initialRouteName={initialRoute}>
                         <Stack.Screen
                           name="TabNavigator"
                           options={{ headerShown: false }}
@@ -413,7 +389,6 @@ function App() {
                             headerTitle: "Sign In",
                             headerTitleStyle: {
                               fontFamily: "PoppinsSemiBold",
-                              // borderWidth:8
                             },
                           }}
                           component={Login}
@@ -832,7 +807,7 @@ function App() {
 }
 
 // async function registerForPushNotificationsAsync(userId: string) {
-//   console.log("userId", userId);
+//
 
 //   let token: string;
 //   if (Platform.OS === "android") {
@@ -857,7 +832,7 @@ function App() {
 
 //   // Get Expo push token
 //   token = (await Notifications.getExpoPushTokenAsync()).data;
-//   console.log(token);
+//
 
 //   // Send token to backend
 //   await storeExpoNotificationsPushToken(userId, token);
@@ -905,7 +880,6 @@ async function registerForPushNotificationsAsync(userId: string) {
       const projectId =
         Constants?.expoConfig?.extra?.eas?.projectId ??
         Constants?.easConfig?.projectId;
-      console.log(projectId);
 
       if (!projectId) {
         throw new Error("Project ID not found");
@@ -915,7 +889,7 @@ async function registerForPushNotificationsAsync(userId: string) {
           projectId,
         })
       ).data;
-      console.log(token);
+
       await storeExpoNotificationsPushToken(userId, token);
     } catch (e) {
       token = `${e}`;

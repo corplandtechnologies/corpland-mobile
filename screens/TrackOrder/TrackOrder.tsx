@@ -113,12 +113,11 @@ const TrackOrder = () => {
     setLoadingState(true);
     try {
       const { data } = await getProductById(currentOrder?.productId);
-      console.log(data);
+
       setProduct(data);
 
       setLoadingState(false);
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(false);
@@ -133,9 +132,7 @@ const TrackOrder = () => {
       const sellerRes = await getUserById(currentOrder?.sellerId);
       setBuyer(buyerRes?.data.user);
       setSeller(sellerRes?.data.user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useFocusEffect(
@@ -176,7 +173,6 @@ const TrackOrder = () => {
       setLoadingState(false);
       navigation.navigate("Active");
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(false);

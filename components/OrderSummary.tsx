@@ -62,7 +62,6 @@ const OrderSummary = () => {
       navigation.navigate("OrderSuccess");
       setIsLoading(false);
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setIsLoading(false);
@@ -96,7 +95,6 @@ const OrderSummary = () => {
       navigation.navigate("OrderSuccess");
       setIsLoading(false);
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setIsLoading(false);
@@ -121,7 +119,6 @@ const OrderSummary = () => {
       navigation.navigate("OrderSuccess");
       setIsLoading(false);
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setIsLoading(false);

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Linking, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Avatar, Switch } from "react-native-paper";
 import { COLORS } from "../utils/color";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -10,11 +10,14 @@ import { useSellerMode } from "../context/SellerModeContext";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { useApp } from "../context/AppContext";
 import PopUpCard from "../components/PopUpCard";
+import { useFocusEffect } from "@react-navigation/native";
+import { authService } from "../services/auth.service";
 
 const Profile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { isSellerMode, toggleSellerMode } = useSellerMode();
-  const { user } = useApp();
+  const { user, logout, setSnackbarMessage, setSnackbarVisible } = useApp();
+
 
   const navigation: any = useNavigation();
 
@@ -28,12 +31,12 @@ const Profile = () => {
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem("user");
-      await AsyncStorage.removeItem("token");
+      await logout();
       navigation.navigate("Login");
       setIsModalVisible(false);
     } catch (error) {
-      console.log(error);
+      setSnackbarMessage("Error logging out");
+      setSnackbarVisible(true);
     }
   };
 
@@ -49,7 +52,7 @@ const Profile = () => {
       <ScrollView
         contentContainerStyle={{
           backgroundColor: COLORS.SECONDARY,
-          paddingBottom: 120 
+          paddingBottom: 120,
         }}
         showsVerticalScrollIndicator={false}
       >
