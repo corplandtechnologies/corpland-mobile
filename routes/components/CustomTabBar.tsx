@@ -110,7 +110,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
                         ? (options.tabBarIcon as any)
                         : `${options.tabBarIcon}-outline`
                     }
-                    color={isFocused ? COLORS.PRIMARY : COLORS.TERTIARY}
+                    color={isFocused ? COLORS.GRAY_DARK : COLORS.TERTIARY}
                     size={25}
                   />
                 </Animated.View>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: COLORS.SECONDARY,
+    backgroundColor: COLORS.PRIMARY,
     borderRadius: 20,
     width: "100%",
     shadowColor: "#000",
