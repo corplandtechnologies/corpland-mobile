@@ -19,7 +19,7 @@ import UserHeader from "../../components/UserHeader";
 import EditAvatar from "../../components/ui/EditAvatar";
 import PhoneInput from "react-native-phone-input";
 import * as ImagePicker from "expo-image-picker";
-import { completeProfile } from "../../api/index";
+import { completeProfile, getUserById, getUserByUserId } from "../../api/index";
 import FormInput from "../../components/ui/FormInput";
 import { Platform } from "react-native";
 import { authService } from "../../services/auth.service";
@@ -83,22 +83,31 @@ const CompleteProfile = () => {
           Platform.OS === "web"
             ? selectedFile || user?.profilePicture
             : selectedImage || user?.profilePicture,
-        userId: user?._id || (await authService.getUser())._id,
       };
 
       const res = await completeProfile(data);
-      const updatedUser = await authService.getCurrentUser();
-      if (updatedUser) {
-        setUser(updatedUser);
-      }
+      const userData = res.data?.data;
+
+      // Store complete user data and update context
+      await authService.setUser(userData);
+      setUser(userData); // Update AppContext
+
+      // Get fresh user data from server
+      const userResponse = await getUserByUserId(userData._id);
+      const completeUserData = userResponse.data?.data;
+
+      // Update storage and context with fresh data
+      await authService.setUser(completeUserData);
+      setUser(completeUserData);
 
       setSnackbarVisible(true);
-      setSnackbarMessage(res.data.message);
-      navigation.navigate("TabNavigator", { name: "Home" });
+      setSnackbarMessage("Profile completed successfully!");
+      navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
+      navigation.navigate("TabNavigator", { screen: "Home" });
       setLoading(false);
     }
   };
@@ -106,7 +115,7 @@ const CompleteProfile = () => {
     <>
       <View style={styles.container}>
         <UserHeader
-          title="Complete Your Profile"
+          title="Create Your Profile"
           description="Don't worry, Only you can see your personal data. No one else would be able to see it."
         />
         <View style={styles.avatarView}>

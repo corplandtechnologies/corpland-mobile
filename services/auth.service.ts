@@ -74,8 +74,21 @@ class AuthService {
     try {
       const token = await this.getToken();
       const user = await this.getUser();
-      return !!(token && user?._id);
+      
+      if (!token || !user?._id) {
+        return false;
+      }
+
+      // Validate the stored user data by fetching latest from server
+      const userProfile = await getUserById(user._id);
+      if (userProfile?.data?.data) {
+        await this.setUser(userProfile.data.data);
+        return true;
+      }
+      
+      return false;
     } catch (error) {
+      console.error('Auth check failed:', error);
       return false;
     }
   }

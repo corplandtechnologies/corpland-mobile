@@ -40,20 +40,12 @@ const NotificationScreen = () => {
     setRefreshing,
     setUnreadNotifications,
     updateUnreadNotificationCount,
+    refreshUserData,
   } = useApp();
   const [notificationsLoading, setNotificationsLoading] = useState(false);
-
-  const fetchUser = async () => {
-    try {
-      const userInfo: any = await AsyncStorage.getItem("user");
-      const parsedUserInfo = JSON.parse(userInfo);
-      const res: any = await getUserById(parsedUserInfo?._id);
-      setUser(res?.data?.user);
-    } catch (error) {}
-  };
-
+  
   useEffect(() => {
-    fetchUser();
+    refreshUserData();
   }, []);
 
   const fetchNotifications = async () => {
@@ -284,7 +276,7 @@ const NotificationScreen = () => {
               setRefreshing(true);
               try {
                 fetchNotifications();
-                fetchUser();
+                refreshUserData();
               } catch (error) {
               } finally {
                 setRefreshing(false);

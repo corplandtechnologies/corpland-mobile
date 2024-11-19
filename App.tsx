@@ -76,6 +76,7 @@ import firebase from "@react-native-firebase/app";
 import { getUserById, saveDevice } from "./api";
 import { ThemeProvider } from "./context/ThemeContext";
 import { authService } from "./services/auth.service";
+import LoadingScreen from "./screens/LoadingScreen";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQAZsd74WSYymehytX8oGpZabbERSBNoU",
@@ -144,6 +145,7 @@ function App() {
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
   const [showTour, setShowTour] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchUser = async () => {
     try {
@@ -303,23 +305,10 @@ function App() {
   const checkAuthStatus = async () => {
     try {
       const isAuthenticated = await authService.isAuthenticated();
-      if (isAuthenticated) {
-        const currentUser = await authService.getCurrentUser();
-        if (!currentUser) {
-          setInitialRoute("Login");
-          return;
-        }
+      const currentUser = await authService.getCurrentUser();
 
-        if (!currentUser.profilePicture || !currentUser.phoneNumber) {
-          setInitialRoute("CompleteProfile");
-          return;
-        }
-
-        setUser(currentUser);
-        setInitialRoute("TabNavigator");
-      } else {
-        setInitialRoute("Login");
-      }
+      setUser(currentUser);
+      setInitialRoute("TabNavigator");
     } catch (error) {
       console.error("Error checking auth status:", error);
       setInitialRoute("Login");
@@ -327,15 +316,32 @@ function App() {
   };
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      await checkAuthStatus();
+    const initializeApp = async () => {
+      try {
+        setIsLoading(true);
+        const isAuthenticated = await authService.isAuthenticated();
+
+        if (isAuthenticated) {
+          const currentUser = await authService.getCurrentUser();
+          if (currentUser) {
+            await setUser(currentUser);
+          }
+        }
+      } catch (error) {
+        console.error("App initialization failed:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    initializeAuth();
-  }, [user?._id]);
-
+    initializeApp();
+  }, []);
   if (!isFontLoaded) {
     return null;
+  }
+
+  if (isLoading) {
+    return <LoadingScreen />;
   }
 
   if (!isConnected) {

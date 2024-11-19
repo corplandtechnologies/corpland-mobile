@@ -165,7 +165,7 @@ const Register = () => {
         name: name,
         phoneNumber: phoneNumber,
         email: email,
-        password: password,
+        password: password.trim(),
         termsAccepted,
       });
 

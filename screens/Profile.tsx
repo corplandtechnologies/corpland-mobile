@@ -18,6 +18,7 @@ const Profile = () => {
   const { isSellerMode, toggleSellerMode } = useSellerMode();
   const { user, logout, setSnackbarMessage, setSnackbarVisible } = useApp();
 
+
   const navigation: any = useNavigation();
 
   const showModal = () => {

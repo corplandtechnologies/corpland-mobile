@@ -23,7 +23,7 @@ import TextElement from "../../components/elements/Texts/TextElement";
 import { login } from "../../api/index.auth";
 import { authService } from "../../services/auth.service";
 import { useApp } from "../../context/AppContext";
-import { getUserById } from "../../api";
+import { getUserById, getUserByUserId } from "../../api";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -39,7 +39,7 @@ const Login = () => {
   const { setUser } = useApp();
 
   useEffect(() => {
-    checkAuthStatus();
+    // checkAuthStatus();
     checkAppleAuthAvailability();
   }, []);
 
@@ -61,13 +61,17 @@ const Login = () => {
         const token = await authService.getToken();
         if (token) {
           const currentUser = await authService.getCurrentUser();
-          
+
           // Check if profile is incomplete
-          if (!currentUser.profilePicture || !currentUser.phoneNumber || !currentUser.name) {
+          if (
+            !currentUser.profilePicture ||
+            !currentUser.phoneNumber ||
+            !currentUser.name
+          ) {
             navigation.navigate("CompleteProfile");
             return;
           }
-          
+
           navigation.navigate("TabNavigator");
         }
       } catch (error) {
@@ -133,21 +137,35 @@ const Login = () => {
     }
     setLoading(true);
     try {
+      // 1. Perform login
       const res = await login({
         email: email,
         password: password,
       });
 
-      const userData = res.data?.data.user;
+      const initialUserData = res.data?.data;
       const token = res.data?.data.token;
 
+      // 2. Store token first
       await authService.setToken(token);
 
-      const userProfile = await getUserById(userData._id);
-      await setUser(userProfile?.data.data);
+      // 3. Fetch complete user data
+      const userResponse = await getUserById(initialUserData.user._id);
+      const completeUserData = userResponse.data?.data;
+
+      // 4. Store complete user data
+      await authService.setUser(completeUserData);
+      setUser(completeUserData); // Update AppContext
 
       setSnackbarVisible(true);
       setSnackbarMessage("Logged In Successfully!");
+
+      // 5. Check profile completion
+      if (!completeUserData.profilePicture || !completeUserData.phoneNumber || !completeUserData.name) {
+        navigation.navigate("CompleteProfile");
+        return;
+      }
+
       navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
       setSnackbarMessage(handleError(error));

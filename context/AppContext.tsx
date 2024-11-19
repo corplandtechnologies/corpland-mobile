@@ -39,6 +39,7 @@ export interface AppContextType {
   updateUnreadNotificationCount: (userId: string) => Promise<void>;
   isAuthenticated: boolean;
   logout: () => Promise<void>;
+  refreshUserData: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -79,6 +80,20 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     await authService.logout();
     setUserState(null);
     setIsAuthenticated(false);
+  };
+
+  const refreshUserData = async () => {
+    try {
+      const currentUser = await authService.getCurrentUser();
+      if (currentUser) {
+        const userResponse = await getUserById(currentUser._id);
+        const updatedUserData = userResponse.data?.data;
+        await authService.setUser(updatedUserData);
+        setUserState(updatedUserData);
+      }
+    } catch (error) {
+      console.error('Error refreshing user data:', error);
+    }
   };
 
   useEffect(() => {
@@ -123,6 +138,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         updateUnreadNotificationCount,
         isAuthenticated,
         logout,
+        refreshUserData,
       }}
     >
       {children}

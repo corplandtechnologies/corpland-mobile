@@ -46,8 +46,6 @@ export const completeProfile = async (userData: any) => {
         }
   );
 
-  formData.append("userId", userData.userId);
-
   const config = {
     headers: { "Content-Type": "multipart/form-data" },
   };
@@ -56,3 +54,5 @@ export const completeProfile = async (userData: any) => {
 };
 
 export const getUserById = (userId: string) => APIv2.get(`/users/${userId}`);
+export const getUserByUserId = (userId: string) =>
+  APIv2.get(`/users/${userId}`);
