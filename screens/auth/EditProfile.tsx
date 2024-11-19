@@ -28,21 +28,22 @@ import { Platform } from "react-native";
 
 const EditProfile = () => {
   const { user } = useUser();
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [name, setName] = useState(userInfo?.name);
+  const [name, setName] = useState("");
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [userId, setUserId] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(userInfo?.phoneNumber);
-  const [selectedCountry, setSelectedCountry] = useState(userInfo?.country);
-  const [selectedRegion, setSelectedRegion] = useState(userInfo?.region);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("");
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [newPassword, setNewPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [phoneRef, setPhoneRef] = useState<any>(null);
 
   const navigation = useNavigation();
 
@@ -55,12 +56,19 @@ const EditProfile = () => {
           );
           const res = await getUserById(parsedUserInfo?._id);
           setUserInfo(res.data.user);
-        } catch (error) {
-          console.log(error);
-        }
+          setName(res.data.user.name);
+          setPhoneNumber(res.data.user.phoneNumber);
+          setSelectedCountry(res.data.user.country);
+          setSelectedRegion(res.data.user.region);
+
+          // Set the phone number in the PhoneInput component after it's mounted
+          if (phoneRef && res.data.user.phoneNumber) {
+            phoneRef.setValue(res.data.user.phoneNumber);
+          }
+        } catch (error) {}
       };
       getUserInfo();
-    }, [])
+    }, [phoneRef])
   );
 
   useEffect(() => {
@@ -71,9 +79,7 @@ const EditProfile = () => {
           const parsedUserInfo = JSON.parse(userInfo);
           setUserId(parsedUserInfo._id);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchUser();
@@ -121,7 +127,6 @@ const EditProfile = () => {
       setSnackbarMessage(res.data.message);
       navigation.navigate("TabNavigator");
     } catch (error) {
-      console.log(error);
       const err = error as Error;
       setSnackbarMessage(err.message);
       setSnackbarVisible(true);
@@ -185,7 +190,7 @@ const EditProfile = () => {
               <Button
                 title="Change"
                 buttonStyle={styles.editButton}
-                onPress={() => document.getElementById("fileUpload").click()}
+                onPress={() => document.getElementById("fileUpload")?.click()}
               />
             </label>
           )}
@@ -194,16 +199,17 @@ const EditProfile = () => {
           icon="user"
           placeholder="Name"
           onChangeText={setName}
-          defaultValue={userInfo?.name}
+          value={name}
           style={styles.input}
+          defaultValue={userInfo?.name}
         />
         <View style={styles.inputContainer}>
           <Icon name="phone" type="font-awesome" color={COLORS.GRAY} />
           <PhoneInput
+            ref={(ref) => setPhoneRef(ref)}
             initialCountry={"gh"}
             textProps={{
               placeholder: "Enter a phone number...",
-              defaultValue: userInfo?.phoneNumber,
             }}
             pickerBackgroundColor={COLORS.TERTIARY}
             onChangePhoneNumber={(text) => {
@@ -217,7 +223,7 @@ const EditProfile = () => {
           title="Country"
           options={Object.keys(regionsByCountry)}
           onSelect={handleCountrySelect}
-          initialValue={userInfo?.country} // Pass the user's current country as the initial value
+          initialValue={selectedCountry}
         />
 
         {selectedCountry && (
@@ -226,7 +232,7 @@ const EditProfile = () => {
             title="Region"
             options={regionOptions}
             onSelect={handleRegionSelect}
-            initialValue={userInfo?.region} // Pass the user's current region as the initial value
+            initialValue={selectedRegion}
           />
         )}
 

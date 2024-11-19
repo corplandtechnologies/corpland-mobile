@@ -41,7 +41,6 @@ const Favorite = () => {
           const fetchedProducts = await getFavoriteProducts(user?._id);
           setProducts(fetchedProducts.data);
         } catch (error) {
-          console.log(error);
         } finally {
           setIsLoading(false); // End loading regardless of success or failure
         }

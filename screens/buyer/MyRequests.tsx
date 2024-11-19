@@ -30,11 +30,9 @@ const MyRequests = () => {
         setIsLoading(true); // Set loading to true before fetching data
         try {
           const response = await getRequestsByUserId(user._id);
-          console.log(response?.data);
 
           setUserRequests(response?.data);
         } catch (error) {
-          console.log(error);
         } finally {
           setIsLoading(false); // Set loading to false after fetching data
         }

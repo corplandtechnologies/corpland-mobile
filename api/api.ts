@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Platform } from "react-native";
+import { authService } from "../services/auth.service";
 
 // export const API = axios.create({
 //   baseURL: "http://localhost:3000/api/v1",
@@ -8,7 +9,7 @@ import { Platform } from "react-native";
 // });
 
 // export const API = axios.create({
-//   baseURL: "http://192.168.237.158:3000/api/v1",
+//   baseURL: "http://192.168.94.158:3000/api/v1",
 //   withCredentials: true,
 // });
 
@@ -17,29 +18,27 @@ export const API = axios.create({
   withCredentials: true,
 });
 
-
-export const APIv2 = axios.create({
-  baseURL: "https://corpland-backend-v2.onrender.com/api/v1",
-  withCredentials: true,
-});
-
+// export const APIv2 = axios.create({
+//   baseURL: "https://corpland-backend-v2.onrender.com/api/v1",
+//   withCredentials: true,
+// });
 
 const getToken = async () => {
-  return await AsyncStorage.getItem("token");
+  return await authService.getToken();
 };
 
-API.interceptors.request.use(
-  async (config) => {
-    const token = await getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// API.interceptors.request.use(
+//   async (config) => {
+//     const token = await getToken();
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
 export const getRequests = () => API.get("/requests");
 export const getRequestById = (id: string) => API.get(`/requests/${id}`);
@@ -139,7 +138,6 @@ export const dialRequest = async (productId: string, userId: string) => {
     const response = await API.post(`/requests/dial/${productId}`, data);
     return response.data; // Assuming the API returns the user data upon successful sign up
   } catch (error) {
-    console.log("Error getting favorite Products:", error);
     throw error; // Rethrow the error to be handled by the caller
   }
 };
@@ -324,7 +322,6 @@ export const dialProduct = async (productId: string, userId: string) => {
     const response = await API.post(`/products/dial/${productId}`, data);
     return response.data; // Assuming the API returns the user data upon successful sign up
   } catch (error) {
-    console.log("Error getting favorite Products:", error);
     throw error; // Rethrow the error to be handled by the caller
   }
 };

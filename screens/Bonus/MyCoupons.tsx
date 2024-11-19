@@ -42,9 +42,7 @@ const MyCoupons = () => {
       const parsedUserInfo = JSON.parse(userInfo);
       const res: any = await getUserById(parsedUserInfo?._id);
       setUser(res?.data?.user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchUser();
@@ -57,7 +55,6 @@ const MyCoupons = () => {
       setSnackbarMessage("Referral code copied to clipboard");
       setSnackbarVisible(true);
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {

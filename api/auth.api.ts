@@ -12,7 +12,6 @@ export const signUp = async (userData: {
     const response = await API.post("/users/signup", userData);
     return response.data; // Assuming the API returns the user data upon successful sign up
   } catch (error) {
-    console.error("Error during sign up:", error);
     throw error; // Rethrow the error to be handled by the caller
   }
 };
@@ -25,7 +24,6 @@ export const authWithSocial = async (userData: {
     const response = await API.post("/users/auth-social", userData);
     return response.data; // Assuming the API returns the user data upon successful sign up
   } catch (error) {
-    console.error("Error during sign up:", error);
     throw error; // Rethrow the error to be handled by the caller
   }
 };
@@ -35,7 +33,6 @@ export const login = async (userData: { email: string; password: string }) => {
     const response = await API.post("/users/login", userData);
     return response.data; // Assuming the API returns the user data upon successful sign up
   } catch (error) {
-    console.error("Error during sign up:", error);
     throw error; // Rethrow the error to be handled by the caller
   }
 };
@@ -45,7 +42,6 @@ export const forgotPassword = async (email: string) => {
     const response = await API.post("/users/forgot-password", { email });
     return response.data;
   } catch (error) {
-    console.error("Error during sign up:", error);
     throw error;
   }
 };
@@ -58,7 +54,6 @@ export const verifyResetCode = async (email: string, resetCode: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error during sign up:", error);
     throw error;
   }
 };
@@ -71,7 +66,6 @@ export const resetPassword = async (email: string, newPassword: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error during sign up:", error);
     throw error;
   }
 };
@@ -84,7 +78,6 @@ export const verifyEmail = async (userData: {
     const response = await API.post("/users/verify", userData);
     return response.data; // Assuming the API returns the user data upon successful sign up
   } catch (error) {
-    console.error("Error during sign up:", error);
     throw error; // Rethrow the error to be handled by the caller
   }
 };

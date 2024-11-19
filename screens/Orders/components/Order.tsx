@@ -117,7 +117,6 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
         }
       }
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(false);
@@ -145,7 +144,6 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
         getOrders();
       }
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(false);
@@ -175,7 +173,6 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
       navigation.navigate("Cart");
       setLoadingState(false);
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(false);

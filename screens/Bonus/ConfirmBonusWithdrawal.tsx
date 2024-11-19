@@ -29,7 +29,6 @@ const ConfirmBonusWithdrawal = () => {
       setSnackbarVisible(true);
       navigation.navigate("Home");
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoading(false);

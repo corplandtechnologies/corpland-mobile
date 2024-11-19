@@ -9,7 +9,7 @@ import {
 import { Input, Button, Icon, CheckBox } from "react-native-elements";
 import { COLORS } from "../../utils/color";
 import { Route, useNavigation } from "@react-navigation/native";
-import { authWithSocial, resetPassword, signUp } from "../../api/auth.api";
+import { resetPassword } from "../../api/index.auth";
 import { Snackbar } from "react-native-paper"; // Ensure this is imported
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -54,7 +54,6 @@ const ResetPassword = ({ route }: { route: any }) => {
       setSnackbarMessage("Password Reset Completed Successfully!");
       navigation.navigate("Login");
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {

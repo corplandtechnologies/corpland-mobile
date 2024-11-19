@@ -14,12 +14,13 @@ import { useSellerMode } from "../context/SellerModeContext";
 import { Icon as BadgeIcon, withBadge } from "react-native-elements";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getUnreadNotificationsCount, getUserById } from "../api/api";
+import { getUnreadNotificationsCount } from "../api/api";
 import { useApp } from "../context/AppContext";
 import CreateRequest from "../screens/buyer/CreateRequest";
 import AuthModal from "../components/auth/AuthModal";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import HomeHeaderRight from "./components/HomeHeaderRight";
+import { getUserById } from "../api";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,6 +32,7 @@ const TabNavigator: React.FC = () => {
     unreadNotifications,
     setUnreadNotifications,
   } = useApp();
+
   const { isSellerMode } = useSellerMode();
   const [isRequest, setIsRequest] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -44,25 +46,20 @@ const TabNavigator: React.FC = () => {
         (await AsyncStorage.getItem("user")) || "{}"
       );
       const res = await getUserById(parsedUserInfo?._id);
-      setUser(res?.data.user);
-    } catch (error) {
-      console.log(error);
-    }
+      setUser(res?.data.data);
+    } catch (error) {}
   };
   const fetchUnreadNotificationCount = async () => {
     try {
       const { data } = await getUnreadNotificationsCount(user?._id);
-      console.log("count", data?.data);
 
       setUnreadNotifications(data?.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useFocusEffect(
     useCallback(() => {
-      getUserInfo();
+      // getUserInfo();
       fetchUnreadNotificationCount();
     }, [])
   );

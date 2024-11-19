@@ -99,7 +99,6 @@ const Product = ({ route }) => {
         const response = await getProductById(productId);
         setProduct(response?.data);
       } catch (error) {
-        console.log(error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
@@ -114,7 +113,6 @@ const Product = ({ route }) => {
         const response = await getUserById(product?.userId);
         setUser(response?.data.user);
       } catch (error) {
-        console.log(error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
@@ -133,7 +131,6 @@ const Product = ({ route }) => {
         );
         setRelatedProducts(filteredProducts);
       } catch (error) {
-        console.error(error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
@@ -204,9 +201,7 @@ const Product = ({ route }) => {
       await dialProduct(productId, currentUser?._id);
       setSnackbarMessage("Contact Successful");
       setSnackbarVisible(true);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleDelete = async () => {
@@ -216,7 +211,6 @@ const Product = ({ route }) => {
       setSnackbarMessage("Product deleted successfully");
       setSnackbarVisible(true);
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(error.response.data);
       setSnackbarVisible(true);
     }

@@ -32,9 +32,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({
       try {
         const res = await getUserById(user?._id);
         setIsFavorite(res.data.user?.favorites.includes(productId));
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     fetchUserById();
   }, [user?._id, productId]);
@@ -42,9 +40,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({
     setIsFavorite(!isFavorite);
     try {
       await toggleFavorites(user?._id, productId);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

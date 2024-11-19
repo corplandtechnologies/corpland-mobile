@@ -5,11 +5,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ScrollView,
+  Linking,
 } from "react-native";
 import { Input, Button, Icon, CheckBox } from "react-native-elements";
 import { COLORS } from "../../utils/color";
 import { useNavigation } from "@react-navigation/native";
-import { authWithSocial, signUp } from "../../api/auth.api";
+import { authWithSocial } from "../../api/auth.api";
 import { Snackbar } from "react-native-paper"; // Ensure this is imported
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,6 +24,10 @@ import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
 // import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import PhoneInput from "react-native-phone-input";
+import { signUp } from "../../api/index.auth";
+import { authService } from "../../services/auth.service";
+import { getUserById } from "../../api";
+import { useApp } from "../../context/AppContext";
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -41,17 +47,18 @@ const Register = () => {
   const [referralCode, setReferralCode] = useState<string>("");
   const navigation: any = useNavigation();
   const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
+  const { setUser } = useApp();
   useEffect(() => {
-    checkAuthStatus();
+    // checkAuthStatus();
     checkAppleAuthAvailability();
   }, []);
 
-  const checkAuthStatus = async () => {
-    const token = await AsyncStorage.getItem("token");
-    if (token) {
-      navigation.navigate("CompleteProfile");
-    }
-  };
+  // const checkAuthStatus = async () => {
+  //   const token = await AsyncStorage.getItem("token");
+  //   if (token) {
+  //     navigation.navigate("CompleteProfile");
+  //   }
+  // };
 
   const checkAppleAuthAvailability = async () => {
     const isAvailable = await AppleAuthentication.isAvailableAsync();
@@ -83,9 +90,9 @@ const Register = () => {
   //     // setSnackbarVisible(true);
   //     // setSnackbarMessage("Registration Completed Successfully!");
   //     // navigation.navigate("CompleteProfile");
-  //     console.log(userInfo);
+  //
   //   } catch (e) {
-  //     console.log(e);
+  //
   //     setSnackbarMessage(handleError(e));
   //     setSnackbarVisible(true);
   //   }
@@ -122,7 +129,6 @@ const Register = () => {
       setSnackbarMessage("Registration Completed Successfully!");
       navigation.navigate("CompleteProfile");
     } catch (e) {
-      console.error("Apple Sign In Error:", e);
       setSnackbarVisible(true);
       setSnackbarMessage(handleError(e));
     }
@@ -132,9 +138,16 @@ const Register = () => {
     setPasswordVisible(!passwordVisible);
   };
   const handleSignUp = async () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!email || !password || !name || !phoneNumber) {
+    if (
+      !email ||
+      !password ||
+      !name ||
+      !phoneNumber ||
+      phoneNumber.trim() === "" ||
+      phoneNumber.length < 10
+    ) {
       setSnackbarMessage("All fields are required!");
       setSnackbarVisible(true);
       return;
@@ -149,21 +162,24 @@ const Register = () => {
     setLoading(true);
     try {
       const res = await signUp({
-        name: name.trim(),
+        name: name,
         phoneNumber: phoneNumber,
-        email: email.toLowerCase().trim(),
-        password: password.trim(),
+        email: email,
+        password: password,
         termsAccepted,
-        referralCode: referralCode.trim(),
       });
 
-      await AsyncStorage.setItem("user", JSON.stringify(res.user));
-      await AsyncStorage.setItem("token", res.token);
+      // Store the initial user data and token
+      const userData = res.data?.data.user;
+      const token = res.data?.data.token;
+
+      await authService.setUser(userData);
+      await authService.setToken(token);
+
       setSnackbarVisible(true);
-      setSnackbarMessage("Registration Completed Successfully!");
+      setSnackbarMessage(res.data?.message);
       navigation.navigate("Verify");
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
@@ -171,8 +187,16 @@ const Register = () => {
     }
   };
 
+  const handleTermsPress = () => {
+    // Will Create this page in the future
+    // Linking.openURL("https://corpland.app/terms-and-conditions");
+    Linking.openURL(
+      "https://www.termsfeed.com/live/ba293553-5fc9-4f66-be64-9613b78987e8"
+    );
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <UserHeader
         title="Create Account"
         description="Fill your information below or register with your social account"
@@ -190,7 +214,7 @@ const Register = () => {
             style={styles.input}
             pickerBackgroundColor={COLORS.TERTIARY}
             onChangePhoneNumber={(text) => {
-              setPhoneNumber(text.trim());
+              setPhoneNumber(text);
             }}
             autoFormat={true}
 
@@ -222,19 +246,20 @@ const Register = () => {
             />
           </TouchableOpacity>
         </View>
-        <FormInput
-          icon="ticket"
-          placeholder="Referral Code (Optional)"
-          onChangeText={setReferralCode}
-        />
       </View>
 
       <CheckBox
-        title="Agree with Terms & Conditions"
+        title={
+          <TouchableOpacity onPress={handleTermsPress}>
+            <Text style={styles.termsText}>Agree with Terms & Conditions</Text>
+          </TouchableOpacity>
+        }
         checked={termsAccepted}
         onPress={() => setTermsAccepted(!termsAccepted)}
         containerStyle={styles.checkboxContainer}
-        textStyle={styles.termsText}
+        checkedColor={COLORS.PRIMARY}
+        checkedIcon="check"
+        uncheckedColor={COLORS.GRAY}
       />
 
       <PrimaryButton
@@ -292,7 +317,7 @@ const Register = () => {
       >
         {snackbarMessage}
       </Snackbar>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -352,6 +377,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.GRAY,
     textDecorationLine: "underline",
+    marginLeft: 10,
   },
   separatorContainer: {
     flexDirection: "row",
@@ -371,7 +397,7 @@ const styles = StyleSheet.create({
   socialSignInContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginVertical: 20,
+    marginVertical: 10,
   },
   button: {
     width: 200,

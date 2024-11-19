@@ -51,7 +51,6 @@ const Withdraw = () => {
       setLoadingState(false);
       navigation.navigate("ConfirmWithdraw");
     } catch (error: any) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(false);

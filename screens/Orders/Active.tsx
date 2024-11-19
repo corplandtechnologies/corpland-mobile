@@ -47,7 +47,6 @@ const Active = () => {
       setOrders(res?.data);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     } finally {
       setLoading(false);

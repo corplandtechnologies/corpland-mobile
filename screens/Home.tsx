@@ -67,6 +67,7 @@ const Home = () => {
   // Modify the selectedTab state to handle pagination
   const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
+  
 
   useEffect(() => {
     // Update paginated products whenever activeTab or products change
@@ -148,7 +149,6 @@ const Home = () => {
       );
       setNotifications(sortedNotifications);
     } catch (error) {
-      console.log(error);
     } finally {
       setNotificationsLoading(false);
     }
@@ -157,12 +157,9 @@ const Home = () => {
   const fetchUnreadNotificationCount = async () => {
     try {
       const { data } = await getUnreadNotificationsCount(user?._id);
-      console.log("count", data?.data);
 
       setUnreadNotifications(data?.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useFocusEffect(
@@ -200,7 +197,6 @@ const Home = () => {
       setSnackbarMessage("Search Completed!");
       navigation.navigate("Search");
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
       setLoadingState(false);
@@ -217,7 +213,6 @@ const Home = () => {
       setProducts(response.data);
       setTrendingProducts(res.data);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -232,7 +227,6 @@ const Home = () => {
       const response = await getRequests();
       setRequests(response.data);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -245,11 +239,11 @@ const Home = () => {
     try {
       const userInfo: any = await AsyncStorage.getItem("user");
       const parsedUserInfo = JSON.parse(userInfo);
+
       const res: any = await getUserById(parsedUserInfo?._id);
+
       setUser(res?.data?.user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchUser();

@@ -66,9 +66,7 @@ const CreateProduct = () => {
           );
           const res = await getUserById(parsedUserInfo?._id);
           setUser(res?.data.user);
-        } catch (error) {
-          console.log(error);
-        }
+        } catch (error) {}
       };
       getUserInfo();
     }, [user?._id])
@@ -229,7 +227,6 @@ const CreateProduct = () => {
       setSelectedRegion("");
       setPrice("");
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(error);
       setSnackbarMessage(error.response.data);
       setSnackbarVisible(true);

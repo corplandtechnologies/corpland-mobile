@@ -74,9 +74,7 @@ const CreateRequest = () => {
           );
           const res = await getUserById(parsedUserInfo?._id);
           setUser(res?.data.user);
-        } catch (error) {
-          console.log(error);
-        }
+        } catch (error) {}
       };
       getUserInfo();
     }, [user?._id])
@@ -217,7 +215,6 @@ const CreateRequest = () => {
         maxPrice: maxPrice,
         userId: user._id,
       };
-      console.log(newProduct);
 
       const newWebProduct = {
         title: title,
@@ -238,7 +235,6 @@ const CreateRequest = () => {
       setSnackbarMessage("Product created successfully");
       setSnackbarVisible(true);
     } catch (error) {
-      console.log(error);
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {

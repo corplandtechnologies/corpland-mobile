@@ -6,9 +6,7 @@ export const getStorageItem = async (item: string) => {
     const result = await AsyncStorage.getItem(item);
     const parsedResult = JSON.parse(result || "");
     return parsedResult;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const createObjectURL = (file: any) => {
@@ -18,10 +16,14 @@ export const createObjectURL = (file: any) => {
 export const handleError = (error: any) => {
   let errorMessage = "An unexpected error occurred.";
   if (error.response) {
-    errorMessage =
-      error.response.data.message ||
-      error.response.data ||
-      error.response.statusText;
+    if (error.response.data?.errors?.length > 0) {
+      errorMessage = error.response.data.errors[0].msg;
+    } else {
+      errorMessage =
+        error.response.data.message ||
+        error.response.data ||
+        error.response.statusText;
+    }
   } else if (error.request) {
     errorMessage = "No response received from the server.";
   } else {
@@ -39,7 +41,6 @@ export const fetchUnreadNotificationCount = async (userId: string) => {
     const { data } = await getUnreadNotificationsCount(userId);
     return data.data;
   } catch (error) {
-    console.error("Error fetching unread notification count:", error);
     return 0;
   }
 };

@@ -33,9 +33,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
       try {
         const res = await getUserById(product.userId);
         setUserInfo(res.data.user);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     fetchUser();
   }, [product?.userId]);

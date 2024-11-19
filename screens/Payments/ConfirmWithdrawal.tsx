@@ -30,7 +30,6 @@ const ConfirmWithdraw = () => {
       setSnackbarMessage("Withdrawal request has been made successfully!");
       navigation.navigate("Home");
     } catch (error) {
-      console.log(error);
       setSnackbarMessage("Something went wrong! Please try again later.");
       setSnackbarVisible(true);
       setLoading(false);

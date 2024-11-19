@@ -35,9 +35,7 @@ const RequestCard: React.FC<RequestCardProps> = ({ request, onReset }) => {
       try {
         const res = await getUserById(request.userId);
         setUserInfo(res.data.user);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     fetchUser();
   }, [request?.userId]);

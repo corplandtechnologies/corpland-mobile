@@ -11,6 +11,7 @@ import React, {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Notification } from "../interfaces";
 import { fetchUnreadNotificationCount } from "../utils";
+import { authService, StoredUser } from "../services/auth.service";
 
 export interface AppContextType {
   loading: any;
@@ -21,8 +22,8 @@ export interface AppContextType {
   setSnackbarMessage: Dispatch<SetStateAction<string>>;
   setLoading: any;
   setError: any;
-  user: any;
-  setUser: any;
+  user: StoredUser | null;
+  setUser: (user: StoredUser | null) => Promise<void>;
   refreshing: boolean;
   setRefreshing: any;
   eventLoading: boolean;
@@ -35,7 +36,9 @@ export interface AppContextType {
   setNotifications: Dispatch<SetStateAction<Notification[]>>;
   unreadNotifications: number;
   setUnreadNotifications: Dispatch<SetStateAction<number>>;
-  updateUnreadNotificationCount: any;
+  updateUnreadNotificationCount: (userId: string) => Promise<void>;
+  isAuthenticated: boolean;
+  logout: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -48,7 +51,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [error, setError] = useState<any>(null);
   const [snackbarVisible, setSnackbarVisible] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
-  const [user, setUser] = useState<any>(null);
+  const [user, setUserState] = useState<StoredUser | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [transferRecipient, setTransferRecipient] = useState<string>("");
   const [requestId, setRequestId] = useState<string>("");
@@ -57,6 +61,38 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const updateUnreadNotificationCount = useCallback(async (userId: string) => {
     const count = await fetchUnreadNotificationCount(userId);
     setUnreadNotifications(count);
+  }, []);
+
+  const setUser = async (newUser: StoredUser | null) => {
+    if (newUser) {
+      await authService.setUser(newUser);
+      setUserState(newUser);
+      setIsAuthenticated(true);
+    } else {
+      await authService.logout();
+      setUserState(null);
+      setIsAuthenticated(false);
+    }
+  };
+
+  const logout = async () => {
+    await authService.logout();
+    setUserState(null);
+    setIsAuthenticated(false);
+  };
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        const storedUser = await authService.getUser();
+        if (storedUser) {
+          setUserState(storedUser);
+          setIsAuthenticated(true);
+        }
+      } catch (error) {}
+    };
+
+    initializeAuth();
   }, []);
 
   return (
@@ -85,6 +121,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         unreadNotifications,
         setUnreadNotifications,
         updateUnreadNotificationCount,
+        isAuthenticated,
+        logout,
       }}
     >
       {children}
