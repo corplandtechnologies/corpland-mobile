@@ -6,7 +6,7 @@ import axios from "axios";
 // });
 
 export const corplandAccountsAPI = axios.create({
-  baseURL: "https://corpland-accounts.onrender.com/api/v1",
+  baseURL: "https://corpland-accounts-backup.onrender.com/api/v1",
   withCredentials: true,
 });
 
