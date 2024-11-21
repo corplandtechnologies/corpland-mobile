@@ -139,9 +139,11 @@ const Login = () => {
     try {
       // 1. Perform login
       const res = await login({
-        email: email.trim(),
+        email: email.toLowerCase().trim(),
         password: password.trim(),
       });
+
+      console.log("res", res.data);
 
       const initialUserData = res.data?.data;
       const token = res.data?.data.token;
@@ -150,7 +152,7 @@ const Login = () => {
       await authService.setToken(token);
 
       // 3. Fetch complete user data
-      const userResponse = await getUserById(initialUserData.user._id);
+      const userResponse = await getUserByUserId(initialUserData.user._id);
       const completeUserData = userResponse.data?.data;
 
       // 4. Store complete user data
@@ -160,18 +162,11 @@ const Login = () => {
       setSnackbarVisible(true);
       setSnackbarMessage("Logged In Successfully!");
 
-      // 5. Check profile completion
-      if (
-        !completeUserData.profilePicture ||
-        !completeUserData.phoneNumber ||
-        !completeUserData.name
-      ) {
-        navigation.navigate("CompleteProfile");
-        return;
-      }
 
       navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
+      console.log("error", error);
+      
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
