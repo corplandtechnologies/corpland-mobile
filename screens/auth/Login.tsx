@@ -139,8 +139,8 @@ const Login = () => {
     try {
       // 1. Perform login
       const res = await login({
-        email: email,
-        password: password,
+        email: email.trim(),
+        password: password.trim(),
       });
 
       const initialUserData = res.data?.data;
