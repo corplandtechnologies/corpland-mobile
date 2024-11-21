@@ -88,7 +88,7 @@ const Favorite = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {products.map((product) => (
-          <ProductCard product={product} />
+          <ProductCard key={product._id} product={product} />
         ))}
       </ScrollView>
     </View>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     gap: 10,
     width: "100%",
     justifyContent: "center",
-    marginBottom: 100,
+    paddingBottom: 100,
   },
   emptyContainer: {
     flex: 1,
