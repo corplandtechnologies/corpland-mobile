@@ -54,5 +54,5 @@ export const resetPassword = (email: string, newPassword: string) =>
   });
 
 export const verifyEmail = (userData: { email: string; otp: string }) => {
-  corplandAccountsAPI.post("/users/verify-email", userData);
+  return corplandAccountsAPI.post("/users/verify-email", userData);
 };

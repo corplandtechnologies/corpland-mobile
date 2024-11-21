@@ -140,7 +140,7 @@ const Login = () => {
       // 1. Perform login
       const res = await login({
         email: email,
-        password: password,
+        password: password.trim(),
       });
 
       const initialUserData = res.data?.data;

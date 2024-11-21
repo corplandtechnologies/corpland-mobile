@@ -2,15 +2,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Platform } from "react-native";
 
-// export const APIv2 = axios.create({
-//   baseURL: "http://192.168.94.158:5007/api/v1",
-//   withCredentials: true,
-// });
-
 export const APIv2 = axios.create({
-  baseURL: "https://corpland-backend-new.onrender.com/api/v1",
+  baseURL: "http://192.168.224.158:5007/api/v1",
   withCredentials: true,
 });
+
+// export const APIv2 = axios.create({
+//   baseURL: "https://corpland-backend-new.onrender.com/api/v1",
+//   withCredentials: true,
+// });
 
 APIv2.interceptors.request.use(
   async (config) => {
@@ -55,4 +55,4 @@ export const completeProfile = async (userData: any) => {
 
 export const getUserById = (userId: string) => APIv2.get(`/users/${userId}`);
 export const getUserByUserId = (userId: string) =>
-  APIv2.get(`/users/${userId}`);
+  APIv2.get(`/users/user/${userId}`);
