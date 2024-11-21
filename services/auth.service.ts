@@ -146,25 +146,10 @@ class AuthService {
       if (!userProfile?.data?.data) {
         return false;
       }
-
       // Check if required profile fields exist
       const profile = userProfile.data.data;
       const requiredFields = ["name", "phoneNumber", "country", "region"];
-
-      console.log("5. Current profile fields:", {
-        name: profile.name,
-        phoneNumber: profile.phoneNumber,
-        country: profile.country,
-        region: profile.region,
-      });
-
       const hasAllFields = requiredFields.every((field) => !!profile[field]);
-      console.log(
-        hasAllFields
-          ? "✅ All required fields are present"
-          : "❌ Missing required fields"
-      );
-
       return hasAllFields;
     } catch (error) {
       return false;
