@@ -1,6 +1,6 @@
 import "react-native-url-polyfill/auto";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, createNavigationContainerRef } from "@react-navigation/native";
 import Register from "./screens/auth/Register";
 import Login from "./screens/auth/Login";
 import Onboarding from "./screens/Onboarding";
@@ -125,6 +125,50 @@ const showLocalNotification = async (remoteMessage: any) => {
   });
 };
 
+// Create a strongly typed navigation ref
+export const navigationRef = createNavigationContainerRef();
+
+// Type-safe navigation function
+export function navigate(name: string, params?: any) {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name as never, params as never);
+  }
+}
+
+const handleNotificationNavigation = (remoteMessage: any) => {
+  if (!remoteMessage?.data) return;
+
+  const { screen, id } = remoteMessage.data;
+
+  if (navigationRef.isReady()) {
+    switch (screen) {
+      case "Product":
+        navigationRef.navigate("Product", { productId: id });
+        break;
+      case "Order":
+        navigationRef.navigate("TrackOrder", { orderId: id });
+        break;
+      case "Request":
+        navigationRef.navigate("Request", { requestId: id });
+        break;
+      case "Wallet":
+        navigationRef.navigate("Wallet");
+        break;
+      case "MyProducts":
+        navigationRef.navigate("MyProducts");
+        break;
+      case "MyRequests":
+        navigationRef.navigate("MyRequests");
+        break;
+      case "externalLink":
+        Linking.openURL(id);  
+        break;
+      default:
+        navigationRef.navigate("Notifications");
+    }
+  }
+};
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -189,16 +233,12 @@ function App() {
       messaging()
         .getInitialNotification()
         .then(async (remoteMessage) => {
-          console.log(
-            "Notification caused app to open from quit state:",
-            remoteMessage?.notification
-          );
+          if (remoteMessage) {
+            handleNotificationNavigation(remoteMessage);
+          }
         });
       messaging().onNotificationOpenedApp((remoteMessage) => {
-        console.log(
-          "Notification caused the app to open from the background state.",
-          remoteMessage.notification
-        );
+        handleNotificationNavigation(remoteMessage);
       });
       messaging().setBackgroundMessageHandler(async (remoteMessage) => {
         await showLocalNotification(remoteMessage);
@@ -377,7 +417,7 @@ function App() {
               <SellerModeProvider>
                 <SearchResultsProvider>
                   <ProductProvider>
-                    <NavigationContainer linking={linking}>
+                    <NavigationContainer ref={navigationRef} linking={linking}>
                       <Stack.Navigator initialRouteName={initialRoute}>
                         <Stack.Screen
                           name="TabNavigator"
