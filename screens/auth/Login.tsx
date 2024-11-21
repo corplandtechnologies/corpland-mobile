@@ -143,8 +143,6 @@ const Login = () => {
         password: password.trim(),
       });
 
-      console.log("res", res.data);
-
       const initialUserData = res.data?.data;
       const token = res.data?.data.token;
 
@@ -162,11 +160,8 @@ const Login = () => {
       setSnackbarVisible(true);
       setSnackbarMessage("Logged In Successfully!");
 
-
       navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
-      console.log("error", error);
-      
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
