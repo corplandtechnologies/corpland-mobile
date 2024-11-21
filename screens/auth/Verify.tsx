@@ -7,6 +7,7 @@ import UserHeader from "../../components/UserHeader";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { COLORS } from "../../utils/color";
 import { verifyEmail } from "../../api/index.auth";
+import { handleError } from "../../utils";
 
 const Verify = () => {
   const [loading, setLoading] = useState(false);
@@ -57,12 +58,17 @@ const Verify = () => {
         otp: verificationCode.join(""),
       };
 
-      await verifyEmail(data);
+      const res = await verifyEmail(data);
 
-      // After verification, navigate to complete profile
-      navigation.navigate("CompleteProfile");
+      if (res?.status === 200) {
+        // After verification, navigate to complete profile
+        navigation.navigate("CompleteProfile" as never);
+      } else {
+        setSnackbarMessage(res?.data?.data.message);
+        setSnackbarVisible(true);
+      }
     } catch (error) {
-      setSnackbarMessage("Invalid Code. Check and Try again!");
+      setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
       setLoading(false);

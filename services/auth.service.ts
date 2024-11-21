@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getUserById } from "../api/index";
+import { getUserById, getUserByUserId } from "../api/index";
 
 const STORAGE_KEYS = {
   USER: "user",
@@ -120,6 +120,56 @@ class AuthService {
       return null;
     } catch (error) {
       return null;
+    }
+  }
+
+  async isUserProfileAvailable(
+    setIsLoading: (isLoading: boolean) => void
+  ): Promise<boolean> {
+    setIsLoading(true);
+    try {
+      const token = await this.getToken();
+
+      const user = await this.getUser();
+
+      if (!user?._id && token) {
+        return false;
+      } else if (!user && !token) {
+        return true;
+      }
+
+      // Try to get user profile from database using getUserByUserId
+
+      const userProfile = await getUserById(user._id);
+
+      // If no user data returned, profile doesn't exist
+      if (!userProfile?.data?.data) {
+        return false;
+      }
+
+      // Check if required profile fields exist
+      const profile = userProfile.data.data;
+      const requiredFields = ["name", "phoneNumber", "country", "region"];
+
+      console.log("5. Current profile fields:", {
+        name: profile.name,
+        phoneNumber: profile.phoneNumber,
+        country: profile.country,
+        region: profile.region,
+      });
+
+      const hasAllFields = requiredFields.every((field) => !!profile[field]);
+      console.log(
+        hasAllFields
+          ? "✅ All required fields are present"
+          : "❌ Missing required fields"
+      );
+
+      return hasAllFields;
+    } catch (error) {
+      return false;
+    } finally {
+      setIsLoading(false);
     }
   }
 }

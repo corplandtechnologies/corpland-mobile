@@ -318,12 +318,21 @@ function App() {
     const initializeApp = async () => {
       try {
         setIsLoading(true);
-        const isAuthenticated = await authService.isAuthenticated();
 
-        if (isAuthenticated) {
-          const currentUser = await authService.getCurrentUser();
-          if (currentUser) {
-            await setUser(currentUser);
+        const isUserProfileAvailable = await authService.isUserProfileAvailable(
+          setIsLoading
+        );
+
+        if (!isUserProfileAvailable) {
+          return setInitialRoute("CompleteProfile");
+        } else {
+          const isAuthenticated = await authService.isAuthenticated();
+
+          if (isAuthenticated) {
+            const currentUser = await authService.getCurrentUser();
+            if (currentUser) {
+              await setUser(currentUser);
+            }
           }
         }
       } catch (error) {
