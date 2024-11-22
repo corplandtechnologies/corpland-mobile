@@ -158,13 +158,16 @@ const handleNotificationNavigation = (remoteMessage: any) => {
       case "Wallet":
         navigationRef.navigate("Wallet");
         break;
+      case "Withdraw":
+        navigationRef.navigate("Withdraw");
+        break;
       case "MyProducts":
         navigationRef.navigate("MyProducts");
         break;
       case "MyRequests":
         navigationRef.navigate("MyRequests");
         break;
-      case "externalLink":
+      case "ExternalLink":
         Linking.openURL(id);
         break;
       default:
