@@ -1,194 +1,182 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
-import MainView from "../../components/elements/Views/MainView";
-import TextElement from "../../components/elements/Texts/TextElement";
-import Card from "../../components/ui/Card";
-import { CheckBox, Icon } from "react-native-elements";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
 import { COLORS } from "../../utils/color";
-import Hr from "../../components/elements/HR/Hr";
-import PhoneInput from "react-native-phone-input";
-import BottomActionCard from "../../components/BottomActionCard";
-import PrimaryButton from "../../components/ui/PrimaryButton";
-import { useApp } from "../../context/AppContext";
-import SnackBar from "../../components/ui/SnackBar";
-import { handleError } from "../../utils";
-import { createTransferRecipient } from "../../api/api";
+import WalletModal from "../../components/WalletModal";
 import { useNavigation } from "@react-navigation/native";
+import Card from "../../components/ui/Card";
+import { useApp } from "../../context/AppContext";
+import TextElement from "../../components/elements/Texts/TextElement";
+import SnackBar from "../../components/ui/SnackBar";
+import moment from "moment";
+import MainView from "../../components/elements/Views/MainView";
+import { RefreshControl } from "react-native";
+import Hr from "../../components/elements/HR/Hr";
+import Icon from "react-native-vector-icons/Ionicons";
+import { getWithdrawals } from "../../api";
+import { handleError } from "../../utils";
+import { authService } from "../../services/auth.service";
 
-const Withdraw = () => {
+const Withdraw: React.FC = () => {
   const navigation: any = useNavigation();
-  const [selectedBankCode, setSelectedBankCode] = React.useState<string>("MTN");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const {
-    user,
+    snackbarVisible,
+    setSnackbarVisible,
     setSnackbarMessage,
     snackbarMessage,
-    setSnackbarVisible,
-    snackbarVisible,
-    setTransferRecipient,
+    user,
+    refreshing,
+    setRefreshing,
   } = useApp();
-  const [proceedLoading, setProceedLoading] = useState<boolean>(false);
 
-  const handleTransferRecipient = async (
-    setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
-  ) => {
-    if (!phoneNumber) {
-      setSnackbarMessage("Please provide the receiving number");
-      setSnackbarVisible(true);
-      return;
-    }
-    setLoadingState(true);
+  const [withdrawRequests, setWithdrawRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchWithdrawals = async () => {
     try {
-      const res = await createTransferRecipient(
-        user?.name,
-        phoneNumber,
-        selectedBankCode,
-        user?._id
+      setIsLoading(true);
+      const response = await getWithdrawals(user?._id || "");
+      setWithdrawRequests(
+        response.data.data.sort(
+          (a: any, b: any) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
       );
-      setTransferRecipient(res.data.transferRecipient);
-      setSnackbarMessage("Tranfer Recipient Created Successfully!");
-      setSnackbarVisible(true);
-      setLoadingState(false);
-      navigation.navigate("ConfirmWithdraw");
-    } catch (error: any) {
+    } catch (error) {
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
-      setLoadingState(false);
     } finally {
-      setLoadingState(false);
+      setIsLoading(false);
+      setRefreshing(false);
     }
   };
+
+  useEffect(() => {
+    fetchWithdrawals();
+  }, [withdrawRequests?.length]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    authService.getCurrentUser();
+    fetchWithdrawals();
+  }, []);
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "pending":
+        return <Icon name="time" size={24} color={COLORS.WARNING} />;
+      case "accepted":
+        return <Icon name="checkmark-circle" size={24} color={COLORS.MONEY} />;
+      case "rejected":
+        return <Icon name="close-circle" size={24} color={COLORS.CANCELLED} />;
+      default:
+        return null;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "pending":
+        return COLORS.WARNING;
+      case "accepted":
+        return COLORS.MONEY;
+      case "rejected":
+        return COLORS.CANCELLED;
+      default:
+        return COLORS.GRAY;
+    }
+  };
+
+  const renderWithdrawRequests = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.centerView}>
+          <ActivityIndicator color={COLORS.PRIMARY} />
+        </View>
+      );
+    }
+
+    if (withdrawRequests.length === 0) {
+      return (
+        <View style={styles.centerView}>
+          <TextElement color={COLORS.GRAY}>
+            No withdrawal history found
+          </TextElement>
+        </View>
+      );
+    }
+
+    return withdrawRequests.map((request) => (
+      <Card key={request._id} style={styles.wrapper}>
+        <View style={styles.infoWrapper}>
+          <View style={styles.statusRow}>
+            {getStatusIcon(request.status)}
+            <TextElement
+              style={styles.statusText}
+              color={getStatusColor(request.status)}
+            >
+              {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+            </TextElement>
+          </View>
+          <TextElement
+            color={COLORS.GRAY}
+            fontSize={12}
+            fontFamily="PoppinsMedium"
+          >
+            {moment(request.createdAt).format("DD MMMM | hh:mm A")}
+          </TextElement>
+          <TextElement
+            color={COLORS.GRAY}
+            fontSize={12}
+            fontFamily="PoppinsMedium"
+          >
+            Account: {request.accountNumber}
+          </TextElement>
+        </View>
+        <View style={styles.amountWrapper}>
+          <TextElement color={COLORS.PRIMARY}>GH₵ {request.amount}</TextElement>
+        </View>
+      </Card>
+    ));
+  };
+
   return (
-    <MainView style={{ padding: 10, justifyContent: "space-between" }}>
-      <View>
-        <View style={{ paddingBottom: 20, gap: 20 }}>
-          <TextElement fontSize={18}>Payment Options</TextElement>
-        </View>
-        <Card style={styles.paymentOptionsCard}>
-          <View style={styles.paymentOptions}>
-            <View style={styles.paymentLeft}>
-              <Image
-                source={{
-                  uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwmjP8b-8u-0h-nU5cTaZERErjQH7Ik_K3EQ&s",
-                }}
-                style={{ width: 50, height: 50, objectFit: "contain" }}
-              />
-              <TextElement
-                color={COLORS.GRAY}
-                fontFamily="PoppinsMedium"
-                fontSize={16}
-              >
-                MTN
-              </TextElement>
-            </View>
-            <View style={styles.paymentRight}>
-              <CheckBox
-                checked={selectedBankCode === "MTN"}
-                onPress={() => setSelectedBankCode("MTN")}
-                iconType="material-community"
-                checkedIcon="radiobox-marked"
-                uncheckedIcon="radiobox-blank"
-              />
-            </View>
-          </View>
-          <Hr />
-          <View style={styles.paymentOptions}>
-            <View style={styles.paymentLeft}>
-              <Image
-                source={{
-                  uri: "https://etranzact.com.gh/wp-content/uploads/2023/07/ATM-Logo-01.png",
-                }}
-                style={{ width: 50, height: 50 }}
-              />
-              <TextElement
-                color={COLORS.GRAY}
-                fontFamily="PoppinsMedium"
-                fontSize={16}
-              >
-                AirtelTigo
-              </TextElement>
-            </View>
-            <View style={styles.paymentRight}>
-              <CheckBox
-                checked={selectedBankCode === "ATL"}
-                onPress={() => setSelectedBankCode("ATL")}
-                iconType="material-community"
-                checkedIcon="radiobox-marked"
-                uncheckedIcon="radiobox-blank"
-              />
-            </View>
-          </View>
-          <Hr />
-          <View style={styles.paymentOptions}>
-            <View style={styles.paymentLeft}>
-              <Image
-                source={{
-                  uri: "https://citinewsroom.com/wp-content/uploads/2024/05/Telecel-Cash-Logo.jpg",
-                }}
-                style={{ width: 50, height: 50, objectFit: "contain" }}
-              />
-              <TextElement
-                color={COLORS.GRAY}
-                fontFamily="PoppinsMedium"
-                fontSize={16}
-              >
-                Telecel
-              </TextElement>
-            </View>
-            <View style={styles.paymentRight}>
-              <CheckBox
-                checked={selectedBankCode === "VOD"}
-                onPress={() => setSelectedBankCode("VOD")}
-                iconType="material-community"
-                checkedIcon="radiobox-marked"
-                uncheckedIcon="radiobox-blank"
-              />
-            </View>
-          </View>
-        </Card>
-        <View style={styles.inputContainer}>
-          {/* <Icon name="phone" type="font-awesome" color={COLORS.GRAY} /> */}
-          <PhoneInput
-            initialCountry={"gh"}
-            textProps={{
-              placeholder: "Enter a phone number...",
-              cursorColor: COLORS.PRIMARY,
-            }}
-            // style={styles.input}
-            pickerBackgroundColor={COLORS.TERTIARY}
-            onChangePhoneNumber={(text) => {
-              // Remove any spaces
-              let formattedNumber = text.replace(/\s+/g, "");
-
-              // Remove the country code prefix "+233" and replace it with "0"
-              if (formattedNumber.startsWith("+233")) {
-                formattedNumber = "0" + formattedNumber.slice(4);
-              }
-
-              setPhoneNumber(formattedNumber);
-            }}
-            autoFormat={true}
-            // You can customize the country list and other props as needed
+    <MainView>
+      <ScrollView
+        contentContainerStyle={{
+          backgroundColor: COLORS.SECONDARY,
+          padding: 10,
+        }}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <View style={styles.walletView}>
+          <WalletModal
+            balance={user?.wallet}
+            onPress={() => navigation.navigate("WithdrawalChannel")}
+            actionButtonText="Withdraw"
+            keyboardType="numeric"
+            isWallet
           />
         </View>
-      </View>
-      <View>
-        <BottomActionCard>
-          <PrimaryButton
-            value="Proceed"
-            onPress={() => {
-              handleTransferRecipient(setProceedLoading);
-            }}
-            loading={proceedLoading}
-            disabled={phoneNumber.length < 10}
-          />
-        </BottomActionCard>
-      </View>
-      <SnackBar
-        setSnackbarVisible={setSnackbarVisible}
-        snackbarVisible={snackbarVisible}
-        snackbarMessage={snackbarMessage}
-      />
+        <Hr height={5} marginVertical={25} marginHorizontal={100} />
+        <TextElement style={styles.title}>Withdraw History</TextElement>
+        <MainView style={styles.loadingView}>
+          {renderWithdrawRequests()}
+        </MainView>
+        <SnackBar
+          setSnackbarVisible={setSnackbarVisible}
+          snackbarVisible={snackbarVisible}
+          snackbarMessage={snackbarMessage}
+        />
+      </ScrollView>
     </MainView>
   );
 };
@@ -196,38 +184,47 @@ const Withdraw = () => {
 export default Withdraw;
 
 const styles = StyleSheet.create({
-  paymentOptions: {
+  main: {
+    backgroundColor: COLORS.SECONDARY,
+    height: "100%",
+    padding: 10,
+  },
+  wrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 10,
-  },
-  paymentLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-  },
-  paymentOptionsCard: {
-    borderRadius: 20,
-    borderColor: COLORS.TERTIARY,
-    justifyContent: "center",
-  },
-  paymentRight: {
-    marginRight: -25,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: COLORS.SECONDARY,
-    marginBottom: 20,
     padding: 15,
-    borderRadius: 10,
-    gap: 10,
-    borderWidth: 1,
-    borderColor: COLORS.TERTIARY,
-    marginTop: 20,
-    height: 65,
+    marginVertical: 5,
+    alignItems: "center",
+  },
+  title: {
+    fontFamily: "PoppinsBold",
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  amountWrapper: {
+    alignItems: "flex-end",
+    flex: 1,
+  },
+  statusRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  statusText: {
+    marginLeft: 8,
+    fontFamily: "PoppinsMedium",
+  },
+  infoWrapper: {
+    flex: 2,
+  },
+  loadingView: {
+    flex: 1,
+  },
+  walletView: {
+    flex: 1,
+  },
+  centerView: {
+    height: "100%",
+    justifyContent: "center",
   },
 });

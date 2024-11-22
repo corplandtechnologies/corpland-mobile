@@ -99,16 +99,16 @@ const Profile = () => {
             iconName="paper-plane-outline"
             onPress={() => navigation.navigate("MyRequests")}
           /> */}
-          {/* <ProfileMenuItem
+          <ProfileMenuItem
             title="Wallet"
             iconName="wallet-outline"
             onPress={() => navigation.navigate("Wallet")}
-          /> */}
-          {/* <ProfileMenuItem
+          />
+          <ProfileMenuItem
             title="Withdraw"
             iconName="card-outline"
             onPress={() => navigation.navigate("Withdraw")}
-          /> */}
+          />
           {/* <ProfileMenuItem
             title="My Coupons"
             iconName="ticket-outline"

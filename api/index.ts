@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Platform } from "react-native";
+import { Withdrawal } from "../interfaces";
 
 // export const APIv2 = axios.create({
 //   baseURL: "http://192.168.224.158:5007/api/v1",
@@ -56,3 +57,9 @@ export const completeProfile = async (userData: any) => {
 export const getUserById = (userId: string) => APIv2.get(`/users/${userId}`);
 export const getUserByUserId = (userId: string) =>
   APIv2.get(`/users/user/${userId}`);
+
+export const createWithdrawal = (data: Withdrawal) =>
+  APIv2.post("/withdrawals", data);
+
+export const getWithdrawals = (userId: string) => 
+  APIv2.get(`/withdrawals?userId=${userId}`);

@@ -73,3 +73,10 @@ export interface GroupedNotifications {
   date: string;
   notifications: Notification[];
 }
+
+export interface Withdrawal {
+  userId: string | undefined;
+  amount: number;
+  accountNumber: string | undefined;
+  channel: string;
+}

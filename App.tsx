@@ -1,6 +1,9 @@
 import "react-native-url-polyfill/auto";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer, createNavigationContainerRef } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  createNavigationContainerRef,
+} from "@react-navigation/native";
 import Register from "./screens/auth/Register";
 import Login from "./screens/auth/Login";
 import Onboarding from "./screens/Onboarding";
@@ -77,6 +80,7 @@ import { getUserById, saveDevice } from "./api";
 import { ThemeProvider } from "./context/ThemeContext";
 import { authService } from "./services/auth.service";
 import LoadingScreen from "./screens/LoadingScreen";
+import WithdrawalChannel from "./screens/Payments/WithdrawalChannel";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQAZsd74WSYymehytX8oGpZabbERSBNoU",
@@ -161,7 +165,7 @@ const handleNotificationNavigation = (remoteMessage: any) => {
         navigationRef.navigate("MyRequests");
         break;
       case "externalLink":
-        Linking.openURL(id);  
+        Linking.openURL(id);
         break;
       default:
         navigationRef.navigate("Notifications");
@@ -770,6 +774,19 @@ function App() {
                             },
                           }}
                           component={ConfirmWithdraw}
+                        />
+                        <Stack.Screen
+                          name="WithdrawalChannel"
+                          options={{
+                            headerTitle: "Select Channel",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={WithdrawalChannel}
                         />
                         <Stack.Screen
                           name="ConfirmBonusWithdrawal"
