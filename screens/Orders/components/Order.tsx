@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { FC, useEffect, useState } from "react";
-import Card from "../../../components/ui/Card";
+import Card from "../../../components/common/Card/Card";
 import Badge from "../../../components/ui/Badge";
 import { COLORS } from "../../../utils/color";
 import RowView from "../../../components/elements/Views/RowView";
 import PrimaryText from "../../../components/elements/Texts/TextElement";
-import PrimaryButton from "../../../components/ui/PrimaryButton";
+import PrimaryButton from "../../../components/common/Button/PrimaryButton";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
 import { useApp } from "../../../context/AppContext";

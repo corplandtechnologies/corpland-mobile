@@ -8,12 +8,12 @@ import {
   Animated,
   TouchableWithoutFeedback,
 } from "react-native";
-import { COLORS } from "../utils/color";
-import TextElement from "./elements/Texts/TextElement";
-import PrimaryButton from "./ui/PrimaryButton";
+import { COLORS } from "../../utils/color";
+import TextElement from "../elements/Texts/TextElement";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Icon } from "react-native-elements";
+import PrimaryButton from "../common/Button/PrimaryButton";
 interface PopUpCardProps {
   visible: boolean;
   onClose: () => void;

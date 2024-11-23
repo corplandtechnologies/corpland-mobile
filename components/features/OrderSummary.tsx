@@ -1,20 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { COLORS } from "../utils/color";
-import PrimaryButton from "./ui/PrimaryButton";
-import AnimatedView from "./animated/AnimatedView";
-import { useCart } from "../context/CartContext";
+import { COLORS } from "../../utils/color";
+import PrimaryButton from "../common/Button/PrimaryButton";
+import AnimatedView from "../animated/AnimatedView";
+import { useCart } from "../../context/CartContext";
 import { useNavigation } from "@react-navigation/native";
 import {
   createBonusOrder,
   createCashOnDeliveryOrder,
   createOrder,
-} from "../api/api";
-import { useUser } from "../context/UserContext";
+} from "../../api/api";
+import { useUser } from "../../context/UserContext";
 import { Snackbar } from "react-native-paper";
-import { useApp } from "../context/AppContext";
-import { handleError } from "../utils";
-import SnackBar from "./ui/SnackBar";
+import { useApp } from "../../context/AppContext";
+import { handleError } from "../../utils";
+import SnackBar from "../common/Snackbar/SnackBar";
 import PopUpCard from "./PopUpCard";
 
 const OrderSummary = () => {

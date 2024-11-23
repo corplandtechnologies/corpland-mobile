@@ -2,7 +2,7 @@
 import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import { Button, Icon as FormIcons } from "react-native-elements";
-import { COLORS } from "../../utils/color";
+import { COLORS } from "../../../utils/color";
 import Icon from "react-native-vector-icons/Ionicons";
 
 interface FormInputProps {

@@ -51,7 +51,7 @@ const Onboarding = () => {
 
   return (
     <ImageBackground
-      source={require("../assets/Designer3.jpeg")} // Replace with your image path
+      source={require("../assets/images/Designer3.jpeg")} // Replace with your image path
       style={styles.backgroundImage}
     >
       <Animated.View

@@ -1,10 +1,10 @@
 import { Linking, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { COLORS } from "../utils/color";
-import WalletModal from "../components/WalletModal";
+import WalletModal from "../components/features/WalletModal";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-elements";
-import PrimaryButton from "../components/ui/PrimaryButton";
+import PrimaryButton from "../components/common/Button/PrimaryButton";
 
 const CompleteDeposit = () => {
   const navigation = useNavigation();

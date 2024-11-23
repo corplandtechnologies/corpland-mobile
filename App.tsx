@@ -10,7 +10,7 @@ import Onboarding from "./screens/Onboarding";
 import * as Font from "expo-font";
 import { useEffect, useRef, useState } from "react";
 import Verify from "./screens/auth/Verify";
-import BackButton from "./components/ui/BackButton";
+import BackButton from "./components/common/Button/BackButton";
 import CompleteProfile from "./screens/auth/CompleteProfile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SellerModeProvider } from "./context/SellerModeContext";
@@ -41,7 +41,7 @@ import NetInfo from "@react-native-community/netinfo";
 import TabNavigator from "./routes/TabNavigator";
 import * as Updates from "expo-updates";
 import { StatusBar } from "expo-status-bar";
-import Header from "./components/Header";
+import Header from "./components/features/Header";
 import { Platform } from "react-native";
 import Wallet from "./screens/Wallet";
 import Deposit from "./screens/Deposit";
@@ -62,7 +62,7 @@ import MyRequests from "./screens/buyer/MyRequests";
 import EditRequest from "./screens/buyer/EditRequest";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
 import NotificationScreen from "./screens/NotificationScreen";
-import PrimaryButton from "./components/ui/PrimaryButton";
+import PrimaryButton from "./components/common/Button/PrimaryButton";
 import TextElement from "./components/elements/Texts/TextElement";
 import ForgotPassword from "./screens/auth/ForgotPassword";
 import VerifyEmailPasswordReset from "./screens/auth/VerifyEmailPasswordReset";
@@ -297,13 +297,13 @@ function App() {
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
-        PoppinsExtraBold: require("./fonts/Poppins/Poppins-ExtraBold.ttf"),
-        PoppinsBold: require("./fonts/Poppins/Poppins-Bold.ttf"),
-        PoppinsSemiBold: require("./fonts/Poppins/Poppins-SemiBold.ttf"),
-        PoppinsMedium: require("./fonts/Poppins/Poppins-Medium.ttf"),
-        PoppinsRegular: require("./fonts/Poppins/Poppins-Regular.ttf"),
-        PoppinsLight: require("./fonts/Poppins/Poppins-Light.ttf"),
-        PoppinsThin: require("./fonts/Poppins/Poppins-Thin.ttf"),
+        PoppinsExtraBold: require("./assets/fonts/Poppins/Poppins-ExtraBold.ttf"),
+        PoppinsBold: require("./assets/fonts/Poppins/Poppins-Bold.ttf"),
+        PoppinsSemiBold: require("./assets/fonts/Poppins/Poppins-SemiBold.ttf"),
+        PoppinsMedium: require("./assets/fonts/Poppins/Poppins-Medium.ttf"),
+        PoppinsRegular: require("./assets/fonts/Poppins/Poppins-Regular.ttf"),
+        PoppinsLight: require("./assets/fonts/Poppins/Poppins-Light.ttf"),
+        PoppinsThin: require("./assets/fonts/Poppins/Poppins-Thin.ttf"),
       });
       setFontLoaded(true);
     }
@@ -402,7 +402,7 @@ function App() {
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
-        <Image source={require("./assets/no-wifi.png")} />
+        <Image source={require("./assets/images/no-wifi.png")} />
         <Text style={styles.mainError}>Ooops...</Text>
         <Text style={styles.message}>No Internet Connection Found.</Text>
         <Text style={styles.message}>Check your connection.</Text>

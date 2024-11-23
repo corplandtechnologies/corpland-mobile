@@ -3,13 +3,13 @@ import React, { useState, useCallback } from "react";
 import { Avatar, Switch } from "react-native-paper";
 import { COLORS } from "../utils/color";
 import Icon from "react-native-vector-icons/Ionicons";
-import ProfileMenuItem from "../components/ProfileMenuItem";
+import ProfileMenuItem from "../components/features/ProfileMenuItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useSellerMode } from "../context/SellerModeContext";
-import ConfirmationModal from "../components/ConfirmationModal";
+import ConfirmationModal from "../components/features/ConfirmationModal";
 import { useApp } from "../context/AppContext";
-import PopUpCard from "../components/PopUpCard";
+import PopUpCard from "../components/features/PopUpCard";
 import { useFocusEffect } from "@react-navigation/native";
 import { authService } from "../services/auth.service";
 
@@ -17,7 +17,6 @@ const Profile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { isSellerMode, toggleSellerMode } = useSellerMode();
   const { user, logout, setSnackbarMessage, setSnackbarVisible } = useApp();
-
 
   const navigation: any = useNavigation();
 

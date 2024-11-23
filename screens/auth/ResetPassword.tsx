@@ -11,10 +11,10 @@ import { COLORS } from "../../utils/color";
 import { Route, useNavigation } from "@react-navigation/native";
 import { resetPassword } from "../../api/index.auth";
 import { Snackbar } from "react-native-paper"; // Ensure this is imported
-import PrimaryButton from "../../components/ui/PrimaryButton";
+import PrimaryButton from "../../components/common/Button/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import UserHeader from "../../components/UserHeader";
-import FormInput from "../../components/ui/FormInput";
+import UserHeader from "../../components/features/UserHeader";
+import FormInput from "../../components/common/Input/FormInput";
 import AuthOption from "../../components/auth/AuthOption";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Platform } from "react-native";

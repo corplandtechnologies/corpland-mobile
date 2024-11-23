@@ -9,8 +9,8 @@ import {
 import { Input, Button, Icon, CheckBox } from "react-native-elements"; // Import CheckBox
 import { COLORS } from "../../utils/color";
 import { useNavigation } from "@react-navigation/native";
-import UserHeader from "../../components/UserHeader";
-import PrimaryButton from "../../components/ui/PrimaryButton";
+import UserHeader from "../../components/features/UserHeader";
+import PrimaryButton from "../../components/common/Button/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Snackbar } from "react-native-paper";
 import { authWithSocial } from "../../api/auth.api";

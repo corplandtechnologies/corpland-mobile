@@ -162,8 +162,8 @@
 
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { COLORS } from "../utils/color";
-import AnimatedView from "./animated/AnimatedView";
+import { COLORS } from "../../utils/color";
+import AnimatedView from "../animated/AnimatedView";
 import { useNavigation } from "@react-navigation/native";
 
 const Banner = () => {

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { COLORS } from "../../utils/color";
+import { COLORS } from "../../../utils/color";
 import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 

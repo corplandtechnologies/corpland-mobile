@@ -10,11 +10,17 @@ import {
 } from "react-native";
 import { COLORS } from "../../utils/color";
 import TextElement from "../elements/Texts/TextElement";
-import PrimaryButton from "../ui/PrimaryButton";
+import PrimaryButton from "../common/Button/PrimaryButton";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const AuthModal = ({ visible, onClose }) => {
+const AuthModal = ({
+  visible,
+  onClose,
+}: {
+  visible: boolean;
+  onClose: () => void;
+}) => {
   const scaleValue = React.useRef(new Animated.Value(0)).current;
   const navigation: any = useNavigation();
 

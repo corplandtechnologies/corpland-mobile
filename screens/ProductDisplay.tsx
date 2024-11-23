@@ -10,10 +10,10 @@ import {
   Dimensions,
   ActivityIndicator,
 } from "react-native";
-import ProductGrid from "../components/ProductGrid";
+import ProductGrid from "../components/features/ProductGrid";
 import { searchProducts } from "../api/api";
 import { COLORS } from "../utils/color";
-import UserHeader from "../components/UserHeader";
+import UserHeader from "../components/features/UserHeader";
 import ProductCard from "../components/ProductCard/ProductCard";
 import { ScrollView } from "react-native";
 

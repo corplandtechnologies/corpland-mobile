@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { FC } from "react";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../../context/ThemeContext";
 
 interface UserHeaderProps {
   title: string;
@@ -11,7 +11,9 @@ const UserHeader: FC<UserHeaderProps> = ({ title, description }) => {
   return (
     <View>
       <Text style={[styles.pageTitle, { color: theme.TEXT }]}>{title}</Text>
-      <Text style={[styles.descriptiveText, { color: theme.GRAY }]}>{description}</Text>
+      <Text style={[styles.descriptiveText, { color: theme.GRAY }]}>
+        {description}
+      </Text>
     </View>
   );
 };

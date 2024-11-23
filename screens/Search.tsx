@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import { COLORS } from "../utils/color";
-import SearchResult from "../components/SearchResult";
+import SearchResult from "../components/features/SearchResult";
 import { useSearchResults } from "../context/SearchResultsContext";
 import { formatPrice } from "../utils";
 

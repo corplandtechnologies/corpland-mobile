@@ -15,10 +15,8 @@ import { Avatar, Snackbar } from "react-native-paper";
 import { COLORS } from "../utils/color";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import Section from "../components/Section";
-import ProductCard from "../components/ProductCard";
-import { Button } from "react-native-elements";
-import PrimaryButton from "../components/ui/PrimaryButton";
+import Section from "../components/features/Section";
+import PrimaryButton from "../components/common/Button/PrimaryButton";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSearchResults } from "../context/SearchResultsContext";
 import {
@@ -28,10 +26,10 @@ import {
   getUserById,
   searchProducts,
 } from "../api/api";
-import ProductItem from "../components/ProductItem";
+import ProductItem from "../components/features/ProductItem";
 import { useProduct } from "../context/ProductContext";
 import { useUser } from "../context/UserContext";
-import ConfirmationModal from "../components/ConfirmationModal";
+import ConfirmationModal from "../components/features/ConfirmationModal";
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../context/AppContext";
@@ -39,7 +37,7 @@ import CartContext from "../context/CartContext";
 import AuthModal from "../components/auth/AuthModal";
 import MainView from "../components/elements/Views/MainView";
 import { blurhash, formatPrice, textTruncate } from "../utils";
-import PopUpCard from "../components/PopUpCard";
+import PopUpCard from "../components/features/PopUpCard";
 import TextElement from "../components/elements/Texts/TextElement";
 
 const Product = ({ route }) => {

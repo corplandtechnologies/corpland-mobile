@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
-import { COLORS } from "../../utils/color";
-import ScreenContextWrapper from "../ScreenContextWrapper";
+import { COLORS } from "../../../utils/color";
+import ScreenContextWrapper from "../../features/ScreenContextWrapper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 

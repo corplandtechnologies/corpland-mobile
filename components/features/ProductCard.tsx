@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Image } from "expo-image";
-import { COLORS } from "../utils/color";
+import { COLORS } from "../../utils/color";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
-import { getUserById } from "../api/api";
+import { getUserById } from "../../api/api";
 import ProductStats from "./ProductStats";
-import { blurhash, formatPrice } from "../utils";
+import { blurhash, formatPrice } from "../../utils";
 
 interface Product {
   title: string;

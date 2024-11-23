@@ -15,10 +15,10 @@ import { Avatar, Snackbar } from "react-native-paper";
 import { COLORS } from "../utils/color";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import Section from "../components/Section";
-import RequestCard from "../components/RequestCard";
+import Section from "../components/features/Section";
+import RequestCard from "../components/features/RequestCard";
 import { Button } from "react-native-elements";
-import PrimaryButton from "../components/ui/PrimaryButton";
+import PrimaryButton from "../components/common/Button/PrimaryButton";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSearchResults } from "../context/SearchResultsContext";
 import {
@@ -28,7 +28,7 @@ import {
   getUserById,
   searchRequests,
 } from "../api/api";
-import ConfirmationModal from "../components/ConfirmationModal";
+import ConfirmationModal from "../components/features/ConfirmationModal";
 import { Platform } from "react-native";
 import { useApp } from "../context/AppContext";
 import CartContext from "../context/CartContext";

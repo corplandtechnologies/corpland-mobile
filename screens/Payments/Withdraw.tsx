@@ -7,12 +7,12 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { COLORS } from "../../utils/color";
-import WalletModal from "../../components/WalletModal";
+import WalletModal from "../../components/features/WalletModal";
 import { useNavigation } from "@react-navigation/native";
-import Card from "../../components/ui/Card";
+import Card from "../../components/common/Card/Card";
 import { useApp } from "../../context/AppContext";
 import TextElement from "../../components/elements/Texts/TextElement";
-import SnackBar from "../../components/ui/SnackBar";
+import SnackBar from "../../components/common/Snackbar/SnackBar";
 import moment from "moment";
 import MainView from "../../components/elements/Views/MainView";
 import { RefreshControl } from "react-native";

@@ -2,15 +2,15 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import MainView from "../../components/elements/Views/MainView";
 import TextElement from "../../components/elements/Texts/TextElement";
-import Card from "../../components/ui/Card";
+import Card from "../../components/common/Card/Card";
 import { CheckBox, Icon } from "react-native-elements";
 import { COLORS } from "../../utils/color";
 import Hr from "../../components/elements/HR/Hr";
 import PhoneInput from "react-native-phone-input";
-import BottomActionCard from "../../components/BottomActionCard";
-import PrimaryButton from "../../components/ui/PrimaryButton";
+import BottomActionCard from "../../components/features/BottomActionCard";
+import PrimaryButton from "../../components/common/Button/PrimaryButton";
 import { useApp } from "../../context/AppContext";
-import SnackBar from "../../components/ui/SnackBar";
+import SnackBar from "../../components/common/Snackbar/SnackBar";
 import { handleError } from "../../utils";
 import { createTransferRecipient } from "../../api/api";
 import { useNavigation } from "@react-navigation/native";
@@ -50,7 +50,6 @@ const WithdrawalChannel = () => {
             ? "mobile_money"
             : "bank_transfer",
       });
-      
     } catch (error: any) {
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);

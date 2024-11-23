@@ -1,7 +1,7 @@
 // LogoutConfirmationModal.tsx
 import React, { useState } from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { COLORS } from "../utils/color";
+import { COLORS } from "../../utils/color";
 
 interface ConfirmationModalProps {
   isVisible: boolean;

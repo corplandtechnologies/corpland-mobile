@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { COLORS } from "../utils/color";
+import { COLORS } from "../../utils/color";
 
 const Header = () => {
   const handlePress = () => {

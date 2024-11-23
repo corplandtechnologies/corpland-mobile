@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { FC } from "react";
 import { Button } from "react-native-elements";
-import { COLORS } from "../../utils/color";
+import { COLORS } from "../../../utils/color";
 
 interface primaryButtonProps {
   value: string | undefined;

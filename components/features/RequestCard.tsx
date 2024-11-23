@@ -1,15 +1,15 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { COLORS } from "../utils/color";
+import { COLORS } from "../../utils/color";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
-import { getUserById } from "../api/api";
-import TextElement from "./elements/Texts/TextElement";
-import Card from "./ui/Card";
-import Hr from "./elements/HR/Hr";
-import { formatPrice } from "../utils";
+import { getUserById } from "../../api/api";
+import TextElement from "../elements/Texts/TextElement";
+import Card from "../common/Card/Card";
+import Hr from "../elements/HR/Hr";
+import { formatPrice } from "../../utils";
 // import RequestStats from "./RequestStats";
 
 interface RequestCard {

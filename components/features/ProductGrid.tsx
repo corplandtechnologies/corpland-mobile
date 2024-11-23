@@ -1,10 +1,10 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS } from "../utils/color";
+import { COLORS } from "../../utils/color";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-import { getUserById } from "../api/api";
+import { getUserById } from "../../api/api";
 import ProductStats from "./ProductStats";
 
 interface ProductItemProps {

@@ -12,7 +12,7 @@ import { COLORS } from "../../utils/color";
 import { useCallback, useEffect, useState } from "react";
 import { handleError } from "../../utils";
 import { useApp } from "../../context/AppContext";
-import SnackBar from "../../components/ui/SnackBar";
+import SnackBar from "../../components/common/Snackbar/SnackBar";
 import { getUserOrders } from "../../api/api";
 import { orders } from "../../data/default";
 import TextElement from "../../components/elements/Texts/TextElement";

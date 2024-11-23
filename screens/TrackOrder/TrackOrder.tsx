@@ -13,9 +13,9 @@ import TextElement from "../../components/elements/Texts/TextElement";
 import StepIndicator from "react-native-step-indicator";
 import { COLORS } from "../../utils/color";
 import Icon from "react-native-vector-icons/Ionicons";
-import Card from "../../components/ui/Card";
-import BottomActionCard from "../../components/BottomActionCard";
-import PrimaryButton from "../../components/ui/PrimaryButton";
+import Card from "../../components/common/Card/Card";
+import BottomActionCard from "../../components/features/BottomActionCard";
+import PrimaryButton from "../../components/common/Button/PrimaryButton";
 import {
   useFocusEffect,
   useNavigation,
@@ -27,7 +27,7 @@ import { getProductById, getUserById, updateOrderStatus } from "../../api/api";
 import { ActivityIndicator } from "react-native";
 import AnimatedView from "../../components/animated/AnimatedView";
 import moment from "moment";
-import SnackBar from "../../components/ui/SnackBar";
+import SnackBar from "../../components/common/Snackbar/SnackBar";
 
 const stepIndicatorStyles = {
   stepIndicatorSize: 30,

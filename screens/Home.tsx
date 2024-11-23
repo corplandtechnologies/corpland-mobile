@@ -10,10 +10,10 @@ import {
   RefreshControl,
 } from "react-native";
 import { COLORS } from "../utils/color";
-import Banner from "../components/Banner";
-import FormInput from "../components/ui/FormInput";
-import Section from "../components/Section";
-import Category from "../components/Category";
+import Banner from "../components/features/Banner";
+import FormInput from "../components/common/Input/FormInput";
+import Section from "../components/features/Section";
+import Category from "../components/features/Category";
 import { storeCategories } from "../data/default";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
@@ -30,7 +30,7 @@ import { useSearchResults } from "../context/SearchResultsContext";
 import { getStorageItem, handleError } from "../utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApp } from "../context/AppContext";
-import RequestCard from "../components/RequestCard";
+import RequestCard from "../components/features/RequestCard";
 import moment from "moment";
 import { Notification } from "../interfaces";
 import ProductCard from "../components/ProductCard/ProductCard";
@@ -67,7 +67,6 @@ const Home = () => {
   // Modify the selectedTab state to handle pagination
   const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  
 
   useEffect(() => {
     // Update paginated products whenever activeTab or products change

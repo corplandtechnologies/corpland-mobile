@@ -2,7 +2,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import { COLORS } from "../utils/color";
+import { COLORS } from "../../utils/color";
 
 interface ProfileMenuItemProps {
   title: string;

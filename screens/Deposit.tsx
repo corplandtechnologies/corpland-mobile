@@ -1,7 +1,7 @@
 import { Linking, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import { COLORS } from "../utils/color";
-import WalletModal from "../components/WalletModal";
+import WalletModal from "../components/features/WalletModal";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Snackbar } from "react-native-paper";
 import { deposit, getUserById } from "../api/api";

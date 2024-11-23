@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { FC, ReactNode } from "react";
-import { COLORS } from "../utils/color";
+import { COLORS } from "../../utils/color";
 
 interface SectionProps {
   headerText: string;

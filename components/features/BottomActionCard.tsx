@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import AnimatedView from "./animated/AnimatedView";
-import Card from "./ui/Card";
+import Card from "../common/Card/Card";
+import AnimatedView from "../animated/AnimatedView";
 
 interface BottomActionCardProps {
   children: React.ReactNode;

@@ -1,14 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
-import { Image } from "expo-image";
-import { COLORS } from "../utils/color";
+import { COLORS } from "../../utils/color";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-import Card from "./ui/Card";
-import { blurhash } from "../utils";
+import ProductStats from "./ProductStats";
+import Card from "../common/Card/Card";
 
-interface ProductItemProps {
+interface SearchResultProps {
   image: any[];
   title: string;
   price: number;
@@ -16,11 +15,10 @@ interface ProductItemProps {
   description: string;
   userDetails: any;
   _id: string | number;
-  onReset?: () => void;
-  status?: string;
+  dials: string | number;
 }
 
-const ProductItem: React.FC<ProductItemProps> = ({
+const SearchResult: React.FC<SearchResultProps> = ({
   image,
   title,
   price,
@@ -28,84 +26,57 @@ const ProductItem: React.FC<ProductItemProps> = ({
   description,
   userDetails,
   _id,
-  onReset,
-  status,
+  dials,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
-
-  const navigation = useNavigation();
   const toggleIsLiked = () => {
     setIsLiked(!isLiked);
   };
 
   const truncatedTitle =
-    description.length > 10
-      ? `${description.substring(0, 10)}...`
+    description.length > 20
+      ? `${description.substring(0, 20)}...`
       : description;
 
+  const navigation: any = useNavigation();
   const productNavigate = () => {
-    if (onReset) {
-      onReset();
-    }
     navigation.navigate("Product", { productId: _id });
   };
-
   return (
     <TouchableOpacity onPress={productNavigate}>
-      <Card
-        style={{
-          width: "100%",
-          flexDirection: "row",
-          flex: 1,
-        }}
-      >
-        <View style={{ flex: 1 }}>
-          <Image
-            source={image}
-            placeholder={{ blurhash }}
-            transition={1000}
-            style={styles.productImage}
-          />
+      <Card style={styles.productMain}>
+        <View style={{ flex: 1, padding: 10 }}>
+          <Image source={{ uri: image }} style={styles.productImage} />
         </View>
-        <View style={{ flex: 2, padding: 10, justifyContent: "space-between" }}>
+        <View style={{ flex: 3, padding: 10, justifyContent: "space-between" }}>
           <View>
             <View>
               <Text style={styles.productTitle}>{title}</Text>
+              {/* <ProductStats
+              icon={"call"}
+              value={dials.length}
+              name="Dials"
+            /> */}
             </View>
             <View style={styles.userView}>
               <View style={styles.avatarContainer}>
-                <Avatar.Image
-                  size={20}
-                  source={{
-                    uri:
-                      userDetails?.profilePicture ||
-                      "https://ik.imagekit.io/4hxqb9ldw/user.png?updatedAt=1725434780558",
-                  }}
-                />
-
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    maxWidth: "90%",
-                    flexWrap: "wrap",
-                    gap: 5,
-                  }}
-                >
+                {userDetails.profilePicture ? (
+                  <Avatar.Image
+                    size={20}
+                    source={{ uri: userDetails.profilePicture }}
+                  />
+                ) : (
+                  <Avatar.Image
+                    size={20}
+                    source={{
+                      uri: "https://ik.imagekit.io/4hxqb9ldw/user.png?updatedAt=1725434780558",
+                    }}
+                  />
+                )}
+                <View>
                   <Text style={styles.AvatarText}>
-                    {(userDetails &&
-                      userDetails.length > 0 &&
-                      userDetails[0]?.name) ||
-                      userDetails.name ||
-                      "Unknown User"}
+                    {userDetails.name || "Unknown User"}
                   </Text>
-                  {userDetails.verified && (
-                    <Icon
-                      name="checkmark-circle"
-                      size={15}
-                      color={COLORS.PRIMARY}
-                    />
-                  )}
                 </View>
                 {/* <View>
               <TouchableOpacity onPress={toggleIsLiked}>
@@ -118,17 +89,15 @@ const ProductItem: React.FC<ProductItemProps> = ({
             </View> */}
               </View>
             </View>
-            <View>
-              <Text style={styles.productDesc}>{truncatedTitle}</Text>
-            </View>
+            {/* <View>
+            <Text style={styles.productDesc}>{truncatedTitle}</Text>
+          </View> */}
           </View>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              flex: 1,
-              gap: 10,
             }}
           >
             <View
@@ -136,7 +105,6 @@ const ProductItem: React.FC<ProductItemProps> = ({
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 2,
-                flex: 1,
               }}
             >
               <Icon name="location" size={20} color={COLORS.GRAY} />
@@ -146,26 +114,14 @@ const ProductItem: React.FC<ProductItemProps> = ({
                 {region}
               </Text>
             </View>
-            <View style={{ flex: 1, alignItems: "flex-end" }}>
-              <Text style={styles.productPrice}>GH₵{price}</Text>
-            </View>
+            <Text style={styles.productPrice}>GH₵ {price}</Text>
           </View>
         </View>
-        {status === "In Review" && (
-          <View style={{ flex: 0.25, alignItems: "center" }}>
-            <Icon name="time" size={20} color={"#FF851B"} />
-          </View>
-        )}
-        {status === "Rejected" && (
-          <View style={{ flex: 0.25, alignItems: "center" }}>
-            <Icon name="close-circle" size={20} color={"red"} />
-          </View>
-        )}
       </Card>
     </TouchableOpacity>
   );
 };
-export default ProductItem;
+export default SearchResult;
 
 const styles = StyleSheet.create({
   productMain: {
@@ -180,13 +136,14 @@ const styles = StyleSheet.create({
     // elevation: 5,
     width: "100%",
     flexDirection: "row",
-    // height: 200,
+    height: 200,
+    marginVertical: 5,
+    marginHorizontal: 5,
     borderWidth: 1,
     borderColor: COLORS.GRAY_LIGHT,
-    flex: 1,
   },
   productImage: {
-    width: "100%",
+    // width: 100,
     height: "100%",
     borderRadius: 10,
     objectFit: "cover",
@@ -196,14 +153,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   productPrice: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "PoppinsBold",
     color: COLORS.PRIMARY,
     fontSize: 18,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
-    fontSize: 11,
-    fontFamily: "PoppinsSemiBold",
+    fontSize: 12,
+    fontFamily: "PoppinsBold",
     // maxWidth: "80%",
   },
   avatarContainer: {

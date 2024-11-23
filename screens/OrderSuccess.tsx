@@ -4,11 +4,10 @@ import MainView from "../components/elements/Views/MainView";
 import { Image } from "react-native";
 import TextElement from "../components/elements/Texts/TextElement";
 import { COLORS } from "../utils/color";
-import Card from "../components/ui/Card";
-import PrimaryButton from "../components/ui/PrimaryButton";
-import AnimatedView from "../components/animated/AnimatedView";
+import Card from "../components/common/Card/Card";
+import PrimaryButton from "../components/common/Button/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
-import BottomActionCard from "../components/BottomActionCard";
+import BottomActionCard from "../components/features/BottomActionCard";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const OrderSuccess = () => {
@@ -21,7 +20,7 @@ const OrderSuccess = () => {
     <MainView style={styles.main}>
       <View style={styles.topView}>
         {/* <Image
-          source={require("../assets/check.png")}
+          source={require("../assets/images/check.png")}
           style={{ width: 100, height: 100 }}
         /> */}
         <Icon name="checkmark-circle" color={COLORS.PRIMARY} size={150} />

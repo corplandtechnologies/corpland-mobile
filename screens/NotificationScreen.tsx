@@ -20,7 +20,7 @@ import { useApp } from "../context/AppContext";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
 import { handleError } from "../utils";
-import SnackBar from "../components/ui/SnackBar";
+import SnackBar from "../components/common/Snackbar/SnackBar";
 import { Notification } from "../interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUserById } from "../api";
@@ -43,7 +43,7 @@ const NotificationScreen = () => {
     refreshUserData,
   } = useApp();
   const [notificationsLoading, setNotificationsLoading] = useState(false);
-  
+
   useEffect(() => {
     refreshUserData();
   }, []);

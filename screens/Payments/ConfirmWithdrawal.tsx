@@ -4,10 +4,10 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Snackbar } from "react-native-paper";
 import { useApp } from "../../context/AppContext";
 import { handleError } from "../../utils";
-import WalletModal from "../../components/WalletModal";
+import WalletModal from "../../components/features/WalletModal";
 import { COLORS } from "../../utils/color";
 import { createWithdrawal } from "../../api";
-import PopUpCard from "../../components/PopUpCard";
+import PopUpCard from "../../components/features/PopUpCard";
 import { Withdrawal } from "../../interfaces";
 
 const ConfirmWithdraw = () => {
@@ -43,7 +43,6 @@ const ConfirmWithdraw = () => {
         channel: channel.toLowerCase(),
       };
 
-      
       await createWithdrawal(withdrawalData);
       setSnackbarVisible(true);
       setSnackbarMessage("Withdrawal request has been made successfully!");

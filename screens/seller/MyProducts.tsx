@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { COLORS } from "../../utils/color";
-import UserHeader from "../../components/UserHeader";
-import ProductItem from "../../components/ProductItem";
+import UserHeader from "../../components/features/UserHeader";
+import ProductItem from "../../components/features/ProductItem";
 import { getUserById, getUserProductsById } from "../../api/api";
 import { useUser } from "../../context/UserContext";
 import { useFocusEffect } from "@react-navigation/native";

@@ -11,7 +11,7 @@ import { COLORS } from "../../utils/color";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import RequestCard from "../../components/RequestCard";
+import RequestCard from "../../components/features/RequestCard";
 import { useApp } from "../../context/AppContext";
 import { getRequestsByUserId } from "../../api/api";
 

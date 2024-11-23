@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { FlatList } from "react-native";
-import ProductGrid from "../components/ProductGrid";
+import ProductGrid from "../components/features/ProductGrid";
 import { getProducts } from "../api/api";
 import { COLORS } from "../utils/color";
 import { ScrollView } from "react-native-gesture-handler";

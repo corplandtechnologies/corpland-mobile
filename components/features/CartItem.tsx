@@ -1,12 +1,11 @@
 import { StyleSheet, Text, Image, View } from "react-native";
 import React, { useContext, useState } from "react";
-import Card from "./ui/Card";
-import QuantitySelector from "./ui/QuantitySelector";
-import { COLORS } from "../utils/color";
-import { useCart } from "../context/CartContext";
-import { formatPrice } from "../utils";
+import Card from "../common/Card/Card";
+import { COLORS } from "../../utils/color";
+import { useCart } from "../../context/CartContext";
+import QuantitySelector from "../ui/QuantitySelector";
 
-const CartItem = ({ product }) => {
+const CartItem = ({ product }: { product: any }) => {
   const { quantity, setQuantity } = useCart();
   return (
     <Card style={styles.wrapper}>

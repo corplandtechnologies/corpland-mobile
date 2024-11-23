@@ -17,7 +17,7 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { FlatList } from "react-native";
-import ProductGrid from "../components/ProductGrid";
+import ProductGrid from "../components/features/ProductGrid";
 import { getFavoriteProducts, getProducts } from "../api/api";
 import { COLORS } from "../utils/color";
 import { useUser } from "../context/UserContext";

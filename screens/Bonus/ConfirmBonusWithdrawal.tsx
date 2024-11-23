@@ -4,7 +4,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Snackbar } from "react-native-paper";
 import { useApp } from "../../context/AppContext";
 import { handleError } from "../../utils";
-import WalletModal from "../../components/WalletModal";
+import WalletModal from "../../components/features/WalletModal";
 import { COLORS } from "../../utils/color";
 import { bonusWithdrawal, withdrawal } from "../../api/api";
 

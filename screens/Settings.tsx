@@ -1,15 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
-import ProfileMenuItem from "../components/ProfileMenuItem";
+import ProfileMenuItem from "../components/features/ProfileMenuItem";
 import MainView from "../components/elements/Views/MainView";
-import ConfirmationModal from "../components/ConfirmationModal";
+import ConfirmationModal from "../components/features/ConfirmationModal";
 import { useApp } from "../context/AppContext";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { deleteAccount } from "../api/api";
 import { handleError } from "../utils";
-import SnackBar from "../components/ui/SnackBar";
-import PopUpCard from "../components/PopUpCard";
+import SnackBar from "../components/common/Snackbar/SnackBar";
+import PopUpCard from "../components/features/PopUpCard";
 
 const Settings = () => {
   const navigation: any = useNavigation();

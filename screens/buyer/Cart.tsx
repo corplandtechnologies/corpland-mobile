@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { COLORS } from "../../utils/color";
-import CartItem from "../../components/CartItem";
-import OrderSummary from "../../components/OrderSummary";
+import CartItem from "../../components/features/CartItem";
+import OrderSummary from "../../components/features/OrderSummary";
 import { useCart } from "../../context/CartContext";
 
 const Cart = () => {

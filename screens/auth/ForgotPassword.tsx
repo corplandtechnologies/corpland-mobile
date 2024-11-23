@@ -6,20 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { Input, Button, Icon, CheckBox } from "react-native-elements"; // Import CheckBox
+import { Icon } from "react-native-elements"; // Import CheckBox
 import { COLORS } from "../../utils/color";
 import { useNavigation } from "@react-navigation/native";
-import UserHeader from "../../components/UserHeader";
-import PrimaryButton from "../../components/ui/PrimaryButton";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import UserHeader from "../../components/features/UserHeader";
+import PrimaryButton from "../../components/common/Button/PrimaryButton";
 import { Snackbar } from "react-native-paper";
 import { forgotPassword } from "../../api/index.auth";
 import AuthOption from "../../components/auth/AuthOption";
-import * as AppleAuthentication from "expo-apple-authentication";
-import { Platform } from "react-native";
-import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
-import TextElement from "../../components/elements/Texts/TextElement";
 
 const ForgotPassword = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);

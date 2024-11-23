@@ -8,21 +8,21 @@ import {
   Platform,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
-import ScreenContextWrapper from "../../components/ScreenContextWrapper";
-import Card from "../../components/ui/Card";
+import ScreenContextWrapper from "../../components/features/ScreenContextWrapper";
+import Card from "../../components/common/Card/Card";
 import Input from "../../components/ui/Input";
 import { StyleSheet } from "react-native";
 import { COLORS } from "../../utils/color";
 import { Button, TextInput } from "react-native-paper";
-import Select from "../../components/ui/Select";
+import Select from "../../components/common/Select/Select";
 import * as ImagePicker from "expo-image-picker";
 import { categories, regionsByCountry } from "../../data/default";
 import { getUserCountry, getUserLocation } from "../../utils/modules";
 import { Snackbar } from "react-native-paper";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { createProduct, getUserById } from "../../api/api";
-import FormInput from "../../components/ui/FormInput";
-import PrimaryButton from "../../components/ui/PrimaryButton";
+import FormInput from "../../components/common/Input/FormInput";
+import PrimaryButton from "../../components/common/Button/PrimaryButton";
 import { useUser } from "../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createObjectURL } from "../../utils";
@@ -64,7 +64,7 @@ const CreateProduct = () => {
 
   useEffect(() => {
     return () => {
-      selectedFiles?.forEach((image: any  ) => {
+      selectedFiles?.forEach((image: any) => {
         URL.revokeObjectURL(createObjectURL(image));
       });
     };

@@ -13,14 +13,14 @@ import { COLORS } from "../../utils/color";
 import { useNavigation } from "@react-navigation/native";
 import { signUp } from "../../api/auth.api";
 import { Snackbar } from "react-native-paper"; // Ensure this is imported
-import PrimaryButton from "../../components/ui/PrimaryButton";
+import PrimaryButton from "../../components/common/Button/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import UserHeader from "../../components/UserHeader";
+import UserHeader from "../../components/features/UserHeader";
 import EditAvatar from "../../components/ui/EditAvatar";
 import PhoneInput from "react-native-phone-input";
 import * as ImagePicker from "expo-image-picker";
 import { completeProfile, getUserById, getUserByUserId } from "../../api/index";
-import FormInput from "../../components/ui/FormInput";
+import FormInput from "../../components/common/Input/FormInput";
 import { Platform } from "react-native";
 import { authService } from "../../services/auth.service";
 import { handleError } from "../../utils";

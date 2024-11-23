@@ -8,15 +8,15 @@ import {
 import * as Clipboard from "expo-clipboard";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../utils/color";
-import WalletModal from "../../components/WalletModal";
+import WalletModal from "../../components/features/WalletModal";
 import { useNavigation } from "@react-navigation/native";
 import { useApp } from "../../context/AppContext";
 import MainView from "../../components/elements/Views/MainView";
 import { RefreshControl } from "react-native";
 import Hr from "../../components/elements/HR/Hr";
 import TextElement from "../../components/elements/Texts/TextElement";
-import SnackBar from "../../components/ui/SnackBar";
-import Card from "../../components/ui/Card";
+import SnackBar from "../../components/common/Snackbar/SnackBar";
+import Card from "../../components/common/Card/Card";
 import Icon from "react-native-vector-icons/Ionicons";
 import { handleError } from "../../utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";

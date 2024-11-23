@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { COLORS } from "../utils/color";
-import PrimaryButton from "../components/ui/PrimaryButton";
+import { COLORS } from "../../utils/color";
+import PrimaryButton from "../common/Button/PrimaryButton";
 import Icon from "react-native-vector-icons/Ionicons";
-import FormInput from "../components/ui/FormInput";
-import { walletModalProps } from "../interfaces";
+import FormInput from "../common/Input/FormInput";
+import { walletModalProps } from "../../interfaces";
 
 const WalletModal: React.FC<walletModalProps> = ({
   isDeposit,

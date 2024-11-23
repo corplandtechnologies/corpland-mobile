@@ -7,13 +7,13 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import ScreenContextWrapper from "../../components/ScreenContextWrapper";
-import Card from "../../components/ui/Card";
+import ScreenContextWrapper from "../../components/features/ScreenContextWrapper";
+import Card from "../../components/common/Card/Card";
 import Input from "../../components/ui/Input";
 import { StyleSheet } from "react-native";
 import { COLORS } from "../../utils/color";
 import { Button, TextInput } from "react-native-paper";
-import Select from "../../components/ui/Select";
+import Select from "../../components/common/Select/Select";
 import * as ImagePicker from "expo-image-picker";
 import { categories, regionsByCountry } from "../../data/default";
 import { getUserCountry, getUserLocation } from "../../utils/modules";

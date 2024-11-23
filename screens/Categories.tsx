@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { COLORS } from "../utils/color";
-import Category from "../components/Category"; // Assuming you have a Category component
+import Category from "../components/features/Category"; // Assuming you have a Category component
 import { storeCategories } from "../data/default"; // Assuming you have dummy data
 import { useNavigation } from "@react-navigation/native";
 

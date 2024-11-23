@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { COLORS } from "../utils/color";
-import WalletModal from "../components/WalletModal";
+import WalletModal from "../components/features/WalletModal";
 import { useNavigation } from "@react-navigation/native";
-import SnackBar from "../components/ui/SnackBar";
+import SnackBar from "../components/common/Snackbar/SnackBar";
 import { useApp } from "../context/AppContext";
 import { handleError } from "../utils";
 

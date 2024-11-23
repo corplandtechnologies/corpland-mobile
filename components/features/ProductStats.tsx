@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { FC } from "react";
-import { COLORS } from "../utils/color";
+import { COLORS } from "../../utils/color";
 import Icon from "react-native-vector-icons/Ionicons";
 
 interface ProductStatsProps {
