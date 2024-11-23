@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { TouchableOpacity } from "react-native";
 import { Icon, withBadge } from "react-native-elements";
-import { useApp } from "../../context/AppContext";
-import { COLORS } from "../../utils/color";
+import { useApp } from "../../../../context/AppContext";
+import { COLORS } from "../../../../utils/color";
 
 const HomeHeaderRight = ({ navigation }: { navigation: any }) => {
   const { user, unreadNotifications, updateUnreadNotificationCount } = useApp();

@@ -9,12 +9,12 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { COLORS } from "../../utils/color";
+import { COLORS } from "../../../utils/color";
 import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
-import AnimatedView from "../../components/animated/AnimatedView";
+import AnimatedView from "../../../components/animated/AnimatedView";
 
 const { width } = Dimensions.get("window");
 const tabsLength = 5;
