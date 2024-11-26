@@ -26,6 +26,8 @@ const Deposit = () => {
     setLoading(true);
     try {
       const res = await deposit(user?.email, amount, user?._id);
+      console.log("res", res.data);
+      
       setSnackbarVisible(true);
       setSnackbarMessage("Authorization URL sent successfully!");
       Linking.openURL(res.data?.authorizationUrl);

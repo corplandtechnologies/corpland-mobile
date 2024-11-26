@@ -14,10 +14,11 @@ export const createObjectURL = (file: any) => {
 };
 
 export const handleError = (error: any) => {
+  console.log("errorMessage", error);
   let errorMessage = "An unexpected error occurred.";
   if (error.response) {
     if (error.response.data?.errors?.length > 0) {
-      errorMessage = error.response.data.errors[0].msg;
+      errorMessage = error.response.data.errors[0].message;
     } else {
       errorMessage =
         error.response.data.message ||

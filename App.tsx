@@ -4,7 +4,6 @@ import {
   NavigationContainer,
   createNavigationContainerRef,
 } from "@react-navigation/native";
-import Register from "./screens/auth/Register";
 import Login from "./screens/auth/Login";
 import Onboarding from "./screens/Onboarding";
 import * as Font from "expo-font";
@@ -19,15 +18,7 @@ import Search from "./screens/Search";
 import { SearchResultsProvider } from "./context/SearchResultsContext";
 import Product from "./screens/Product";
 import { COLORS } from "./utils/color";
-import {
-  Button,
-  Image,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Button, Image, StyleSheet, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import FavoriteIcon from "./components/ui/FavoriteIcon";
 import { ProductProvider, useProduct } from "./context/ProductContext";
@@ -77,10 +68,13 @@ import React from "react";
 import messaging from "@react-native-firebase/messaging";
 import firebase from "@react-native-firebase/app";
 import { getUserById, saveDevice } from "./api";
-import { ThemeProvider } from "./context/ThemeContext";
 import { authService } from "./services/auth.service";
 import LoadingScreen from "./screens/LoadingScreen";
 import WithdrawalChannel from "./screens/Payments/WithdrawalChannel";
+import Location from "./screens/LocationScreen/LocationScreen";
+import LocationScreen from "./screens/LocationScreen/LocationScreen";
+import { ThemeProvider } from "@app/providers/ThemeProvider";
+import Register from "@features/auth/screens/Register";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQAZsd74WSYymehytX8oGpZabbERSBNoU",
@@ -859,6 +853,19 @@ function App() {
                             // ),
                           }}
                           component={NotificationScreen}
+                        />
+                        <Stack.Screen
+                          name="LocationScreen"
+                          options={{
+                            headerTitle: "Enter Your Location",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={LocationScreen}
                         />
                       </Stack.Navigator>
                     </NavigationContainer>

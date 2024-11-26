@@ -331,7 +331,7 @@ const CreateProduct = () => {
           <FormInput
             placeholder="Description*"
             onChangeText={setDesc}
-            icon="align-justify"
+            icon="align-left"
             style={styles.textInputDesc}
             multiline={true}
           />

@@ -76,9 +76,12 @@ const CompleteProfile = () => {
   const handleProfileUpdate = async () => {
     setLoading(true);
     try {
+      const storedUser = await authService.getUser();
+      const storedUserEmail = storedUser?.email;  
       const data = {
         name: name || user?.name,
         phoneNumber: phoneNumber,
+        email: storedUserEmail,
         profilePicture:
           Platform.OS === "web"
             ? selectedFile || user?.profilePicture

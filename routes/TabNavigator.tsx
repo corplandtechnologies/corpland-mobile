@@ -93,7 +93,7 @@ const TabNavigator: React.FC = () => {
               if (!user) {
                 setModalVisible(true);
               } else {
-                navigation.navigate("EditProfile");
+                navigation.navigate("LocationScreen");
               }
             }}
           >

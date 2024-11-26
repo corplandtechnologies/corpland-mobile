@@ -177,3 +177,123 @@ export const orders = [
     status: 3,
   },
 ];
+
+export const dummyPredictions = [
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+  {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  }, {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  }, {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  }, {
+    structured_formatting: {
+      main_text: "Golden Avenue",
+      secondary_text: "8502 Preston Rd, Inglewood, CA 90301",
+    },
+  },
+];
