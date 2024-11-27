@@ -27,11 +27,10 @@ import { handleError } from "../../utils";
 import { useApp } from "../../context/AppContext";
 
 const CompleteProfile = () => {
-  const { setUser } = useApp();
+  const { user, setUser } = useApp();
   const [loading, setLoading] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [user, setLocalUser] = useState(null);
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -39,13 +38,19 @@ const CompleteProfile = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [phoneRef, setPhoneRef] = useState<any>(null);
 
+  useEffect(() => {
+    if (phoneRef && user?.phoneNumber) {
+      phoneRef.setValue(user.phoneNumber);
+    }
+  }, [phoneRef, user?.phoneNumber]);
+
   const navigation = useNavigation();
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const currentUser = await authService.getCurrentUser();
       if (currentUser) {
-        setLocalUser(currentUser);
+        setUser(currentUser);
       }
     };
 
@@ -85,21 +90,7 @@ const CompleteProfile = () => {
             : selectedImage || user?.profilePicture,
       };
 
-      const res = await completeProfile(data);
-      const userData = res.data?.data;
-
-      // Store complete user data and update context
-      await authService.setUser(userData);
-      setUser(userData); // Update AppContext
-
-      // Get fresh user data from server
-      const userResponse = await getUserByUserId(userData._id);
-      const completeUserData = userResponse.data?.data;
-
-      // Update storage and context with fresh data
-      await authService.setUser(completeUserData);
-      setUser(completeUserData);
-
+      const res = await completeProfile(data, user?._id || "");
       setSnackbarVisible(true);
       setSnackbarMessage("Profile completed successfully!");
       navigation.navigate("TabNavigator", { screen: "Home" });
@@ -107,7 +98,6 @@ const CompleteProfile = () => {
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
     } finally {
-      navigation.navigate("TabNavigator", { screen: "Home" });
       setLoading(false);
     }
   };

@@ -12,6 +12,7 @@ import { Input, Button, Icon, CheckBox } from "react-native-elements";
 import { COLORS } from "../../utils/color";
 import { useNavigation } from "@react-navigation/native";
 import { authWithSocial } from "../../api/auth.api";
+import { signUp } from "../../api";
 import { Snackbar } from "react-native-paper"; // Ensure this is imported
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,9 +25,7 @@ import { jwtDecode } from "jwt-decode";
 import { handleError } from "../../utils";
 // import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import PhoneInput from "react-native-phone-input";
-import { signUp } from "../../api/index.auth";
 import { authService } from "../../services/auth.service";
-import { getUserById } from "../../api";
 import { useApp } from "../../context/AppContext";
 
 const Register = () => {

@@ -122,41 +122,7 @@ class AuthService {
       return null;
     }
   }
-
-  async isUserProfileAvailable(
-    setIsLoading: (isLoading: boolean) => void
-  ): Promise<boolean> {
-    setIsLoading(true);
-    try {
-      const token = await this.getToken();
-
-      const user = await this.getUser();
-
-      if (!user?._id && token) {
-        return false;
-      } else if (!user && !token) {
-        return true;
-      }
-
-      // Try to get user profile from database using getUserByUserId
-
-      const userProfile = await getUserById(user._id);
-
-      // If no user data returned, profile doesn't exist
-      if (!userProfile?.data?.data) {
-        return false;
-      }
-      // Check if required profile fields exist
-      const profile = userProfile.data.data;
-      const requiredFields = ["name", "phoneNumber", "country", "region"];
-      const hasAllFields = requiredFields.every((field) => !!profile[field]);
-      return hasAllFields;
-    } catch (error) {
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }
 }
 
 export const authService = AuthService.getInstance();
+    

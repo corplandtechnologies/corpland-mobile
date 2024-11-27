@@ -19,25 +19,27 @@ import UserHeader from "../../components/UserHeader";
 import EditAvatar from "../../components/ui/EditAvatar";
 import PhoneInput from "react-native-phone-input";
 import * as ImagePicker from "expo-image-picker";
-import { completeProfile, getUserById, updateUser } from "../../api/api";
 import FormInput from "../../components/ui/FormInput";
 import { useUser } from "../../context/UserContext";
 import Select from "../../components/ui/Select";
 import { regionsByCountry } from "../../data/default";
 import { Platform } from "react-native";
+import { getUserById, updateUser } from "../../api";
+import { authService } from "../../services/auth.service";
+import { useApp } from "../../context/AppContext";
+import { handleError } from "../../utils";
 
 const EditProfile = () => {
-  const { user } = useUser();
-  const [userInfo, setUserInfo] = useState<any>({});
+  const { user } = useApp();
   const [loading, setLoading] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [name, setName] = useState("");
+  const [name, setName] = useState(user?.name);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [userId, setUserId] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState("");
+  const [selectedImage, setSelectedImage] = useState<string | null | any>(null);
+  const [userId, setUserId] = useState(user?._id);
+  const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber);
+  const [selectedCountry, setSelectedCountry] = useState(user?.country);
+  const [selectedRegion, setSelectedRegion] = useState(user?.region);
   const [regionOptions, setRegionOptions] = useState<string[]>([]);
   const [newPassword, setNewPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -45,45 +47,13 @@ const EditProfile = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [phoneRef, setPhoneRef] = useState<any>(null);
 
-  const navigation = useNavigation();
-
-  useFocusEffect(
-    useCallback(() => {
-      const getUserInfo = async () => {
-        try {
-          const parsedUserInfo = JSON.parse(
-            (await AsyncStorage.getItem("user")) || ""
-          );
-          const res = await getUserById(parsedUserInfo?._id);
-          setUserInfo(res.data.user);
-          setName(res.data.user.name);
-          setPhoneNumber(res.data.user.phoneNumber);
-          setSelectedCountry(res.data.user.country);
-          setSelectedRegion(res.data.user.region);
-
-          // Set the phone number in the PhoneInput component after it's mounted
-          if (phoneRef && res.data.user.phoneNumber) {
-            phoneRef.setValue(res.data.user.phoneNumber);
-          }
-        } catch (error) {}
-      };
-      getUserInfo();
-    }, [phoneRef])
-  );
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userInfo = await AsyncStorage.getItem("userInfo");
-        if (userInfo) {
-          const parsedUserInfo = JSON.parse(userInfo);
-          setUserId(parsedUserInfo._id);
-        }
-      } catch (error) {}
-    };
-
-    fetchUser();
-  }, []);
+    if (phoneRef && user?.phoneNumber) {
+      phoneRef.setValue(user.phoneNumber);
+    }
+  }, [phoneRef, user?.phoneNumber]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -111,24 +81,24 @@ const EditProfile = () => {
     setLoading(true);
     try {
       let data = {
-        name: name || userInfo?.name,
-        phoneNumber: phoneNumber || userInfo?.phoneNumber,
+        name: name || user?.name,
+        phoneNumber: phoneNumber || user?.phoneNumber,
         profilePicture:
           Platform.OS === "web"
-            ? selectedFile || userInfo?.profilePicture
-            : selectedImage || userInfo?.profilePicture,
-        country: selectedCountry ? selectedCountry : userInfo?.country,
-        region: selectedRegion ? selectedRegion : userInfo?.region,
-        userId: userInfo._id,
+            ? selectedFile || user?.profilePicture
+            : selectedImage || user?.profilePicture,
+        country: selectedCountry ? selectedCountry : user?.country,
+        region: selectedRegion ? selectedRegion : user?.region,
       };
 
-      const res = await updateUser(data);
+      const res = await updateUser(data, user?._id || "");
       setSnackbarVisible(true);
       setSnackbarMessage(res.data.message);
-      navigation.navigate("TabNavigator");
+      navigation.navigate("TabNavigator", { screen: "Home" });
     } catch (error) {
       const err = error as Error;
-      setSnackbarMessage(err.message);
+
+      setSnackbarMessage(handleError(err));
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -154,12 +124,11 @@ const EditProfile = () => {
           description="Don't worry, Only you can see your personal data. No one else would be able to see it."
         />
         <View style={styles.avatarView}>
-          {selectedImage || userInfo?.profilePicture || previewImage ? (
+          {selectedImage || user?.profilePicture || previewImage ? (
             <>
               <Image
                 source={{
-                  uri:
-                    selectedImage || previewImage || userInfo?.profilePicture,
+                  uri: selectedImage || previewImage || user?.profilePicture,
                 }}
                 style={styles.selectedImage}
               />
@@ -201,7 +170,7 @@ const EditProfile = () => {
           onChangeText={setName}
           value={name}
           style={styles.input}
-          defaultValue={userInfo?.name}
+          defaultValue={user?.name}
         />
         <View style={styles.inputContainer}>
           <Icon name="phone" type="font-awesome" color={COLORS.GRAY} />
@@ -210,12 +179,14 @@ const EditProfile = () => {
             initialCountry={"gh"}
             textProps={{
               placeholder: "Enter a phone number...",
+              defaultValue: user?.phoneNumber,
             }}
             pickerBackgroundColor={COLORS.TERTIARY}
             onChangePhoneNumber={(text) => {
               setPhoneNumber(text);
             }}
             autoFormat={true}
+            value={user?.phoneNumber}
           />
         </View>
         <Select

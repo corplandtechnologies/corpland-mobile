@@ -366,20 +366,12 @@ function App() {
       try {
         setIsLoading(true);
 
-        const isUserProfileAvailable = await authService.isUserProfileAvailable(
-          setIsLoading
-        );
+        const isAuthenticated = await authService.isAuthenticated();
 
-        if (!isUserProfileAvailable) {
-          return setInitialRoute("CompleteProfile");
-        } else {
-          const isAuthenticated = await authService.isAuthenticated();
-
-          if (isAuthenticated) {
-            const currentUser = await authService.getCurrentUser();
-            if (currentUser) {
-              await setUser(currentUser);
-            }
+        if (isAuthenticated) {
+          const currentUser = await authService.getCurrentUser();
+          if (currentUser) {
+            await setUser(currentUser);
           }
         }
       } catch (error) {
@@ -389,7 +381,7 @@ function App() {
     };
 
     initializeApp();
-  }, []);
+  }, [user?._id]);
   if (!isFontLoaded) {
     return null;
   }
