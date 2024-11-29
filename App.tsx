@@ -143,7 +143,9 @@ export function navigate(name: string, params?: any) {
 const handleNotificationNavigation = (remoteMessage: any) => {
   if (!remoteMessage?.data) return;
 
-  const { screen, id } = remoteMessage.data;
+  const parsedRemoteMessage = JSON.parse(remoteMessage)
+
+  const { screen, id } = parsedRemoteMessage.data;
 
   if (navigationRef.isReady()) {
     switch (screen) {
