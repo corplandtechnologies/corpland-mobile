@@ -20,7 +20,7 @@ import CreateRequest from "../screens/buyer/CreateRequest";
 import AuthModal from "../components/auth/AuthModal";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import HomeHeaderRight from "./components/HomeHeaderRight";
-import { getUserById, getUserByUserId } from "../api";
+import { getUserById } from "../api";
 import { authService } from "../services/auth.service";
 
 const Tab = createBottomTabNavigator();
@@ -46,7 +46,7 @@ const TabNavigator: React.FC = () => {
       const parsedUserInfo: any = JSON.parse(
         (await AsyncStorage.getItem("user")) || "{}"
       );
-      const res = await getUserByUserId(parsedUserInfo?._id);
+      const res = await getUserById(parsedUserInfo?._id);
       await authService.setUser(res?.data.data);
     } catch (error) {}
   };

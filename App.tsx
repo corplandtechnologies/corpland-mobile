@@ -81,6 +81,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { authService } from "./services/auth.service";
 import LoadingScreen from "./screens/LoadingScreen";
 import WithdrawalChannel from "./screens/Payments/WithdrawalChannel";
+import LocationScreen from "./screens/Location/screens/LocationScreen";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQAZsd74WSYymehytX8oGpZabbERSBNoU",
@@ -851,6 +852,19 @@ function App() {
                             // ),
                           }}
                           component={NotificationScreen}
+                        />
+                        <Stack.Screen
+                          name="LocationScreen"
+                          options={{
+                            headerTitle: "Enter Your Location",
+                            headerTitleAlign: "center",
+                            headerLeft: () => <BackButton />,
+                            headerTitleStyle: {
+                              fontFamily: "PoppinsSemiBold",
+                              // borderWidth:8
+                            },
+                          }}
+                          component={LocationScreen}
                         />
                       </Stack.Navigator>
                     </NavigationContainer>
