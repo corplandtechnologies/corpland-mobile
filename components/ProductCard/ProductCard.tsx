@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import TextElement from "../elements/Texts/TextElement";
 import { Icon } from "react-native-elements";
 import { COLORS } from "../../utils/color";
@@ -23,10 +23,31 @@ interface productCardProps {
 const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
   const navigation: any = useNavigation();
   const [loading, setLoading] = React.useState(true);
+  const [imagesLoaded, setImagesLoaded] = React.useState(false);
 
   const handleImageLoad = () => {
     setLoading(false);
   };
+
+  const handleImageError = () => {
+    setLoading(false); // Stop loading on error
+  };
+
+  // New function to preload images
+  const preloadImages = async (imageUrls: string[]) => {
+    const promises = imageUrls.map((url) => {
+      return Image.prefetch(url); // Use Image.prefetch to preload images
+    });
+    await Promise.all(promises);
+    setImagesLoaded(true); // Set images loaded state
+  };
+
+  useEffect(() => {
+    const imagesToLoad = product.thumbnail
+      ? [product.thumbnail]
+      : [product.images[0]];
+    preloadImages(imagesToLoad);
+  }, [product]);
 
   const productNavigate = () => {
     if (onReset) {
@@ -34,6 +55,7 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
     }
     navigation.navigate("Product", { productId: product._id });
   };
+
   return (
     <TouchableOpacity style={styles.main} onPress={productNavigate}>
       <View
@@ -58,12 +80,13 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
                 </SkeletonPlaceholder>
               )}
               <Image
-                src={product.thumbnail}
+                source={{ uri: product.thumbnail }}
                 style={{
                   width: "100%",
                   height: "100%",
                 }}
                 onLoad={handleImageLoad}
+                onError={handleImageError}
               />
             </View>
           </>
@@ -77,13 +100,14 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
               </SkeletonPlaceholder>
             )}
             <Image
-              src={product.images[0]}
+              source={{ uri: product.images[0] }}
               style={{
                 width: "100%",
                 height: "100%",
                 borderRadius: 10,
               }}
               onLoad={handleImageLoad}
+              onError={handleImageError}
             />
           </View>
         )}
