@@ -62,7 +62,7 @@ const Verify = () => {
 
       if (res?.status === 200) {
         // After verification, navigate to complete profile
-        navigation.navigate("CompleteProfile" as never);
+        navigation.navigate("EditProfile" as never);
       } else {
         setSnackbarMessage(res?.data?.data.message);
         setSnackbarVisible(true);

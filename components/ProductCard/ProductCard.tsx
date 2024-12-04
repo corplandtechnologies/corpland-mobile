@@ -1,12 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React, { FC } from "react";
-import { Image } from "expo-image";
 import TextElement from "../elements/Texts/TextElement";
 import { Icon } from "react-native-elements";
 import { COLORS } from "../../utils/color";
 import { formatPrice, textTruncate } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
 import FavoriteIcon from "../ui/FavoriteIcon";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
@@ -22,6 +22,12 @@ interface productCardProps {
 }
 const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
   const navigation: any = useNavigation();
+  const [loading, setLoading] = React.useState(true);
+
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
+
   const productNavigate = () => {
     if (onReset) {
       onReset();
@@ -44,26 +50,40 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
               <FavoriteIcon productId={product._id} size={25} />
             </View>
             <View style={styles.productPreviewImageView}>
+              {loading && (
+                <SkeletonPlaceholder>
+                  <View
+                    style={{ width: "100%", height: "100%", borderRadius: 10 }}
+                  />
+                </SkeletonPlaceholder>
+              )}
               <Image
-                source={product.thumbnail}
+                src={product.thumbnail}
                 style={{
                   width: "100%",
                   height: "100%",
                 }}
-                placeholder={blurhash}
+                onLoad={handleImageLoad}
               />
             </View>
           </>
         ) : (
           <View style={styles.productImageView}>
+            {loading && (
+              <SkeletonPlaceholder>
+                <View
+                  style={{ width: "100%", height: "100%", borderRadius: 10 }}
+                />
+              </SkeletonPlaceholder>
+            )}
             <Image
-              source={product.images[0]}
+              src={product.images[0]}
               style={{
                 width: "100%",
                 height: "100%",
                 borderRadius: 10,
               }}
-              placeholder={{ blurhash }}
+              onLoad={handleImageLoad}
             />
           </View>
         )}
