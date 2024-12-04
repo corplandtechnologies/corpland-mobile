@@ -67,7 +67,6 @@ const Home = () => {
   // Modify the selectedTab state to handle pagination
   const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  
 
   useEffect(() => {
     // Update paginated products whenever activeTab or products change
@@ -289,10 +288,10 @@ const Home = () => {
         {/* <UserInfo navigation={navigation} /> */}
         <View style={styles.searchView}>
           <FormInput
-            icon="search"
+            // icon="search"
             placeholder="What are you looking for?..."
             isButtoned={true}
-            isButtonedIcon="options-outline"
+            isButtonedIcon="search"
             onChangeText={setSearch}
             loading={searchLoading}
             onPress={() => handleSearch(setSearchLoading)}
