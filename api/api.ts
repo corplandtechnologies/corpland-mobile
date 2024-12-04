@@ -400,32 +400,6 @@ export const updateOrderStatus = (
     buyerId,
   });
 
-export const createTransferRecipient = (
-  name: string,
-  accountNumber: string,
-  bankCode: string,
-  userId: string
-) =>
-  API.post("/users/create-transfer-recipient", {
-    name,
-    accountNumber,
-    bankCode,
-    userId,
-  });
-
-export const withdrawal = (amount: number, recipient: string, userId: string) =>
-  API.post("/users/initialize-withdrawal", {
-    amount,
-    recipient,
-    userId,
-  });
-
-export const bonusWithdrawal = (amount: number, userId: string) =>
-  API.post("/users/withdraw-bonus", {
-    amount,
-    userId,
-  });
-
 export const getUserTransactions = (userId: string) =>
   API.get(`/transactions/${userId}`);
 
