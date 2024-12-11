@@ -36,6 +36,7 @@ import { Notification } from "../interfaces";
 import ProductCard from "../components/ProductCard/ProductCard";
 import TextElement from "../components/elements/Texts/TextElement";
 import { StatusBar } from "expo-status-bar";
+import { authService } from "../services/auth.service";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -161,24 +162,22 @@ const Home = () => {
     } catch (error) {}
   };
 
+  const getLoggedInUser = async () => {
+    const user = await authService.getCurrentUser();
+
+    if (user) {
+      setUser(user);
+      return;
+    }
+  };
+
   useFocusEffect(
     useCallback(() => {
       fetchNotifications();
       fetchUnreadNotificationCount();
+      getLoggedInUser();
     }, [])
   );
-  // useEffect(() => {
-  //   const getLoggedInUser = async () => {
-  //     const user = await getStorageItem("user");
-  //     if (!user) {
-  //       alert("Please Login to continue using Corpland. Thank you!");
-  //       navigation.navigate("Login");
-  //       return;
-  //     }
-  //   };
-  //   getLoggedInUser();
-  // }, []);
-
   const handleSearch = async (
     setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
   ) => {

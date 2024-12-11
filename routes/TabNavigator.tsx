@@ -42,14 +42,14 @@ const TabNavigator: React.FC = () => {
   const onToggleSwitch = () => setIsRequest(!isRequest);
 
   const getUserInfo = async () => {
-    try {
-      const parsedUserInfo: any = JSON.parse(
-        (await AsyncStorage.getItem("user")) || "{}"
-      );
-      const res = await getUserById(parsedUserInfo?._id);
-      await authService.setUser(res?.data.data);
-    } catch (error) {}
+    const user = await authService.getCurrentUser();
+
+    if (user) {
+      setUser(user);
+      return;
+    }
   };
+
   const fetchUnreadNotificationCount = async () => {
     try {
       const { data } = await getUnreadNotificationsCount(user?._id);
@@ -93,7 +93,7 @@ const TabNavigator: React.FC = () => {
               if (!user) {
                 setModalVisible(true);
               } else {
-                navigation.navigate("EditProfile");
+                navigation.navigate("LocationScreen");
               }
             }}
           >
