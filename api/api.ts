@@ -14,7 +14,7 @@ import { authService } from "../services/auth.service";
 // });
 
 export const API = axios.create({
-  baseURL: "https://corpland-backend.onrender.com/api/v1",
+  baseURL: "https://corpland-backend-api-uqkg.onrender.com/api/v1",
   withCredentials: true,
 });
 
