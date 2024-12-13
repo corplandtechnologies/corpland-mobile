@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   letter: {
     fontSize: 32,
-    fontFamily: "PoppinsExtraBold",
+    fontFamily: "poppinsExtraBold",
     color: COLORS.PRIMARY,
     // marginHorizontal: 2,
   },

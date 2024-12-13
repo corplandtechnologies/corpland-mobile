@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: COLORS.PRIMARY,
     textAlign: "center",
-    fontFamily: "PoppinsExtraBold",
+    fontFamily: "poppinsExtraBold",
   },
   explanationContainer: {
     // Additional styles for the explanation container
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.PRIMARY,
     textAlign: "center",
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
   buttonContainer: {
     // Additional styles for the button container

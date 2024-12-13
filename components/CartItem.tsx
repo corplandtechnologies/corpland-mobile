@@ -49,14 +49,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     fontSize: 16,
   },
   cat: {
     color: COLORS.GRAY,
   },
   price: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     color: COLORS.PRIMARY,
   },
 });

@@ -101,10 +101,10 @@ const styles = StyleSheet.create({
   },
   walletTitle: {
     color: COLORS.GRAY,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
   walletFunds: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   fundView: {
     flexDirection: "row",

@@ -70,7 +70,7 @@ const RequestCard: React.FC<RequestCardProps> = ({ request, onReset }) => {
         </View>
         <View style={styles.bottomView}>
           <View style={styles.bottomTopView}>
-            <TextElement fontFamily="PoppinsSemiBold" fontSize={18}>
+            <TextElement fontFamily="poppinsSemiBold" fontSize={18}>
               {request.title}
             </TextElement>
           </View>
@@ -105,11 +105,11 @@ const RequestCard: React.FC<RequestCardProps> = ({ request, onReset }) => {
             </View>
           </View>
           <View style={styles.bottomBottomView}>
-            <TextElement fontFamily="PoppinsBold">
+            <TextElement fontFamily="poppinsBold">
               GH₵{formatPrice(request.minPrice)}
             </TextElement>
-            <TextElement fontFamily="PoppinsBold"> - </TextElement>
-            <TextElement fontFamily="PoppinsBold">
+            <TextElement fontFamily="poppinsBold"> - </TextElement>
+            <TextElement fontFamily="poppinsBold">
               GH₵{formatPrice(request.maxPrice)}
             </TextElement>
           </View>
@@ -151,26 +151,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   productTitle: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     // fontSize: 20,
     width: 200,
   },
   productPrice: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     color: COLORS.PRIMARY,
     // fontSize: 18,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 11,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   avatarContainer: {
     flexDirection: "row",
     gap: 5,
   },
   productDesc: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     // fontSize: 16,
   },
   userView: {

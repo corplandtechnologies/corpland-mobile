@@ -123,12 +123,12 @@ const MyCoupons = () => {
             <TextElement fontSize={18}>Your referral code</TextElement>
             <Card style={{ padding: 0 }}>
               <View style={styles.couponViewTop}>
-                <TextElement fontFamily="PoppinsBold" fontSize={18}>
+                <TextElement fontFamily="poppinsBold" fontSize={18}>
                   {user.referralCode}
                 </TextElement>
                 <TextElement
                   fontSize={11}
-                  fontFamily="PoppinsMedium"
+                  fontFamily="poppinsMedium"
                   color={COLORS.GRAY}
                 >
                   Allow your friends or references to use your code to register
@@ -141,7 +141,7 @@ const MyCoupons = () => {
                     size={24}
                     color={COLORS.MONEY}
                   />
-                  <TextElement fontFamily="PoppinsBold">
+                  <TextElement fontFamily="poppinsBold">
                     Earn 20% commission
                   </TextElement>
                 </View>
@@ -150,7 +150,7 @@ const MyCoupons = () => {
                 style={styles.couponViewBottom}
                 onPress={() => copyToClipboard(user?.referralCode)}
               >
-                <TextElement fontFamily="PoppinsMedium">
+                <TextElement fontFamily="poppinsMedium">
                   {isCopied ? "COPIED" : "COPY CODE"}
                 </TextElement>
               </TouchableOpacity>
@@ -159,12 +159,12 @@ const MyCoupons = () => {
               <TextElement fontSize={18}>Best offers for you</TextElement>
               <Card style={{ padding: 0 }}>
                 <View style={styles.couponViewTop}>
-                  <TextElement fontFamily="PoppinsBold" fontSize={18}>
+                  <TextElement fontFamily="poppinsBold" fontSize={18}>
                     WELCOME200
                   </TextElement>
                   <TextElement
                     fontSize={11}
-                    fontFamily="PoppinsMedium"
+                    fontFamily="poppinsMedium"
                     color={COLORS.GRAY}
                   >
                     Allow your friends or references to use your code to
@@ -177,25 +177,25 @@ const MyCoupons = () => {
                       size={24}
                       color={COLORS.MONEY}
                     />
-                    <TextElement fontFamily="PoppinsBold">
+                    <TextElement fontFamily="poppinsBold">
                       Earn 20% commission
                     </TextElement>
                   </View>
                 </View>
                 <TouchableOpacity style={styles.couponViewBottom}>
-                  <TextElement fontFamily="PoppinsMedium">
+                  <TextElement fontFamily="poppinsMedium">
                     COPY CODE
                   </TextElement>
                 </TouchableOpacity>
               </Card>
               <Card style={{ padding: 0 }}>
                 <View style={styles.couponViewTop}>
-                  <TextElement fontFamily="PoppinsBold" fontSize={18}>
+                  <TextElement fontFamily="poppinsBold" fontSize={18}>
                     CASHBACK12
                   </TextElement>
                   <TextElement
                     fontSize={11}
-                    fontFamily="PoppinsMedium"
+                    fontFamily="poppinsMedium"
                     color={COLORS.GRAY}
                   >
                     Add Items worth GHC20.00 or more to unlock
@@ -206,13 +206,13 @@ const MyCoupons = () => {
                       size={24}
                       color={COLORS.MONEY}
                     />
-                    <TextElement fontFamily="PoppinsBold">
+                    <TextElement fontFamily="poppinsBold">
                       Up to 10% cashback
                     </TextElement>
                   </View>
                 </View>
                 <TouchableOpacity style={styles.couponViewBottom}>
-                  <TextElement fontFamily="PoppinsMedium">
+                  <TextElement fontFamily="poppinsMedium">
                     COPY CODE
                   </TextElement>
                 </TouchableOpacity>
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   amountWrapper: {
     alignItems: "flex-end",
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   },
   amount: {
     color: COLORS.MONEY,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   reportView: {
     gap: 10,

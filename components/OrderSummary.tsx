@@ -218,10 +218,10 @@ const styles = StyleSheet.create({
   },
   descText: {
     color: COLORS.GRAY,
-    fontFamily: "PoppinsMedium",
+    fontFamily: "poppinsMedium",
   },
   priceText: {
     color: COLORS.PRIMARY,
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
   },
 });

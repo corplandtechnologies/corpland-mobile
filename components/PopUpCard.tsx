@@ -94,7 +94,7 @@ const PopUpCard: FC<PopUpCardProps> = ({
                   }}
                   style={{ width: 200, height: 50 }}
                 />
-                <TextElement fontFamily="PoppinsMedium" textAlign="center">
+                <TextElement fontFamily="poppinsMedium" textAlign="center">
                   {title}
                 </TextElement>
                 {warning && (
@@ -105,7 +105,7 @@ const PopUpCard: FC<PopUpCardProps> = ({
                       size={16}
                     />
                     <TextElement
-                      fontFamily="PoppinsRegular"
+                      fontFamily="poppinsRegular"
                       fontSize={11}
                       textAlign="center"
                     >

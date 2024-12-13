@@ -18,7 +18,6 @@ const Profile = () => {
   const { isSellerMode, toggleSellerMode } = useSellerMode();
   const { user, logout, setSnackbarMessage, setSnackbarVisible } = useApp();
 
-
   const navigation: any = useNavigation();
 
   const showModal = () => {
@@ -161,7 +160,7 @@ const styles = StyleSheet.create({
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 16,
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     marginTop: 30,
   },
   avatarContainer: {
@@ -182,7 +181,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   modeText: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     color: COLORS.PRIMARY,
   },
   modalContainer: {
@@ -197,7 +196,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 24,
     color: COLORS.SECONDARY,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   modalButtons: {
     flexDirection: "column",
@@ -219,13 +218,13 @@ const styles = StyleSheet.create({
     color: COLORS.PRIMARY,
     fontSize: 16,
     textAlign: "center",
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   modalButtonTextLogout: {
     color: COLORS.SECONDARY,
     fontSize: 16,
     textAlign: "center",
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
 });
 

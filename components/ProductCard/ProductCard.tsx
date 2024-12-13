@@ -113,7 +113,7 @@ const ProductCard: FC<productCardProps> = ({ product, onReset }) => {
         )}
       </View>
       <View style={styles.detailsView}>
-        <TextElement fontFamily="PoppinsMedium">
+        <TextElement fontFamily="poppinsMedium">
           {textTruncate(product.title)}
         </TextElement>
         <TextElement>GH₵ {formatPrice(product.price)}.00</TextElement>

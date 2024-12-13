@@ -50,7 +50,6 @@ const WithdrawalChannel = () => {
             ? "mobile_money"
             : "bank_transfer",
       });
-      
     } catch (error: any) {
       setSnackbarMessage(handleError(error));
       setSnackbarVisible(true);
@@ -76,7 +75,7 @@ const WithdrawalChannel = () => {
               />
               <TextElement
                 color={COLORS.GRAY}
-                fontFamily="PoppinsMedium"
+                fontFamily="poppinsMedium"
                 fontSize={16}
               >
                 MTN
@@ -103,7 +102,7 @@ const WithdrawalChannel = () => {
               />
               <TextElement
                 color={COLORS.GRAY}
-                fontFamily="PoppinsMedium"
+                fontFamily="poppinsMedium"
                 fontSize={16}
               >
                 AirtelTigo
@@ -130,7 +129,7 @@ const WithdrawalChannel = () => {
               />
               <TextElement
                 color={COLORS.GRAY}
-                fontFamily="PoppinsMedium"
+                fontFamily="poppinsMedium"
                 fontSize={16}
               >
                 Telecel

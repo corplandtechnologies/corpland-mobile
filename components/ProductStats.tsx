@@ -23,7 +23,7 @@ const ProductStats: FC<ProductStatsProps> = ({ icon, value, name, card }) => {
       <Text
         style={{
           color: COLORS.GRAY,
-          fontFamily: "PoppinsRegular",
+          fontFamily: "poppinsRegular",
           fontSize: card ? 10 : 16,
         }}
       >
@@ -32,7 +32,7 @@ const ProductStats: FC<ProductStatsProps> = ({ icon, value, name, card }) => {
       <Text
         style={{
           color: COLORS.GRAY,
-          fontFamily: "PoppinsRegular",
+          fontFamily: "poppinsRegular",
           fontSize: card ? 10 : 16,
         }}
       >

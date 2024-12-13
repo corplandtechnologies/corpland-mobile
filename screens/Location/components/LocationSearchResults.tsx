@@ -23,7 +23,7 @@ const LocationSearchResults: FC<LocationSearchResultsProps> = ({
             {predictions.structured_formatting.main_text}
           </TextElement>
         </View>
-        <TextElement color={COLORS.TERTIARY} fontFamily="PoppinsMedium">
+        <TextElement color={COLORS.TERTIARY} fontFamily="poppinsMedium">
           {predictions.structured_formatting.secondary_text}
         </TextElement>
       </TouchableOpacity>

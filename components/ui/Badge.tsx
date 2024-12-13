@@ -36,7 +36,7 @@ const Badge: FC<BadgeProps> = ({ bgColor, text, isOrder }) => {
     >
       <Text
         style={{
-          fontFamily: "PoppinsSemiBold",
+          fontFamily: "poppinsSemiBold",
           textAlign: "center",
           color: isOrder ? textColor : COLORS.PRIMARY,
           fontSize: 11,

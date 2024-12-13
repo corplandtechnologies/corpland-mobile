@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from "react-native";
 import { COLORS } from "../utils/color";
-import Banner from "../components/Banner";
+import Banner from "./Home/components/Banner/Banner";
 import FormInput from "../components/ui/FormInput";
 import Section from "../components/Section";
 import Category from "../components/Category";
@@ -345,7 +345,7 @@ const Home = () => {
                       color={
                         activeTab === tab ? COLORS.SECONDARY : COLORS.PRIMARY
                       }
-                      fontFamily="PoppinsMedium"
+                      fontFamily="poppinsMedium"
                     >
                       {tab}
                     </TextElement>

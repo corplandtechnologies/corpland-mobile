@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
-import Home from "../screens/Home";
+import Home from "../screens/Home/Home";
 import CreateProduct from "../screens/seller/CreateProduct";
 import Favorite from "../screens/Favorite";
 import Orders from "../screens/Orders/Orders";
@@ -99,13 +99,13 @@ const TabNavigator: React.FC = () => {
           >
             {user ? (
               <Text
-                style={{ color: COLORS.PRIMARY, fontFamily: "PoppinsSemiBold" }}
+                style={{ color: COLORS.PRIMARY, fontFamily: "poppinsSemiBold" }}
               >
                 {user?.region}, {user?.country}
               </Text>
             ) : (
               <Text
-                style={{ color: COLORS.PRIMARY, fontFamily: "PoppinsSemiBold" }}
+                style={{ color: COLORS.PRIMARY, fontFamily: "poppinsSemiBold" }}
               >
                 Select Location
               </Text>
@@ -121,6 +121,7 @@ const TabNavigator: React.FC = () => {
     <>
       <Tab.Navigator
         screenOptions={({ route }) => ({
+          headerShown: false,
           tabBarIcon: ({ color, size }) => {
             let iconName: string = "";
 
@@ -157,11 +158,7 @@ const TabNavigator: React.FC = () => {
           name="Home"
           component={Home}
           options={{
-            tabBarShowLabel: false,
             tabBarIcon: "home",
-            headerTitle: "",
-            headerLeft: () => <CustomHeaderLeft />,
-            headerRight: () => <HomeHeaderRight navigation={navigation} />,
           }}
         />
         <Tab.Screen
@@ -171,7 +168,7 @@ const TabNavigator: React.FC = () => {
             tabBarIcon: "heart",
             headerTitle: "Favorites",
             headerTitleStyle: {
-              fontFamily: "PoppinsSemiBold",
+              fontFamily: "poppinsSemiBold",
             },
             headerLeft: () => <BackButton />,
             headerTitleAlign: "center",
@@ -184,7 +181,7 @@ const TabNavigator: React.FC = () => {
             tabBarIcon: "add-circle",
             headerTitle: "Post Product",
             headerTitleStyle: {
-              fontFamily: "PoppinsSemiBold",
+              fontFamily: "poppinsSemiBold",
             },
             headerLeft: () => <BackButton />,
             headerTitleAlign: "center",
@@ -197,7 +194,7 @@ const TabNavigator: React.FC = () => {
             tabBarIcon: "bag",
             headerTitle: "My Orders",
             headerTitleStyle: {
-              fontFamily: "PoppinsSemiBold",
+              fontFamily: "poppinsSemiBold",
             },
             headerLeft: () => <BackButton />,
             headerTitleAlign: "center",
@@ -210,7 +207,7 @@ const TabNavigator: React.FC = () => {
             tabBarIcon: "person",
             headerTitle: "Profile",
             headerTitleStyle: {
-              fontFamily: "PoppinsSemiBold",
+              fontFamily: "poppinsSemiBold",
             },
             headerLeft: () => <BackButton />,
             headerTitleAlign: "center",

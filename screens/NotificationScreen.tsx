@@ -43,7 +43,7 @@ const NotificationScreen = () => {
     refreshUserData,
   } = useApp();
   const [notificationsLoading, setNotificationsLoading] = useState(false);
-  
+
   useEffect(() => {
     refreshUserData();
   }, []);
@@ -182,11 +182,11 @@ const NotificationScreen = () => {
       return (
         <View key={date} style={styles.dateGroup}>
           <View style={styles.timeView}>
-            <TextElement fontFamily="PoppinsMedium" color={COLORS.GRAY}>
+            <TextElement fontFamily="poppinsMedium" color={COLORS.GRAY}>
               {displayDate}
             </TextElement>
             <TouchableOpacity onPress={handleAllNotificationStatus}>
-              <TextElement fontFamily="PoppinsMedium">
+              <TextElement fontFamily="poppinsMedium">
                 Mark all as read
               </TextElement>
             </TouchableOpacity>
@@ -220,12 +220,12 @@ const NotificationScreen = () => {
               </View>
               <View style={styles.notificationViewMiddle}>
                 <TextElement fontSize={16}>{notification.title}</TextElement>
-                <TextElement fontFamily="PoppinsRegular" color={COLORS.GRAY}>
+                <TextElement fontFamily="poppinsRegular" color={COLORS.GRAY}>
                   {notification.description}
                 </TextElement>
               </View>
               <View style={styles.notificationViewRight}>
-                <TextElement fontFamily="PoppinsMedium" color={COLORS.GRAY}>
+                <TextElement fontFamily="poppinsMedium" color={COLORS.GRAY}>
                   {formatTimeAgo(notification.createdAt)}
                 </TextElement>
               </View>
@@ -248,7 +248,7 @@ const NotificationScreen = () => {
     if (notifications.length === 0) {
       return (
         <View style={styles.noNotificationsView}>
-          <TextElement fontSize={18} fontFamily="PoppinsSemiBold">
+          <TextElement fontSize={18} fontFamily="poppinsSemiBold">
             You have no notifications yet
           </TextElement>
         </View>

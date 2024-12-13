@@ -251,7 +251,7 @@ const CreateRequest = () => {
             options={categories}
             onSelect={(selectedOption) => setSelectedCategory(selectedOption)} // Update the selected category state
           />
-          <Text style={{ fontFamily: "PoppinsRegular" }}>Add a photo</Text>
+          <Text style={{ fontFamily: "poppinsRegular" }}>Add a photo</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.imageContainer}>
               {Platform.OS === "web" ? (
@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   textInput: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     backgroundColor: COLORS.SECONDARY,
   },
   addImageBox: {
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
   },
   textInputDesc: {
     paddingLeft: 10,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
   CreateRequest: {
     backgroundColor: COLORS.PRIMARY,
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
   removeImageText: {
     fontSize: 16,
     color: COLORS.SECONDARY,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
   priceRangeView: {
     flexDirection: "row",

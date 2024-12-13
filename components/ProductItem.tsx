@@ -141,7 +141,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
             >
               <Icon name="location" size={20} color={COLORS.GRAY} />
               <Text
-                style={{ color: COLORS.GRAY, fontFamily: "PoppinsRegular" }}
+                style={{ color: COLORS.GRAY, fontFamily: "poppinsRegular" }}
               >
                 {region}
               </Text>
@@ -192,18 +192,18 @@ const styles = StyleSheet.create({
     objectFit: "cover",
   },
   productTitle: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     fontSize: 18,
   },
   productPrice: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     color: COLORS.PRIMARY,
     fontSize: 18,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 11,
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     // maxWidth: "80%",
   },
   avatarContainer: {
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   productDesc: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     fontSize: 16,
   },
   userView: {
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   levelText: {
     color: COLORS.SECONDARY,
     textAlign: "center",
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   productView: {
     flexDirection: "row",

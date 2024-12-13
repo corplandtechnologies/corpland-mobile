@@ -460,22 +460,22 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   titleText: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     fontSize: 18,
     flex: 3,
   },
   descTitle: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     fontSize: 18,
   },
   desc: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     color: COLORS.GRAY,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 14,
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
   },
 
   avatarContainer: {
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
   },
 
   priceText: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     fontSize: 18,
     color: COLORS.PRIMARY,
   },

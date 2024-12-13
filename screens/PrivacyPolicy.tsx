@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
     <MainView style={{ padding: 10 }}>
       <View>
         <TextElement fontSize={18}>Cancellation Policy</TextElement>
-        <TextElement fontFamily="PoppinsRegular">
+        <TextElement fontFamily="poppinsRegular">
           Last updated: June 30, 2024
           <TextElement>
             {" "}

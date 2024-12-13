@@ -207,7 +207,7 @@ const Login = () => {
         style={{ marginBottom: 20 }}
         onPress={() => navigation.navigate("ForgotPassword")}
       >
-        <TextElement textAlign="right" fontFamily="PoppinsRegular">
+        <TextElement textAlign="right" fontFamily="poppinsRegular">
           Forgot Password?
         </TextElement>
       </TouchableOpacity>
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
   checkboxContainer: {
     backgroundColor: "transparent",

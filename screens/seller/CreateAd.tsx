@@ -128,7 +128,7 @@ const CreateAd = () => {
     <ScreenContextWrapper>
       <ScrollView>
         <Card>
-          <Text style={{ fontFamily: "PoppinsRegular" }}>Add a photo</Text>
+          <Text style={{ fontFamily: "poppinsRegular" }}>Add a photo</Text>
           <View style={styles.imageContainer}>
             {image && (
               <View style={styles.imageWrapper}>
@@ -235,7 +235,7 @@ const CreateAd = () => {
 
 const styles = StyleSheet.create({
   textInput: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     backgroundColor: COLORS.SECONDARY,
   },
   addImageBox: {
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   },
   textInputDesc: {
     paddingLeft: 10,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     height: "100%",
   },
   createAd: {
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   removeImageText: {
     fontSize: 16,
     color: COLORS.SECONDARY,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
 });
 

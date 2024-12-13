@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   optionText: {
     color: COLORS.PRIMARY,
     fontSize: 16,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     borderBottomWidth: 1,
     borderBottomColor: COLORS.PRIMARY,
     textDecorationLine: "underline",

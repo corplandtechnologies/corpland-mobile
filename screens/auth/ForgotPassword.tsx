@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
   checkboxContainer: {
     backgroundColor: "transparent",

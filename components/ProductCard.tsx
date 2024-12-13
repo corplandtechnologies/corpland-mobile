@@ -107,7 +107,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onReset }) => {
             <Text
               style={{
                 color: COLORS.GRAY,
-                fontFamily: "PoppinsRegular",
+                fontFamily: "poppinsRegular",
                 fontSize: 11,
               }}
             >
@@ -166,19 +166,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   productTitle: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     // fontSize: 20,
     width: 200,
   },
   productPrice: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     color: COLORS.PRIMARY,
     // fontSize: 18,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 11,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   avatarContainer: {
     flexDirection: "row",
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   productDesc: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     // fontSize: 16,
   },
   userView: {

@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "90%",
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
   buttonContainer: {
     flex: 1,

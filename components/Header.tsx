@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   button: {
     backgroundColor: COLORS.PRIMARY, // Blue background
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff", // White text
     fontSize: 16,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
 });
 

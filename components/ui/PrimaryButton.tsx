@@ -66,7 +66,7 @@ const PrimaryButton: FC<primaryButtonProps> = ({
                 : secondary
                 ? COLORS.PRIMARY
                 : COLORS.SECONDARY,
-              fontFamily: fontFamily ? fontFamily : "PoppinsSemiBold",
+              fontFamily: fontFamily ? fontFamily : "poppinsSemiBold",
             }
       }
     />

@@ -11,7 +11,9 @@ const UserHeader: FC<UserHeaderProps> = ({ title, description }) => {
   return (
     <View>
       <Text style={[styles.pageTitle, { color: theme.TEXT }]}>{title}</Text>
-      <Text style={[styles.descriptiveText, { color: theme.GRAY }]}>{description}</Text>
+      <Text style={[styles.descriptiveText, { color: theme.GRAY }]}>
+        {description}
+      </Text>
     </View>
   );
 };
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: "center",
     marginBottom: 20,
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
   },
   descriptiveText: {
     fontSize: 16,

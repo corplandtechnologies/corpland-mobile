@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     color: COLORS.PRIMARY,
     fontSize: 14,
     fontWeight: "600",
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
   header: {
     borderBottomColor: COLORS.PRIMARY,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   title: {
     fontSize: 18,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLORS.PRIMARY,
     textAlign: "center",
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   optionContainer: {
     paddingVertical: 15,
@@ -157,6 +157,6 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
 });

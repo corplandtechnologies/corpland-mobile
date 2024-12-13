@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: "center",
     marginBottom: 20,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   descriptiveText: {
     fontSize: 16,

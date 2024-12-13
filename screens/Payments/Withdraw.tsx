@@ -126,14 +126,14 @@ const Withdraw: React.FC = () => {
           <TextElement
             color={COLORS.GRAY}
             fontSize={12}
-            fontFamily="PoppinsMedium"
+            fontFamily="poppinsMedium"
           >
             {moment(request.createdAt).format("DD MMMM | hh:mm A")}
           </TextElement>
           <TextElement
             color={COLORS.GRAY}
             fontSize={12}
-            fontFamily="PoppinsMedium"
+            fontFamily="poppinsMedium"
           >
             Account: {request.accountNumber}
           </TextElement>
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     fontSize: 18,
     marginBottom: 10,
   },
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     marginLeft: 8,
-    fontFamily: "PoppinsMedium",
+    fontFamily: "poppinsMedium",
   },
   infoWrapper: {
     flex: 2,

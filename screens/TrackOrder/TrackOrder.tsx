@@ -200,7 +200,7 @@ const TrackOrder = () => {
               labels={stepTitles.data.map((item) => (
                 <View>
                   <TextElement>{item.title}</TextElement>
-                  <TextElement color={COLORS.GRAY} fontFamily="PoppinsMedium">
+                  <TextElement color={COLORS.GRAY} fontFamily="poppinsMedium">
                     {item.time}
                   </TextElement>
                 </View>
@@ -364,14 +364,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     fontSize: 16,
   },
   cat: {
     color: COLORS.GRAY,
   },
   price: {
-    fontFamily: "PoppinsExtraBold",
+    fontFamily: "poppinsExtraBold",
     color: COLORS.PRIMARY,
   },
 });

@@ -123,7 +123,7 @@ const Wallet: React.FC = () => {
                 <TextElement
                   color={COLORS.GRAY}
                   fontSize={12}
-                  fontFamily="PoppinsMedium"
+                  fontFamily="poppinsMedium"
                 >
                   {moment(transaction.createdAt).format("DD MMMM | hh:mm A")}
                 </TextElement>
@@ -142,7 +142,7 @@ const Wallet: React.FC = () => {
                 <TextElement
                   color={COLORS.GRAY}
                   fontSize={12}
-                  fontFamily="PoppinsMedium"
+                  fontFamily="poppinsMedium"
                 >
                   Balance GH₵ {transaction.balanceAfter}
                 </TextElement>
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   amountWrapper: {
     alignItems: "flex-end",
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   },
   amount: {
     color: COLORS.MONEY,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   reportView: {
     gap: 10,

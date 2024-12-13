@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     color: COLORS.SECONDARY,
   },
   text: {
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     marginHorizontal: 20,
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
 });
 

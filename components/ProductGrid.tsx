@@ -143,7 +143,7 @@ const ProductGrid: React.FC<ProductItemProps> = ({
             <Text
               style={{
                 color: COLORS.GRAY,
-                fontFamily: "PoppinsRegular",
+                fontFamily: "poppinsRegular",
                 fontSize: 11,
               }}
             >
@@ -173,18 +173,18 @@ const styles = StyleSheet.create({
     objectFit: "cover",
   },
   productTitle: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     fontSize: 16,
   },
   productPrice: {
-    fontFamily: "PoppinsExtraBold",
+    fontFamily: "poppinsExtraBold",
     color: COLORS.PRIMARY,
     fontSize: 14,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 8,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     // maxWidth: "80%",
   },
   avatarContainer: {
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   productDesc: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     fontSize: 11,
   },
   userView: {
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   levelText: {
     color: COLORS.SECONDARY,
     textAlign: "center",
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   productView: {
     flexDirection: "row",

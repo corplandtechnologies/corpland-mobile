@@ -64,7 +64,7 @@ const AuthModal = ({ visible, onClose }) => {
                   }}
                   style={{ width: 200, height: 50 }}
                 />
-                <TextElement fontFamily="PoppinsMedium">
+                <TextElement fontFamily="poppinsMedium">
                   Login or Register below to access
                 </TextElement>
               </View>

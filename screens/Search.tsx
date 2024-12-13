@@ -60,6 +60,6 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 18,
     color: COLORS.PRIMARY,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
 });

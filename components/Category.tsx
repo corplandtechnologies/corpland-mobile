@@ -13,7 +13,7 @@ const Category: FC<CategoryProps> = ({ category, icon }) => {
       <View style={styles.wrapper}>
         <Icon name={icon} color={COLORS.PRIMARY} size={24} type="ionicon" />
       </View>
-      <Text style={{ fontFamily: "PoppinsMedium", textAlign: "center" }}>
+      <Text style={{ fontFamily: "poppinsMedium", textAlign: "center" }}>
         {category}
       </Text>
     </View>

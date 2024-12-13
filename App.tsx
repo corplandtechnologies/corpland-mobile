@@ -300,13 +300,16 @@ function App() {
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
-        PoppinsExtraBold: require("./fonts/Poppins/Poppins-ExtraBold.ttf"),
-        PoppinsBold: require("./fonts/Poppins/Poppins-Bold.ttf"),
-        PoppinsSemiBold: require("./fonts/Poppins/Poppins-SemiBold.ttf"),
-        PoppinsMedium: require("./fonts/Poppins/Poppins-Medium.ttf"),
-        PoppinsRegular: require("./fonts/Poppins/Poppins-Regular.ttf"),
-        PoppinsLight: require("./fonts/Poppins/Poppins-Light.ttf"),
-        PoppinsThin: require("./fonts/Poppins/Poppins-Thin.ttf"),
+        poppinsBlack: require("./fonts/Poppins/Poppins-Black.ttf"),
+        poppinsBold: require("./fonts/Poppins/Poppins-Bold.ttf"),
+        poppinsExtraBold: require("./fonts/Poppins/Poppins-ExtraBold.ttf"),
+        poppinsExtraLight: require("./fonts/Poppins/Poppins-ExtraLight.ttf"),
+        poppinsItalic: require("./fonts/Poppins/Poppins-Italic.ttf"),
+        poppinsLight: require("./fonts/Poppins/Poppins-Light.ttf"),
+        poppinsMedium: require("./fonts/Poppins/Poppins-Medium.ttf"),
+        poppinsRegular: require("./fonts/Poppins/Poppins-Regular.ttf"),
+        poppinsSemiBold: require("./fonts/Poppins/Poppins-SemiBold.ttf"),
+        poppinsThin: require("./fonts/Poppins/Poppins-Thin.ttf"),
       });
       setFontLoaded(true);
     }

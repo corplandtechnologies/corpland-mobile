@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     color: COLORS.PRIMARY,
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
   },
   childrenView: {
     marginTop: 10,
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerOptions: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     color: COLORS.GRAY,
   },
 });

@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     margin: 24,
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     color: COLORS.SECONDARY,
   },
   modalSubText: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 8,
     color: "#888",
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
   },
   modalButtons: {
     flexDirection: "column",
@@ -87,13 +87,13 @@ const styles = StyleSheet.create({
     color: COLORS.PRIMARY,
     fontSize: 16,
     textAlign: "center",
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
   modalButtonTextConfirm: {
     color: "#FFF",
     fontSize: 16,
     textAlign: "center",
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
   },
 });
 

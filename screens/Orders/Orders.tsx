@@ -12,7 +12,7 @@ export default function Orders() {
       initialRouteName="Active"
       screenOptions={{
         tabBarActiveTintColor: COLORS.PRIMARY,
-        tabBarLabelStyle: { fontFamily: "PoppinsBold" },
+        tabBarLabelStyle: { fontFamily: "poppinsBold" },
         tabBarInactiveTintColor: COLORS.TERTIARY,
         tabBarPressColor: COLORS.PRIMARY,
         tabBarIndicatorStyle: {

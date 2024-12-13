@@ -188,7 +188,7 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
       </View>
       <RowView style={styles.transactionInfo}>
         <View>
-          <PrimaryText color={COLORS.GRAY} fontFamily="PoppinsBold">
+          <PrimaryText color={COLORS.GRAY} fontFamily="poppinsBold">
             Transaction ID
           </PrimaryText>
           <PrimaryText>#{orders.transactionId}</PrimaryText>
@@ -196,7 +196,7 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
         <View>
           <PrimaryText
             color={COLORS.GRAY}
-            fontFamily="PoppinsBold"
+            fontFamily="poppinsBold"
             textAlign="center"
           >
             Order Date
@@ -206,7 +206,7 @@ const Order: FC<orderProps> = ({ orders, getOrders }) => {
           </PrimaryText>
         </View>
         <View>
-          <PrimaryText color={COLORS.GRAY} fontFamily="PoppinsBold">
+          <PrimaryText color={COLORS.GRAY} fontFamily="poppinsBold">
             Total Payment
           </PrimaryText>
           <PrimaryText textAlign="center">

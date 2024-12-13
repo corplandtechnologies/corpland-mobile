@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginHorizontal: 10,
     color: COLORS.SECONDARY,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     padding: 2,
   },
   quantity: {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   quantityText: {
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     fontSize: 16,
     color: COLORS.SECONDARY,
   },

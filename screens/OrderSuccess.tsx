@@ -31,7 +31,7 @@ const OrderSuccess = () => {
         <TextElement
           textAlign="center"
           color={COLORS.GRAY}
-          fontFamily="PoppinsMedium"
+          fontFamily="poppinsMedium"
         >
           You can track your delivery in the "Orders" section.
         </TextElement>

@@ -351,7 +351,7 @@ const Product = ({ route }) => {
                                   )}
                                 </View>
                                 <TextElement
-                                  fontFamily="PoppinsMedium"
+                                  fontFamily="poppinsMedium"
                                   color={COLORS.GRAY}
                                   fontSize={14}
                                 >
@@ -543,22 +543,22 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   titleText: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     fontSize: 18,
     flex: 3,
   },
   descTitle: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     fontSize: 18,
   },
   desc: {
-    fontFamily: "PoppinsRegular",
+    fontFamily: "poppinsRegular",
     color: COLORS.GRAY,
   },
   AvatarText: {
     color: COLORS.PRIMARY,
     fontSize: 14,
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
   },
 
   avatarContainer: {
@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
   },
 
   priceText: {
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
     fontSize: 18,
     color: COLORS.PRIMARY,
   },
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
   readMoreText: {
     textDecorationLine: "underline",
     color: COLORS.PRIMARY,
-    fontFamily: "PoppinsSemiBold",
+    fontFamily: "poppinsSemiBold",
   },
   actionButtonView: {
     backgroundColor: COLORS.GRAY_LIGHT,

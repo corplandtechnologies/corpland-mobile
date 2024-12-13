@@ -30,7 +30,7 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
       }}
     >
       <Icon name={iconName} size={24} color={COLORS.PRIMARY} />
-      <Text style={{ marginLeft: 10, flex: 1, fontFamily: "PoppinsMedium" }}>
+      <Text style={{ marginLeft: 10, flex: 1, fontFamily: "poppinsMedium" }}>
         {title}
       </Text>
       <Icon name="chevron-forward" size={24} color={COLORS.PRIMARY} />

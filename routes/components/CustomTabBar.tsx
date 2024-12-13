@@ -1,20 +1,19 @@
+import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
   Dimensions,
   Animated as RNAnimated,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
-import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { COLORS } from "../../utils/color";
 import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
-import AnimatedView from "../../components/animated/AnimatedView";
+import { useTheme } from "../../context/ThemeContext";
+import ViewElement from "../../components/common/View/ViewElement";
+import IconElement from "../../components/common/Icon/IconElement";
 
 const { width } = Dimensions.get("window");
 const tabsLength = 5;
@@ -27,6 +26,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
   descriptors,
   navigation,
 }) => {
+  const { theme } = useTheme();
   const [translateX] = useState(new RNAnimated.Value(0));
 
   const translateTab = (index: number) => {
@@ -43,83 +43,84 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
   }, [state.index]);
 
   return (
-    <AnimatedView>
-      <View style={styles.container}>
-        <View style={styles.tabBar}>
-          <RNAnimated.View
-            style={[
-              styles.slidingBarContainer,
-              { transform: [{ translateX }] },
-            ]}
-          />
-          {state.routes.map((route, index) => {
-            const { options } = descriptors[route.key];
-            const label =
-              options.tabBarLabel !== undefined
-                ? (options.tabBarLabel as string)
-                : options.title !== undefined
-                ? options.title
-                : route.name;
+    <View style={styles.container}>
+      <ViewElement style={styles.tabBar}>
+        <RNAnimated.View
+          style={[
+            styles.slidingBarContainer,
+            {
+              transform: [{ translateX }],
+              backgroundColor: theme.TERTIARY_LIGHT,
+            },
+          ]}
+        />
+        {state.routes.map((route, index) => {
+          const { options } = descriptors[route.key];
+          const label =
+            options.tabBarLabel !== undefined
+              ? (options.tabBarLabel as string)
+              : options.title !== undefined
+              ? options.title
+              : route.name;
 
-            const isFocused = state.index === index;
+          const isFocused = state.index === index;
 
-            const onPress = () => {
-              const event = navigation.emit({
-                type: "tabPress",
-                target: route.key,
-                canPreventDefault: true,
-              });
-
-              if (!isFocused && !event.defaultPrevented) {
-                navigation.navigate(route.name);
-              }
-            };
-
-            const onLongPress = () => {
-              navigation.emit({
-                type: "tabLongPress",
-                target: route.key,
-              });
-            };
-
-            const animatedStyle = useAnimatedStyle(() => {
-              return {
-                transform: [
-                  {
-                    scale: withSpring(isFocused ? 1.2 : 1),
-                  },
-                ],
-              };
+          const onPress = () => {
+            const event = navigation.emit({
+              type: "tabPress",
+              target: route.key,
+              canPreventDefault: true,
             });
 
-            return (
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityState={isFocused ? { selected: true } : {}}
-                accessibilityLabel={options.tabBarAccessibilityLabel}
-                testID={options.tabBarTestID}
-                onPress={onPress}
-                onLongPress={onLongPress}
-                style={styles.tab}
-                key={index}
-              >
-                <Animated.View style={animatedStyle}>
-                  <Icon
-                    name={
-                      isFocused
-                        ? (options.tabBarIcon as any)
-                        : `${options.tabBarIcon}-outline`
-                    }
-                    color={isFocused ? COLORS.PRIMARY : COLORS.TERTIARY}
-                    size={25}
-                  />
-                </Animated.View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
-    </AnimatedView>
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
+
+          const onLongPress = () => {
+            navigation.emit({
+              type: "tabLongPress",
+              target: route.key,
+            });
+          };
+
+          const animatedStyle = useAnimatedStyle(() => {
+            return {
+              transform: [
+                {
+                  scale: withSpring(isFocused ? 1.2 : 1),
+                },
+              ],
+            };
+          });
+
+          return (
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityState={isFocused ? { selected: true } : {}}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              // testID={options.tabBarTestID}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              style={styles.tab}
+              key={index}
+            >
+              <Animated.View style={animatedStyle}>
+                <IconElement
+                  name={
+                    isFocused
+                      ? (options.tabBarIcon as any)
+                      : `${options.tabBarIcon}-outline`
+                  }
+                  color={isFocused ? theme.PRIMARY : theme.TERTIARY}
+                  size={25}
+                />
+              </Animated.View>
+            </TouchableOpacity>
+          );
+        })}
+      </ViewElement>
+    </View>
   );
 };
 
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: COLORS.SECONDARY,
+    // backgroundColor: COLORS.SECONDARY,
     borderRadius: 20,
     width: "100%",
     shadowColor: "#000",
@@ -151,32 +152,18 @@ const styles = StyleSheet.create({
   },
   tab: {
     alignItems: "center",
-    padding: 20,
+    padding: 10,
+    paddingVertical: 20,
     zIndex: 1,
-  },
-  tabFocused: {
-    alignItems: "center",
-    backgroundColor: COLORS.GRAY_LIGHT,
-    borderRadius: 20,
-    padding: 20,
   },
   slidingBarContainer: {
     width: TAB_WIDTH,
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: COLORS.GRAY_LIGHT,
     alignItems: "center",
     borderRadius: 20,
     marginTop: 10,
     marginBottom: 10,
     zIndex: 0,
-  },
-  slidingBar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: COLORS.PRIMARY,
-    position: "absolute",
-    bottom: 20,
   },
 });
 

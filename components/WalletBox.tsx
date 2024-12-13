@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   balance: {
     color: COLORS.SECONDARY,
-    fontFamily: "PoppinsBold",
+    fontFamily: "poppinsBold",
     fontSize: 14,
   },
 });
